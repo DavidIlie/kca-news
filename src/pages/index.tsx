@@ -1,13 +1,12 @@
-import React from 'react'
-import { NextSeo } from 'next-seo'
+import React from "react";
+import { NextSeo } from "next-seo";
 
 const Home: React.FC = () => {
-  return (
-    <>
-      <NextSeo title="Home" />
-      <div className="flex min-h-screen flex-col items-center justify-center py-2"></div>
-    </>
-  )
-}
+    return (
+        <>
+            <NextSeo title="Home" />
+        </>
+    );
+};
 
-export default Home
+export default Home;

@@ -5,6 +5,8 @@ import NextNprogress from "nextjs-progressbar";
 
 import "../styles/globals.css";
 
+import NavBar from "../components/NavBar";
+
 function KingsNews({ Component, pageProps }: AppProps) {
     return (
         <>
@@ -32,6 +34,7 @@ function KingsNews({ Component, pageProps }: AppProps) {
                 showOnShallow={true}
             />
             <Toaster position="top-center" />
+            <NavBar />
             <Component {...pageProps} />
         </>
     );
