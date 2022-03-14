@@ -18,9 +18,9 @@ const Footer: React.FC = () => {
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
                             className="h-10 w-10 rounded-full bg-blue-500 p-2 text-white"
                             viewBox="0 0 24 24"
                         >

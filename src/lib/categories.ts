@@ -8,7 +8,7 @@ export const newsLinks: Category[] = [
     {
         id: "our-school",
         name: "Our School",
-        url: "/our-school?filter=entertainment",
+        url: "/our-school?filter=news",
     },
     {
         id: "latest-news",
