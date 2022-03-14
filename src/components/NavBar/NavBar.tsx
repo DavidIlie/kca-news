@@ -1,8 +1,13 @@
 import React from "react";
+import { useSession } from "next-auth/react";
 
 import { Button } from "../../ui/Button";
+import { Spinner } from "../../ui/Spinner";
+import UserDropdown from "./UserDropdown";
 
 const NavBar: React.FC = () => {
+    const { status } = useSession();
+
     return (
         <header className="body-font border-b-2 text-gray-600 sm:px-8">
             <div className="container mx-auto flex flex-col flex-wrap items-center p-5 md:flex-row">
@@ -11,9 +16,9 @@ const NavBar: React.FC = () => {
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         className="h-10 w-10 rounded-full bg-indigo-500 p-2 text-white"
                         viewBox="0 0 24 24"
                     >
@@ -65,7 +70,13 @@ const NavBar: React.FC = () => {
                             </svg>
                         </button>
                     </div>
-                    <Button>Login</Button>
+                    {status === "loading" ? (
+                        <Spinner />
+                    ) : status === "unauthenticated" ? (
+                        <Button>Login</Button>
+                    ) : (
+                        <UserDropdown />
+                    )}
                 </div>
             </div>
         </header>

@@ -7,11 +7,16 @@ import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
 
 import NavBar from "../components/NavBar";
+import { isServer } from "../lib/isServer";
 
 const KingsNews = ({
     Component,
     pageProps: { session, ...pageProps },
 }: AppProps) => {
+    if (isServer && !Component.getInitialProps) {
+        return null;
+    }
+
     return (
         <>
             <DefaultSeo
@@ -38,8 +43,8 @@ const KingsNews = ({
                 showOnShallow={true}
             />
             <Toaster position="top-center" />
-            <NavBar />
             <SessionProvider session={session}>
+                <NavBar />
                 <Component {...pageProps} />
             </SessionProvider>
         </>
