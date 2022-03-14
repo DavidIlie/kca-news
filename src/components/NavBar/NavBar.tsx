@@ -19,7 +19,7 @@ const NavBar: React.FC = () => {
     const { status } = useSession();
 
     return (
-        <nav className="w-full border-b-2 text-gray-600 shadow-md sm:fixed sm:px-12">
+        <nav className="w-full border-b-2 text-gray-600 shadow-md sm:fixed 2xl:px-12">
             <div className="container mx-auto flex flex-col flex-wrap items-center p-5 md:flex-row">
                 <Link href="/">
                     <a className="mb-4 flex items-center font-medium text-gray-900 md:mb-0">
@@ -57,7 +57,7 @@ const NavBar: React.FC = () => {
                         </a>
                     </Link>
                 </nav>
-                <div className="mt-4 flex items-center gap-4 sm:mt-0">
+                <div className="mx-auto mt-4 flex items-center gap-4 xl:mt-0">
                     <div className="relative mx-auto text-gray-600">
                         <input
                             className="h-10 rounded-lg border-2 border-gray-300 bg-white px-5 pr-16 text-sm focus:outline-none"
