@@ -123,7 +123,7 @@ const Footer: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <p className="mx-auto bg-gray-100 py-4 px-5 text-left text-sm text-gray-800">
+            <p className="mx-auto bg-gray-100 py-4 px-5 text-center text-sm text-gray-800 sm:text-left sm:text-base">
                 © {new Date().getFullYear()}{" "}
                 <a
                     href="https://davidilie.com"
