@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
     return (
         <footer className="text-gray-100">
             <div className="container mx-auto flex flex-col flex-wrap border-b-2 border-t-2 px-5 pb-12 pt-6 text-gray-600 md:flex-row md:flex-nowrap md:items-center lg:items-start">
-                <div className="mx-auto w-64 flex-shrink-0 text-center md:mx-0 md:text-left">
+                <div className="mx-auto w-64 flex-shrink-0 text-center sm:pl-14 md:mx-0 md:text-left">
                     <a className="title-font flex items-center justify-center font-medium text-gray-900 md:justify-start">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
                         Make the school cool.
                     </p>
                 </div>
-                <div className="-mb-10 mt-10 flex flex-grow flex-wrap text-center md:mt-0 md:pl-20 md:text-left">
+                <div className="-mb-10 mt-10 grid grid-cols-2 text-center sm:flex sm:flex-grow sm:flex-wrap md:mt-0 md:pl-20 md:text-left">
                     <div className="w-full px-4 md:w-1/2 lg:w-1/4">
                         <h2 className="title-font mb-3 text-sm font-medium tracking-widest text-gray-900">
                             NEWS
