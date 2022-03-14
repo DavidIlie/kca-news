@@ -28,7 +28,7 @@ const Home: React.FC = () => {
                             </div>
                             <img
                                 src="/kings-alicante-1.jpg"
-                                className="rounded-md"
+                                className="rounded-md duration-150 hover:shadow-xl"
                             />
                             <div className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200">
                                 <VscChevronRight size={30} />
