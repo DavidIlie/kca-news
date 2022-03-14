@@ -6,8 +6,10 @@ import { SessionProvider } from "next-auth/react";
 
 import "../styles/globals.css";
 
-import NavBar from "../components/NavBar";
 import { isServer } from "../lib/isServer";
+
+import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 const KingsNews = ({
     Component,
@@ -46,6 +48,7 @@ const KingsNews = ({
             <SessionProvider session={session}>
                 <NavBar />
                 <Component {...pageProps} />
+                <Footer />
             </SessionProvider>
         </>
     );
