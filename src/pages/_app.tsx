@@ -2,12 +2,16 @@ import type { AppProps } from "next/app";
 import { DefaultSeo } from "next-seo";
 import { Toaster } from "react-hot-toast";
 import NextNprogress from "nextjs-progressbar";
+import { SessionProvider } from "next-auth/react";
 
 import "../styles/globals.css";
 
 import NavBar from "../components/NavBar";
 
-function KingsNews({ Component, pageProps }: AppProps) {
+const KingsNews = ({
+    Component,
+    pageProps: { session, ...pageProps },
+}: AppProps) => {
     return (
         <>
             <DefaultSeo
@@ -35,9 +39,11 @@ function KingsNews({ Component, pageProps }: AppProps) {
             />
             <Toaster position="top-center" />
             <NavBar />
-            <Component {...pageProps} />
+            <SessionProvider session={session}>
+                <Component {...pageProps} />
+            </SessionProvider>
         </>
     );
-}
+};
 
 export default KingsNews;
