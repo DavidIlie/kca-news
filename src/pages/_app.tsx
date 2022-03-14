@@ -15,12 +15,12 @@ const KingsNews = ({
     return (
         <>
             <DefaultSeo
-                defaultTitle="King's News"
-                titleTemplate="%s | King's News"
+                defaultTitle="KCA News"
+                titleTemplate="%s | KCA News"
                 openGraph={{
-                    title: `King's News`,
+                    title: `KCA News`,
                     type: `website`,
-                    site_name: `King's News`,
+                    site_name: `KCA News`,
                     images: [
                         {
                             url: ``,
