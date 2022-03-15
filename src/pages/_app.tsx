@@ -46,9 +46,11 @@ const KingsNews = ({
             />
             <Toaster position="top-center" />
             <SessionProvider session={session}>
-                <NavBar />
-                <Component {...pageProps} />
-                <Footer />
+                <div className="flex h-screen flex-col">
+                    <NavBar />
+                    <Component {...pageProps} />
+                    <Footer />
+                </div>
             </SessionProvider>
         </>
     );

@@ -6,9 +6,9 @@ const Home: React.FC = () => {
     return (
         <>
             <NextSeo title="Home" />
-            <div className="mx-auto flex min-h-screen w-full items-center">
-                <div className="mx-auto mt-10 flex items-center gap-16">
-                    <div className="relative -ml-48 flex items-center justify-center gap-4">
+            <div className="flex min-h-screen flex-grow items-center justify-center">
+                <div className="mt-16 flex w-full justify-center">
+                    <div className="relative flex items-center justify-center gap-4">
                         <button className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500">
                             <VscChevronLeft size={30} />
                         </button>
@@ -33,7 +33,7 @@ const Home: React.FC = () => {
                             <VscChevronRight size={30} />
                         </button>
                     </div>
-                    <div>
+                    <div className="mt-6">
                         <h1 className="text-4xl font-medium">Latest Posts:</h1>
                     </div>
                 </div>
