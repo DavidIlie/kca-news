@@ -18,7 +18,9 @@ export default NextAuth({
         async signIn({ user }) {
             if (
                 user.email?.includes("kcpupils.org") ||
-                user.email?.includes("kings.education")
+                user.email?.includes("kings.education") ||
+                user.email?.includes("davidilie.com") ||
+                user.email?.includes("davidapps.dev")
             )
                 return true;
             return false;

@@ -73,6 +73,8 @@ model Article {
   cover         String
   description   String
   published     Boolean   @default(false)
+  categoryId    String
+  filter        String?
 }
 
 model Comment {
