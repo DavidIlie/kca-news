@@ -56,9 +56,9 @@ const NavBar: React.FC = () => {
                             name="Lifestyle"
                             categories={lifestyleLinks}
                         />
-                        <Link href="/our-team">
+                        <Link href="/about">
                             <a className="cursor-pointer rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-1 duration-150 hover:bg-gray-200 hover:text-gray-900">
-                                Our Team
+                                About
                             </a>
                         </Link>
                     </nav>
