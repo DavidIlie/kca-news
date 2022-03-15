@@ -1,7 +1,7 @@
 import React from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { BiUserCircle, BiCog } from "react-icons/bi";
+import { BiUserCircle } from "react-icons/bi";
 import { useSession, signOut } from "next-auth/react";
 
 import DropdownElement from "../../ui/DropdownElement";
@@ -36,12 +36,6 @@ const UserDropdown: React.FC = () => {
                             <DropdownElement>
                                 <BiUserCircle className="mx-0.5 text-xl" />
                                 Profile
-                            </DropdownElement>
-                        </Menu.Item>
-                        <Menu.Item as={NextLink} href="/settings">
-                            <DropdownElement>
-                                <BiCog className="mx-0.5 text-xl" />
-                                Settings
                             </DropdownElement>
                         </Menu.Item>
                     </div>
