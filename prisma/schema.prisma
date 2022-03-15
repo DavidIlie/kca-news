@@ -23,12 +23,12 @@ model Account {
 
   isAdmin            Boolean @default(false)
 
-  articles      Article[]
-  comments      Comment[]
-  upvotes       Upvote[]
-  downvotes     Downvote[]
+  articles           Article[]
+  comments           Comment[]
+  upvotes            Upvote[]
+  downvotes          Downvote[]
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -70,6 +70,9 @@ model Article {
   upvotes       Upvote[]
   downvotes     Downvote[]
   pdf           String
+  cover         String
+  description   String
+  published     Boolean   @default(false)
 }
 
 model Comment {

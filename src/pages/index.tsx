@@ -9,7 +9,7 @@ const Home: React.FC = () => {
         <>
             <NextSeo title="Home" />
             <div className="flex min-h-screen flex-grow items-center">
-                <div className="-ml-16 mt-16 flex w-full justify-center">
+                <div className="-ml-24 mt-20 flex w-full justify-center">
                     <Slide cascade triggerOnce direction="left">
                         <div className="relative flex items-center gap-4">
                             <button className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500">

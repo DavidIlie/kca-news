@@ -15,9 +15,9 @@ const UserDropdown: React.FC = () => {
                 {({ open }) => (
                     <img
                         src={data?.user?.image || "/no-pfp.jpg"}
-                        className={`flex w-[45%] rounded-full ring-${
-                            open ? 4 : 2
-                        } duration-150 hover:ring-4`}
+                        className={`flex w-[45%] rounded-full duration-150 hover:ring-2 ${
+                            open && "ring-2"
+                        }`}
                     />
                 )}
             </Menu.Button>

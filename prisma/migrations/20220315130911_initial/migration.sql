@@ -53,6 +53,9 @@ CREATE TABLE "Article" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lastUpdated" TIMESTAMP(3) NOT NULL,
     "pdf" TEXT NOT NULL,
+    "cover" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "published" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Article_pkey" PRIMARY KEY ("id")
 );
