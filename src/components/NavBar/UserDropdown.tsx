@@ -14,7 +14,7 @@ const UserDropdown: React.FC = () => {
             <Menu.Button>
                 <img
                     src={data?.user?.image || "/no-pfp.jpg"}
-                    className="flex w-[45%] rounded-full"
+                    className="flex w-[45%] rounded-full ring-2"
                 />
             </Menu.Button>
             <Transition
