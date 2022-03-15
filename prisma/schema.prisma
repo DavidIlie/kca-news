@@ -27,6 +27,7 @@ model Account {
   comments           Comment[]
   upvotes            Upvote[]
   downvotes          Downvote[]
+  reviews            Review[]
 
   user               User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -66,7 +67,7 @@ model Article {
   comments      Comment[]
   title         String
   createdAt     DateTime  @default(now())
-  lastUpdated   DateTime
+  lastUpdated   DateTime?
   upvotes       Upvote[]
   downvotes     Downvote[]
   pdf           String
@@ -74,8 +75,18 @@ model Article {
   description   String
   published     Boolean   @default(false)
   categoryId    String[]
-  filter        String?
+  filter        String[]
   featured      Boolean   @default(false)
+}
+
+model Review {
+  id            String    @id @default(uuid())
+  reviewer      String
+  user          Account   @relation(fields: [reviewer], references: [id], onDelete: Cascade)
+  stars         Int
+  title         String
+  description   String
+  content       String
 }
 
 model Comment {
