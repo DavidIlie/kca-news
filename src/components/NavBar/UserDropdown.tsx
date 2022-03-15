@@ -12,10 +12,14 @@ const UserDropdown: React.FC = () => {
     return (
         <Menu as="div" className="relative -mr-14 inline-flex">
             <Menu.Button>
-                <img
-                    src={data?.user?.image || "/no-pfp.jpg"}
-                    className="flex w-[45%] rounded-full ring-2"
-                />
+                {({ open }) => (
+                    <img
+                        src={data?.user?.image || "/no-pfp.jpg"}
+                        className={`flex w-[45%] rounded-full ring-${
+                            open ? 4 : 2
+                        } duration-150 hover:ring-4`}
+                    />
+                )}
             </Menu.Button>
             <Transition
                 as={Fragment}
