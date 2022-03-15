@@ -56,8 +56,9 @@ CREATE TABLE "Article" (
     "cover" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "published" BOOLEAN NOT NULL DEFAULT false,
-    "categoryId" TEXT NOT NULL,
+    "categoryId" TEXT[],
     "filter" TEXT,
+    "featured" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Article_pkey" PRIMARY KEY ("id")
 );

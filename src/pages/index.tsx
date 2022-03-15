@@ -21,13 +21,8 @@ const Home: React.FC = () => {
                                         <span className="text-2xl font-bold">
                                             BREAKING NEWS:
                                         </span>{" "}
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit. Suspendisse euismod
-                                        tristique velit id facilisis.
-                                        Suspendisse potenti. Nunc blandit orci
-                                        sit amet posuere consequat. Quisque nisl
-                                        est, mattis at nunc sit amet, tempor
-                                        ornare tortor.
+                                        Your mum is on fire, but the house
+                                        aswell
                                     </h1>
                                 </div>
                                 <img
