@@ -4,6 +4,7 @@ import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 import { format, parseISO } from "date-fns";
 import Image from "next/image";
+import { signOut, useSession, signIn } from "next-auth/react";
 
 import {
     AiOutlineLike,
@@ -44,6 +45,8 @@ const ArticleViewer: React.FC<Props> = ({ article, writer, notFound }) => {
         );
     }
 
+    const { data } = useSession();
+
     return (
         <>
             <NextSeo title={article.title} />
@@ -64,14 +67,14 @@ const ArticleViewer: React.FC<Props> = ({ article, writer, notFound }) => {
                         <div className="grid grid-cols-2 divide-x-2 divide-gray-500">
                             <div className="mr-4 flex items-center justify-center gap-1">
                                 <AiOutlineLike
-                                    size="40"
+                                    size="30"
                                     className="cursor-pointer duration-150 hover:text-blue-500"
                                 />
                                 <p className="font-medium">0</p>
                             </div>
                             <div className="flex items-center justify-center gap-1 pl-4">
                                 <AiOutlineDislike
-                                    size="40"
+                                    size="30"
                                     className="cursor-pointer duration-150 hover:text-red-500"
                                 />
                                 <p className="font-medium">0</p>
@@ -133,10 +136,49 @@ const ArticleViewer: React.FC<Props> = ({ article, writer, notFound }) => {
                             type="application/pdf"
                         />
                     </object>
-                    <div className="mt-4 ml-4">
+                    <div className="mt-6 ml-4 border-t-2 pt-4">
                         <h1 className="text-4xl font-semibold">
                             What do you think?
                         </h1>
+                        <div className="my-4 w-full rounded border border-gray-200 bg-gray-50 p-6">
+                            <h5 className="text-lg font-bold text-gray-900 md:text-xl">
+                                Leave a comment
+                            </h5>
+                            <p className="my-1 text-gray-800">
+                                Share your opinion regarding this article for
+                                other students/teachers to see.
+                            </p>
+                            {!data ? (
+                                <>
+                                    <a
+                                        className="my-4 flex h-8 w-28 cursor-pointer items-center justify-center rounded bg-gray-200 font-bold text-gray-900 duration-150 hover:bg-gray-300"
+                                        onClick={() => signIn("google")}
+                                    >
+                                        Login
+                                    </a>
+                                    <p className="text-sm text-gray-800">
+                                        Your information is only used to display
+                                        your name and reply by email.
+                                    </p>
+                                </>
+                            ) : (
+                                <div className="mt-2">
+                                    <input
+                                        aria-label="Your message"
+                                        placeholder="Your message..."
+                                        required
+                                        className="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 py-2 pl-4 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                                    />
+                                    <Button
+                                        className="mt-2 w-full"
+                                        type="submit"
+                                        color="sky"
+                                    >
+                                        Comment
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
