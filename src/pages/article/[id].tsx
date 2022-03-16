@@ -5,6 +5,13 @@ import { NextSeo } from "next-seo";
 import { format, parseISO } from "date-fns";
 import Image from "next/image";
 
+import {
+    AiOutlineLike,
+    AiOutlineDislike,
+    AiFillLike,
+    AiFillDislike,
+} from "react-icons/ai";
+
 import prisma from "../../lib/prisma";
 import type { Article } from "../../types/Article";
 import type { User } from "../../types/User";
@@ -50,11 +57,29 @@ const ArticleViewer: React.FC<Props> = ({ article, writer, notFound }) => {
                             />
                         ))}
                     </div>
-                    <h1 className="border-b-2 px-4 pb-2 text-4xl font-semibold md:text-4xl">
-                        {article.title}
-                    </h1>
-                    <div className="mt-1 flex items-center">
-                        <span className="ml-4 inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
+                    <div className="flex justify-between border-b-2 pb-2">
+                        <h1 className="px-4 text-4xl font-semibold md:text-4xl">
+                            {article.title}
+                        </h1>
+                        <div className="grid grid-cols-2 divide-x-2 divide-gray-500">
+                            <div className="mr-4 flex items-center justify-center gap-1">
+                                <AiOutlineLike
+                                    size="40"
+                                    className="cursor-pointer duration-150 hover:text-blue-500"
+                                />
+                                <p className="font-medium">0</p>
+                            </div>
+                            <div className="flex items-center justify-center gap-1 pl-4">
+                                <AiOutlineDislike
+                                    size="40"
+                                    className="cursor-pointer duration-150 hover:text-red-500"
+                                />
+                                <p className="font-medium">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="ml-4 mt-1 flex items-center">
+                        <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
                             <Image
                                 className="rounded-full"
                                 src={writer.image}
@@ -108,6 +133,11 @@ const ArticleViewer: React.FC<Props> = ({ article, writer, notFound }) => {
                             type="application/pdf"
                         />
                     </object>
+                    <div className="mt-4 ml-4">
+                        <h1 className="text-4xl font-semibold">
+                            What do you think?
+                        </h1>
+                    </div>
                 </div>
             </div>
         </>
