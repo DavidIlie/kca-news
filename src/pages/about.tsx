@@ -60,7 +60,7 @@ const OurTeam: React.FC = () => {
                         <h1 className="mt-8 text-center text-5xl font-medium">
                             The Team
                         </h1>
-                        <div className="mx-auto mt-10 grid grid-cols-4 gap-12">
+                        <div className="mx-auto mt-12 grid grid-cols-4 gap-12">
                             <div className="hoverItem duration-150">
                                 <img
                                     src="/no-pfp.jpg"
