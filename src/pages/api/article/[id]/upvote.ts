@@ -24,10 +24,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     if (upvoteCheck) {
+        await prisma.upvote.delete({ where: { id: upvoteCheck.id } });
     } else {
+        // await prisma.upvote.create({
+        //     data: {
+        //     },
+        // });
     }
 
-    return res.send(req.query);
+    return res.status(200).json({ message: "ok" });
 };
 
 export default handler;
