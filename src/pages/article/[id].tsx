@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 import { format, parseISO } from "date-fns";
 import Image from "next/image";
-import { signOut, useSession, signIn } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
+import { Slide } from "react-awesome-reveal";
 
 import {
     AiOutlineLike,
@@ -16,6 +17,7 @@ import {
 import prisma from "../../lib/prisma";
 import type { Article } from "../../types/Article";
 import type { User } from "../../types/User";
+import type { Comment } from "@prisma/client";
 import { shimmer } from "../../lib/shimmer";
 
 import { Button } from "../../ui/Button";
@@ -25,27 +27,47 @@ interface Props {
     article: Article;
     writer: User;
     notFound?: boolean;
+    upvotes: {
+        count: number;
+        self: boolean;
+    };
+    downvotes: {
+        count: number;
+        self: boolean;
+    };
+    comments: Array<Comment>;
 }
 
-const ArticleViewer: React.FC<Props> = ({ article, writer, notFound }) => {
+const ArticleViewer: React.FC<Props> = ({
+    article,
+    writer,
+    notFound,
+    upvotes,
+    downvotes,
+}) => {
     if (notFound) {
         return (
             <div className="flex min-h-screen flex-grow items-center justify-center">
-                <div>
-                    <h1 className="mb-4 text-6xl font-bold text-red-500">
-                        404 not found.
-                    </h1>
-                    <Link href="/">
-                        <a>
-                            <Button className="mx-auto">Go Home</Button>
-                        </a>
-                    </Link>
-                </div>
+                <Slide triggerOnce direction="down">
+                    <div>
+                        <h1 className="mb-4 text-6xl font-bold text-red-500">
+                            404 not found.
+                        </h1>
+                        <Link href="/">
+                            <a>
+                                <Button className="mx-auto">Go Home</Button>
+                            </a>
+                        </Link>
+                    </div>
+                </Slide>
             </div>
         );
     }
 
     const { data } = useSession();
+
+    const [upvoteCount, setUpvoteCount] = useState<number>(upvotes.count);
+    const [downvoteCount, setDownvoteCount] = useState<number>(downvotes.count);
 
     return (
         <>
@@ -66,18 +88,32 @@ const ArticleViewer: React.FC<Props> = ({ article, writer, notFound }) => {
                         </h1>
                         <div className="grid grid-cols-2 divide-x-2 divide-gray-500">
                             <div className="mr-4 flex items-center justify-center gap-1">
-                                <AiOutlineLike
-                                    size="30"
-                                    className="cursor-pointer duration-150 hover:text-blue-500"
-                                />
-                                <p className="font-medium">0</p>
+                                {upvotes.self ? (
+                                    <AiFillLike
+                                        size="30"
+                                        className="cursor-pointer duration-150 hover:text-blue-500"
+                                    />
+                                ) : (
+                                    <AiOutlineLike
+                                        size="30"
+                                        className="cursor-pointer duration-150 hover:text-blue-500"
+                                    />
+                                )}
+                                <p className="font-medium">{upvoteCount}</p>
                             </div>
                             <div className="flex items-center justify-center gap-1 pl-4">
-                                <AiOutlineDislike
-                                    size="30"
-                                    className="cursor-pointer duration-150 hover:text-red-500"
-                                />
-                                <p className="font-medium">0</p>
+                                {downvotes.self ? (
+                                    <AiFillDislike
+                                        size="30"
+                                        className="cursor-pointer duration-150 hover:text-red-500"
+                                    />
+                                ) : (
+                                    <AiOutlineDislike
+                                        size="30"
+                                        className="cursor-pointer duration-150 hover:text-red-500"
+                                    />
+                                )}
+                                <p className="font-medium">{downvoteCount}</p>
                             </div>
                         </div>
                     </div>
@@ -164,8 +200,8 @@ const ArticleViewer: React.FC<Props> = ({ article, writer, notFound }) => {
                             ) : (
                                 <div className="mt-2">
                                     <input
-                                        aria-label="Your message"
-                                        placeholder="Your message..."
+                                        aria-label="Your comment"
+                                        placeholder="Your comment..."
                                         required
                                         className="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 py-2 pl-4 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                                     />
@@ -213,10 +249,37 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
     const writer = await prisma.user.findFirst({ where: { id: user?.userId } });
 
+    const upvotes = await prisma.upvote.count({
+        where: { articleId: article.id },
+    });
+    const upvoteUser = await prisma.upvote.findFirst({
+        where: { articleId: article.id, votedBy: user.id },
+    });
+
+    const downvotes = await prisma.downvote.count({
+        where: { articleId: article.id },
+    });
+    const downvoteUser = await prisma.downvote.findFirst({
+        where: { articleId: article.id, votedBy: user.id },
+    });
+
+    const comments = await prisma.comment.findMany({
+        where: { articleId: article.id },
+    });
+
     return {
         props: {
             article: JSON.parse(JSON.stringify(article)),
             writer: JSON.parse(JSON.stringify(writer)),
+            upvotes: {
+                count: upvotes,
+                self: upvoteUser !== null,
+            },
+            downvotes: {
+                count: downvotes,
+                self: downvoteUser !== null,
+            },
+            comments: JSON.parse(JSON.stringify(comments)),
         },
     };
 };
