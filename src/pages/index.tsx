@@ -71,7 +71,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async () => {
     const featuredPosts = await prisma.article.findMany({
         where: { featured: true, published: true },
     });
