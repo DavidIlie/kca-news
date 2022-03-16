@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-  reactStrictMode: true,
-  swcMinify: true,
-}
+    reactStrictMode: true,
+    swcMinify: true,
+    images: {
+        domains: ["lh3.googleusercontent.com", "s3.davidapps.dev"],
+    },
+};

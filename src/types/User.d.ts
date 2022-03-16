@@ -3,4 +3,5 @@ export interface User {
     image: string;
     isAdmin: boolean;
     id: string;
+    name: string;
 }
