@@ -29,17 +29,17 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
             <div className="flex min-h-screen flex-grow items-center">
                 <div className="-ml-20 mt-20 flex w-full justify-center gap-24">
                     <Slide cascade triggerOnce direction="left">
-                        <Link href={`/article/${featuredPosts[index].id}`}>
-                            <a className="relative -mr-96 flex items-center gap-4">
-                                <button
-                                    className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100"
-                                    disabled={index === 0}
-                                    onClick={() => setSelectedIndex(index - 1)}
-                                    title="Back"
-                                >
-                                    <VscChevronLeft size={30} />
-                                </button>
-                                <div className="w-[50%] duration-150 hover:shadow-xl">
+                        <div className="relative -mr-96 flex items-center gap-4">
+                            <button
+                                className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100"
+                                disabled={index === 0}
+                                onClick={() => setSelectedIndex(index - 1)}
+                                title="Back"
+                            >
+                                <VscChevronLeft size={30} />
+                            </button>
+                            <Link href={`/article/${featuredPosts[index].id}`}>
+                                <a className="w-[50%] duration-150 hover:shadow-xl">
                                     <h1 className="absolute top-0 left-0 ml-20 rounded-t-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg font-medium text-white">
                                         {featuredPosts[index].title} -{" "}
                                         <span className="font-normal italic text-gray-300">
@@ -66,19 +66,17 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                                         src={featuredPosts[index].cover}
                                         className="aspect-[3/2] rounded-md object-cover"
                                     />
-                                </div>
-                                <button
-                                    className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100"
-                                    disabled={
-                                        index === featuredPosts.length - 1
-                                    }
-                                    onClick={() => setSelectedIndex(index + 1)}
-                                    title="Next"
-                                >
-                                    <VscChevronRight size={30} />
-                                </button>
-                            </a>
-                        </Link>
+                                </a>
+                            </Link>
+                            <button
+                                className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100"
+                                disabled={index === featuredPosts.length - 1}
+                                onClick={() => setSelectedIndex(index + 1)}
+                                title="Next"
+                            >
+                                <VscChevronRight size={30} />
+                            </button>
+                        </div>
                     </Slide>
                     <Slide cascade triggerOnce direction="down">
                         <div className="mt-6 text-center">
