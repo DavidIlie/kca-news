@@ -37,7 +37,8 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                                             BREAKING NEWS:
                                         </span>{" "}
                                         Your mum is on fire, but the house
-                                        aswell
+                                        aswell because she forgo💀 to switch off
+                                        the oven
                                     </h1>
                                 </div>
                                 <img
