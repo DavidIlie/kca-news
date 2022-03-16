@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 import { VscChevronLeft, VscChevronRight } from "react-icons/vsc";
-
 import { Slide } from "react-awesome-reveal";
 
-const Home: React.FC = () => {
+import prisma from "../lib/prisma";
+import { Article } from "../types/Article";
+
+interface Props {
+    featuredPosts: Article[];
+}
+
+const Home: React.FC<Props> = ({ featuredPosts }) => {
+    const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
     return (
         <>
             <NextSeo title="Home" />
@@ -12,7 +21,13 @@ const Home: React.FC = () => {
                 <div className="-ml-24 mt-20 flex w-full justify-center">
                     <Slide cascade triggerOnce direction="left">
                         <div className="relative flex items-center gap-4">
-                            <button className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500">
+                            <button
+                                className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100"
+                                disabled={selectedIndex === 0}
+                                onClick={() =>
+                                    setSelectedIndex(selectedIndex - 1)
+                                }
+                            >
                                 <VscChevronLeft size={30} />
                             </button>
                             <div className="w-[70%] duration-150 hover:shadow-xl">
@@ -30,7 +45,15 @@ const Home: React.FC = () => {
                                     className="aspect-[14/9] rounded-md object-cover"
                                 />
                             </div>
-                            <button className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500">
+                            <button
+                                className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100"
+                                disabled={
+                                    selectedIndex === featuredPosts.length
+                                }
+                                onClick={() =>
+                                    setSelectedIndex(selectedIndex + 1)
+                                }
+                            >
                                 <VscChevronRight size={30} />
                             </button>
                         </div>
@@ -46,6 +69,18 @@ const Home: React.FC = () => {
             </div>
         </>
     );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const featuredPosts = await prisma.article.findMany({
+        where: { featured: true, published: true },
+    });
+
+    return {
+        props: {
+            featuredPosts: JSON.parse(JSON.stringify(featuredPosts)),
+        },
+    };
 };
 
 export default Home;

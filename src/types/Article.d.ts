@@ -1,0 +1,14 @@
+export interface Article {
+    id: string;
+    writer: string;
+    title: string;
+    createdAt: Date;
+    lastUpdated: Date;
+    pdf: string;
+    cover: string;
+    description: string;
+    published: boolean;
+    categoryId: Array<string>;
+    filter: Array<string>;
+    featured: boolean;
+}
