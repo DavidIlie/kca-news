@@ -352,9 +352,6 @@ const ArticleViewer: React.FC<Props> = ({
                                                         response.message
                                                     );
                                                 } else {
-                                                    toast.success(
-                                                        "Created successfully!"
-                                                    );
                                                     resetForm();
                                                     setFormSuccess(true);
                                                     setInterval(
