@@ -24,6 +24,12 @@ export default NextAuth({
                 return true;
             return false;
         },
+        async session({ session, user }) {
+            if (session?.user) {
+                session.user.id = user.id;
+            }
+            return session;
+        },
     },
     secret: "wdzNsBb2TFRnlQb8oGYa8aU4W/IFbY++i++GJI+8N6I=",
 });

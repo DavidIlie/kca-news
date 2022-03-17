@@ -18,7 +18,7 @@ import {
 import prisma from "../../lib/prisma";
 import type { Article } from "../../types/Article";
 import type { User } from "../../types/User";
-import type { Comment } from "@prisma/client";
+import type { Comment } from "../../types/Comment";
 import { shimmer } from "../../lib/shimmer";
 
 import { Button } from "../../ui/Button";
@@ -77,6 +77,7 @@ const ArticleViewer: React.FC<Props> = ({
     const [commentsState, setComments] = useState<Array<Comment>>(comments);
 
     const handleOpinion = async (s: "upvote" | "downvote") => {
+        if (!data?.user) return signIn("google");
         const upvotePromise = new Promise<string>(async (resolve, reject) => {
             const r = await fetch(`/api/article/${article.id}/${s}`, {
                 credentials: "include",
@@ -113,7 +114,7 @@ const ArticleViewer: React.FC<Props> = ({
             }
         });
 
-        toast.promise(
+        return toast.promise(
             upvotePromise,
             {
                 loading: "Loading",
@@ -286,13 +287,63 @@ const ArticleViewer: React.FC<Props> = ({
                                         <Button
                                             className="mt-2 w-full"
                                             type="submit"
-                                            color="sky"
                                         >
                                             Comment
                                         </Button>
                                     </div>
                                 )}
                             </div>
+                            {commentsState.map((comment, index) => (
+                                <div
+                                    className="flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4"
+                                    key={index}
+                                >
+                                    <Image
+                                        src={
+                                            comment.user?.image || "/no-pfp.jpg"
+                                        }
+                                        width={55}
+                                        height={24}
+                                        blurDataURL={shimmer(10, 10)}
+                                        placeholder="blur"
+                                        className="rounded-full object-cover shadow-lg"
+                                        alt={`${
+                                            comment.user?.name.split(" ")[0]
+                                        }'s profile image`}
+                                    />
+                                    <div className="flex flex-col space-y-2 ">
+                                        <div className="w-full">
+                                            {comment.comment}
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <p className="text-sm text-gray-500">
+                                                {comment.user?.name}
+                                            </p>
+                                            <span className=" text-gray-800">
+                                                /
+                                            </span>
+                                            <p className="text-sm text-gray-400">
+                                                {format(
+                                                    new Date(comment.createdAt),
+                                                    "d MMM yyyy 'at' h:mm bb"
+                                                )}
+                                            </p>
+                                            {data?.user &&
+                                                comment.userId ===
+                                                    data.user?.id && (
+                                                    <>
+                                                        <span className="text-gray-200">
+                                                            /
+                                                        </span>
+                                                        <button className="text-sm text-red-600">
+                                                            Delete
+                                                        </button>
+                                                    </>
+                                                )}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </Slide>
@@ -343,6 +394,9 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     const comments = await prisma.comment.findMany({
         where: { articleId: article.id },
+        include: {
+            user: true,
+        },
     });
 
     return {
