@@ -4,7 +4,7 @@ export default function SuccessMessage({
     children: React.ReactNode;
 }) {
     return (
-        <p className="flex items-center text-sm font-bold text-green-700">
+        <p className="flex items-center text-sm font-semibold text-green-500">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"

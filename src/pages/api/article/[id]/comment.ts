@@ -24,18 +24,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         if (!article)
             return res.status(404).json({ message: "article not found" });
 
-        const user = await prisma.user.findFirst({
-            where: { email: session.user?.email },
-        });
-
         const commentCheck = await prisma.comment.findFirst({
-            where: { userId: user?.id, comment: body.message },
+            where: { userId: session?.user?.id, comment: body.message },
         });
         if (commentCheck) return res.status(409).json({ message: "conflict" });
 
         const commentCreation = await prisma.comment.create({
             data: {
-                userId: user!.id,
+                userId: session!.user!.id,
                 articleId: article.id,
                 comment: body.message,
             },

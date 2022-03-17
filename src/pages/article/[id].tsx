@@ -21,12 +21,13 @@ import type { Article } from "../../types/Article";
 import type { User } from "../../types/User";
 import type { Comment } from "../../types/Comment";
 import { shimmer } from "../../lib/shimmer";
+import { crudCommentSchema } from "../../schema/comment";
 
 import { Button } from "../../ui/Button";
 import ArticleBadge from "../../components/ArticleBadge";
-import { crudCommentSchema } from "../../schema/comment";
 import ErrorMessage from "../../ui/ErrorMessage";
 import SuccessMessage from "../../ui/SuccessMessage";
+import ConfirmModal from "../../ui/ConfirmModal";
 
 interface Props {
     article: Article;
@@ -82,6 +83,9 @@ const ArticleViewer: React.FC<Props> = ({
 
     const [formSuccess, setFormSuccess] = useState<boolean>(false);
 
+    const [openConfirmModal, setOpenConfirmModal] = useState<boolean>(false);
+    const [deleteCommentId, setDeleteCommentId] = useState<string | null>(null);
+
     const handleOpinion = async (s: "upvote" | "downvote") => {
         if (!data?.user) return signIn("google");
         const upvotePromise = new Promise<string>(async (resolve, reject) => {
@@ -128,6 +132,42 @@ const ArticleViewer: React.FC<Props> = ({
                 error: "Error when fetching!",
             },
             { id: "updateOpinion" }
+        );
+    };
+
+    const deleteComment = async () => {
+        const deleteCommentPromise = new Promise<string>(
+            async (resolve, reject) => {
+                const r = await fetch(
+                    `/api/article/${article.id}/comment/${deleteCommentId}`,
+                    {
+                        credentials: "include",
+                        method: "DELETE",
+                    }
+                );
+                if (r.status === 200) {
+                    let finalArray = [] as Array<Comment>;
+                    commentsState.map(
+                        (comment) =>
+                            comment.id !== deleteCommentId &&
+                            finalArray.push(comment)
+                    );
+                    setComments(finalArray);
+                    resolve("");
+                } else {
+                    reject("");
+                }
+            }
+        );
+
+        return toast.promise(
+            deleteCommentPromise,
+            {
+                loading: "Loading",
+                success: "Deleted sucessfully!",
+                error: "Error when fetching!",
+            },
+            { id: "deleteComment" }
         );
     };
 
@@ -261,7 +301,7 @@ const ArticleViewer: React.FC<Props> = ({
                                 What do you think?
                             </h1>
                             <div className="my-4 w-full rounded border border-gray-200 bg-gray-50 p-6">
-                                <h5 className="text-lg font-bold text-gray-900 md:text-xl">
+                                <h5 className="text-lg font-semibold text-gray-900 md:text-xl">
                                     Leave a comment
                                 </h5>
                                 <p className="my-1 text-gray-800">
@@ -301,6 +341,7 @@ const ArticleViewer: React.FC<Props> = ({
                                                         body: JSON.stringify(
                                                             data
                                                         ),
+                                                        credentials: "include",
                                                     }
                                                 );
                                                 const response = await r.json();
@@ -418,7 +459,17 @@ const ArticleViewer: React.FC<Props> = ({
                                                         <span className="text-gray-200">
                                                             /
                                                         </span>
-                                                        <button className="text-sm text-red-600">
+                                                        <button
+                                                            className="text-sm text-red-600"
+                                                            onClick={() => {
+                                                                setDeleteCommentId(
+                                                                    comment.id
+                                                                );
+                                                                setOpenConfirmModal(
+                                                                    true
+                                                                );
+                                                            }}
+                                                        >
                                                             Delete
                                                         </button>
                                                     </>
@@ -431,6 +482,11 @@ const ArticleViewer: React.FC<Props> = ({
                     </div>
                 </Slide>
             </div>
+            <ConfirmModal
+                isOpen={openConfirmModal}
+                updateModalState={() => setOpenConfirmModal(!openConfirmModal)}
+                successFunction={deleteComment}
+            />
         </>
     );
 };
@@ -480,6 +536,11 @@ export const getServerSideProps: GetServerSideProps = async ({
         include: {
             user: true,
         },
+        orderBy: [
+            {
+                createdAt: "desc",
+            },
+        ],
     });
 
     return {
