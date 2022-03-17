@@ -174,7 +174,7 @@ const ArticleViewer: React.FC<Props> = ({
     return (
         <>
             <NextSeo title={article.title} />
-            <div className="mb-20 flex flex-grow px-4 sm:pt-24 lg:px-0">
+            <div className="sm:pt-42 mb-20 flex flex-grow px-4 md:pt-36 lg:px-0 xl:pt-24">
                 <Slide
                     triggerOnce
                     className="mx-auto"
