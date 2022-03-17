@@ -6,6 +6,7 @@ import { format, parseISO } from "date-fns";
 import Image from "next/image";
 import { useSession, signIn } from "next-auth/react";
 import { Slide } from "react-awesome-reveal";
+import toast from "react-hot-toast";
 
 import {
     AiOutlineLike,
@@ -67,7 +68,58 @@ const ArticleViewer: React.FC<Props> = ({
     const { data } = useSession();
 
     const [upvoteCount, setUpvoteCount] = useState<number>(upvotes.count);
+    const [selfUpvote, setSelfUpvote] = useState<boolean>(upvotes.self);
+
     const [downvoteCount, setDownvoteCount] = useState<number>(downvotes.count);
+    const [selfDownvote, setSelfDownvote] = useState<boolean>(downvotes.self);
+
+    const handleOpinion = async (s: "upvote" | "downvote") => {
+        const upvotePromise = new Promise<string>(async (resolve, reject) => {
+            const r = await fetch(`/api/article/${article.id}/${s}`, {
+                credentials: "include",
+            });
+            if (r.status === 200) {
+                if (s === "upvote") {
+                    if (selfDownvote) {
+                        setSelfDownvote(false);
+                        setDownvoteCount(downvoteCount - 1);
+                    }
+                    if (selfUpvote) {
+                        setSelfUpvote(false);
+                        setUpvoteCount(upvoteCount - 1);
+                    } else {
+                        setSelfUpvote(true);
+                        setUpvoteCount(upvoteCount + 1);
+                    }
+                } else {
+                    if (selfUpvote) {
+                        setSelfUpvote(false);
+                        setUpvoteCount(upvoteCount - 1);
+                    }
+                    if (selfDownvote) {
+                        setSelfDownvote(false);
+                        setDownvoteCount(downvoteCount - 1);
+                    } else {
+                        setSelfDownvote(true);
+                        setDownvoteCount(downvoteCount + 1);
+                    }
+                }
+                resolve("");
+            } else {
+                reject("");
+            }
+        });
+
+        toast.promise(
+            upvotePromise,
+            {
+                loading: "Loading",
+                success: "Updated sucessfully!",
+                error: "Error when fetching!",
+            },
+            { id: "updateOpinion" }
+        );
+    };
 
     return (
         <>
@@ -88,29 +140,37 @@ const ArticleViewer: React.FC<Props> = ({
                         </h1>
                         <div className="grid grid-cols-2 divide-x-2 divide-gray-500">
                             <div className="mr-4 flex items-center justify-center gap-1">
-                                {upvotes.self ? (
+                                {selfUpvote ? (
                                     <AiFillLike
                                         size="30"
-                                        className="cursor-pointer duration-150 hover:text-blue-500"
+                                        className="cursor-pointer text-blue-500 duration-150 hover:text-blue-500"
+                                        onClick={() => handleOpinion("upvote")}
                                     />
                                 ) : (
                                     <AiOutlineLike
                                         size="30"
                                         className="cursor-pointer duration-150 hover:text-blue-500"
+                                        onClick={() => handleOpinion("upvote")}
                                     />
                                 )}
                                 <p className="font-medium">{upvoteCount}</p>
                             </div>
                             <div className="flex items-center justify-center gap-1 pl-4">
-                                {downvotes.self ? (
+                                {selfDownvote ? (
                                     <AiFillDislike
                                         size="30"
-                                        className="cursor-pointer duration-150 hover:text-red-500"
+                                        className="cursor-pointer text-red-500 duration-150 hover:text-red-500"
+                                        onClick={() =>
+                                            handleOpinion("downvote")
+                                        }
                                     />
                                 ) : (
                                     <AiOutlineDislike
                                         size="30"
                                         className="cursor-pointer duration-150 hover:text-red-500"
+                                        onClick={() =>
+                                            handleOpinion("downvote")
+                                        }
                                     />
                                 )}
                                 <p className="font-medium">{downvoteCount}</p>
