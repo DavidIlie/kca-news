@@ -19,19 +19,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const user = await prisma.user.findFirst({
         where: { email: session.user?.email },
     });
-    const account = await prisma.account.findFirst({
-        where: { userId: user?.id },
-    });
 
     const downvoteCheck = await prisma.downvote.findFirst({
-        where: { articleId: article.id, votedBy: account?.id },
+        where: { articleId: article.id, votedBy: user?.id },
     });
 
     if (downvoteCheck) {
         await prisma.downvote.delete({ where: { id: downvoteCheck.id } });
     } else {
         const upvoteCheck = await prisma.upvote.findFirst({
-            where: { articleId: article.id, votedBy: account?.id },
+            where: { articleId: article.id, votedBy: user?.id },
         });
         if (upvoteCheck)
             await prisma.upvote.delete({ where: { id: upvoteCheck.id } });
@@ -39,7 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         await prisma.downvote.create({
             data: {
                 articleId: article.id,
-                votedBy: account!.id,
+                votedBy: user!.id,
             },
         });
     }

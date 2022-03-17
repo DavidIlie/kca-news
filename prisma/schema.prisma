@@ -21,14 +21,6 @@ model Account {
   id_token           String?  @db.Text
   session_state      String?
 
-  isAdmin            Boolean @default(false)
-
-  articles           Article[]
-  comments           Comment[]
-  upvotes            Upvote[]
-  downvotes          Downvote[]
-  reviews            Review[]
-
   user               User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
@@ -50,6 +42,14 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+
+  articles           Article[]
+  comments           Comment[]
+  upvotes            Upvote[]
+  downvotes          Downvote[]
+  reviews            Review[]
+
+  isAdmin            Boolean @default(false)
 }
 
 model VerificationToken {
@@ -63,7 +63,7 @@ model VerificationToken {
 model Article {
   id            String    @id @default(uuid())
   writer        String
-  user          Account   @relation(fields: [writer], references: [id], onDelete: Cascade)
+  user          User   @relation(fields: [writer], references: [id], onDelete: Cascade)
   comments      Comment[]
   title         String
   createdAt     DateTime  @default(now())
@@ -71,18 +71,20 @@ model Article {
   upvotes       Upvote[]
   downvotes     Downvote[]
   pdf           String
+  mdx           String
   cover         String
   description   String
   published     Boolean   @default(false)
   categoryId    String[]
   filter        String[]
   featured      Boolean   @default(false)
+  review        Boolean   @default(false)
 }
 
 model Review {
   id            String    @id @default(uuid())
   reviewer      String
-  user          Account   @relation(fields: [reviewer], references: [id], onDelete: Cascade)
+  user          User   @relation(fields: [reviewer], references: [id], onDelete: Cascade)
   stars         Int
   title         String
   description   String
@@ -92,10 +94,11 @@ model Review {
 model Comment {
   id            String    @id @default(uuid())
   userId        String
-  user          Account   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   articleId     String
   article       Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
   createdAt     DateTime  @default(now())
+  comment       String
 }
 
 model Upvote {
@@ -103,7 +106,7 @@ model Upvote {
   articleId     String
   article       Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
   votedBy       String
-  user          Account  @relation(fields: [votedBy], references: [id], onDelete: Cascade)
+  user          User  @relation(fields: [votedBy], references: [id], onDelete: Cascade)
 }
 
 model Downvote {
@@ -111,5 +114,5 @@ model Downvote {
   articleId     String
   article       Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
   votedBy       String
-  user          Account  @relation(fields: [votedBy], references: [id], onDelete: Cascade)
+  user          User  @relation(fields: [votedBy], references: [id], onDelete: Cascade)
 }
