@@ -94,7 +94,7 @@ model Review {
 model Comment {
   id            String    @id @default(uuid())
   userId        String
-  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   articleId     String
   article       Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
   createdAt     DateTime  @default(now())
@@ -106,7 +106,7 @@ model Upvote {
   articleId     String
   article       Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
   votedBy       String
-  user          User  @relation(fields: [votedBy], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [votedBy], references: [id], onDelete: Cascade)
 }
 
 model Downvote {
@@ -114,5 +114,5 @@ model Downvote {
   articleId     String
   article       Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
   votedBy       String
-  user          User  @relation(fields: [votedBy], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [votedBy], references: [id], onDelete: Cascade)
 }

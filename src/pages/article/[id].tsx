@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useSession, signIn, getSession } from "next-auth/react";
 import { Slide } from "react-awesome-reveal";
 import toast from "react-hot-toast";
+import { Formik, Field, Form } from "formik";
 
 import {
     AiOutlineLike,
@@ -23,6 +24,9 @@ import { shimmer } from "../../lib/shimmer";
 
 import { Button } from "../../ui/Button";
 import ArticleBadge from "../../components/ArticleBadge";
+import { crudCommentSchema } from "../../schema/comment";
+import ErrorMessage from "../../ui/ErrorMessage";
+import SuccessMessage from "../../ui/SuccessMessage";
 
 interface Props {
     article: Article;
@@ -75,6 +79,8 @@ const ArticleViewer: React.FC<Props> = ({
     const [selfDownvote, setSelfDownvote] = useState<boolean>(downvotes.self);
 
     const [commentsState, setComments] = useState<Array<Comment>>(comments);
+
+    const [formSuccess, setFormSuccess] = useState<boolean>(false);
 
     const handleOpinion = async (s: "upvote" | "downvote") => {
         if (!data?.user) return signIn("google");
@@ -263,39 +269,116 @@ const ArticleViewer: React.FC<Props> = ({
                                     for other students/teachers to see.
                                 </p>
                                 {!data ? (
-                                    <>
-                                        <a
-                                            className="my-4 flex h-8 w-28 cursor-pointer items-center justify-center rounded bg-gray-200 font-bold text-gray-900 duration-150 hover:bg-gray-300"
-                                            onClick={() => signIn("google")}
-                                        >
-                                            Login
-                                        </a>
-                                        <p className="text-sm text-gray-800">
-                                            Your information is only used to
-                                            display your name and reply by
-                                            email.
-                                        </p>
-                                    </>
+                                    <a
+                                        className="my-4 flex h-8 w-28 cursor-pointer items-center justify-center rounded bg-gray-200 font-bold text-gray-900 duration-150 hover:bg-gray-300"
+                                        onClick={() => signIn("google")}
+                                    >
+                                        Login
+                                    </a>
                                 ) : (
                                     <div className="mt-2">
-                                        <input
-                                            aria-label="Your comment"
-                                            placeholder="Your comment..."
-                                            required
-                                            className="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 py-2 pl-4 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                                        />
-                                        <Button
-                                            className="mt-2 w-full"
-                                            type="submit"
+                                        <Formik
+                                            validateOnChange={false}
+                                            validateOnBlur={false}
+                                            validationSchema={crudCommentSchema}
+                                            initialValues={{
+                                                message: "",
+                                            }}
+                                            onSubmit={async (
+                                                data,
+                                                {
+                                                    setSubmitting,
+                                                    setFieldError,
+                                                    resetForm,
+                                                }
+                                            ) => {
+                                                setSubmitting(true);
+
+                                                const r = await fetch(
+                                                    `/api/article/${article.id}/comment`,
+                                                    {
+                                                        method: "POST",
+                                                        body: JSON.stringify(
+                                                            data
+                                                        ),
+                                                    }
+                                                );
+                                                const response = await r.json();
+
+                                                if (r.status !== 200) {
+                                                    setFieldError(
+                                                        "message",
+                                                        response.message
+                                                    );
+                                                } else {
+                                                    toast.success(
+                                                        "Created successfully!"
+                                                    );
+                                                    resetForm();
+                                                    setFormSuccess(true);
+                                                    setInterval(
+                                                        () =>
+                                                            setFormSuccess(
+                                                                false
+                                                            ),
+                                                        2000
+                                                    );
+                                                    setComments([
+                                                        response,
+                                                        ...commentsState,
+                                                    ]);
+                                                }
+
+                                                setSubmitting(false);
+                                            }}
                                         >
-                                            Comment
-                                        </Button>
+                                            {({ errors, isSubmitting }) => (
+                                                <Form>
+                                                    <Field
+                                                        as="input"
+                                                        aria-label="Your comment"
+                                                        placeholder="Your comment..."
+                                                        required
+                                                        name="message"
+                                                        className="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 py-2 pl-4 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                                                    />
+                                                    <Button
+                                                        className="mt-2 mb-2 w-full"
+                                                        type="submit"
+                                                        disabled={isSubmitting}
+                                                        loading={isSubmitting}
+                                                    >
+                                                        Comment
+                                                    </Button>
+                                                    {errors.message ? (
+                                                        <ErrorMessage>
+                                                            {errors.message}
+                                                        </ErrorMessage>
+                                                    ) : formSuccess ? (
+                                                        <SuccessMessage>
+                                                            Created
+                                                            successfully!
+                                                        </SuccessMessage>
+                                                    ) : (
+                                                        <p className="text-sm text-gray-800">
+                                                            Your information is
+                                                            only used to display
+                                                            your name and reply
+                                                            by email.
+                                                        </p>
+                                                    )}
+                                                </Form>
+                                            )}
+                                        </Formik>
                                     </div>
                                 )}
                             </div>
                             {commentsState.map((comment, index) => (
                                 <div
-                                    className="flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4"
+                                    className={`flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4 ${
+                                        index !== commentsState.length - 1 &&
+                                        "mb-4"
+                                    }`}
                                     key={index}
                                 >
                                     <Image
