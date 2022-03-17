@@ -306,7 +306,7 @@ const ArticleViewer: React.FC<Props> = ({
                                         height={24}
                                         blurDataURL={shimmer(10, 10)}
                                         placeholder="blur"
-                                        className="rounded-full object-cover shadow-lg"
+                                        className="rounded-full object-cover"
                                         alt={`${
                                             comment.user?.name.split(" ")[0]
                                         }'s profile image`}
