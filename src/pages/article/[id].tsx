@@ -196,7 +196,7 @@ const ArticleViewer: React.FC<Props> = ({
                             </h1>
                             <div className="grid grid-cols-2 divide-x-2 divide-gray-500">
                                 <div className="mr-4 flex items-center justify-center gap-1">
-                                    {selfUpvote ? (
+                                    {selfUpvote && data ? (
                                         <AiFillLike
                                             size="30"
                                             className="cursor-pointer text-blue-500 duration-150 hover:text-blue-500"
@@ -216,7 +216,7 @@ const ArticleViewer: React.FC<Props> = ({
                                     <p className="font-medium">{upvoteCount}</p>
                                 </div>
                                 <div className="flex items-center justify-center gap-1 pl-4">
-                                    {selfDownvote ? (
+                                    {selfDownvote && data ? (
                                         <AiFillDislike
                                             size="30"
                                             className="cursor-pointer text-red-500 duration-150 hover:text-red-500"
@@ -511,7 +511,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         where: { id: article?.writer },
     });
     const user = await prisma.user.findFirst({
-        where: { email: session?.user?.email },
+        where: { id: session?.user?.id },
     });
 
     const upvotes = await prisma.upvote.count({
