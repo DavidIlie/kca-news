@@ -4,11 +4,19 @@ import { DefaultSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { AiOutlineSearch } from "react-icons/ai";
 
-const Search: React.FC = () => {
+import prisma from "../lib/prisma";
+import { Article } from "../types/Article";
+
+interface Props {
+    initialResponse: Array<Article>;
+}
+
+const Search: React.FC<Props> = ({ initialResponse }) => {
     const { query } = useRouter();
     const q = (query as any).q;
 
     const [searchQuery, setSearchQuery] = useState(q);
+    const [results, setResults] = useState<Array<Article>>(initialResponse);
 
     return (
         <>
@@ -58,8 +66,14 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
             },
         };
 
+    const initialResponse = await prisma.article.findMany({
+        where: { published: true, title: q as string },
+    });
+
     return {
-        props: {},
+        props: {
+            initialResponse,
+        },
     };
 };
 
