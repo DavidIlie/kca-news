@@ -18,6 +18,8 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
     const [searchQuery, setSearchQuery] = useState(q);
     const [results, setResults] = useState<Array<Article>>(initialResponse);
 
+    console.log(results);
+
     return (
         <>
             <DefaultSeo title={q} />
@@ -67,12 +69,17 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
         };
 
     const initialResponse = await prisma.article.findMany({
-        where: { published: true, title: q as string },
+        where: {
+            published: true,
+            title: {
+                contains: q as string,
+            },
+        },
     });
 
     return {
         props: {
-            initialResponse,
+            initialResponse: JSON.parse(JSON.stringify(initialResponse)),
         },
     };
 };
