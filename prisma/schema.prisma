@@ -43,11 +43,10 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  articles           Article[]
-  comments           Comment[]
-  upvotes            Upvote[]
-  downvotes          Downvote[]
-  reviews            Review[]
+  articles      Article[]
+  comments      Comment[]
+  upvotes       Upvote[]
+  downvotes     Downvote[]
 
   isAdmin            Boolean @default(false)
 }
@@ -62,16 +61,16 @@ model VerificationToken {
 
 model Article {
   id            String    @id @default(uuid())
-  writer        String
-  user          User   @relation(fields: [writer], references: [id], onDelete: Cascade)
+  writer        String?
+  user          User?   @relation(fields: [writer], references: [id], onDelete: Cascade)
+  anonymous     Boolean
   comments      Comment[]
   title         String
   createdAt     DateTime  @default(now())
-  lastUpdated   DateTime?
   upvotes       Upvote[]
   downvotes     Downvote[]
-  pdf           String
-  mdx           String
+  pdf           String?
+  mdx           String?
   cover         String
   description   String
   published     Boolean   @default(false)
@@ -79,16 +78,6 @@ model Article {
   filter        String[]
   featured      Boolean   @default(false)
   review        Boolean   @default(false)
-}
-
-model Review {
-  id            String    @id @default(uuid())
-  reviewer      String
-  user          User   @relation(fields: [reviewer], references: [id], onDelete: Cascade)
-  stars         Int
-  title         String
-  description   String
-  content       String
 }
 
 model Comment {

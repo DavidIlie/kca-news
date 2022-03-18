@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
@@ -9,6 +10,7 @@ import { useShortcut } from "litkey";
 
 import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
+import { shimmer } from "../lib/shimmer";
 
 interface Props {
     featuredPosts: Article[];
@@ -40,7 +42,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                             </button>
                             <Link href={`/article/${featuredPosts[index].id}`}>
                                 <a className="w-[50%] duration-150 hover:shadow-xl">
-                                    <h1 className="absolute top-0 left-0 ml-20 rounded-t-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg font-medium text-white">
+                                    <h1 className="absolute top-0 left-0 z-50 ml-[4.8rem] w-[50.15%] rounded-t-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg font-medium text-white">
                                         {featuredPosts[index].title} -{" "}
                                         <span className="font-normal italic text-gray-300">
                                             {formatDistance(
@@ -54,7 +56,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                                             )}
                                         </span>
                                     </h1>
-                                    <div className="h-26 absolute bottom-0 w-[50%] rounded-b-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg text-white">
+                                    <div className="h-26 absolute bottom-0 z-50 mb-1.5 w-[50%] rounded-b-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg text-white">
                                         <h1 className="line-clamp-3">
                                             <span className="text-2xl font-bold">
                                                 BREAKING NEWS:
@@ -62,9 +64,13 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                                             {featuredPosts[index].description}
                                         </h1>
                                     </div>
-                                    <img
+                                    <Image
                                         src={featuredPosts[index].cover}
                                         className="aspect-[3/2] rounded-md object-cover"
+                                        placeholder="blur"
+                                        blurDataURL={shimmer(1000, 600)}
+                                        width={1000}
+                                        height={600}
                                     />
                                 </a>
                             </Link>
