@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
 import { AiOutlineSearch } from "react-icons/ai";
 
@@ -17,6 +18,9 @@ import {
 
 const NavBar: React.FC = () => {
     const { status } = useSession();
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const { push } = useRouter();
 
     return (
         <nav className="z-50 w-full border-b-2 bg-white text-gray-600 shadow-md sm:fixed 2xl:px-12">
@@ -64,8 +68,34 @@ const NavBar: React.FC = () => {
                             type="search"
                             name="search"
                             placeholder="Search"
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            value={searchQuery}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && searchQuery !== "") {
+                                    push(
+                                        `/search?q=${encodeURIComponent(
+                                            searchQuery
+                                        )}`
+                                    );
+                                    setSearchQuery("");
+                                }
+                            }}
                         />
-                        <AiOutlineSearch className="absolute right-0 top-0 mr-4 mt-[0.75rem]" />
+                        <AiOutlineSearch
+                            className={`absolute right-0 top-0 mr-4 mt-[0.75rem] ${
+                                searchQuery !== "" && "cursor-pointer"
+                            }`}
+                            onClick={() => {
+                                if (searchQuery !== "") {
+                                    push(
+                                        `/search?q=${encodeURIComponent(
+                                            searchQuery
+                                        )}`
+                                    );
+                                    setSearchQuery("");
+                                }
+                            }}
+                        />
                     </div>
                     {status === "loading" ? (
                         <Spinner size="6" />
