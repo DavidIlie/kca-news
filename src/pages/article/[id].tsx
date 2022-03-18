@@ -12,6 +12,7 @@ import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import remarkAutoLinkHeadings from "remark-autolink-headings";
 import remarkSlug from "remark-slug";
+import matter from "gray-matter";
 
 import {
     AiOutlineLike,
@@ -33,7 +34,6 @@ import ErrorMessage from "../../ui/ErrorMessage";
 import SuccessMessage from "../../ui/SuccessMessage";
 import ConfirmModal from "../../ui/ConfirmModal";
 import MDXComponents from "../../components/MDXComponents";
-import matter from "gray-matter";
 
 interface Props {
     article: Article;
