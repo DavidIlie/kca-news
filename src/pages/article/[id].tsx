@@ -8,6 +8,10 @@ import { useSession, signIn, getSession } from "next-auth/react";
 import { Slide } from "react-awesome-reveal";
 import toast from "react-hot-toast";
 import { Formik, Field, Form } from "formik";
+import { MDXRemote } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
+import remarkAutoLinkHeadings from "remark-autolink-headings";
+import remarkSlug from "remark-slug";
 
 import {
     AiOutlineLike,
@@ -28,10 +32,12 @@ import ArticleBadge from "../../components/ArticleBadge";
 import ErrorMessage from "../../ui/ErrorMessage";
 import SuccessMessage from "../../ui/SuccessMessage";
 import ConfirmModal from "../../ui/ConfirmModal";
+import MDXComponents from "../../components/MDXComponents";
+import matter from "gray-matter";
 
 interface Props {
     article: Article;
-    writer: User | false;
+    writer: User;
     notFound?: boolean;
     upvotes: {
         count: number;
@@ -42,6 +48,7 @@ interface Props {
         self: boolean;
     };
     comments: Array<Comment>;
+    mdxSource?: any;
 }
 
 const ArticleViewer: React.FC<Props> = ({
@@ -51,6 +58,7 @@ const ArticleViewer: React.FC<Props> = ({
     upvotes,
     downvotes,
     comments,
+    mdxSource,
 }) => {
     if (notFound) {
         return (
@@ -243,30 +251,38 @@ const ArticleViewer: React.FC<Props> = ({
                             <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
                                 <Image
                                     className="rounded-full"
-                                    src={writer ? writer.image : "/no-pfp.jpg"}
+                                    src={
+                                        article.anonymous
+                                            ? "/no-pfp.jpg"
+                                            : writer.image
+                                    }
                                     width="25px"
                                     height="25px"
                                     blurDataURL={shimmer(1920, 1080)}
                                     alt={`${
-                                        writer
-                                            ? writer.name.split(" ")[0]
-                                            : "KCA News"
+                                        article.anonymous
+                                            ? "KCA News"
+                                            : writer.name.split(" ")[0]
                                     }'s profile image`}
                                 />
                                 <span className="ml-1 mr-1 text-lg">
-                                    {writer ? writer.name : "KCA News Team"}
+                                    {article.anonymous
+                                        ? "KCA News Team"
+                                        : writer.name}
                                 </span>
                             </span>
-                            <h1 className="text-gray-800">
+                            <h1 className="ml-1 flex items-center text-gray-800">
                                 {" / "}
-                                {format(
-                                    parseISO(
-                                        new Date(
-                                            article.createdAt
-                                        ).toISOString()
-                                    ),
-                                    "MMMM dd, yyyy"
-                                )}
+                                <div className="ml-2">
+                                    {format(
+                                        parseISO(
+                                            new Date(
+                                                article.createdAt
+                                            ).toISOString()
+                                        ),
+                                        "MMMM dd, yyyy"
+                                    )}
+                                </div>
                             </h1>
                         </div>
                         <div className="mt-6 mb-12 flex justify-center">
@@ -280,9 +296,10 @@ const ArticleViewer: React.FC<Props> = ({
                                 placeholder="blur"
                             />
                         </div>
-                        <p className="mb-5 w-full max-w-5xl px-2 text-justify text-lg">
+                        <p className="ml-2 w-full max-w-5xl px-2 pb-6 text-justify">
                             {article.description}
                         </p>
+                        <div className="ml-4 mb-7 border-t-2" />
                         {article.pdf && (
                             <object
                                 data={article.pdf}
@@ -299,6 +316,14 @@ const ArticleViewer: React.FC<Props> = ({
                                     type="application/pdf"
                                 />
                             </object>
+                        )}
+                        {article.mdx && (
+                            <div className="blog-content px-4">
+                                <MDXRemote
+                                    components={{ ...MDXComponents }}
+                                    {...mdxSource}
+                                />
+                            </div>
                         )}
                         <div className="mt-6 ml-4 border-t-2 pt-4">
                             <h1 className="text-4xl font-semibold">
@@ -545,12 +570,23 @@ export const getServerSideProps: GetServerSideProps = async ({
         ],
     });
 
+    let mdxSource = null;
+
+    if (article.mdx) {
+        const { content } = matter(article.mdx);
+        mdxSource = await serialize(content, {
+            mdxOptions: {
+                remarkPlugins: [remarkAutoLinkHeadings, remarkSlug],
+            },
+        });
+    }
+
     return {
         props: {
             article: JSON.parse(JSON.stringify(article)),
             writer: article.anonymous
-                ? JSON.parse(JSON.stringify(writer))
-                : false,
+                ? false
+                : JSON.parse(JSON.stringify(writer)),
             upvotes: {
                 count: upvotes,
                 self: upvoteUser !== null,
@@ -560,6 +596,7 @@ export const getServerSideProps: GetServerSideProps = async ({
                 self: downvoteUser !== null,
             },
             comments: JSON.parse(JSON.stringify(comments)),
+            mdxSource,
         },
     };
 };

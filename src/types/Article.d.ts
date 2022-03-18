@@ -11,4 +11,6 @@ export interface Article {
     categoryId: Array<string>;
     filter: Array<string>;
     featured: boolean;
+    mdx?: string;
+    anonymous: boolean;
 }
