@@ -31,7 +31,7 @@ import ConfirmModal from "../../ui/ConfirmModal";
 
 interface Props {
     article: Article;
-    writer: User;
+    writer: User | false;
     notFound?: boolean;
     upvotes: {
         count: number;
@@ -243,16 +243,18 @@ const ArticleViewer: React.FC<Props> = ({
                             <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
                                 <Image
                                     className="rounded-full"
-                                    src={writer.image}
+                                    src={writer ? writer.image : "/no-pfp.jpg"}
                                     width="25px"
                                     height="25px"
                                     blurDataURL={shimmer(1920, 1080)}
                                     alt={`${
-                                        writer.name.split(" ")[0]
+                                        writer
+                                            ? writer.name.split(" ")[0]
+                                            : "KCA News"
                                     }'s profile image`}
                                 />
                                 <span className="ml-1 mr-1 text-lg">
-                                    {writer.name}
+                                    {writer ? writer.name : "KCA News Team"}
                                 </span>
                             </span>
                             <h1 className="text-gray-800">
@@ -281,21 +283,23 @@ const ArticleViewer: React.FC<Props> = ({
                         <p className="mb-5 w-full max-w-5xl px-2 text-justify text-lg">
                             {article.description}
                         </p>
-                        <object
-                            data={article.pdf}
-                            type={article.pdf}
-                            style={{
-                                height: "80vh",
-                                width: "96%",
-                                margin: "0 auto",
-                            }}
-                        >
-                            <embed
-                                src={article.pdf}
-                                style={{ height: "80vh", width: "100%" }}
-                                type="application/pdf"
-                            />
-                        </object>
+                        {article.pdf && (
+                            <object
+                                data={article.pdf}
+                                type={article.pdf}
+                                style={{
+                                    height: "80vh",
+                                    width: "96%",
+                                    margin: "0 auto",
+                                }}
+                            >
+                                <embed
+                                    src={article.pdf}
+                                    style={{ height: "80vh", width: "100%" }}
+                                    type="application/pdf"
+                                />
+                            </object>
+                        )}
                         <div className="mt-6 ml-4 border-t-2 pt-4">
                             <h1 className="text-4xl font-semibold">
                                 What do you think?
@@ -508,8 +512,9 @@ export const getServerSideProps: GetServerSideProps = async ({
     const session = await getSession({ req });
 
     const writer = await prisma.user.findFirst({
-        where: { id: article?.writer },
+        where: { id: article?.writer || "" },
     });
+
     const user = await prisma.user.findFirst({
         where: { id: session?.user?.id },
     });
@@ -543,7 +548,9 @@ export const getServerSideProps: GetServerSideProps = async ({
     return {
         props: {
             article: JSON.parse(JSON.stringify(article)),
-            writer: JSON.parse(JSON.stringify(writer)),
+            writer: article.anonymous
+                ? JSON.parse(JSON.stringify(writer))
+                : false,
             upvotes: {
                 count: upvotes,
                 self: upvoteUser !== null,
