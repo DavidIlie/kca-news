@@ -42,7 +42,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                             </button>
                             <Link href={`/article/${featuredPosts[index].id}`}>
                                 <a className="w-[50%]">
-                                    <h1 className="absolute top-0 left-0 z-50 ml-[4.8rem] w-[50.15%] rounded-t-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg font-medium text-white">
+                                    <h1 className="absolute top-0 left-0 z-50 ml-[4.9rem] w-[50%] rounded-t-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg font-medium text-white">
                                         {featuredPosts[index].title} -{" "}
                                         <span className="font-normal italic text-gray-300">
                                             {formatDistance(

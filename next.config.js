@@ -3,6 +3,10 @@ module.exports = {
     reactStrictMode: true,
     swcMinify: true,
     images: {
-        domains: ["lh3.googleusercontent.com", "s3.davidapps.dev"],
+        domains: [
+            "lh3.googleusercontent.com",
+            "s3.davidapps.dev",
+            "media.davidapps.dev",
+        ],
     },
 };
