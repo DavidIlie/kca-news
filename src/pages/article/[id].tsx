@@ -278,7 +278,7 @@ const ArticleViewer: React.FC<Props> = ({
                                 placeholder="blur"
                             />
                         </div>
-                        <p className="mb-10 w-full max-w-5xl px-2 text-justify text-lg">
+                        <p className="mb-5 w-full max-w-5xl px-2 text-justify text-lg">
                             {article.description}
                         </p>
                         <object
