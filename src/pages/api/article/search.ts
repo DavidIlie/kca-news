@@ -11,6 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 published: true,
                 title: {
                     contains: q as string,
+                    mode: "insensitive",
                 },
             },
         });

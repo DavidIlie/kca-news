@@ -23,6 +23,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const doSearch = async () => {
+        if (searchQuery === "") return;
         setLoading(true);
 
         const r = await fetch(
@@ -37,7 +38,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
             setResults(response);
         }
 
-        setLoading(false);
+        return setLoading(false);
     };
 
     return (
@@ -100,6 +101,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
             published: true,
             title: {
                 contains: q as string,
+                mode: "insensitive",
             },
         },
     });
