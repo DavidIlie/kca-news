@@ -24,6 +24,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
 
     const doSearch = async () => {
         if (searchQuery === "") return;
+
         setLoading(true);
 
         const r = await fetch(
