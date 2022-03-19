@@ -68,9 +68,9 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                                         src={featuredPosts[index].cover}
                                         className="aspect-[3/2] rounded-md object-cover"
                                         placeholder="blur"
-                                        blurDataURL={shimmer(1000, 600)}
+                                        blurDataURL={shimmer(1000, 750)}
                                         width={1000}
-                                        height={600}
+                                        height={750}
                                     />
                                 </a>
                             </Link>
