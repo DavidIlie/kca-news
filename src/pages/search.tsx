@@ -24,7 +24,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const doSearch = async () => {
-        if (searchQuery === "") return;
+        if (searchQuery === "" || searchQuery === previousSearchQuery) return;
 
         setLoading(true);
 
@@ -70,7 +70,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
                     </div>
                     <div className="mt-4">
                         {loading && (
-                            <Spinner className="mx-auto mt-4 h-16 w-16" />
+                            <Spinner className="mx-auto my-12 h-16 w-16" />
                         )}
                         {results.map((article, index) => (
                             <ArticleCard article={article} key={index} />

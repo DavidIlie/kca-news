@@ -14,18 +14,18 @@ interface ArticleCardProps {
 const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
     return (
         <Link href={`/article/${article.id}`}>
-            <a className="hoverItem t-11 mb-4 flex transform cursor-pointer flex-wrap justify-center gap-4 rounded-xl border-2 border-gray-200 bg-gray-50 duration-200 md:flex-nowrap md:px-3 md:py-2">
+            <a className="hoverItem t-11 mb-4 flex cursor-pointer gap-4 rounded-xl border-2 border-gray-200 bg-gray-50 duration-200 md:flex-nowrap md:px-3 md:py-2">
                 <Image
                     alt="Post picture"
                     className="rounded shadow-xl"
                     src={article.cover}
-                    width={1300 / 2}
+                    width={1000 / 2}
                     height={700 / 2}
                     blurDataURL={shimmer(1905 / 2, 957 / 2)}
                     placeholder="blur"
                     objectFit="cover"
                 />
-                <div className="py-1 md:max-w-sm md:px-0">
+                <div className="py-1 md:max-w-xl md:px-0">
                     {article.categoryId.map((tag, i) => (
                         <ArticleBadge tag={tag} key={i} />
                     ))}
