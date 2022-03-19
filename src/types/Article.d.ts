@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export interface Article {
     id: string;
     writer: string;
@@ -13,4 +15,5 @@ export interface Article {
     featured: boolean;
     mdx?: string;
     anonymous: boolean;
+    user?: User;
 }

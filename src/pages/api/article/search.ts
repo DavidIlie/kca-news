@@ -14,6 +14,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     mode: "insensitive",
                 },
             },
+            include: {
+                user: true,
+            },
+            orderBy: [
+                {
+                    createdAt: "desc",
+                },
+            ],
         });
 
         return res.json(articles);

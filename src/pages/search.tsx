@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
 import { Spinner } from "../ui/Spinner";
+import ArticleCard from "../components/ArticleCard";
 
 interface Props {
     initialResponse: Array<Article>;
@@ -72,7 +73,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
                             <Spinner className="mx-auto mt-4 h-16 w-16" />
                         )}
                         {results.map((article, index) => (
-                            <h1 key={index}>{article.title}</h1>
+                            <ArticleCard article={article} key={index} />
                         ))}
                         {results.length === 0 && (
                             <h1 className="text-center text-xl font-semibold">
@@ -105,6 +106,14 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
                 mode: "insensitive",
             },
         },
+        include: {
+            user: true,
+        },
+        orderBy: [
+            {
+                createdAt: "desc",
+            },
+        ],
     });
 
     return {

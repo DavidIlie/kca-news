@@ -192,10 +192,7 @@ const ArticleViewer: React.FC<Props> = ({
                     <div className="container mx-auto mt-10 max-w-4xl">
                         <div className="mb-4 flex w-full flex-wrap justify-start px-3">
                             {article.categoryId.map((category, index) => (
-                                <ArticleBadge
-                                    tag={category.toUpperCase()}
-                                    key={index}
-                                />
+                                <ArticleBadge tag={category} key={index} />
                             ))}
                         </div>
                         <div className="flex justify-between border-b-2 pb-2">
