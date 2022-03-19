@@ -3,9 +3,11 @@ import { GetServerSideProps } from "next";
 import { DefaultSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { AiOutlineSearch } from "react-icons/ai";
+import toast from "react-hot-toast";
 
 import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
+import { Spinner } from "../ui/Spinner";
 
 interface Props {
     initialResponse: Array<Article>;
@@ -15,18 +17,36 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
     const { query } = useRouter();
     const q = (query as any).q;
 
+    const [previousSearchQuery, setPreviousSearchQuery] = useState(q);
     const [searchQuery, setSearchQuery] = useState(q);
     const [results, setResults] = useState<Array<Article>>(initialResponse);
+    const [loading, setLoading] = useState<boolean>(false);
 
-    console.log(results);
+    const doSearch = async () => {
+        setLoading(true);
+
+        const r = await fetch(
+            `/api/article/search?q=${encodeURIComponent(searchQuery)}`
+        );
+        const response = await r.json();
+
+        if (r.status !== 200) {
+            toast.error(response.message);
+        } else {
+            setPreviousSearchQuery(searchQuery);
+            setResults(response);
+        }
+
+        setLoading(false);
+    };
 
     return (
         <>
-            <DefaultSeo title={q} />
+            <DefaultSeo title={previousSearchQuery} />
             <div className="mb-20 flex min-h-screen flex-grow px-4 sm:pt-32 lg:px-0">
                 <div className="container mx-auto max-w-5xl">
                     <h1 className="mb-4 text-4xl font-semibold">
-                        Search results for: {q}
+                        Search results for: {previousSearchQuery}
                     </h1>
                     <div className="relative mx-auto text-gray-600">
                         <input
@@ -36,20 +56,27 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
                             placeholder="Search"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    console.log("search");
-                                }
-                            }}
+                            onKeyDown={(e) => e.key === "Enter" && doSearch()}
                         />
                         <AiOutlineSearch
                             className={`absolute right-0 top-0 mr-4 mt-[0.75rem] ${
                                 searchQuery !== "" && "cursor-pointer"
                             }`}
-                            onClick={() => {
-                                console.log("search");
-                            }}
+                            onClick={() => doSearch()}
                         />
+                    </div>
+                    <div className="mt-4">
+                        {loading && (
+                            <Spinner className="mx-auto mt-4 h-16 w-16" />
+                        )}
+                        {results.map((article, index) => (
+                            <h1 key={index}>{article.title}</h1>
+                        ))}
+                        {results.length === 0 && (
+                            <h1 className="text-center text-xl font-semibold">
+                                No results...
+                            </h1>
+                        )}
                     </div>
                 </div>
             </div>
