@@ -55,7 +55,7 @@ model User {
 
   status        String?
 
-  nickame       String?
+  nickname       String?
 }
 
 model VerificationToken {
