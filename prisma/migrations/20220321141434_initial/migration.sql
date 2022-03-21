@@ -34,6 +34,9 @@ CREATE TABLE "User" (
     "emailVerified" TIMESTAMP(3),
     "image" TEXT,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
+    "description" TEXT,
+    "status" TEXT,
+    "nickname" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
