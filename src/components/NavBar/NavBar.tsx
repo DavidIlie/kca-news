@@ -20,7 +20,7 @@ const NavBar: React.FC = () => {
     const { status } = useSession();
 
     const [searchQuery, setSearchQuery] = useState("");
-    const { push } = useRouter();
+    const { push, asPath } = useRouter();
 
     return (
         <nav className="z-50 w-full border-b-2 bg-white text-gray-600 shadow-md sm:fixed 2xl:px-12">
@@ -77,6 +77,7 @@ const NavBar: React.FC = () => {
                                             searchQuery
                                         )}`
                                     );
+                                    if (asPath.includes("search")) window.location.reload();
                                     setSearchQuery("");
                                 }
                             }}
@@ -92,6 +93,7 @@ const NavBar: React.FC = () => {
                                             searchQuery
                                         )}`
                                     );
+                                    if (asPath.includes("search")) window.location.reload();
                                     setSearchQuery("");
                                 }
                             }}
