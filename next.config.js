@@ -7,6 +7,7 @@ module.exports = {
             "lh3.googleusercontent.com",
             "s3.davidapps.dev",
             "media.davidapps.dev",
+            "img.rawpixel.com"
         ],
     },
 };
