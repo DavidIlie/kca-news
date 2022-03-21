@@ -33,10 +33,13 @@ CREATE TABLE "User" (
     "email" TEXT,
     "emailVerified" TIMESTAMP(3),
     "image" TEXT,
-    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "description" TEXT,
     "status" TEXT,
     "nickname" TEXT,
+    "tags" TEXT[],
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
+    "isWriter" BOOLEAN NOT NULL DEFAULT false,
+    "isReviewer" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
