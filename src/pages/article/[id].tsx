@@ -263,9 +263,15 @@ const ArticleViewer: React.FC<Props> = ({
                                     }'s profile image`}
                                 />
                                 <span className="ml-1 mr-1 text-lg">
-                                    {article.anonymous
-                                        ? "KCA News Team"
-                                        : writer.name}
+                                    {article.anonymous ? (
+                                        "KCA News Team"
+                                    ) : (
+                                        <Link href={`/profile/${writer.id}`}>
+                                            <a className="duration-150 hover:text-blue-500">
+                                                {writer.name}
+                                            </a>
+                                        </Link>
+                                    )}
                                 </span>
                             </span>
                             <h1 className="ml-1 flex items-center text-gray-800">
