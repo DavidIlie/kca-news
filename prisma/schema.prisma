@@ -48,10 +48,14 @@ model User {
   upvotes       Upvote[]
   downvotes     Downvote[]
 
-  isAdmin       Boolean @default(false)
   description   String?
   status        String?
   nickname      String?
+  tags          String[]
+
+  isAdmin       Boolean @default(false)
+  isWriter      Boolean @default(false)
+  isReviewer    Boolean @default(false)
 }
 
 model VerificationToken {
