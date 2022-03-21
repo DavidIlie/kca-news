@@ -2,6 +2,16 @@
 
 postitive comments are pending to be given
 
+## IMMEDIATEOhasdui;oasduig
+
+- individual category page viwer
+- personal user profile viewer
+- see other people's profiles
+- dashboard
+    - markdown editor for articles
+    - admin page for comments
+- have fun
+
 ## possible things that i will add no matter what
 
 -   meme of da day
