@@ -50,6 +50,12 @@ model User {
   downvotes     Downvote[]
 
   isAdmin            Boolean @default(false)
+
+  description   String?
+
+  status        String?
+
+  nickame       String?
 }
 
 model VerificationToken {
