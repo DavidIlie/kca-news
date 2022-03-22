@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 
 import { MdArticle, MdPublish } from "react-icons/md";
-import { AiFillLike, AiFillDislike } from "react-icons/ai";
+import {
+    AiFillLike,
+    AiFillDislike,
+    AiOutlineArrowDown,
+    AiOutlineArrowUp,
+} from "react-icons/ai";
 import { FaCommentDots } from "react-icons/fa";
 
 import prisma from "../../lib/prisma";
 import { Article } from "../../types/Article";
 import { Button } from "../../ui/Button";
 import StatisticCard from "../../components/StatisticCard";
+import { User } from "../../types/User";
+import Radio from "../../ui/Radio";
 
 interface Props {
+    user: User;
     statistics: {
         totalArticles: number;
         publishedArticles: number;
@@ -23,7 +31,12 @@ interface Props {
     articles: Article[];
 }
 
-const WriterPanel: React.FC<Props> = ({ statistics, articles }) => {
+const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
+    const [selected, setSelected] = useState<Article | null>(null);
+    const [openedMoreDetails, setOpenedMoreDetails] = useState<string | null>(
+        null
+    );
+
     return (
         <>
             <DefaultSeo title="Writer Panel" />
@@ -31,7 +44,9 @@ const WriterPanel: React.FC<Props> = ({ statistics, articles }) => {
                 <div className="mx-auto">
                     <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-2 md:grid-cols-4 lg:grid-cols-5 lg:px-8">
                         <StatisticCard
-                            title="Your Articles"
+                            title={`${
+                                user.isAdmin ? "Total" : "Your"
+                            } Articles`}
                             value={statistics.totalArticles}
                             icon={MdArticle}
                         />
@@ -58,16 +73,63 @@ const WriterPanel: React.FC<Props> = ({ statistics, articles }) => {
                     </div>
                     <div className="container mt-8 max-w-7xl px-2 sm:px-8">
                         <h1 className="mb-4 text-4xl font-semibold">
-                            Your Articles
+                            {user.isAdmin ? "Total" : "Your"} Articles
                         </h1>
                         <div className="flex items-center gap-2">
                             <Button>Create Article</Button>
-                            <Button disabled color="sky">
+                            <Button disabled={selected === null} color="sky">
                                 Update Article
                             </Button>
-                            <Button disabled color="secondary">
+                            <Button
+                                disabled={
+                                    selected === null || articles.length === 1
+                                }
+                                color="secondary"
+                            >
                                 Delete Article
                             </Button>
+                        </div>
+                        <div className="mt-4">
+                            {articles.map((article, index) => (
+                                <div
+                                    className={`flex items-center gap-2 rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-4 ${
+                                        index !== articles.length - 1 && "mb-4"
+                                    }`}
+                                    key={article.id}
+                                >
+                                    <div className="flex items-center gap-4 pl-4">
+                                        <div className="cursor-pointer text-lg">
+                                            {openedMoreDetails ===
+                                            article.id ? (
+                                                <AiOutlineArrowUp
+                                                    onClick={() =>
+                                                        setOpenedMoreDetails(
+                                                            null
+                                                        )
+                                                    }
+                                                />
+                                            ) : (
+                                                <AiOutlineArrowDown
+                                                    onClick={() =>
+                                                        setOpenedMoreDetails(
+                                                            article.id
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                        </div>
+                                        <Radio
+                                            checked={selected === article}
+                                            onChange={() => {
+                                                selected === article
+                                                    ? setSelected(null)
+                                                    : setSelected(article);
+                                            }}
+                                            className="focus:none"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -98,7 +160,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
           });
 
     const publishedArticles = user?.isAdmin
-        ? await prisma.article.count()
+        ? await prisma.article.count({ where: { published: true } })
         : await prisma.article.count({
               where: { published: true, user: session?.user?.id },
           });
@@ -115,6 +177,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     return {
         props: {
+            user,
             statistics: {
                 totalArticles,
                 publishedArticles,
