@@ -69,7 +69,7 @@ model VerificationToken {
 model Article {
   id            String    @id @default(uuid())
   writer        String?
-  user          User?   @relation(fields: [writer], references: [id], onDelete: Cascade)
+  user          User?     @relation(fields: [writer], references: [id], onDelete: Cascade)
   anonymous     Boolean
   comments      Comment[]
   title         String
@@ -83,7 +83,6 @@ model Article {
   published     Boolean   @default(false)
   categoryId    String[]
   filter        String[]
-  featured      Boolean   @default(false)
   review        Boolean   @default(false)
 }
 
