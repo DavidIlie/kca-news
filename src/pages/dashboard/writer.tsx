@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
+import { Disclosure } from "@headlessui/react";
 
 import { MdArticle, MdPublish } from "react-icons/md";
 import {
@@ -91,33 +92,23 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                         </div>
                         <div className="mt-4">
                             {articles.map((article, index) => (
-                                <div
-                                    className={`flex items-center gap-2 rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-4 ${
+                                <Disclosure
+                                    as="div"
+                                    className={`rounded-md border-2 border-gray-200 bg-gray-100 px-6 py-4 ${
                                         index !== articles.length - 1 && "mb-4"
                                     }`}
                                     key={article.id}
                                 >
-                                    <div className="flex items-center gap-4 pl-4">
-                                        <div className="cursor-pointer text-lg">
-                                            {openedMoreDetails ===
-                                            article.id ? (
-                                                <AiOutlineArrowUp
-                                                    onClick={() =>
-                                                        setOpenedMoreDetails(
-                                                            null
-                                                        )
-                                                    }
-                                                />
-                                            ) : (
-                                                <AiOutlineArrowDown
-                                                    onClick={() =>
-                                                        setOpenedMoreDetails(
-                                                            article.id
-                                                        )
-                                                    }
-                                                />
-                                            )}
-                                        </div>
+                                    <div className="flex items-center gap-4">
+                                        <Disclosure.Button className="cursor-pointer text-lg">
+                                            {({ open }) =>
+                                                open ? (
+                                                    <AiOutlineArrowUp title="Less Details" />
+                                                ) : (
+                                                    <AiOutlineArrowDown title="More Details" />
+                                                )
+                                            }
+                                        </Disclosure.Button>
                                         <Radio
                                             checked={selected === article}
                                             onChange={() => {
@@ -127,8 +118,16 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                             }}
                                             className="focus:none"
                                         />
+                                        <div className="flex w-full items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                                <h1>{article.title}</h1>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                    <Disclosure.Panel className="mt-4">
+                                        more details here
+                                    </Disclosure.Panel>
+                                </Disclosure>
                             ))}
                         </div>
                     </div>
