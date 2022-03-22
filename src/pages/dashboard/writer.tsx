@@ -27,11 +27,11 @@ const WriterPanel: React.FC<Props> = ({ statistics, articles }) => {
     return (
         <>
             <DefaultSeo title="Writer Panel" />
-            <div className="mb-20 flex min-h-screen flex-grow px-4 sm:pt-32">
+            <div className="mb-20 flex min-h-screen flex-grow px-4 pt-10 sm:pt-32">
                 <div className="mx-auto">
                     <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-2 md:grid-cols-4 lg:grid-cols-5 lg:px-8">
                         <StatisticCard
-                            title="Total Articles"
+                            title="Your Articles"
                             value={statistics.totalArticles}
                             icon={MdArticle}
                         />
