@@ -48,7 +48,7 @@ interface Props {
         count: number;
         self: boolean;
     };
-    comments: Array<Comment>;
+    comments: Comment[];
     mdxSource?: any;
 }
 

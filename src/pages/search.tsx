@@ -111,7 +111,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
             },
         },
         include: {
-            user: true,
+            writer: true,
         },
         orderBy: [
             {

@@ -2,7 +2,6 @@ import { User } from "./User";
 
 export interface Article {
     id: string;
-    writer: string;
     title: string;
     createdAt: Date;
     lastUpdated: Date;

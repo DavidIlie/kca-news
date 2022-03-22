@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 },
             },
             include: {
-                user: true,
+                writer: true,
             },
             orderBy: [
                 {

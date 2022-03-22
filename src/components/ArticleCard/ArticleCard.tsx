@@ -42,7 +42,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                                 src={
                                     article.anonymous
                                         ? "/no-pfp.jpg"
-                                        : article.user!.image
+                                        : article.writer!.image
                                 }
                                 width="30px"
                                 height="30px"
@@ -50,14 +50,14 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                                 alt={`${
                                     article.anonymous
                                         ? "KCA News"
-                                        : article.user!.name.split(" ")[0]
+                                        : article.writer!.name.split(" ")[0]
                                 }'s profile image`}
                             />
                             <div className="ml-2">
                                 <span className="text-sm text-gray-700">
                                     {article.anonymous
                                         ? "KCA News Team"
-                                        : article.user!.name}
+                                        : article.writer!.name}
                                 </span>
                                 <h1 className="mt-0.5 text-gray-800">
                                     {formatDistance(
