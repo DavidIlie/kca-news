@@ -94,13 +94,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const totalArticles = user?.isAdmin
         ? await prisma.article.count()
         : await prisma.article.count({
-              where: { writer: session?.user?.id },
+              where: { user: session?.user?.id },
           });
 
     const publishedArticles = user?.isAdmin
         ? await prisma.article.count()
         : await prisma.article.count({
-              where: { published: true, writer: session?.user?.id },
+              where: { published: true, user: session?.user?.id },
           });
 
     const totalComments = await prisma.comment.count();
@@ -110,7 +110,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const articles = user?.isAdmin
         ? await prisma.article.findMany()
         : await prisma.article.findMany({
-              where: { writer: session?.user?.id },
+              where: { user: session?.user?.id },
           });
 
     return {

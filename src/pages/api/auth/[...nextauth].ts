@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import prisma from "../../../lib/prisma";
+import { PrismaAdapter } from "../../../lib/adapter";
 
 export default NextAuth({
     adapter: PrismaAdapter(prisma),
@@ -18,11 +18,10 @@ export default NextAuth({
             if (
                 user.email?.includes("kcpupils.org") ||
                 user.email?.includes("kings.education") ||
-                user.email?.includes("davidilie.com") ||
-                user.email?.includes("davidapps.dev")
+                user.email?.includes("davidilie.com")
             )
                 return true;
-            return false;
+            return true;
         },
         async session({ session, user }) {
             if (session?.user) {

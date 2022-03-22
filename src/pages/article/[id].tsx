@@ -13,6 +13,7 @@ import { serialize } from "next-mdx-remote/serialize";
 import remarkAutoLinkHeadings from "remark-autolink-headings";
 import remarkSlug from "remark-slug";
 import matter from "gray-matter";
+import { Popover, Transition } from "@headlessui/react";
 
 import {
     AiOutlineLike,
@@ -262,15 +263,85 @@ const ArticleViewer: React.FC<Props> = ({
                                             : writer.name.split(" ")[0]
                                     }'s profile image`}
                                 />
-                                <span className="ml-1 mr-1 text-lg">
+                                <span className="ml-2 mr-1 text-lg">
                                     {article.anonymous ? (
                                         "KCA News Team"
                                     ) : (
-                                        <Link href={`/profile/${writer.id}`}>
-                                            <a className="duration-150 hover:text-blue-500">
-                                                {writer.name}
-                                            </a>
-                                        </Link>
+                                        <div className="flex gap-2">
+                                            <Link
+                                                href={`/profile/${writer.id}`}
+                                            >
+                                                <a className="duration-150 hover:text-blue-500">
+                                                    {writer.name}
+                                                </a>
+                                            </Link>
+                                            {article.coWriters.length !== 0 && (
+                                                <Popover className="relative">
+                                                    <Popover.Button
+                                                        as="span"
+                                                        className="cursor-pointer select-none duration-150 hover:text-blue-500"
+                                                    >
+                                                        {" "}
+                                                        and{" "}
+                                                        {
+                                                            article.coWriters
+                                                                .length
+                                                        }{" "}
+                                                        others
+                                                    </Popover.Button>
+                                                    <Transition
+                                                        as={React.Fragment}
+                                                        enter="transition ease-out duration-200"
+                                                        enterFrom="opacity-0 translate-y-1"
+                                                        enterTo="opacity-100 translate-y-0"
+                                                        leave="transition ease-in duration-150"
+                                                        leaveFrom="opacity-100 translate-y-0"
+                                                        leaveTo="opacity-0 translate-y-1"
+                                                    >
+                                                        <Popover.Panel className="absolute z-10 w-[20rem] rounded-md border-2 border-gray-100 bg-white">
+                                                            {article.coWriters.map(
+                                                                (co, index) => (
+                                                                    <Link
+                                                                        href={`/profile/${co.id}`}
+                                                                    >
+                                                                        <a
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                            className="flex select-none items-center gap-2 py-3 px-4 duration-150 hover:bg-gray-100 hover:text-blue-500"
+                                                                        >
+                                                                            <Image
+                                                                                className="rounded-full"
+                                                                                src={
+                                                                                    co.image
+                                                                                }
+                                                                                width="25px"
+                                                                                height="25px"
+                                                                                blurDataURL={shimmer(
+                                                                                    1920,
+                                                                                    1080
+                                                                                )}
+                                                                                alt={`${
+                                                                                    co.name.split(
+                                                                                        " "
+                                                                                    )[0]
+                                                                                }'s profile image`}
+                                                                            />
+                                                                            <span>
+                                                                                {" "}
+                                                                                {
+                                                                                    co.name
+                                                                                }
+                                                                            </span>
+                                                                        </a>
+                                                                    </Link>
+                                                                )
+                                                            )}
+                                                        </Popover.Panel>
+                                                    </Transition>
+                                                </Popover>
+                                            )}
+                                        </div>
                                     )}
                                 </span>
                             </span>
@@ -528,6 +599,17 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     const article = await prisma.article.findFirst({
         where: { id: id as string, published: true },
+        include: {
+            coWriters: true,
+            comments: {
+                orderBy: {
+                    createdAt: "desc",
+                },
+            },
+            upvotes: true,
+            downvotes: true,
+            writer: true,
+        },
     });
 
     if (!article)
@@ -536,42 +618,6 @@ export const getServerSideProps: GetServerSideProps = async ({
                 notFound: true,
             },
         };
-
-    const session = await getSession({ req });
-
-    const writer = await prisma.user.findFirst({
-        where: { id: article?.writer || "" },
-    });
-
-    const user = await prisma.user.findFirst({
-        where: { id: session?.user?.id },
-    });
-
-    const upvotes = await prisma.upvote.count({
-        where: { articleId: article.id },
-    });
-    const upvoteUser = await prisma.upvote.findFirst({
-        where: { articleId: article.id, votedBy: user?.id },
-    });
-
-    const downvotes = await prisma.downvote.count({
-        where: { articleId: article.id },
-    });
-    const downvoteUser = await prisma.downvote.findFirst({
-        where: { articleId: article.id, votedBy: user?.id },
-    });
-
-    const comments = await prisma.comment.findMany({
-        where: { articleId: article.id },
-        include: {
-            user: true,
-        },
-        orderBy: [
-            {
-                createdAt: "desc",
-            },
-        ],
-    });
 
     let mdxSource = null;
 
@@ -584,21 +630,33 @@ export const getServerSideProps: GetServerSideProps = async ({
         });
     }
 
+    const session = await getSession({ req });
+
+    let hasSelfUpvoted = false;
+    let hasSelfDownvoted = false;
+
+    article.upvotes.forEach(
+        (s) => s.votedBy === session?.user?.id && (hasSelfUpvoted = true)
+    );
+    article.downvotes.forEach(
+        (s) => s.votedBy === session?.user?.id && (hasSelfDownvoted = true)
+    );
+
     return {
         props: {
             article: JSON.parse(JSON.stringify(article)),
             writer: article.anonymous
                 ? false
-                : JSON.parse(JSON.stringify(writer)),
+                : JSON.parse(JSON.stringify(article.writer)),
             upvotes: {
-                count: upvotes,
-                self: upvoteUser !== null,
+                count: article.upvotes.length,
+                self: hasSelfUpvoted,
             },
             downvotes: {
-                count: downvotes,
-                self: downvoteUser !== null,
+                count: article.downvotes.length,
+                self: hasSelfDownvoted,
             },
-            comments: JSON.parse(JSON.stringify(comments)),
+            comments: JSON.parse(JSON.stringify(article.comments)),
             mdxSource,
         },
     };

@@ -54,18 +54,19 @@ CREATE TABLE "VerificationToken" (
 -- CreateTable
 CREATE TABLE "Article" (
     "id" TEXT NOT NULL,
-    "writer" TEXT,
+    "user" TEXT,
     "anonymous" BOOLEAN NOT NULL,
     "title" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "pdf" TEXT,
     "mdx" TEXT,
+    "review" BOOLEAN NOT NULL DEFAULT false,
     "cover" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "published" BOOLEAN NOT NULL DEFAULT false,
     "categoryId" TEXT[],
     "filter" TEXT[],
-    "review" BOOLEAN NOT NULL DEFAULT false,
+    "underReview" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Article_pkey" PRIMARY KEY ("id")
 );
@@ -99,6 +100,12 @@ CREATE TABLE "Downvote" (
     CONSTRAINT "Downvote_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "_coWriter" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
 
@@ -114,6 +121,12 @@ CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token"
 -- CreateIndex
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "_coWriter_AB_unique" ON "_coWriter"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_coWriter_B_index" ON "_coWriter"("B");
+
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -121,7 +134,7 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Article" ADD CONSTRAINT "Article_writer_fkey" FOREIGN KEY ("writer") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Article" ADD CONSTRAINT "Article_user_fkey" FOREIGN KEY ("user") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -140,3 +153,9 @@ ALTER TABLE "Downvote" ADD CONSTRAINT "Downvote_votedBy_fkey" FOREIGN KEY ("vote
 
 -- AddForeignKey
 ALTER TABLE "Downvote" ADD CONSTRAINT "Downvote_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_coWriter" ADD FOREIGN KEY ("A") REFERENCES "Article"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_coWriter" ADD FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

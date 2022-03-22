@@ -10,10 +10,11 @@ export interface Article {
     cover: string;
     description: string;
     published: boolean;
-    categoryId: Array<string>;
-    filter: Array<string>;
+    categoryId: string[];
+    filter: string[];
     featured: boolean;
     mdx?: string;
     anonymous: boolean;
-    user?: User;
+    writer?: User;
+    coWriters: User[];
 }
