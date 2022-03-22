@@ -11,7 +11,7 @@ import { Spinner } from "../ui/Spinner";
 import ArticleCard from "../components/ArticleCard";
 
 interface Props {
-    initialResponse: Array<Article>;
+    initialResponse: Article[];
 }
 
 const Search: React.FC<Props> = ({ initialResponse }) => {
@@ -20,7 +20,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
 
     const [previousSearchQuery, setPreviousSearchQuery] = useState(q);
     const [searchQuery, setSearchQuery] = useState(q);
-    const [results, setResults] = useState<Array<Article>>(initialResponse);
+    const [results, setResults] = useState<Article[]>(initialResponse);
     const [loading, setLoading] = useState<boolean>(false);
 
     const doSearch = async () => {
