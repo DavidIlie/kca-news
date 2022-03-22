@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Search: React.FC<Props> = ({ initialResponse }) => {
-    const { query } = useRouter();
+    const { query, push } = useRouter();
     const q = (query as any).q;
 
     const [previousSearchQuery, setPreviousSearchQuery] = useState(q);
@@ -27,6 +27,10 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
         if (searchQuery === "" || searchQuery === previousSearchQuery) return;
 
         setLoading(true);
+
+        push(`/search?q=${encodeURIComponent(searchQuery)}`, "", {
+            shallow: true,
+        });
 
         const r = await fetch(
             `/api/article/search?q=${encodeURIComponent(searchQuery)}`
