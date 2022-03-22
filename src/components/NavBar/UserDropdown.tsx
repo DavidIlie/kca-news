@@ -2,6 +2,9 @@ import React from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { BiUserCircle } from "react-icons/bi";
+import { BsFillPenFill } from "react-icons/bs";
+import { MdPreview } from "react-icons/md";
+import { GrUserAdmin } from "react-icons/gr";
 import { useSession, signOut } from "next-auth/react";
 
 import DropdownElement from "../../ui/DropdownElement";
@@ -9,6 +12,7 @@ import NextLink from "../../ui/NextLink";
 
 const UserDropdown: React.FC = () => {
     const { data } = useSession();
+
     return (
         <Menu as="div" className="relative -mr-14 inline-flex">
             <Menu.Button>
@@ -38,6 +42,30 @@ const UserDropdown: React.FC = () => {
                                 Profile
                             </DropdownElement>
                         </Menu.Item>
+                        {data?.user?.isWriter && (
+                            <Menu.Item as={NextLink} href="/dashboard/writer">
+                                <DropdownElement>
+                                    <BsFillPenFill className="mx-0.5 text-xl" />
+                                    Writer Panel
+                                </DropdownElement>
+                            </Menu.Item>
+                        )}
+                        {data?.user?.isReviewer && (
+                            <Menu.Item as={NextLink} href="/dashboard/reviewer">
+                                <DropdownElement>
+                                    <MdPreview className="mx-0.5 text-xl" />
+                                    Reviewer Panel
+                                </DropdownElement>
+                            </Menu.Item>
+                        )}
+                        {data?.user?.isAdmin && (
+                            <Menu.Item as={NextLink} href="/dashboard/admin">
+                                <DropdownElement>
+                                    <GrUserAdmin className="mx-1 text-xl" />
+                                    Admin Panel
+                                </DropdownElement>
+                            </Menu.Item>
+                        )}
                     </div>
                     <Menu.Item
                         as="a"

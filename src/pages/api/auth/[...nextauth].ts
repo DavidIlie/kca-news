@@ -27,6 +27,13 @@ export default NextAuth({
         async session({ session, user }) {
             if (session?.user) {
                 session.user.id = user.id;
+                session.user.description = user.description as string;
+                session.user.status = user.status as string;
+                session.user.nickname = user.nickname as string;
+                session.user.tags = user.tags as string[];
+                session.user.isAdmin = user.isAdmin as boolean;
+                session.user.isWriter = user.isWriter as boolean;
+                session.user.isReviewer = user.isReviewer as boolean;
             }
             return session;
         },
