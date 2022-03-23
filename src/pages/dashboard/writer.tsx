@@ -376,7 +376,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    };
 
    const articles = session?.user?.isAdmin
-      ? await prisma.article.findMany({ include: includeParams as any })
+      ? await prisma.article.findMany({
+           include: includeParams as any,
+           where: { user: session?.user?.id },
+        })
       : await prisma.article.findMany({ include: includeParams as any });
 
    return {
