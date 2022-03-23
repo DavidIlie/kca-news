@@ -13,6 +13,9 @@ import NextLink from "../../ui/NextLink";
 const UserDropdown: React.FC = () => {
    const { data } = useSession();
 
+   const isWriter = data?.user?.isAdmin ? true : data?.user?.isWriter;
+   const isReviewer = data?.user?.isAdmin ? true : data?.user?.isReviewer;
+
    return (
       <Menu as="div" className="relative -mr-14 inline-flex">
          <Menu.Button>
@@ -42,7 +45,7 @@ const UserDropdown: React.FC = () => {
                         Profile
                      </DropdownElement>
                   </Menu.Item>
-                  {data?.user?.isWriter && (
+                  {isWriter && (
                      <Menu.Item as={NextLink} href="/dashboard/writer">
                         <DropdownElement>
                            <BsFillPenFill className="mx-0.5 text-xl" />
@@ -50,19 +53,11 @@ const UserDropdown: React.FC = () => {
                         </DropdownElement>
                      </Menu.Item>
                   )}
-                  {data?.user?.isReviewer && (
+                  {isReviewer && (
                      <Menu.Item as={NextLink} href="/dashboard/reviewer">
                         <DropdownElement>
                            <MdPreview className="mx-0.5 text-xl" />
                            Reviewer Panel
-                        </DropdownElement>
-                     </Menu.Item>
-                  )}
-                  {data?.user?.isAdmin && (
-                     <Menu.Item as={NextLink} href="/dashboard/admin">
-                        <DropdownElement>
-                           <GrUserAdmin className="mx-1 text-xl" />
-                           Admin Panel
                         </DropdownElement>
                      </Menu.Item>
                   )}

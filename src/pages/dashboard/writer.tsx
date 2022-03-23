@@ -223,11 +223,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const session = await getSession({ req });
 
-   const user = await prisma.user.findFirst({
-      where: { id: session?.user?.id },
-   });
-
-   if (!user?.isWriter || (!user?.isWriter && !user.isAdmin))
+   if (!session || session?.user?.isAdmin ? false : !session?.user?.isWriter)
       return {
          redirect: {
             destination: "/",
@@ -235,13 +231,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
          },
       };
 
-   const totalArticles = user?.isAdmin
+   const totalArticles = session?.user?.isAdmin
       ? await prisma.article.count()
       : await prisma.article.count({
            where: { user: session?.user?.id },
         });
 
-   const publishedArticles = user?.isAdmin
+   const publishedArticles = session?.user?.isAdmin
       ? await prisma.article.count({ where: { published: true } })
       : await prisma.article.count({
            where: { published: true, user: session?.user?.id },
@@ -251,7 +247,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const totalUpvotes = await prisma.upvote.count();
    const totalDownvotes = await prisma.downvote.count();
 
-   const articles = user?.isAdmin
+   const articles = session?.user?.isAdmin
       ? await prisma.article.findMany()
       : await prisma.article.findMany({
            where: { user: session?.user?.id },
@@ -259,7 +255,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
    return {
       props: {
-         user,
+         user: session?.user,
          statistics: {
             totalArticles,
             publishedArticles,
