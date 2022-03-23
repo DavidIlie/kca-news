@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
@@ -42,6 +43,8 @@ interface Props {
 const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
    const [selected, setSelected] = useState<Article | null>(null);
 
+   const { push } = useRouter();
+
    return (
       <>
          <DefaultSeo title="Writer Panel" />
@@ -79,8 +82,19 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                      {user.isAdmin ? "Total" : "Your"} Articles
                   </h1>
                   <div className="flex items-center gap-2">
-                     <Button>Create Article</Button>
-                     <Button disabled={selected === null} color="sky">
+                     <Link href="/dashboard/writer/create">
+                        <a>
+                           <Button>Create Article</Button>
+                        </a>
+                     </Link>
+                     <Button
+                        disabled={selected === null}
+                        color="sky"
+                        onClick={() =>
+                           selected !== null &&
+                           push(`/dashboard/writer/edit/${selected.id}`)
+                        }
+                     >
                         Edit Article
                      </Button>
                      <Button
