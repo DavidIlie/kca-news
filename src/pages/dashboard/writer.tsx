@@ -95,7 +95,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                      {articles.map((article, index) => (
                         <Disclosure
                            as="div"
-                           className={`rounded-md border-2 border-gray-200 bg-gray-100 px-6 py-4 ${
+                           className={`rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-4 ${
                               index !== articles.length - 1 && "mb-4"
                            }`}
                            key={article.id}
