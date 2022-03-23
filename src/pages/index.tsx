@@ -11,6 +11,7 @@ import { useShortcut } from "litkey";
 import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
 import { shimmer } from "../lib/shimmer";
+import ErrorPage from "../components/ErrorPage";
 
 interface Props {
    featuredPosts: Article[];
@@ -24,6 +25,10 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
       "right",
       () => index !== featuredPosts.length - 1 && setSelectedIndex(index + 1)
    );
+
+   if (featuredPosts.length === 0) {
+      return <ErrorPage />;
+   }
 
    return (
       <>
