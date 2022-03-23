@@ -144,7 +144,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         where: { id: session?.user?.id },
     });
 
-    if (!user?.isWriter || !user?.isAdmin)
+    if (!user?.isWriter || (!user?.isWriter && !user.isAdmin))
         return {
             redirect: {
                 destination: "/",
