@@ -83,7 +83,8 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                             </Button>
                             <Button
                                 disabled={
-                                    selected === null || articles.length === 1
+                                    selected === null ||
+                                    (articles.length === 1 && user.isAdmin)
                                 }
                                 color="secondary"
                             >
