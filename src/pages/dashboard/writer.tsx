@@ -191,7 +191,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                                 leaveFrom="opacity-100 translate-y-0"
                                                 leaveTo="opacity-0 translate-y-1"
                                              >
-                                                <Popover.Panel className="absolute right-0 z-10 -mr-12 w-96 rounded-md border-2 border-gray-200 bg-white p-4 shadow-md">
+                                                <Popover.Panel className="absolute right-0 z-10 -mr-12 w-96 rounded-md border-2 border-gray-200 bg-white p-4 text-justify shadow-md">
                                                    This can be for any number of
                                                    reasons: your article is
                                                    pending to be published, your
