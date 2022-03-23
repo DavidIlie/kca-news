@@ -123,11 +123,12 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  <div className="flex items-center gap-3">
                                     <h1>
                                        {article.title}{" "}
-                                       {article.published && (
-                                          <span className="font-semibold">
-                                             (published)
-                                          </span>
-                                       )}{" "}
+                                       {article.published &&
+                                          !article.underReview && (
+                                             <span className="font-semibold">
+                                                (published)
+                                             </span>
+                                          )}{" "}
                                        {" - "}
                                        <Link href={`/article/${article.id}`}>
                                           <a className="font-semibold text-blue-500 duration-150 hover:text-blue-600 hover:underline">
@@ -173,7 +174,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                                       href="#"
                                                       target="_blank"
                                                       rel="noreferrer"
-                                                      className="text-blue-400 duration-150 hover:text-blue-500"
+                                                      className="text-blue-500 duration-150 hover:text-blue-600"
                                                    >
                                                       click here
                                                    </a>
