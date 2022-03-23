@@ -15,7 +15,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ statusCode = 500 }) => {
          <div className="mt-5 flex min-h-screen w-full flex-col items-center justify-center">
             <div className="text-4xl font-semibold">Well, this is awkward.</div>
             <div className="mt-1 font-semibold text-gray-600">
-               <h1>Looks like there has been an error.</h1>
+               <h1>Looks like an error just occurred.</h1>
             </div>
             <div className="mt-2 text-gray-800">
                <Button onClick={() => window.location.reload()}>Reload</Button>
