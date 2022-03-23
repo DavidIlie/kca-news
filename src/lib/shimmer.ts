@@ -13,10 +13,10 @@ const shimmerSvg = (width: number, height: number) => `
   </svg>`;
 
 const toBase64 = (str: string) =>
-    typeof window === "undefined"
-        ? Buffer.from(str).toString("base64")
-        : window.btoa(str);
+   typeof window === "undefined"
+      ? Buffer.from(str).toString("base64")
+      : window.btoa(str);
 
 export const shimmer = (width: number, height: number) => {
-    return `data:image/svg+xml;base64,${toBase64(shimmerSvg(width, height))}`;
+   return `data:image/svg+xml;base64,${toBase64(shimmerSvg(width, height))}`;
 };

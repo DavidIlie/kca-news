@@ -3,46 +3,46 @@
 @tailwind utilities;
 
 .hoverItem:hover {
-    transform: translateY(-4px);
+   transform: translateY(-4px);
 }
 
 .blog-content
-    *:not(svg, h1, h2, h3, h4, h5, h6, a, pre, .code-title, .token-line, .token.plain, .blog-image) {
-    margin-top: 1em !important;
+   *:not(svg, h1, h2, h3, h4, h5, h6, a, pre, .code-title, .token-line, .token.plain, .blog-image) {
+   margin-top: 1em !important;
 }
 
 .token-line {
-    @apply p-1 hover:bg-gray-50 dark:hover:bg-gray-800;
+   @apply p-1 hover:bg-gray-50 dark:hover:bg-gray-800;
 }
 
 .blog-content code {
-    @apply bg-blue-100 bg-opacity-20 text-blue-500 dark:bg-blue-900 dark:bg-opacity-20;
+   @apply bg-blue-100 bg-opacity-20 text-blue-500 dark:bg-blue-900 dark:bg-opacity-20;
 }
 
 .blog-content h1 {
-    font-weight: 600;
+   font-weight: 600;
 }
 
 .blog-content h2 {
-    font-weight: 600;
+   font-weight: 600;
 }
 
 .blog-content h3 {
-    font-weight: 600;
+   font-weight: 600;
 }
 
 .blog-content h4 {
-    font-weight: 600;
+   font-weight: 600;
 }
 
 .blog-content h5 {
-    font-weight: 600;
+   font-weight: 600;
 }
 
 .blog-content h6 {
-    font-weight: 600;
+   font-weight: 600;
 }
 
 .blog-content p {
-    font-size: 1rem;
+   font-size: 1rem;
 }

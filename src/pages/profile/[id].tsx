@@ -6,39 +6,39 @@ import { User } from "../../types/User";
 import prisma from "../../lib/prisma";
 
 interface Props {
-    user: User;
+   user: User;
 }
 
 const ProfileViewer: React.FC<Props> = ({ user }) => {
-    return (
-        <>
-            <DefaultSeo title={user.name} />
-            <div className="mb-20 flex min-h-screen flex-grow px-4 sm:pt-24 lg:px-0"></div>
-        </>
-    );
+   return (
+      <>
+         <DefaultSeo title={user.name} />
+         <div className="mb-20 flex min-h-screen flex-grow px-4 sm:pt-24 lg:px-0"></div>
+      </>
+   );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
-    query,
-    req,
+   query,
+   req,
 }) => {
-    const { id } = query;
+   const { id } = query;
 
-    const user = await prisma.user.findFirst({ where: { id: id as string } });
+   const user = await prisma.user.findFirst({ where: { id: id as string } });
 
-    if (!user)
-        return {
-            redirect: {
-                destination: req.headers.referer || "/",
-                permanent: false,
-            },
-        };
+   if (!user)
+      return {
+         redirect: {
+            destination: req.headers.referer || "/",
+            permanent: false,
+         },
+      };
 
-    return {
-        props: {
-            user: JSON.parse(JSON.stringify(user)),
-        },
-    };
+   return {
+      props: {
+         user: JSON.parse(JSON.stringify(user)),
+      },
+   };
 };
 
 export default ProfileViewer;

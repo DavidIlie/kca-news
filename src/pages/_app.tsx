@@ -12,48 +12,48 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 
 const KingsNews = ({
-    Component,
-    pageProps: { session, ...pageProps },
+   Component,
+   pageProps: { session, ...pageProps },
 }: AppProps) => {
-    if (isServer && !Component.getInitialProps) {
-        return null;
-    }
+   if (isServer && !Component.getInitialProps) {
+      return null;
+   }
 
-    return (
-        <>
-            <DefaultSeo
-                defaultTitle="KCA News"
-                titleTemplate="%s | KCA News"
-                openGraph={{
-                    title: `KCA News`,
-                    type: `website`,
-                    site_name: `KCA News`,
-                    images: [
-                        {
-                            url: ``,
-                            alt: `Logo`,
-                        },
-                    ],
-                }}
-                description="Make the school cool."
-            />
-            <NextNprogress
-                color="#156896"
-                startPosition={0.3}
-                stopDelayMs={200}
-                height={3}
-                showOnShallow={true}
-            />
-            <Toaster position="top-center" />
-            <SessionProvider session={session}>
-                <div className="flex h-screen flex-col">
-                    <NavBar />
-                    <Component {...pageProps} />
-                    <Footer />
-                </div>
-            </SessionProvider>
-        </>
-    );
+   return (
+      <>
+         <DefaultSeo
+            defaultTitle="KCA News"
+            titleTemplate="%s | KCA News"
+            openGraph={{
+               title: `KCA News`,
+               type: `website`,
+               site_name: `KCA News`,
+               images: [
+                  {
+                     url: ``,
+                     alt: `Logo`,
+                  },
+               ],
+            }}
+            description="Make the school cool."
+         />
+         <NextNprogress
+            color="#156896"
+            startPosition={0.3}
+            stopDelayMs={200}
+            height={3}
+            showOnShallow={true}
+         />
+         <Toaster position="top-center" />
+         <SessionProvider session={session}>
+            <div className="flex h-screen flex-col">
+               <NavBar />
+               <Component {...pageProps} />
+               <Footer />
+            </div>
+         </SessionProvider>
+      </>
+   );
 };
 
 export default KingsNews;
