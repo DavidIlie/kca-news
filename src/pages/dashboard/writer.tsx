@@ -156,13 +156,13 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                        <div className="mr-2 flex items-center justify-center gap-1">
                                           <AiOutlineLike size="25" />
                                           <p className="font-medium">
-                                             {article.upvotes.length}
+                                             {article.upvotes?.length || 0}
                                           </p>
                                        </div>
                                        <div className="flex items-center justify-center gap-1 pl-2">
                                           <AiOutlineDislike size="25" />
                                           <p className="font-medium">
-                                             {article.downvotes.length}
+                                             {article.downvotes?.length || 0}
                                           </p>
                                        </div>
                                     </div>
@@ -360,25 +360,24 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const totalUpvotes = await prisma.upvote.count();
    const totalDownvotes = await prisma.downvote.count();
 
+   const includeParams = {
+      coWriters: true,
+      comments: {
+         take: 1,
+         orderBy: {
+            createdAt: "desc",
+         },
+         include: {
+            user: true,
+         },
+      },
+      upvotes: true,
+      downvotes: true,
+   };
+
    const articles = session?.user?.isAdmin
-      ? await prisma.article.findMany()
-      : await prisma.article.findMany({
-           where: { user: session?.user?.id },
-           include: {
-              coWriters: true,
-              comments: {
-                 take: 1,
-                 orderBy: {
-                    createdAt: "desc",
-                 },
-                 include: {
-                    user: true,
-                 },
-              },
-              upvotes: true,
-              downvotes: true,
-           },
-        });
+      ? await prisma.article.findMany({ include: includeParams as any })
+      : await prisma.article.findMany({ include: includeParams as any });
 
    return {
       props: {

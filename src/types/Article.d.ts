@@ -21,6 +21,6 @@ export interface Article {
    coWriters: User[];
    underReview: boolean;
    comments?: Comment[];
-   upvotes: Upvote[];
-   downvotes: Downvote[];
+   upvotes?: Upvote[];
+   downvotes?: Downvote[];
 }
