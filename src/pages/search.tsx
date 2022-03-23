@@ -109,6 +109,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
                 contains: q as string,
                 mode: "insensitive",
             },
+            underReview: false,
         },
         include: {
             writer: true,

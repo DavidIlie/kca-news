@@ -13,6 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     contains: q as string,
                     mode: "insensitive",
                 },
+                underReview: false,
             },
             include: {
                 writer: true,
