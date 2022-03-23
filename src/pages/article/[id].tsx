@@ -472,58 +472,62 @@ const ArticleViewer: React.FC<Props> = ({
                            </div>
                         )}
                      </div>
-                     {commentsState.map((comment, index) => (
-                        <div
-                           className={`flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4 ${
-                              index !== commentsState.length - 1 && "mb-4"
-                           }`}
-                           key={index}
-                        >
-                           <Image
-                              src={comment.user?.image || "/no-pfp.jpg"}
-                              width={55}
-                              height={24}
-                              blurDataURL={shimmer(10, 10)}
-                              placeholder="blur"
-                              className="rounded-full object-cover"
-                              alt={`${
-                                 comment.user?.name.split(" ")[0]
-                              }'s profile image`}
-                           />
-                           <div className="flex flex-col space-y-2 ">
-                              <div className="w-full">{comment.comment}</div>
-                              <div className="flex items-center space-x-2">
-                                 <p className="text-sm text-gray-500">
-                                    {comment.user?.name}
-                                 </p>
-                                 <span className=" text-gray-800">/</span>
-                                 <p className="text-sm text-gray-400">
-                                    {format(
-                                       new Date(comment.createdAt),
-                                       "d MMM yyyy 'at' h:mm bb"
-                                    )}
-                                 </p>
-                                 {data?.user &&
-                                    comment.userId === data.user?.id && (
-                                       <>
-                                          <span className="text-gray-200">
-                                             /
-                                          </span>
-                                          <button
-                                             className="text-sm text-red-600"
-                                             onClick={() => {
-                                                setDeleteCommentId(comment.id);
-                                                setOpenConfirmModal(true);
-                                             }}
-                                          >
-                                             Delete
-                                          </button>
-                                       </>
-                                    )}
+                     <div id="comments">
+                        {commentsState.map((comment, index) => (
+                           <div
+                              className={`flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4 ${
+                                 index !== commentsState.length - 1 && "mb-4"
+                              }`}
+                              key={index}
+                           >
+                              <Image
+                                 src={comment.user?.image || "/no-pfp.jpg"}
+                                 width={55}
+                                 height={24}
+                                 blurDataURL={shimmer(10, 10)}
+                                 placeholder="blur"
+                                 className="rounded-full object-cover"
+                                 alt={`${
+                                    comment.user?.name.split(" ")[0]
+                                 }'s profile image`}
+                              />
+                              <div className="flex flex-col space-y-2 ">
+                                 <div className="w-full">{comment.comment}</div>
+                                 <div className="flex items-center space-x-2">
+                                    <p className="text-sm text-gray-500">
+                                       {comment.user?.name}
+                                    </p>
+                                    <span className=" text-gray-800">/</span>
+                                    <p className="text-sm text-gray-400">
+                                       {format(
+                                          new Date(comment.createdAt),
+                                          "d MMM yyyy 'at' h:mm bb"
+                                       )}
+                                    </p>
+                                    {data?.user &&
+                                       comment.userId === data.user?.id && (
+                                          <>
+                                             <span className="text-gray-200">
+                                                /
+                                             </span>
+                                             <button
+                                                className="text-sm text-red-600"
+                                                onClick={() => {
+                                                   setDeleteCommentId(
+                                                      comment.id
+                                                   );
+                                                   setOpenConfirmModal(true);
+                                                }}
+                                             >
+                                                Delete
+                                             </button>
+                                          </>
+                                       )}
+                                 </div>
                               </div>
                            </div>
-                        </div>
-                     ))}
+                        ))}
+                     </div>
                   </div>
                </div>
             </Slide>
@@ -554,6 +558,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       include: {
          coWriters: true,
          comments: {
+            include: {
+               user: true,
+            },
             orderBy: {
                createdAt: "desc",
             },

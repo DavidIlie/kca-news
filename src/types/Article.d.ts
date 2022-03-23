@@ -1,6 +1,7 @@
 import { User } from "./User";
 
 import { Comment } from "./Comment";
+import { Downvote, Upvote } from "@prisma/client";
 
 export interface Article {
    id: string;
@@ -20,4 +21,6 @@ export interface Article {
    coWriters: User[];
    underReview: boolean;
    comments?: Comment[];
+   upvotes: Upvote[];
+   downvotes: Downvote[];
 }

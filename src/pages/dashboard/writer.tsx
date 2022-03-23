@@ -12,6 +12,8 @@ import {
    AiFillDislike,
    AiOutlineArrowDown,
    AiOutlineArrowUp,
+   AiOutlineLike,
+   AiOutlineDislike,
 } from "react-icons/ai";
 import { FaCommentDots } from "react-icons/fa";
 import { GrCircleInformation } from "react-icons/gr";
@@ -100,7 +102,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            }`}
                            key={article.id}
                         >
-                           <div className="flex items-center gap-4">
+                           <div className="flex items-center gap-2">
                               <Disclosure.Button className="cursor-pointer text-lg">
                                  {({ open }) =>
                                     open ? (
@@ -120,24 +122,36 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  className="focus:none"
                               />
                               <div className="flex w-full items-center justify-between">
-                                 <div className="flex items-center gap-3">
-                                    <h1>
-                                       {article.title}{" "}
-                                       {article.published &&
-                                          !article.underReview && (
-                                             <span className="font-semibold">
-                                                (published)
-                                             </span>
-                                          )}{" "}
-                                       {" - "}
-                                       <Link href={`/article/${article.id}`}>
-                                          <a className="font-semibold text-blue-600 duration-150 hover:text-blue-800 hover:underline">
-                                             See article
-                                          </a>
-                                       </Link>
-                                    </h1>
-                                 </div>
+                                 <h1 className="-ml-2">
+                                    {article.title}{" "}
+                                    {article.published &&
+                                       !article.underReview && (
+                                          <span className="font-semibold">
+                                             (published)
+                                          </span>
+                                       )}{" "}
+                                    {" - "}
+                                    <Link href={`/article/${article.id}`}>
+                                       <a className="font-semibold text-blue-600 duration-150 hover:text-blue-800 hover:underline">
+                                          See article
+                                       </a>
+                                    </Link>
+                                 </h1>
                                  <div className="flex items-center gap-2">
+                                    <div className="mr-2 grid grid-cols-2 divide-x-2 divide-gray-500">
+                                       <div className="mr-2 flex items-center justify-center gap-1">
+                                          <AiOutlineLike size="25" />
+                                          <p className="font-medium">
+                                             {article.upvotes.length}
+                                          </p>
+                                       </div>
+                                       <div className="flex items-center justify-center gap-1 pl-2">
+                                          <AiOutlineDislike size="25" />
+                                          <p className="font-medium">
+                                             {article.downvotes.length}
+                                          </p>
+                                       </div>
+                                    </div>
                                     <div>
                                        {article.categoryId.map((tag, i) => (
                                           <ArticleBadge tag={tag} key={i} />
@@ -237,13 +251,62 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                     </p>
                                  )}
                                  {article.comments?.length !== 0 && (
-                                    <p className="text-justify">
-                                       <span className="font-semibold">
-                                          Latest Comment:
-                                       </span>{" "}
-                                       {article.comments![0].comment} by
-                                    </p>
+                                    <>
+                                       <div className="line-clamp-1">
+                                          <span className="font-semibold">
+                                             Latest Comment:
+                                          </span>{" "}
+                                          {article.comments![0].comment}
+                                       </div>
+                                       by{" "}
+                                       <Link
+                                          href={`/profile/${
+                                             article.comments![0].user?.id
+                                          }`}
+                                       >
+                                          <a className="text-blue-600 duration-150 hover:text-blue-800">
+                                             {article.comments![0].user?.name}
+                                          </a>
+                                       </Link>
+                                       ,{" "}
+                                       <Link
+                                          href={`/article/${article.id}#comments`}
+                                       >
+                                          <a className="text-blue-600 duration-150 hover:text-blue-800">
+                                             see rest
+                                          </a>
+                                       </Link>
+                                    </>
                                  )}
+                                 <div className="mt-[1.5rem] flex items-center gap-2">
+                                    <Link
+                                       href={`/dashboard/writer/edit/${article.id}`}
+                                    >
+                                       <a className="w-1/3">
+                                          <Button className="w-full">
+                                             Edit
+                                          </Button>
+                                       </a>
+                                    </Link>
+                                    <div className="w-1/3">
+                                       <Button
+                                          className="w-full"
+                                          color="sky"
+                                          disabled={article.underReview}
+                                       >
+                                          Change Visibility
+                                       </Button>
+                                    </div>
+                                    <div className="w-1/3">
+                                       <Button
+                                          className="w-full"
+                                          color="secondary"
+                                          disabled={article.underReview}
+                                       >
+                                          Delete
+                                       </Button>
+                                    </div>
+                                 </div>
                               </div>
                            </Disclosure.Panel>
                         </Disclosure>
