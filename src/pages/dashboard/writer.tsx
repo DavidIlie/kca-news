@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
@@ -78,7 +79,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                   <div className="flex items-center gap-2">
                      <Button>Create Article</Button>
                      <Button disabled={selected === null} color="sky">
-                        Update Article
+                        Edit Article
                      </Button>
                      <Button
                         disabled={
@@ -120,7 +121,20 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                               />
                               <div className="flex w-full items-center justify-between">
                                  <div className="flex items-center gap-3">
-                                    <h1>{article.title}</h1>
+                                    <h1>
+                                       {article.title}{" "}
+                                       {article.published && (
+                                          <span className="font-semibold">
+                                             (published)
+                                          </span>
+                                       )}{" "}
+                                       {" - "}
+                                       <Link href={`/article/${article.id}`}>
+                                          <a className="font-semibold text-blue-500 duration-150 hover:text-blue-600 hover:underline">
+                                             See article
+                                          </a>
+                                       </Link>
+                                    </h1>
                                  </div>
                                  <div className="flex items-center gap-2">
                                     <div>
@@ -172,7 +186,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  </div>
                               </div>
                            </div>
-                           <Disclosure.Panel className="mt-4">
+                           <Disclosure.Panel className="mt-4 flex justify-evenly gap-4 border-t-2 border-blue-500 pt-4">
                               <Image
                                  alt="Post picture"
                                  className="rounded shadow-xl"
@@ -183,6 +197,17 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  placeholder="blur"
                                  objectFit="cover"
                               />
+                              <div className="max-w-lg">
+                                 <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
+                                    Description
+                                 </h1>
+                                 <p className="mb-2 text-justify">
+                                    {article.description}
+                                 </p>
+                                 <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
+                                    Extra Details
+                                 </h1>
+                              </div>
                            </Disclosure.Panel>
                         </Disclosure>
                      ))}

@@ -543,8 +543,14 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
    const { id } = query;
 
+   const session = await getSession({ req });
+
    const article = await prisma.article.findFirst({
-      where: { id: id as string, published: true },
+      where: session?.user?.isWriter
+         ? { id: id as string, user: session?.user?.id }
+         : session?.user?.isAdmin
+         ? { id: id as string }
+         : { id: id as string, published: true, underReview: false },
       include: {
          coWriters: true,
          comments: {
@@ -575,8 +581,6 @@ export const getServerSideProps: GetServerSideProps = async ({
          },
       });
    }
-
-   const session = await getSession({ req });
 
    let hasSelfUpvoted = false;
    let hasSelfDownvoted = false;
