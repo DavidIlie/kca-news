@@ -278,7 +278,7 @@ const ArticleViewer: React.FC<Props> = ({
                                           leaveFrom="opacity-100 translate-y-0"
                                           leaveTo="opacity-0 translate-y-1"
                                        >
-                                          <Popover.Panel className="absolute z-10 w-[20rem] rounded-md border-2 border-gray-100 bg-white">
+                                          <Popover.Panel className="absolute z-10 w-[20rem] rounded-md border-2 border-gray-100 bg-white shadow-md">
                                              {article.coWriters.map(
                                                 (co, index) => (
                                                    <Link

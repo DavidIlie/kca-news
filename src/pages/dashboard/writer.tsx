@@ -131,7 +131,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                           )}{" "}
                                        {" - "}
                                        <Link href={`/article/${article.id}`}>
-                                          <a className="font-semibold text-blue-500 duration-150 hover:text-blue-600 hover:underline">
+                                          <a className="font-semibold text-blue-600 duration-150 hover:text-blue-800 hover:underline">
                                              See article
                                           </a>
                                        </Link>
@@ -151,7 +151,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                           <Popover className="relative">
                                              <Popover.Button
                                                 as={GrCircleInformation}
-                                                className="mt-0.5"
+                                                className="mt-0.5 cursor-pointer"
                                                 title="What's this?"
                                              />
                                              <Transition
@@ -174,7 +174,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                                       href="#"
                                                       target="_blank"
                                                       rel="noreferrer"
-                                                      className="text-blue-500 duration-150 hover:text-blue-600"
+                                                      className="text-blue-600 duration-150 hover:text-blue-800"
                                                    >
                                                       click here
                                                    </a>
@@ -208,6 +208,42 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
                                     Extra Details
                                  </h1>
+                                 {article.coWriters.length !== 0 && (
+                                    <p>
+                                       <span className="font-semibold">
+                                          Co Writers:
+                                       </span>{" "}
+                                       {article.coWriters.map(
+                                          (writer, index) => (
+                                             <Link
+                                                href={`/profile/${writer.id}`}
+                                             >
+                                                <a
+                                                   key={index}
+                                                   className="font-semibold text-blue-600 duration-150 hover:text-blue-800"
+                                                >
+                                                   {writer.name}
+                                                   {index !==
+                                                      article.coWriters.length -
+                                                         1 && (
+                                                      <span className="text-black">
+                                                         ,{" "}
+                                                      </span>
+                                                   )}
+                                                </a>
+                                             </Link>
+                                          )
+                                       )}
+                                    </p>
+                                 )}
+                                 {article.comments?.length !== 0 && (
+                                    <p className="text-justify">
+                                       <span className="font-semibold">
+                                          Latest Comment:
+                                       </span>{" "}
+                                       {article.comments![0].comment} by
+                                    </p>
+                                 )}
                               </div>
                            </Disclosure.Panel>
                         </Disclosure>
@@ -251,6 +287,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       ? await prisma.article.findMany()
       : await prisma.article.findMany({
            where: { user: session?.user?.id },
+           include: {
+              coWriters: true,
+              comments: {
+                 take: 1,
+                 orderBy: {
+                    createdAt: "desc",
+                 },
+                 include: {
+                    user: true,
+                 },
+              },
+              upvotes: true,
+              downvotes: true,
+           },
         });
 
    return {

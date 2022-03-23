@@ -1,5 +1,7 @@
 import { User } from "./User";
 
+import { Comment } from "./Comment";
+
 export interface Article {
    id: string;
    title: string;
@@ -17,4 +19,5 @@ export interface Article {
    writer?: User;
    coWriters: User[];
    underReview: boolean;
+   comments?: Comment[];
 }
