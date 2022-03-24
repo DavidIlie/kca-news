@@ -16,9 +16,9 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
    return (
       <>
          <DefaultSeo title={article.title} />
-         <div className="flex">
-            <div className="h-full w-2/3 bg-gray-500"></div>
-            <div className="h-full w-1/3 bg-blue-500"></div>
+         <div className="flex min-h-screen">
+            <div className="h-full w-4/5 bg-gray-500"></div>
+            <div className="h-full w-1/5 bg-blue-500"></div>
          </div>
       </>
    );
