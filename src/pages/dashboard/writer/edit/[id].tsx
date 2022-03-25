@@ -7,6 +7,7 @@ import { AiOutlineCloseCircle, AiOutlineMenu } from "react-icons/ai";
 import prisma from "../../../../lib/prisma";
 import { Article } from "../../../../types/Article";
 import { User } from "../../../../types/User";
+import { Button } from "../../../../ui/Button";
 
 interface Props {
    user: User;
@@ -23,7 +24,7 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
             <div className={`h-full ${openSidebar ? "w-4/5" : "w-full"}`}></div>
             {!openSidebar && (
                <AiOutlineMenu
-                  className="absolute right-0 top-0 mt-24 mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-5xl duration-150 hover:bg-gray-100"
+                  className="absolute right-0 top-0 mt-24 mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100"
                   title="Open Menu"
                   onClick={() => setOpenSidebar(true)}
                />
@@ -31,9 +32,9 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
             <div
                className={`h-full ${
                   openSidebar ? "w-1/5" : "hidden"
-               } border-l-2 py-3`}
+               } relative border-l-2 py-3`}
             >
-               <div className="flex items-center justify-center gap-2 border-b-2 pb-3">
+               <div className="flex items-center justify-between gap-2 border-b-2 px-4 pb-3">
                   <h1 className="text-2xl font-semibold">Settings</h1>
                   <AiOutlineCloseCircle
                      size="25"
@@ -41,6 +42,11 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
                      title="Close"
                      onClick={() => setOpenSidebar(false)}
                   />
+               </div>
+               <div className="absolute bottom-0 w-full px-2 py-4">
+                  <Button className="w-full" disabled>
+                     Save
+                  </Button>
                </div>
             </div>
          </div>
