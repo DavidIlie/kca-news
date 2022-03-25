@@ -6,6 +6,7 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import { Disclosure, Popover, Transition } from "@headlessui/react";
+import { Tooltip } from "@mantine/core";
 
 import { MdArticle, MdPublish } from "react-icons/md";
 import {
@@ -27,6 +28,7 @@ import StatisticCard from "../../components/StatisticCard";
 import { User } from "../../types/User";
 import Radio from "../../ui/Radio";
 import ArticleBadge from "../../components/ArticleBadge";
+import ArticleUnderReviewCard from "../../components/ArticleUnderReviewCard";
 
 interface Props {
    user: User;
@@ -174,43 +176,10 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                     </div>
                                     {article.underReview && (
                                        <div className="flex items-center gap-2">
+                                          <ArticleUnderReviewCard />
                                           <h1 className="font-semibold">
                                              Under Review
                                           </h1>
-                                          <Popover className="relative">
-                                             <Popover.Button
-                                                as={GrCircleInformation}
-                                                className="mt-0.5 cursor-pointer"
-                                                title="What's this?"
-                                             />
-                                             <Transition
-                                                as={React.Fragment}
-                                                enter="transition ease-out duration-200"
-                                                enterFrom="opacity-0 translate-y-1"
-                                                enterTo="opacity-100 translate-y-0"
-                                                leave="transition ease-in duration-150"
-                                                leaveFrom="opacity-100 translate-y-0"
-                                                leaveTo="opacity-0 translate-y-1"
-                                             >
-                                                <Popover.Panel className="absolute right-0 z-10 -mr-12 w-96 rounded-md border-2 border-gray-200 bg-white p-4 text-justify shadow-md">
-                                                   This can be for any number of
-                                                   reasons: your article is
-                                                   pending to be published, your
-                                                   article has been taken down
-                                                   for moderation, etc. To see
-                                                   more information{" "}
-                                                   <a
-                                                      href="#"
-                                                      target="_blank"
-                                                      rel="noreferrer"
-                                                      className="text-blue-600 duration-150 hover:text-blue-800"
-                                                   >
-                                                      click here
-                                                   </a>
-                                                   .
-                                                </Popover.Panel>
-                                             </Transition>
-                                          </Popover>
                                        </div>
                                     )}
                                  </div>
