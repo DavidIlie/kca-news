@@ -9,11 +9,13 @@ import {
    AiOutlineMenu,
 } from "react-icons/ai";
 import { Disclosure } from "@headlessui/react";
+import { useLocalStorage } from "@mantine/hooks";
 
 import prisma from "../../../../lib/prisma";
 import { Article } from "../../../../types/Article";
 import { User } from "../../../../types/User";
 import { Button } from "../../../../ui/Button";
+import EditorSettingsDisclosure from "../../../../components/EditorSettingsDisclosure";
 
 interface Props {
    user: User;
@@ -31,7 +33,7 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
             {!openSidebar && (
                <AiOutlineMenu
                   className="absolute right-0 top-0 mt-24 mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100"
-                  title="Open Menu"
+                  title="Open Settings"
                   onClick={() => setOpenSidebar(true)}
                />
             )}
@@ -49,21 +51,12 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
                      onClick={() => setOpenSidebar(false)}
                   />
                </div>
-               <Disclosure as="div" className="border-b-2">
-                  <Disclosure.Button className="w-[99.5%] py-4 px-2 ring-blue-500 duration-150 hover:bg-gray-100 focus:ring-2">
-                     {({ open }) => (
-                        <div className="mx-4 flex items-center justify-between gap-2">
-                           <h1>Status & Visibilty</h1>
-                           {open ? (
-                              <AiOutlineArrowUp />
-                           ) : (
-                              <AiOutlineArrowDown />
-                           )}
-                        </div>
-                     )}
-                  </Disclosure.Button>
-                  <Disclosure.Panel></Disclosure.Panel>
-               </Disclosure>
+               <EditorSettingsDisclosure
+                  defaultChecked={false}
+                  name="Status & Visibility"
+               >
+                  <h1>yo</h1>
+               </EditorSettingsDisclosure>
                <div className="absolute bottom-0 w-full px-2 py-4">
                   <Button className="w-full" disabled>
                      Save
