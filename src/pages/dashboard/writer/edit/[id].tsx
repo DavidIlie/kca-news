@@ -23,6 +23,7 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
 
    const [categories, setCategories] = useState<string[]>(article.categoryId);
    const [title, setTitle] = useState<string>(article.title);
+   const [description, setDescription] = useState<string>(article.description);
 
    return (
       <>
@@ -54,6 +55,20 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
                      onChange={(e) => setTitle(e.target.value)}
                   />
                </div>
+               {description !== article.description && (
+                  <RiRestartLine
+                     className="absolute -ml-10 mt-5 cursor-pointer text-2xl"
+                     onClick={() => {
+                        setDescription(article.description);
+                     }}
+                  />
+               )}
+               <ContentEditable
+                  tagName="p"
+                  className="mt-4 text-justify"
+                  html={description}
+                  onChange={(e) => setDescription(e.target.value)}
+               />
             </div>
             {!openSidebar && (
                <AiOutlineMenu
