@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import { DefaultSeo } from "next-seo";
 import { getSession } from "next-auth/react";
-import { AiOutlineCloseCircle, AiOutlineMenu } from "react-icons/ai";
+import {
+   AiOutlineArrowDown,
+   AiOutlineArrowUp,
+   AiOutlineCloseCircle,
+   AiOutlineMenu,
+} from "react-icons/ai";
+import { Disclosure } from "@headlessui/react";
 
 import prisma from "../../../../lib/prisma";
 import { Article } from "../../../../types/Article";
@@ -32,9 +38,9 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
             <div
                className={`h-full ${
                   openSidebar ? "w-1/5" : "hidden"
-               } relative border-l-2 py-3`}
+               } relative border-l-2 py-4`}
             >
-               <div className="flex items-center justify-between gap-2 border-b-2 px-4 pb-3">
+               <div className="flex items-center justify-between gap-2 border-b-2 px-4 pb-4">
                   <h1 className="text-2xl font-semibold">Settings</h1>
                   <AiOutlineCloseCircle
                      size="25"
@@ -43,6 +49,21 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
                      onClick={() => setOpenSidebar(false)}
                   />
                </div>
+               <Disclosure as="div" className="border-b-2">
+                  <Disclosure.Button className="w-[99.5%] py-4 px-2 ring-blue-500 duration-150 hover:bg-gray-100 focus:ring-2">
+                     {({ open }) => (
+                        <div className="mx-4 flex items-center justify-between gap-2">
+                           <h1>Status & Visibilty</h1>
+                           {open ? (
+                              <AiOutlineArrowUp />
+                           ) : (
+                              <AiOutlineArrowDown />
+                           )}
+                        </div>
+                     )}
+                  </Disclosure.Button>
+                  <Disclosure.Panel></Disclosure.Panel>
+               </Disclosure>
                <div className="absolute bottom-0 w-full px-2 py-4">
                   <Button className="w-full" disabled>
                      Save
