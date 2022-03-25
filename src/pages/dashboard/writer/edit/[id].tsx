@@ -25,13 +25,14 @@ import RichTextEditor from "../../../../components/RichTextEditor";
 
 interface Props {
    user: User;
-   article: Article;
+   articleServer: Article;
    html: string;
 }
 
-const ArticleEditor: React.FC<Props> = ({ user, article, html }) => {
+const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
    const [openSidebar, setOpenSidebar] = useState<boolean>(true);
 
+   const [article, setArticle] = useState<Article>(articleServer);
    const [categories, setCategories] = useState<string[]>(article.categoryId);
    const [title, setTitle] = useState<string>(article.title);
    const [description, setDescription] = useState<string>(article.description);
@@ -67,6 +68,7 @@ const ArticleEditor: React.FC<Props> = ({ user, article, html }) => {
             content: markdownValue,
          }),
       });
+      const response = await r.json();
 
       if (r.status === 200) {
          notifications.updateNotification(id, {
@@ -77,9 +79,8 @@ const ArticleEditor: React.FC<Props> = ({ user, article, html }) => {
             icon: <AiOutlineCheck />,
             autoClose: 2000,
          });
+         setArticle(response.newArticle);
       } else {
-         const response = await r.json();
-
          notifications.updateNotification(id, {
             id,
             color: "red",
@@ -244,7 +245,7 @@ export const getServerSideProps: GetServerSideProps = async ({
    return {
       props: {
          user: session?.user,
-         article: JSON.parse(JSON.stringify(article)),
+         articleServer: JSON.parse(JSON.stringify(article)),
          html,
       },
    };

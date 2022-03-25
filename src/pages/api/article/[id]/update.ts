@@ -38,7 +38,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
    });
 
-   return res.status(200).json({ message: "ok" });
+   const newArticle = await prisma.article.findFirst({
+      where: { id: article.id },
+   });
+
+   return res.status(200).json({ newArticle });
 };
 
 export default handler;
