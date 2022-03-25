@@ -2,14 +2,7 @@ import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import { DefaultSeo } from "next-seo";
 import { getSession } from "next-auth/react";
-import {
-   AiOutlineArrowDown,
-   AiOutlineArrowUp,
-   AiOutlineCloseCircle,
-   AiOutlineMenu,
-} from "react-icons/ai";
-import { Disclosure } from "@headlessui/react";
-import { useLocalStorage } from "@mantine/hooks";
+import { AiOutlineCloseCircle, AiOutlineMenu } from "react-icons/ai";
 
 import prisma from "../../../../lib/prisma";
 import { Article } from "../../../../types/Article";
@@ -22,27 +15,8 @@ interface Props {
    article: Article;
 }
 
-interface LocalStorageState {
-   status: boolean;
-   description: boolean;
-   categories: boolean;
-   filter: boolean;
-   misc: boolean;
-}
-
 const ArticleEditor: React.FC<Props> = ({ user, article }) => {
    const [openSidebar, setOpenSidebar] = useState<boolean>(true);
-   const [selectedSidebar, setSelectedSidebar] =
-      useLocalStorage<LocalStorageState>({
-         key: "editorSidebarConfig",
-         defaultValue: {
-            status: true,
-            description: false,
-            categories: false,
-            filter: false,
-            misc: false,
-         },
-      });
 
    return (
       <>
