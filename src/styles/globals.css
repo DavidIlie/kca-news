@@ -46,3 +46,7 @@
 .blog-content p {
    font-size: 1rem;
 }
+
+[contenteditable] {
+   outline: 0px solid transparent;
+}

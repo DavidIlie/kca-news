@@ -3,12 +3,15 @@ import { GetServerSideProps } from "next";
 import { DefaultSeo } from "next-seo";
 import { getSession } from "next-auth/react";
 import { AiOutlineCloseCircle, AiOutlineMenu } from "react-icons/ai";
+import { RiRestartLine } from "react-icons/ri";
+import ContentEditable from "react-contenteditable";
 
 import prisma from "../../../../lib/prisma";
 import { Article } from "../../../../types/Article";
 import { User } from "../../../../types/User";
 import { Button } from "../../../../ui/Button";
 import EditorSettingsDisclosure from "../../../../components/EditorSettingsDisclosure";
+import ArticleBadge from "../../../../components/ArticleBadge";
 
 interface Props {
    user: User;
@@ -18,11 +21,40 @@ interface Props {
 const ArticleEditor: React.FC<Props> = ({ user, article }) => {
    const [openSidebar, setOpenSidebar] = useState<boolean>(true);
 
+   const [categories, setCategories] = useState<string[]>(article.categoryId);
+   const [title, setTitle] = useState<string>(article.title);
+
    return (
       <>
-         <DefaultSeo title={article.title} />
+         <DefaultSeo title={title} />
          <div className="mt-[5.4rem] flex flex-grow">
-            <div className={`h-full ${openSidebar ? "w-4/5" : "w-full"}`}></div>
+            <div
+               className={`container mx-auto h-full max-w-4xl pt-16 ${
+                  openSidebar ? "w-4/5" : "w-full"
+               }`}
+            >
+               <div className="border-b-2 pb-4">
+                  <div className="mb-4 flex w-full flex-wrap justify-start">
+                     {categories.map((category, index) => (
+                        <ArticleBadge tag={category} key={index} />
+                     ))}
+                  </div>
+                  {title !== article.title && (
+                     <RiRestartLine
+                        className="absolute -ml-10 mt-[0.9rem] cursor-pointer text-2xl"
+                        onClick={() => {
+                           setTitle(article.title);
+                        }}
+                     />
+                  )}
+                  <ContentEditable
+                     tagName="h1"
+                     className="text-4xl font-semibold"
+                     html={title}
+                     onChange={(e) => setTitle(e.target.value)}
+                  />
+               </div>
+            </div>
             {!openSidebar && (
                <AiOutlineMenu
                   className="absolute right-0 top-0 mt-24 mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100"

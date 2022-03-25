@@ -224,13 +224,13 @@ const ArticleViewer: React.FC<Props> = ({
                duration={500}
             >
                <div className="container mx-auto mt-10 max-w-4xl">
-                  <div className="mb-4 flex w-full flex-wrap justify-start px-3">
+                  <div className="mb-2 flex w-full flex-wrap justify-start px-3">
                      {article.categoryId.map((category, index) => (
                         <ArticleBadge tag={category} key={index} />
                      ))}
                   </div>
                   <div className="flex justify-between border-b-2 pb-2">
-                     <h1 className="px-4 text-4xl font-semibold md:text-4xl">
+                     <h1 className="px-4 text-4xl font-semibold">
                         {article.title}
                      </h1>
                      <div className="grid grid-cols-2 divide-x-2 divide-gray-500">
