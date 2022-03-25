@@ -22,8 +22,27 @@ interface Props {
    article: Article;
 }
 
+interface LocalStorageState {
+   status: boolean;
+   description: boolean;
+   categories: boolean;
+   filter: boolean;
+   misc: boolean;
+}
+
 const ArticleEditor: React.FC<Props> = ({ user, article }) => {
    const [openSidebar, setOpenSidebar] = useState<boolean>(true);
+   const [selectedSidebar, setSelectedSidebar] =
+      useLocalStorage<LocalStorageState>({
+         key: "editorSidebarConfig",
+         defaultValue: {
+            status: true,
+            description: false,
+            categories: false,
+            filter: false,
+            misc: false,
+         },
+      });
 
    return (
       <>
@@ -51,10 +70,19 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
                      onClick={() => setOpenSidebar(false)}
                   />
                </div>
-               <EditorSettingsDisclosure
-                  defaultChecked={false}
-                  name="Status & Visibility"
-               >
+               <EditorSettingsDisclosure name="Status & Visibility">
+                  <h1>yo</h1>
+               </EditorSettingsDisclosure>
+               <EditorSettingsDisclosure name="Description">
+                  <h1>yo</h1>
+               </EditorSettingsDisclosure>
+               <EditorSettingsDisclosure name="Categories">
+                  <h1>yo</h1>
+               </EditorSettingsDisclosure>
+               <EditorSettingsDisclosure name="Filter">
+                  <h1>yo</h1>
+               </EditorSettingsDisclosure>
+               <EditorSettingsDisclosure name="Misc">
                   <h1>yo</h1>
                </EditorSettingsDisclosure>
                <div className="absolute bottom-0 w-full px-2 py-4">
