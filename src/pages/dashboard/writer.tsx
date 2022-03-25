@@ -216,7 +216,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  </div>
                               </div>
                            </div>
-                           <Disclosure.Panel className="mt-4 flex justify-evenly gap-4 border-t-2 border-blue-500 pt-4">
+                           <Disclosure.Panel className="relative mt-4 flex justify-evenly gap-4 border-t-2 border-blue-500 pt-4">
                               <Image
                                  alt="Post picture"
                                  className="rounded shadow-xl"
@@ -227,7 +227,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  placeholder="blur"
                                  objectFit="cover"
                               />
-                              <div className="max-w-lg">
+                              <div className="relative max-w-lg">
                                  <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
                                     Description
                                  </h1>
@@ -293,7 +293,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                        </Link>
                                     </>
                                  )}
-                                 <div className="mt-[1.5rem] flex items-center gap-2">
+                                 <div className="absolute bottom-0 mb-0.5 flex w-full items-center gap-2">
                                     <Link
                                        href={`/dashboard/writer/edit/${article.id}`}
                                     >
