@@ -20,7 +20,7 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
    return (
       <>
          <DefaultSeo title={article.title} />
-         <div className="mt-[5.5rem] flex flex-grow">
+         <div className="mt-[5.4rem] flex flex-grow">
             <div className={`h-full ${openSidebar ? "w-4/5" : "w-full"}`}></div>
             {!openSidebar && (
                <AiOutlineMenu
