@@ -2,9 +2,18 @@ import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import { DefaultSeo } from "next-seo";
 import { getSession } from "next-auth/react";
-import { AiOutlineCloseCircle, AiOutlineMenu } from "react-icons/ai";
+import {
+   AiOutlineCheck,
+   AiOutlineClose,
+   AiOutlineCloseCircle,
+   AiOutlineMenu,
+} from "react-icons/ai";
 import { RiRestartLine } from "react-icons/ri";
 import ContentEditable from "react-contenteditable";
+import { useNotifications } from "@mantine/notifications";
+
+//@ts-ignore
+import MarkdownIt from "markdown-it";
 
 import prisma from "../../../../lib/prisma";
 import { Article } from "../../../../types/Article";
@@ -12,18 +21,77 @@ import { User } from "../../../../types/User";
 import { Button } from "../../../../ui/Button";
 import EditorSettingsDisclosure from "../../../../components/EditorSettingsDisclosure";
 import ArticleBadge from "../../../../components/ArticleBadge";
+import RichTextEditor from "../../../../components/RichTextEditor";
 
 interface Props {
    user: User;
    article: Article;
+   html: string;
 }
 
-const ArticleEditor: React.FC<Props> = ({ user, article }) => {
+const ArticleEditor: React.FC<Props> = ({ user, article, html }) => {
    const [openSidebar, setOpenSidebar] = useState<boolean>(true);
 
    const [categories, setCategories] = useState<string[]>(article.categoryId);
    const [title, setTitle] = useState<string>(article.title);
    const [description, setDescription] = useState<string>(article.description);
+   const [markdownValue, changeMarkdownValue] = useState<string>(html);
+   const [hasEditedMarkdown, setHasEditedMarkdown] = useState<boolean>(false);
+   const [loading, setLoading] = useState<boolean>(false);
+
+   const notifications = useNotifications();
+
+   const canSave =
+      article.categoryId !== categories ||
+      article.title !== title ||
+      article.description !== description ||
+      hasEditedMarkdown;
+
+   const handleEdit = async () => {
+      setLoading(true);
+
+      const id = notifications.showNotification({
+         loading: true,
+         title: "Edit",
+         message: "Processing your request...",
+         autoClose: false,
+         disallowClose: true,
+      });
+
+      const r = await fetch(`/api/article/${article.id}/update`, {
+         method: "POST",
+         credentials: "include",
+         body: JSON.stringify({
+            title,
+            description,
+            content: markdownValue,
+         }),
+      });
+
+      if (r.status === 200) {
+         notifications.updateNotification(id, {
+            id,
+            color: "teal",
+            title: "Edit",
+            message: "Updated successfully!",
+            icon: <AiOutlineCheck />,
+            autoClose: 2000,
+         });
+      } else {
+         const response = await r.json();
+
+         notifications.updateNotification(id, {
+            id,
+            color: "red",
+            title: "Edit - Error",
+            message: response.message || "Unknown Error",
+            icon: <AiOutlineClose />,
+            autoClose: 5000,
+         });
+      }
+
+      setLoading(false);
+   };
 
    return (
       <>
@@ -69,14 +137,32 @@ const ArticleEditor: React.FC<Props> = ({ user, article }) => {
                   html={description}
                   onChange={(e) => setDescription(e.target.value)}
                />
-            </div>
-            {!openSidebar && (
-               <AiOutlineMenu
-                  className="absolute right-0 top-0 mt-24 mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100"
-                  title="Open Settings"
-                  onClick={() => setOpenSidebar(true)}
+               {!openSidebar && (
+                  <AiOutlineMenu
+                     className="absolute right-0 top-0 mt-24 mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100"
+                     title="Open Settings"
+                     onClick={() => setOpenSidebar(true)}
+                  />
+               )}
+               <div className="mt-4" />
+               <RichTextEditor
+                  value={markdownValue}
+                  onChange={changeMarkdownValue}
+                  onFocus={() => {
+                     setHasEditedMarkdown(true);
+                  }}
                />
-            )}
+               <div className="mt-4 border-t-2 pt-4">
+                  <Button
+                     className="w-full"
+                     disabled={!canSave || loading}
+                     loading={loading}
+                     onClick={handleEdit}
+                  >
+                     Save
+                  </Button>
+               </div>
+            </div>
             <div
                className={`h-full ${
                   openSidebar ? "w-1/5" : "hidden"
@@ -150,10 +236,16 @@ export const getServerSideProps: GetServerSideProps = async ({
          },
       };
 
+   const markdown: MarkdownIt = MarkdownIt({
+      html: true,
+   });
+   const html = await markdown.render(article.mdx);
+
    return {
       props: {
          user: session?.user,
          article: JSON.parse(JSON.stringify(article)),
+         html,
       },
    };
 };
