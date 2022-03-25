@@ -11,6 +11,7 @@ import {
 import { RiRestartLine } from "react-icons/ri";
 import ContentEditable from "react-contenteditable";
 import { useNotifications } from "@mantine/notifications";
+import { useLocalStorage } from "@mantine/hooks";
 
 //@ts-ignore
 import MarkdownIt from "markdown-it";
@@ -30,7 +31,10 @@ interface Props {
 }
 
 const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
-   const [openSidebar, setOpenSidebar] = useState<boolean>(true);
+   const [openSidebar, setOpenSidebar] = useLocalStorage<boolean>({
+      key: "editorOpenSidebar",
+      defaultValue: true,
+   });
 
    const [article, setArticle] = useState<Article>(articleServer);
    const [categories, setCategories] = useState<string[]>(article.categoryId);
