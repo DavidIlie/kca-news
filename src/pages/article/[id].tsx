@@ -6,7 +6,6 @@ import { format, parseISO } from "date-fns";
 import Image from "next/image";
 import { useSession, signIn, getSession } from "next-auth/react";
 import { Slide } from "react-awesome-reveal";
-import toast from "react-hot-toast";
 import { Formik, Field, Form } from "formik";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
@@ -14,12 +13,15 @@ import remarkAutoLinkHeadings from "remark-autolink-headings";
 import remarkSlug from "remark-slug";
 import matter from "gray-matter";
 import { Popover, Transition } from "@headlessui/react";
+import { useNotifications } from "@mantine/notifications";
 
 import {
    AiOutlineLike,
    AiOutlineDislike,
    AiFillLike,
    AiFillDislike,
+   AiOutlineCheck,
+   AiOutlineClose,
 } from "react-icons/ai";
 
 import prisma from "../../lib/prisma";
@@ -80,6 +82,8 @@ const ArticleViewer: React.FC<Props> = ({
       );
    }
 
+   const notifications = useNotifications();
+
    const { data } = useSession();
 
    const [upvoteCount, setUpvoteCount] = useState<number>(upvotes.count);
@@ -97,86 +101,116 @@ const ArticleViewer: React.FC<Props> = ({
 
    const handleOpinion = async (s: "upvote" | "downvote") => {
       if (!data?.user) return signIn("google");
-      const upvotePromise = new Promise<string>(async (resolve, reject) => {
-         const r = await fetch(`/api/article/${article.id}/${s}`, {
-            credentials: "include",
-         });
-         if (r.status === 200) {
-            if (s === "upvote") {
-               if (selfDownvote) {
-                  setSelfDownvote(false);
-                  setDownvoteCount(downvoteCount - 1);
-               }
-               if (selfUpvote) {
-                  setSelfUpvote(false);
-                  setUpvoteCount(upvoteCount - 1);
-               } else {
-                  setSelfUpvote(true);
-                  setUpvoteCount(upvoteCount + 1);
-               }
-            } else {
-               if (selfUpvote) {
-                  setSelfUpvote(false);
-                  setUpvoteCount(upvoteCount - 1);
-               }
-               if (selfDownvote) {
-                  setSelfDownvote(false);
-                  setDownvoteCount(downvoteCount - 1);
-               } else {
-                  setSelfDownvote(true);
-                  setDownvoteCount(downvoteCount + 1);
-               }
-            }
-            resolve("");
-         } else {
-            reject("");
-         }
+
+      const id = notifications.showNotification({
+         loading: true,
+         title: "Opinion",
+         message:
+            s === "upvote" ? "Liking this article" : "Disliking this article",
+         autoClose: false,
+         disallowClose: true,
       });
 
-      return toast.promise(
-         upvotePromise,
-         {
-            loading: "Loading",
-            success: "Updated sucessfully!",
-            error: "Error when fetching!",
-         },
-         { id: "updateOpinion" }
-      );
+      const r = await fetch(`/api/article/${article.id}/${s}`, {
+         credentials: "include",
+      });
+      if (r.status === 200) {
+         if (s === "upvote") {
+            if (selfDownvote) {
+               setSelfDownvote(false);
+               setDownvoteCount(downvoteCount - 1);
+            }
+            if (selfUpvote) {
+               setSelfUpvote(false);
+               setUpvoteCount(upvoteCount - 1);
+            } else {
+               setSelfUpvote(true);
+               setUpvoteCount(upvoteCount + 1);
+            }
+         } else {
+            if (selfUpvote) {
+               setSelfUpvote(false);
+               setUpvoteCount(upvoteCount - 1);
+            }
+            if (selfDownvote) {
+               setSelfDownvote(false);
+               setDownvoteCount(downvoteCount - 1);
+            } else {
+               setSelfDownvote(true);
+               setDownvoteCount(downvoteCount + 1);
+            }
+         }
+         notifications.updateNotification(id, {
+            id,
+            color: s === "upvote" ? "teal" : "red",
+            title: "Opinion",
+            message:
+               s === "upvote"
+                  ? !selfUpvote
+                     ? "Liked this article successfully!"
+                     : "Unliked this article successfully!"
+                  : !selfDownvote
+                  ? "Disliked this article successfully!"
+                  : "Un-Disliked this article successfully!",
+            icon: <AiOutlineCheck />,
+            autoClose: 2000,
+         });
+      } else {
+         const response = await r.json();
+
+         notifications.updateNotification(id, {
+            id,
+            color: "red",
+            title: "Opinion - Error",
+            message: response.message || "Unknown Error",
+            icon: <AiOutlineClose />,
+            autoClose: 5000,
+         });
+      }
    };
 
    const deleteComment = async () => {
-      const deleteCommentPromise = new Promise<string>(
-         async (resolve, reject) => {
-            const r = await fetch(
-               `/api/article/${article.id}/comment/${deleteCommentId}`,
-               {
-                  credentials: "include",
-                  method: "DELETE",
-               }
-            );
-            if (r.status === 200) {
-               let finalArray = [] as Array<Comment>;
-               commentsState.map(
-                  (comment) =>
-                     comment.id !== deleteCommentId && finalArray.push(comment)
-               );
-               setComments(finalArray);
-               resolve("");
-            } else {
-               reject("");
-            }
+      const id = notifications.showNotification({
+         loading: true,
+         title: "Comment",
+         message: "Deleting your comment...",
+         autoClose: false,
+         disallowClose: true,
+      });
+
+      const r = await fetch(
+         `/api/article/${article.id}/comment/${deleteCommentId}`,
+         {
+            credentials: "include",
+            method: "DELETE",
          }
       );
-
-      return toast.promise(
-         deleteCommentPromise,
-         {
-            loading: "Loading",
-            success: "Deleted sucessfully!",
-            error: "Error when fetching!",
-         },
-         { id: "deleteComment" }
-      );
+      if (r.status === 200) {
+         let finalArray = [] as Array<Comment>;
+         commentsState.map(
+            (comment) =>
+               comment.id !== deleteCommentId && finalArray.push(comment)
+         );
+         setComments(finalArray);
+         notifications.updateNotification(id, {
+            id,
+            color: "teal",
+            title: "Comment",
+            message: "Deleted this comment successfully!",
+            icon: <AiOutlineCheck />,
+            autoClose: 2000,
+         });
+      } else {
+         const response = await r.json();
+         notifications.updateNotification(id, {
+            id,
+            color: "red",
+            title: "Comment - Error",
+            message: response.message || "Unknown Error",
+            icon: <AiOutlineClose />,
+            autoClose: 2000,
+         });
+      }
    };
 
    return (
@@ -214,7 +248,9 @@ const ArticleViewer: React.FC<Props> = ({
                                  onClick={() => handleOpinion("upvote")}
                               />
                            )}
-                           <p className="font-medium">{upvoteCount}</p>
+                           <p className="select-none font-medium">
+                              {upvoteCount}
+                           </p>
                         </div>
                         <div className="flex items-center justify-center gap-1 pl-4">
                            {selfDownvote && data ? (
@@ -230,7 +266,9 @@ const ArticleViewer: React.FC<Props> = ({
                                  onClick={() => handleOpinion("downvote")}
                               />
                            )}
-                           <p className="font-medium">{downvoteCount}</p>
+                           <p className="select-none font-medium">
+                              {downvoteCount}
+                           </p>
                         </div>
                      </div>
                   </div>

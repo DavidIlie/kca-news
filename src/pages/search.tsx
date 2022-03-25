@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import { DefaultSeo } from "next-seo";
 import { useRouter } from "next/router";
-import { AiOutlineSearch } from "react-icons/ai";
-import toast from "react-hot-toast";
+import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
+import { useNotifications } from "@mantine/notifications";
 
 import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
@@ -23,6 +23,8 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
    const [results, setResults] = useState<Article[]>(initialResponse);
    const [loading, setLoading] = useState<boolean>(false);
 
+   const notifications = useNotifications();
+
    const doSearch = async () => {
       if (searchQuery === "" || searchQuery === previousSearchQuery) return;
 
@@ -38,7 +40,12 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
       const response = await r.json();
 
       if (r.status !== 200) {
-         toast.error(response.message);
+         notifications.showNotification({
+            color: "red",
+            title: "Error",
+            message: response.message || "Unknown Error",
+            icon: <AiOutlineClose />,
+         });
       } else {
          setPreviousSearchQuery(searchQuery);
          setResults(response);
