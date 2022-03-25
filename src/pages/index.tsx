@@ -6,7 +6,7 @@ import { NextSeo } from "next-seo";
 import { VscChevronLeft, VscChevronRight } from "react-icons/vsc";
 import { Slide } from "react-awesome-reveal";
 import { formatDistance } from "date-fns";
-import { useShortcut } from "litkey";
+import { useHotkeys } from "@mantine/hooks";
 
 import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
@@ -20,11 +20,14 @@ interface Props {
 const Home: React.FC<Props> = ({ featuredPosts }) => {
    const [index, setSelectedIndex] = useState<number>(0);
 
-   useShortcut("left", () => index !== 0 && setSelectedIndex(index - 1));
-   useShortcut(
-      "right",
-      () => index !== featuredPosts.length - 1 && setSelectedIndex(index + 1)
-   );
+   useHotkeys([
+      ["ArrowLeft", () => index !== 0 && setSelectedIndex(index - 1)],
+      [
+         "ArrowRight",
+         () =>
+            index !== featuredPosts.length - 1 && setSelectedIndex(index + 1),
+      ],
+   ]);
 
    if (featuredPosts.length === 0) {
       return <ErrorPage />;

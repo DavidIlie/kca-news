@@ -47,13 +47,7 @@ const KingsNews = ({
             showOnShallow={true}
          />
          <SessionProvider session={session}>
-            <MantineProvider
-               withGlobalStyles
-               withNormalizeCSS
-               theme={{
-                  colorScheme: "light",
-               }}
-            >
+            <MantineProvider>
                <NotificationsProvider>
                   <div className="flex h-screen flex-col">
                      <NavBar />
