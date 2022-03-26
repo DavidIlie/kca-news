@@ -39,6 +39,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                ? true
                : true,
          },
+         include: {
+            writer: true,
+         },
       });
 
       return res.status(200).json({ article: newArticle });

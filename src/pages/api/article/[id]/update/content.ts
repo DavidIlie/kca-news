@@ -28,8 +28,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const body = await updateArticleSchema.validate(req.body);
 
-      // const markdown = NodeHtmlMarkdown.translate(body.content);
-
       const newArticle = await prisma.article.update({
          where: { id: article.id },
          data: {
@@ -42,6 +40,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                : article.underReview
                ? true
                : true,
+         },
+         include: {
+            writer: true,
          },
       });
 

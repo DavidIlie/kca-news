@@ -36,6 +36,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                : false
             : article.published,
       },
+      include: {
+         writer: true,
+      },
    });
 
    return res.json({ article: newArticle });

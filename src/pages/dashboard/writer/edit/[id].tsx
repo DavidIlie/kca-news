@@ -4,6 +4,7 @@ import Image from "next/image";
 import { DefaultSeo } from "next-seo";
 import { getSession } from "next-auth/react";
 import {
+   AiOutlineCheck,
    AiOutlineClose,
    AiOutlineCloseCircle,
    AiOutlineMenu,
@@ -18,8 +19,10 @@ import {
    Tooltip,
    LoadingOverlay,
    Textarea,
+   Alert,
 } from "@mantine/core";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
 
@@ -59,6 +62,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [loadingRest, setLoadingRest] = useState<boolean>(false);
    const [openConfirmModalUnderReview, setOpenConfirmModalUnderReview] =
       useState<boolean>(false);
+   const [displayAlert, setDisplayAlert] = useState<boolean>(false);
 
    const notifications = useNotifications();
 
@@ -89,6 +93,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
       if (r.status === 200) {
          setArticle(response.article);
+         setDisplayAlert(true);
+         setTimeout(() => {
+            setDisplayAlert(false);
+         }, 2500);
       } else {
          notifications.showNotification({
             color: "red",
@@ -113,6 +121,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
       if (r.status === 200) {
          setArticle(response.article);
+         setDisplayAlert(true);
+         setTimeout(() => {
+            setDisplayAlert(false);
+         }, 2500);
       } else {
          notifications.showNotification({
             color: "red",
@@ -139,6 +151,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
       if (r.status === 200) {
          setArticle(response.article);
+         setDisplayAlert(true);
+         setTimeout(() => {
+            setDisplayAlert(false);
+         }, 2500);
       } else {
          notifications.showNotification({
             color: "red",
@@ -163,6 +179,28 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
             >
                <LoadingOverlay visible={loadingContentUpdate} />
                <div className="border-b-2 pb-4">
+                  {displayAlert && (
+                     <Alert
+                        icon={<AiOutlineCheck />}
+                        title="Perfect!"
+                        color="green"
+                        className="mb-4"
+                        withCloseButton
+                        onClose={() => setDisplayAlert(false)}
+                     >
+                        {article.underReview && !article.published
+                           ? "Your article has been put under review so that your changes can be moderated."
+                           : `                     ${
+                                article.writer!.id === user.id ? "Your" : "This"
+                             } article
+                     has successfully been updated!`}{" "}
+                        <Link href={`/article/${article.id}`}>
+                           <a className="font-semibold text-blue-500 duration-150 hover:text-blue-800">
+                              See article
+                           </a>
+                        </Link>
+                     </Alert>
+                  )}
                   <div className="mb-2 flex w-full flex-wrap justify-start">
                      {categories.map((category, index) => (
                         <ArticleBadge tag={category} key={index} />
@@ -188,7 +226,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      onChange={(e) => setTitle(e.target.value)}
                   />
                </div>
-               <div className="relative mt-3 flex justify-center">
+               <div className="relative mt-4 flex justify-center">
                   <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
                      <Button
                         color="cyan"
@@ -230,13 +268,13 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                />
                {!openSidebar && (
                   <AiOutlineMenu
-                     className="absolute right-0 top-0 z-50 mt-[55%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 sm:mt-24"
+                     className="absolute right-0 top-0 z-50 mt-[75%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 sm:mt-24"
                      title="Open Settings"
                      onClick={() => setOpenSidebar(true)}
                   />
                )}
                <div
-                  className={`mt-2 ${
+                  className={`mt-6 ${
                      markdownValue.length < 2 && "-mb-1"
                   } border-t-2`}
                />
@@ -382,6 +420,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
                                        if (r.status === 200) {
                                           setArticle(response.article);
+                                          setDisplayAlert(true);
+                                          setTimeout(() => {
+                                             setDisplayAlert(false);
+                                          }, 2500);
                                        } else {
                                           notifications.showNotification({
                                              color: "red",
@@ -521,9 +563,15 @@ export const getServerSideProps: GetServerSideProps = async ({
            where: {
               id: id as string,
            },
+           include: {
+              writer: true,
+           },
         })
       : await prisma.article.findFirst({
            where: { id: id as string, user: session?.user?.id },
+           include: {
+              writer: true,
+           },
         });
 
    if (!article)

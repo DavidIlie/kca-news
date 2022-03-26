@@ -374,7 +374,7 @@ const ArticleViewer: React.FC<Props> = ({
                         </h1>
                      )}
                   </div>
-                  <div className="mx-6 mt-6 mb-12 flex justify-center">
+                  <div className="mx-4 mt-2 mb-6 flex justify-center">
                      <Image
                         alt="Post picture"
                         className="rounded-xl shadow-xl"
