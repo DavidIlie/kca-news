@@ -386,21 +386,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                      nothingFound="Nothing found"
                      clearable
                      maxDropdownHeight={160}
-                     // classNames={{
-                     //    value: `text-${
-                     //       colors[
-                     //          (categories[0].charCodeAt(1) +
-                     //             categories[0].charCodeAt(1)) %
-                     //             11
-                     //       ]
-                     //    }-50 bg-${
-                     //       colors[
-                     //          (categories[0].charCodeAt(1) +
-                     //             categories[0].charCodeAt(2)) %
-                     //             11
-                     //       ]
-                     //    }-500`,
-                     // }}
                   />
                </EditorSettingsDisclosure>
                <EditorSettingsDisclosure name="Filter">
