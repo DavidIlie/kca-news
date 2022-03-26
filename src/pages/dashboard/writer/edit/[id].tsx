@@ -334,7 +334,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                      <Button
                         color="secondary"
                         className="mt-3 -ml-1 w-full"
-                        disabled={article.underReview}
+                        disabled={article.underReview || article.published}
                      >
                         Delete
                      </Button>

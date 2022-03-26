@@ -103,7 +103,8 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                         disabled={
                            selected === null ||
                            (articles.length === 1 && user.isAdmin) ||
-                           selected.underReview
+                           selected.underReview ||
+                           selected.published
                         }
                         color="secondary"
                      >
@@ -290,7 +291,10 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                        <Button
                                           className="w-full"
                                           color="secondary"
-                                          disabled={article.underReview}
+                                          disabled={
+                                             article.underReview ||
+                                             article.published
+                                          }
                                        >
                                           Delete
                                        </Button>
