@@ -55,11 +55,10 @@ CREATE TABLE "VerificationToken" (
 CREATE TABLE "Article" (
     "id" TEXT NOT NULL,
     "user" TEXT,
-    "anonymous" BOOLEAN NOT NULL,
+    "anonymous" BOOLEAN NOT NULL DEFAULT false,
     "title" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "pdf" TEXT,
-    "mdx" TEXT,
+    "mdx" TEXT NOT NULL,
     "review" BOOLEAN NOT NULL DEFAULT false,
     "cover" TEXT NOT NULL,
     "description" TEXT NOT NULL,

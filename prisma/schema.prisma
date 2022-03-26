@@ -70,16 +70,15 @@ model VerificationToken {
 model Article {
   id            String    @id @default(uuid())
   user          String?
-  writer        User?    @relation("writer", fields: [user], references: [id], onDelete: Cascade)
+  writer        User?     @relation("writer", fields: [user], references: [id], onDelete: Cascade)
   coWriters     User[]    @relation("coWriter", references: [id])
-  anonymous     Boolean
+  anonymous     Boolean   @default(false)
   comments      Comment[]
   title         String
   createdAt     DateTime  @default(now())
   upvotes       Upvote[]
   downvotes     Downvote[]
-  pdf           String?
-  mdx           String?
+  mdx           String
   review        Boolean   @default(false)
   cover         String
   description   String

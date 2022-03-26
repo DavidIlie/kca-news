@@ -381,31 +381,12 @@ const ArticleViewer: React.FC<Props> = ({
                      {article.description}
                   </p>
                   <div className="ml-4 mb-7 border-t-2" />
-                  {article.pdf && (
-                     <object
-                        data={article.pdf}
-                        type={article.pdf}
-                        style={{
-                           height: "80vh",
-                           width: "96%",
-                           margin: "0 auto",
-                        }}
-                     >
-                        <embed
-                           src={article.pdf}
-                           style={{ height: "80vh", width: "100%" }}
-                           type="application/pdf"
-                        />
-                     </object>
-                  )}
-                  {article.mdx && (
-                     <div className="blog-content px-4">
-                        <MDXRemote
-                           components={{ ...MDXComponents }}
-                           {...mdxSource}
-                        />
-                     </div>
-                  )}
+                  <div className="blog-content px-4">
+                     <MDXRemote
+                        components={{ ...MDXComponents }}
+                        {...mdxSource}
+                     />
+                  </div>
                   <div className="mt-6 ml-4 border-t-2 pt-4">
                      <h1 className="text-4xl font-semibold">
                         What do you think?
@@ -616,16 +597,12 @@ export const getServerSideProps: GetServerSideProps = async ({
          },
       };
 
-   let mdxSource = null;
-
-   if (article.mdx) {
-      const { content } = matter(article.mdx);
-      mdxSource = await serialize(content, {
-         mdxOptions: {
-            remarkPlugins: [remarkAutoLinkHeadings, remarkSlug],
-         },
-      });
-   }
+   const { content } = matter(article.mdx);
+   const mdxSource = await serialize(content, {
+      mdxOptions: {
+         remarkPlugins: [remarkAutoLinkHeadings, remarkSlug],
+      },
+   });
 
    let hasSelfUpvoted = false;
    let hasSelfDownvoted = false;
