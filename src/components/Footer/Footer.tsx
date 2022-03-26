@@ -1,12 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import {
-   entertainmentLinks,
-   lifestyleLinks,
-   newsLinks,
-   sportLinks,
-} from "../../lib/categories";
+import { links } from "../../lib/categories";
 
 const Footer: React.FC = () => {
    return (
@@ -38,19 +33,23 @@ const Footer: React.FC = () => {
                      NEWS
                   </h2>
                   <nav className="mb-10 list-none">
-                     {newsLinks.map((news, index) => (
-                        <li key={index}>
-                           <Link
-                              href={
-                                 news.url ? news.url : `/news?filter=${news.id}`
-                              }
-                           >
-                              <a className="text-gray-600 hover:text-gray-800">
-                                 {news.name}
-                              </a>
-                           </Link>
-                        </li>
-                     ))}
+                     {links
+                        .filter((l) => l.location.includes("news"))
+                        .map((news, index) => (
+                           <li key={index}>
+                              <Link
+                                 href={
+                                    news.location.length > 1
+                                       ? `/${news.id}?filter=news`
+                                       : `/${news.location[0]}?category=${news.id}`
+                                 }
+                              >
+                                 <a className="text-gray-600 hover:text-gray-800">
+                                    {news.name}
+                                 </a>
+                              </Link>
+                           </li>
+                        ))}
                   </nav>
                </div>
                <div className="w-full px-4 md:w-1/2 lg:w-1/4">
@@ -58,21 +57,23 @@ const Footer: React.FC = () => {
                      ENTERTAINMENT
                   </h2>
                   <nav className="mb-10 list-none">
-                     {entertainmentLinks.map((news, index) => (
-                        <li key={index}>
-                           <Link
-                              href={
-                                 news.url
-                                    ? news.url
-                                    : `/entertainment?filter=${news.id}`
-                              }
-                           >
-                              <a className="text-gray-600 hover:text-gray-800">
-                                 {news.name}
-                              </a>
-                           </Link>
-                        </li>
-                     ))}
+                     {links
+                        .filter((l) => l.location.includes("entertainment"))
+                        .map((news, index) => (
+                           <li key={index}>
+                              <Link
+                                 href={
+                                    news.location.length > 1
+                                       ? `/${news.id}?filter=entertainment`
+                                       : `/${news.location[0]}?category=${news.id}`
+                                 }
+                              >
+                                 <a className="text-gray-600 hover:text-gray-800">
+                                    {news.name}
+                                 </a>
+                              </Link>
+                           </li>
+                        ))}
                   </nav>
                </div>
                <div className="w-full px-4 md:w-1/2 lg:w-1/4">
@@ -80,21 +81,23 @@ const Footer: React.FC = () => {
                      SPORT
                   </h2>
                   <nav className="mb-10 list-none">
-                     {sportLinks.map((news, index) => (
-                        <li key={index}>
-                           <Link
-                              href={
-                                 news.url
-                                    ? news.url
-                                    : `/sport?filter=${news.id}`
-                              }
-                           >
-                              <a className="text-gray-600 hover:text-gray-800">
-                                 {news.name}
-                              </a>
-                           </Link>
-                        </li>
-                     ))}
+                     {links
+                        .filter((l) => l.location.includes("sport"))
+                        .map((news, index) => (
+                           <li key={index}>
+                              <Link
+                                 href={
+                                    news.location.length > 1
+                                       ? `/${news.id}?filter=sport`
+                                       : `/${news.location[0]}?category=${news.id}`
+                                 }
+                              >
+                                 <a className="text-gray-600 hover:text-gray-800">
+                                    {news.name}
+                                 </a>
+                              </Link>
+                           </li>
+                        ))}
                   </nav>
                </div>
                <div className="w-full px-4 md:w-1/2 lg:w-1/4">
@@ -102,21 +105,23 @@ const Footer: React.FC = () => {
                      LIFESTYLE
                   </h2>
                   <nav className="mb-10 list-none">
-                     {lifestyleLinks.map((news, index) => (
-                        <li key={index}>
-                           <Link
-                              href={
-                                 news.url
-                                    ? news.url
-                                    : `/lifestyle?filter=${news.id}`
-                              }
-                           >
-                              <a className="text-gray-600 hover:text-gray-800">
-                                 {news.name}
-                              </a>
-                           </Link>
-                        </li>
-                     ))}
+                     {links
+                        .filter((l) => l.location.includes("lifestyle"))
+                        .map((news, index) => (
+                           <li key={index}>
+                              <Link
+                                 href={
+                                    news.location.length > 1
+                                       ? `/${news.id}?filter=lifestyle`
+                                       : `/${news.location[0]}?category=${news.id}`
+                                 }
+                              >
+                                 <a className="text-gray-600 hover:text-gray-800">
+                                    {news.name}
+                                 </a>
+                              </Link>
+                           </li>
+                        ))}
                   </nav>
                </div>
             </div>
