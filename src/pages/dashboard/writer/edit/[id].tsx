@@ -210,6 +210,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                      placeholder="Pick all the appropiate categories"
                      onChange={setCategories}
                      value={categories}
+                     searchable
+                     nothingFound="Nothing found"
+                     clearable
+                     maxDropdownHeight={160}
                   />
                </EditorSettingsDisclosure>
                <EditorSettingsDisclosure name="Filter">
