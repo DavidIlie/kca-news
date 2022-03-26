@@ -49,7 +49,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
    const notifications = useNotifications();
 
    const canSave =
-      article.categoryId !== categories ||
       article.title !== title ||
       article.description !== description ||
       hasEditedMarkdown;
@@ -114,6 +113,11 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                      {categories.map((category, index) => (
                         <ArticleBadge tag={category} key={index} />
                      ))}
+                     {categories.length === 0 && (
+                        <div className="invisible">
+                           <ArticleBadge tag="i love surds" />
+                        </div>
+                     )}
                   </div>
                   {title !== article.title && (
                      <RiRestartLine
@@ -190,19 +194,28 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                <EditorSettingsDisclosure name="Description">
                   <h1>yo</h1>
                </EditorSettingsDisclosure>
-               <EditorSettingsDisclosure name="Categories">
+               <EditorSettingsDisclosure
+                  name="Categories"
+                  warning={categories.length === 0}
+               >
+                  {categories.length === 0 && (
+                     <h1 className="-mt-2 mb-2 px-1 font-medium">
+                        At least one category is needed to publish.
+                     </h1>
+                  )}
                   <MultiSelect
                      data={links.map((l) => {
                         return { value: l.id, label: l.name };
                      })}
                      placeholder="Pick all the appropiate categories"
                      onChange={setCategories}
+                     value={categories}
                   />
                </EditorSettingsDisclosure>
                <EditorSettingsDisclosure name="Filter">
                   <h1>yo</h1>
                </EditorSettingsDisclosure>
-               <EditorSettingsDisclosure name="Misc">
+               <EditorSettingsDisclosure name="Cover">
                   <h1>yo</h1>
                </EditorSettingsDisclosure>
                <div className="absolute bottom-0 w-full px-2 py-4">

@@ -54,10 +54,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
                   ? "Untitled Article"
                   : `Untitled Article #${unnamedArticles}`,
             user: session?.user?.id,
-            mdx: `# welcome to the template article`,
+            mdx: `# Welcome to the template article`,
             cover: "https://cdn.davidilie.com/kca-news/kings-alicante-1.jpg",
             description:
-               "this is an example of the description for the untitled article",
+               "This is an example of the description for the untitled article.",
          },
       });
 
