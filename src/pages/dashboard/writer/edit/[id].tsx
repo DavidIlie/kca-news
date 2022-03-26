@@ -237,8 +237,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                )}
                <div
                   className={`mt-2 ${
-                     markdownValue === "" && "-mb-1"
-                  } border-t-2 pt-4`}
+                     markdownValue.length < 2 && "-mb-1"
+                  } border-t-2`}
                />
                {/*
                   // @ts-ignore */}
@@ -246,8 +246,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                   placeholder="Start typing..."
                   onChange={(markdown) => changeMarkdownValue(markdown())}
                   defaultValue={markdownValue}
+                  className="z-0"
                />
-               <div className="mt-5 border-t-2 pt-4">
+               <div className="mt-11 border-t-2 pt-4">
                   <Button
                      className="w-full"
                      disabled={!canSave ? !canSaveRest : false}

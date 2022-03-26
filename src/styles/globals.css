@@ -61,25 +61,25 @@
 }
 
 .ProseMirror h1 {
-   @apply text-4xl font-extrabold text-black;
+   @apply text-4xl text-black;
 }
 
 .ProseMirror h2 {
-   @apply text-3xl font-extrabold text-black;
+   @apply text-3xl text-black;
 }
 
 .ProseMirror h3 {
-   @apply text-2xl font-extrabold text-black;
+   @apply text-2xl text-black;
 }
 
 .ProseMirror h4 {
-   @apply text-xl font-extrabold text-black;
+   @apply text-xl text-black;
 }
 
 .ProseMirror h5 {
-   @apply text-lg font-extrabold text-black;
+   @apply text-lg text-black;
 }
 
 .ProseMirror h6 {
-   @apply text-sm font-extrabold text-black;
+   @apply text-sm text-black;
 }

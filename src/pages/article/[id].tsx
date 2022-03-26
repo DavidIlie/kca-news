@@ -395,7 +395,7 @@ const ArticleViewer: React.FC<Props> = ({
                         // @ts-ignore */}
                      <Editor defaultValue={article.mdx} readOnly />
                   </div>
-                  <div className="mt-2 ml-4 border-t-2 pt-4">
+                  <div className="mt-11 ml-4 border-t-2 pt-4">
                      <h1 className="text-4xl font-semibold">
                         What do you think?
                      </h1>
