@@ -19,11 +19,7 @@ const EditorSettingsDisclosure: React.FC<Props> = ({
    warning = false,
 }) => {
    return (
-      <Disclosure
-         as="div"
-         className="border-b-2"
-         defaultOpen={name === "Status & Visibility"}
-      >
+      <Disclosure as="div" className="border-b-2">
          <Disclosure.Button className="w-[99.5%] py-4 px-2 ring-blue-500 duration-150 hover:bg-gray-100 focus:ring-1">
             {({ open }) => (
                <div className="mx-4 flex items-center justify-between gap-2">

@@ -1,9 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
-import { NodeHtmlMarkdown } from "node-html-markdown";
 
-import prisma from "../../../../lib/prisma";
-import { updateArticleSchema } from "../../../../schema/article";
+import prisma from "../../../../../lib/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    const session = await getSession({ req });
@@ -25,24 +23,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
    if (!article) return res.status(404).json({ message: "article not found" });
 
-   const body = await updateArticleSchema.validate(req.body);
+   if (article.underReview && !session?.user?.isAdmin)
+      return res.status(401).json({ message: "no permission to update" });
 
-   const markdown = NodeHtmlMarkdown.translate(body.content);
-
-   await prisma.article.update({
+   const newArticle = await prisma.article.update({
       where: { id: article.id },
-      data: {
-         title: body.title,
-         description: body.description,
-         mdx: markdown,
-      },
+      data: { underReview: !article.underReview },
    });
 
-   const newArticle = await prisma.article.findFirst({
-      where: { id: article.id },
-   });
-
-   return res.status(200).json({ newArticle });
+   return res.json({ article: newArticle });
 };
 
 export default handler;

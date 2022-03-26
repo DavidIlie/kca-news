@@ -12,7 +12,8 @@ import { RiRestartLine } from "react-icons/ri";
 import ContentEditable from "react-contenteditable";
 import { useNotifications } from "@mantine/notifications";
 import { useLocalStorage } from "@mantine/hooks";
-import { MultiSelect } from "@mantine/core";
+import { MultiSelect, TextInput, Tooltip } from "@mantine/core";
+import { Textarea } from "@mantine/core";
 
 //@ts-ignore
 import MarkdownIt from "markdown-it";
@@ -25,6 +26,9 @@ import EditorSettingsDisclosure from "../../../../components/EditorSettingsDiscl
 import ArticleBadge from "../../../../components/ArticleBadge";
 import RichTextEditor from "../../../../components/RichTextEditor";
 import { links } from "../../../../lib/categories";
+import Radio from "../../../../ui/Radio";
+import ArticleUnderReviewCard from "../../../../components/ArticleUnderReviewCard";
+import ConfirmModal from "../../../../ui/ConfirmModal";
 
 interface Props {
    user: User;
@@ -44,7 +48,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
    const [description, setDescription] = useState<string>(article.description);
    const [markdownValue, changeMarkdownValue] = useState<string>(html);
    const [hasEditedMarkdown, setHasEditedMarkdown] = useState<boolean>(false);
-   const [loading, setLoading] = useState<boolean>(false);
+   const [loadingContentUpdate, setLoadingContentUpdate] =
+      useState<boolean>(false);
+   const [openConfirmModalUnderReview, setOpenConfirmModalUnderReview] =
+      useState<boolean>(false);
 
    const notifications = useNotifications();
 
@@ -54,7 +61,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
       hasEditedMarkdown;
 
    const handleEdit = async () => {
-      setLoading(true);
+      setLoadingContentUpdate(true);
 
       const id = notifications.showNotification({
          loading: true,
@@ -64,7 +71,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
          disallowClose: true,
       });
 
-      const r = await fetch(`/api/article/${article.id}/update`, {
+      const r = await fetch(`/api/article/${article.id}/update/content`, {
          method: "POST",
          credentials: "include",
          body: JSON.stringify({
@@ -84,7 +91,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
             icon: <AiOutlineCheck />,
             autoClose: 2000,
          });
-         setArticle(response.newArticle);
+         setArticle(response.article);
       } else {
          notifications.updateNotification(id, {
             id,
@@ -96,7 +103,45 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
          });
       }
 
-      setLoading(false);
+      setLoadingContentUpdate(false);
+   };
+
+   const handleSetUnderReview = async () => {
+      if (article.underReview && !user.isAdmin) return;
+
+      const id = notifications.showNotification({
+         loading: true,
+         title: "Under Review",
+         message: "Processing your request...",
+         autoClose: false,
+         disallowClose: true,
+      });
+
+      const r = await fetch(`/api/article/${article.id}/update/underReview`, {
+         credentials: "include",
+      });
+      const response = await r.json();
+
+      if (r.status === 200) {
+         notifications.updateNotification(id, {
+            id,
+            color: "teal",
+            title: "Under Review",
+            message: "Updated successfully!",
+            icon: <AiOutlineCheck />,
+            autoClose: 2000,
+         });
+         setArticle(response.article);
+      } else {
+         notifications.updateNotification(id, {
+            id,
+            color: "red",
+            title: "Under Review - Error",
+            message: response.message || "Unknown Error",
+            icon: <AiOutlineClose />,
+            autoClose: 5000,
+         });
+      }
    };
 
    return (
@@ -166,8 +211,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                <div className="mt-4 border-t-2 pt-4">
                   <Button
                      className="w-full"
-                     disabled={!canSave || loading}
-                     loading={loading}
+                     disabled={!canSave || loadingContentUpdate}
+                     loading={loadingContentUpdate}
                      onClick={handleEdit}
                   >
                      Save
@@ -188,18 +233,87 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                      onClick={() => setOpenSidebar(false)}
                   />
                </div>
-               <EditorSettingsDisclosure name="Status & Visibility">
-                  <h1>yo</h1>
+               <EditorSettingsDisclosure name="Visibility">
+                  <div className="mx-4">
+                     <TextInput
+                        label="Title"
+                        onChange={(e) => setTitle(e.currentTarget.value)}
+                        value={title}
+                        required
+                     />
+                     <div className="mt-2 flex justify-between text-left">
+                        <h1 className="font-semibold">Status:</h1>
+                        <h1 className="text-blue-500">
+                           {article.published
+                              ? "Published"
+                              : article.underReview
+                              ? "Under Review"
+                              : "Not published"}
+                        </h1>
+                     </div>
+                     <div className="mt-2 flex items-center gap-2">
+                        <Tooltip
+                           label="Places article under review to be moderated by an administrator. This cannot be undone by you once changed."
+                           wrapLines
+                           width={220}
+                           withArrow
+                           transition="fade"
+                           transitionDuration={200}
+                           disabled={article.underReview || user.isAdmin}
+                        >
+                           <Radio
+                              label="Pending review"
+                              checked={article.underReview}
+                              labelSize="md"
+                              disabled={article.underReview && !user.isAdmin}
+                              onClick={() => {
+                                 if (!user.isAdmin) {
+                                    setOpenConfirmModalUnderReview(
+                                       !openConfirmModalUnderReview
+                                    );
+                                 } else {
+                                    handleSetUnderReview();
+                                 }
+                              }}
+                           />
+                        </Tooltip>
+                        {article.underReview && !user.isAdmin && (
+                           <ArticleUnderReviewCard />
+                        )}
+                     </div>
+                     <Button
+                        color="secondary"
+                        className="mt-3 -ml-1 w-full"
+                        disabled={article.underReview}
+                     >
+                        Delete
+                     </Button>
+                  </div>
                </EditorSettingsDisclosure>
-               <EditorSettingsDisclosure name="Description">
-                  <h1>yo</h1>
+               <EditorSettingsDisclosure
+                  name="Description"
+                  warning={description === ""}
+               >
+                  {description === "" && (
+                     <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
+                        You need a description in order to publish
+                     </h1>
+                  )}
+                  <Textarea
+                     placeholder="Description"
+                     required
+                     onChange={(e) => setDescription(e.currentTarget.value)}
+                     value={description}
+                     minRows={2}
+                     maxRows={4}
+                  />
                </EditorSettingsDisclosure>
                <EditorSettingsDisclosure
                   name="Categories"
                   warning={categories.length === 0}
                >
                   {categories.length === 0 && (
-                     <h1 className="-mt-2 mb-2 px-1 font-medium">
+                     <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
                         At least one category is needed to publish.
                      </h1>
                   )}
@@ -229,6 +343,13 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                </div>
             </div>
          </div>
+         <ConfirmModal
+            isOpen={openConfirmModalUnderReview}
+            successFunction={handleSetUnderReview}
+            updateModalState={() =>
+               setOpenConfirmModalUnderReview(!openConfirmModalUnderReview)
+            }
+         />
       </>
    );
 };
