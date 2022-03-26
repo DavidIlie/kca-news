@@ -438,12 +438,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                               </h1>
                            )}
                            <MultiSelect
-                              data={links.map((l) => {
-                                 return {
-                                    value: l.id,
-                                    label: l.name.toLowerCase(),
-                                 };
-                              })}
+                              data={links.map((l) => ({
+                                 value: l.id,
+                                 label: l.name.toLowerCase(),
+                              }))}
                               placeholder="Pick all the appropiate categories"
                               onChange={setCategories}
                               value={categories}
