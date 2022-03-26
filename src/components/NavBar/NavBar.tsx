@@ -37,7 +37,7 @@ const NavBar: React.FC = () => {
                   <span className="ml-3 text-xl">KCA News</span>
                </a>
             </Link>
-            <nav className="flex flex-wrap items-center justify-center gap-4 text-base md:mr-auto md:ml-4 md:border-l md:border-gray-400 md:py-1 md:pl-4">
+            <nav className="flex w-full flex-nowrap items-center justify-center gap-4 overflow-y-auto pb-2 text-base sm:w-auto sm:pb-0 md:mr-auto md:ml-4 md:border-l md:border-gray-400 md:py-1 md:pl-4">
                <Link href="/">
                   <a className="cursor-pointer rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-1 duration-150 hover:bg-gray-200 hover:text-gray-900">
                      Home

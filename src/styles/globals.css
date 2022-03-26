@@ -50,3 +50,12 @@
 [contenteditable] {
    outline: 0px solid transparent;
 }
+
+.scrollbar-hidden::-webkit-scrollbar {
+   display: none;
+}
+
+.scrollbar-hidden {
+   -ms-overflow-style: none;
+   scrollbar-width: none;
+}

@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { links } from "../lib/categories";
 
 export const updateArticleSchema = yup.object().shape({
-   title: yup.string().min(4).max(32).required(),
+   title: yup.string().min(4).max(200).required(),
    description: yup.string().min(24).max(1000).required(),
    content: yup.string().required(),
 });

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { GetServerSideProps } from "next";
+import Image from "next/image";
 import { DefaultSeo } from "next-seo";
 import { getSession } from "next-auth/react";
 import {
@@ -33,6 +34,9 @@ import { links } from "../../../../lib/categories";
 import Radio from "../../../../ui/Radio";
 import ArticleUnderReviewCard from "../../../../components/ArticleUnderReviewCard";
 import ConfirmModal from "../../../../ui/ConfirmModal";
+import { shimmer } from "../../../../lib/shimmer";
+import { Consumer } from "../../../../components/CustomSidebar/CustomSidebar";
+import CustomSidebar from "../../../../components/CustomSidebar";
 
 interface Props {
    user: User;
@@ -57,6 +61,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
    const [loadingRest, setLoadingRest] = useState<boolean>(false);
    const [openConfirmModalUnderReview, setOpenConfirmModalUnderReview] =
       useState<boolean>(false);
+   const [viewFullPhoto, setViewFullPhoto] = useState<boolean>(false);
 
    const notifications = useNotifications();
 
@@ -70,7 +75,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
       categories.length !== 0;
 
    const handleEdit = async () => {
-      console.log("updating content...");
       setLoadingContentUpdate(true);
 
       const r = await fetch(`/api/article/${article.id}/update/content`, {
@@ -153,9 +157,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
    return (
       <>
          <DefaultSeo title={title} />
-         <div className="mt-[5.4rem] flex flex-grow">
+         <div className="mt-4 flex flex-grow pb-10 sm:mt-[5.4rem] sm:pb-0">
             <div
-               className={`container mx-auto h-full max-w-4xl pt-16 ${
+               className={`container mx-auto h-full max-w-4xl px-4 sm:pt-10 ${
                   openSidebar ? "w-4/5" : "w-full"
                }`}
             >
@@ -186,6 +190,35 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                      onChange={(e) => setTitle(e.target.value)}
                   />
                </div>
+               <div className="relative mt-3 flex justify-center">
+                  <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
+                     <Button onClick={() => setViewFullPhoto(!viewFullPhoto)}>
+                        Show {viewFullPhoto ? "Small" : "Full"}
+                     </Button>
+                     <Button
+                        color="cyan"
+                        onClick={() =>
+                           notifications.showNotification({
+                              title: "Cover Photo",
+                              message: "Not available yet!",
+                              autoClose: 2000,
+                           })
+                        }
+                     >
+                        Replace
+                     </Button>
+                  </div>
+                  <Image
+                     alt="Post picture"
+                     className="rounded-xl shadow-xl"
+                     src={article.cover}
+                     width={1280}
+                     height={viewFullPhoto ? 720 / 1 : 720 / 3}
+                     blurDataURL={shimmer(1920, 1080)}
+                     placeholder="blur"
+                     objectFit="cover"
+                  />
+               </div>
                {description !== article.description && (
                   <RiRestartLine
                      className="absolute -ml-10 mt-5 cursor-pointer text-2xl"
@@ -202,7 +235,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                />
                {!openSidebar && (
                   <AiOutlineMenu
-                     className="absolute right-0 top-0 mt-24 mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100"
+                     className="absolute right-0 top-0 z-50 mt-[55%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 sm:mt-24"
                      title="Open Settings"
                      onClick={() => setOpenSidebar(true)}
                   />
@@ -235,185 +268,222 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                   </Button>
                </div>
             </div>
-            <div
-               className={`h-full ${
-                  openSidebar ? "w-1/5" : "hidden"
-               } relative border-l-2 py-4`}
+            <CustomSidebar
+               drawerProps={{
+                  opened: openSidebar,
+                  onClose: () => setOpenSidebar(!openSidebar),
+                  title: "Settings",
+                  size: "xl",
+                  position: "right",
+                  overlayOpacity: 0.25,
+                  classNames: {
+                     header: "px-4 border-b-2 py-4 -mb-0.5",
+                     title: "font-semibold text-2xl",
+                  },
+               }}
+               normalProps={{
+                  className: `h-full ${
+                     openSidebar ? "w-1/5" : "hidden"
+                  } relative border-l-2 py-4`,
+               }}
             >
-               <LoadingOverlay visible={loadingRest && !loadingContentUpdate} />
-               <div className="flex items-center justify-between gap-2 border-b-2 px-4 pb-4">
-                  <h1 className="text-2xl font-semibold">Settings</h1>
-                  <AiOutlineCloseCircle
-                     size="25"
-                     className="mt-1 cursor-pointer duration-150 hover:text-blue-600"
-                     title="Close"
-                     onClick={() => setOpenSidebar(false)}
-                  />
-               </div>
-               <EditorSettingsDisclosure name="Visibility">
-                  <TextInput
-                     label="Title"
-                     onChange={(e) => setTitle(e.currentTarget.value)}
-                     value={title}
-                     required
-                  />
-                  <div className="mt-2 flex justify-between text-left">
-                     <h1 className="font-semibold">Status:</h1>
-                     <h1 className="text-blue-500">
-                        {article.published
-                           ? "Published"
-                           : article.underReview
-                           ? "Under Review"
-                           : "Not published"}
-                     </h1>
-                  </div>
-                  <div className="mt-2 flex items-center gap-2">
-                     <Tooltip
-                        label="Places article under review to be moderated by an administrator. This cannot be undone by you once changed."
-                        wrapLines
-                        width={220}
-                        withArrow
-                        transition="fade"
-                        transitionDuration={200}
-                        disabled={article.underReview || user.isAdmin}
-                     >
-                        <Radio
-                           label="Pending review"
-                           checked={article.underReview}
-                           labelSize="md"
-                           disabled={article.underReview && !user.isAdmin}
-                           onChange={() => {
-                              if (!user.isAdmin) {
-                                 setOpenConfirmModalUnderReview(
-                                    !openConfirmModalUnderReview
-                                 );
-                              } else {
-                                 handleSetUnderReview();
-                              }
-                           }}
+               <Consumer>
+                  {({ mobile }) => (
+                     <>
+                        <LoadingOverlay
+                           visible={loadingRest && !loadingContentUpdate}
                         />
-                     </Tooltip>
-                     {article.underReview && !user.isAdmin && (
-                        <ArticleUnderReviewCard />
-                     )}
-                  </div>
-                  {user.isAdmin && (
-                     <div className="mt-2 flex items-center gap-2">
-                        <Radio
-                           label="Publish"
-                           labelSize="md"
-                           checked={article.published}
-                           disabled={
-                              article.underReview ||
-                              article.categoryId.length === 0
-                           }
-                           labelDisabled={
-                              article.underReview ||
-                              article.categoryId.length === 0
-                           }
-                           onChange={async () => {
-                              setLoadingRest(true);
+                        {!mobile && (
+                           <div className="flex items-center justify-between gap-2 border-b-2 px-4 pb-4">
+                              <h1 className="text-2xl font-semibold">
+                                 Settings
+                              </h1>
+                              <AiOutlineCloseCircle
+                                 size="25"
+                                 className="mt-1 cursor-pointer duration-150 hover:text-blue-600"
+                                 title="Close"
+                                 onClick={() => setOpenSidebar(false)}
+                              />
+                           </div>
+                        )}
+                        <EditorSettingsDisclosure name="Visibility">
+                           <TextInput
+                              label="Title"
+                              onChange={(e) => setTitle(e.currentTarget.value)}
+                              value={title}
+                              required
+                           />
+                           <div className="mt-2 flex justify-between text-left">
+                              <h1 className="font-semibold">Status:</h1>
+                              <h1 className="text-blue-500">
+                                 {article.published
+                                    ? "Published"
+                                    : article.underReview
+                                    ? "Under Review"
+                                    : "Not published"}
+                              </h1>
+                           </div>
+                           <div className="mt-2 flex items-center gap-2">
+                              <Tooltip
+                                 label="Places article under review to be moderated by an administrator. This cannot be undone by you once changed."
+                                 wrapLines
+                                 width={220}
+                                 withArrow
+                                 transition="fade"
+                                 transitionDuration={200}
+                                 disabled={article.underReview || user.isAdmin}
+                              >
+                                 <Radio
+                                    label="Pending review"
+                                    checked={article.underReview}
+                                    labelSize="md"
+                                    disabled={
+                                       article.underReview && !user.isAdmin
+                                    }
+                                    onChange={() => {
+                                       if (!user.isAdmin) {
+                                          setOpenConfirmModalUnderReview(
+                                             !openConfirmModalUnderReview
+                                          );
+                                       } else {
+                                          handleSetUnderReview();
+                                       }
+                                    }}
+                                 />
+                              </Tooltip>
+                              {article.underReview && !user.isAdmin && (
+                                 <ArticleUnderReviewCard />
+                              )}
+                           </div>
+                           {user.isAdmin && (
+                              <div className="mt-2 flex items-center gap-2">
+                                 <Radio
+                                    label="Publish"
+                                    labelSize="md"
+                                    checked={article.published}
+                                    disabled={
+                                       article.underReview ||
+                                       article.categoryId.length === 0
+                                    }
+                                    labelDisabled={
+                                       article.underReview ||
+                                       article.categoryId.length === 0
+                                    }
+                                    onChange={async () => {
+                                       setLoadingRest(true);
 
-                              const r = await fetch(
-                                 `/api/article/${article.id}/update/publish`,
-                                 {
-                                    credentials: "include",
+                                       const r = await fetch(
+                                          `/api/article/${article.id}/update/publish`,
+                                          {
+                                             credentials: "include",
+                                          }
+                                       );
+                                       const response = await r.json();
+
+                                       if (r.status === 200) {
+                                          setArticle(response.article);
+                                       } else {
+                                          notifications.showNotification({
+                                             color: "red",
+                                             title: "Publish - Error",
+                                             message:
+                                                response.message ||
+                                                "Unknown Error",
+                                             icon: <AiOutlineClose />,
+                                             autoClose: 5000,
+                                          });
+                                       }
+
+                                       setLoadingRest(false);
+                                    }}
+                                 />
+                              </div>
+                           )}
+                           <Button
+                              color="secondary"
+                              className="mt-3 -ml-1 w-full"
+                              disabled={
+                                 article.underReview || article.published
+                              }
+                           >
+                              Delete
+                           </Button>
+                        </EditorSettingsDisclosure>
+                        <EditorSettingsDisclosure
+                           name="Description"
+                           warning={description === ""}
+                        >
+                           {description === "" && (
+                              <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
+                                 You need a description in order to publish
+                              </h1>
+                           )}
+                           <Textarea
+                              placeholder="Description"
+                              required
+                              onChange={(e) =>
+                                 setDescription(e.currentTarget.value)
+                              }
+                              value={description}
+                              minRows={4}
+                              maxRows={8}
+                           />
+                        </EditorSettingsDisclosure>
+                        <EditorSettingsDisclosure
+                           name="Categories"
+                           warning={categories.length === 0}
+                        >
+                           {categories.length === 0 && (
+                              <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
+                                 At least one category is needed to publish.
+                              </h1>
+                           )}
+                           <MultiSelect
+                              data={links.map((l) => {
+                                 return {
+                                    value: l.id,
+                                    label: l.name.toLowerCase(),
+                                 };
+                              })}
+                              placeholder="Pick all the appropiate categories"
+                              onChange={setCategories}
+                              value={categories}
+                              searchable
+                              nothingFound="Nothing found"
+                              clearable
+                              maxDropdownHeight={160}
+                              maxSelectedValues={5}
+                           />
+                        </EditorSettingsDisclosure>
+                        <EditorSettingsDisclosure name="Filter">
+                           <h1>yo</h1>
+                        </EditorSettingsDisclosure>
+                        <EditorSettingsDisclosure name="Cover">
+                           <h1>yo</h1>
+                        </EditorSettingsDisclosure>
+                        <div className="absolute bottom-0 w-full px-2 py-4">
+                           <Button
+                              className="w-full"
+                              disabled={!canSave ? !canSaveRest : false}
+                              onClick={() => {
+                                 if (canSave) {
+                                    if (canSave && canSaveRest) {
+                                       handleEdit();
+                                       handleUpdateRest();
+                                    }
+                                    handleEdit();
+                                 } else {
+                                    handleUpdateRest();
                                  }
-                              );
-                              const response = await r.json();
-
-                              if (r.status === 200) {
-                                 setArticle(response.article);
-                              } else {
-                                 notifications.showNotification({
-                                    color: "red",
-                                    title: "Publish - Error",
-                                    message:
-                                       response.message || "Unknown Error",
-                                    icon: <AiOutlineClose />,
-                                    autoClose: 5000,
-                                 });
-                              }
-
-                              setLoadingRest(false);
-                           }}
-                        />
-                     </div>
+                              }}
+                           >
+                              Save
+                           </Button>
+                        </div>
+                     </>
                   )}
-                  <Button
-                     color="secondary"
-                     className="mt-3 -ml-1 w-full"
-                     disabled={article.underReview || article.published}
-                  >
-                     Delete
-                  </Button>
-               </EditorSettingsDisclosure>
-               <EditorSettingsDisclosure
-                  name="Description"
-                  warning={description === ""}
-               >
-                  {description === "" && (
-                     <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
-                        You need a description in order to publish
-                     </h1>
-                  )}
-                  <Textarea
-                     placeholder="Description"
-                     required
-                     onChange={(e) => setDescription(e.currentTarget.value)}
-                     value={description}
-                     minRows={4}
-                     maxRows={8}
-                  />
-               </EditorSettingsDisclosure>
-               <EditorSettingsDisclosure
-                  name="Categories"
-                  warning={categories.length === 0}
-               >
-                  {categories.length === 0 && (
-                     <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
-                        At least one category is needed to publish.
-                     </h1>
-                  )}
-                  <MultiSelect
-                     data={links.map((l) => {
-                        return { value: l.id, label: l.name.toLowerCase() };
-                     })}
-                     placeholder="Pick all the appropiate categories"
-                     onChange={setCategories}
-                     value={categories}
-                     searchable
-                     nothingFound="Nothing found"
-                     clearable
-                     maxDropdownHeight={160}
-                  />
-               </EditorSettingsDisclosure>
-               <EditorSettingsDisclosure name="Filter">
-                  <h1>yo</h1>
-               </EditorSettingsDisclosure>
-               <EditorSettingsDisclosure name="Cover">
-                  <h1>yo</h1>
-               </EditorSettingsDisclosure>
-               <div className="absolute bottom-0 w-full px-2 py-4">
-                  <Button
-                     className="w-full"
-                     disabled={!canSave ? !canSaveRest : false}
-                     onClick={() => {
-                        if (canSave) {
-                           if (canSave && canSaveRest) {
-                              handleEdit();
-                              handleUpdateRest();
-                           }
-                           handleEdit();
-                        } else {
-                           handleUpdateRest();
-                        }
-                     }}
-                  >
-                     Save
-                  </Button>
-               </div>
-            </div>
+               </Consumer>
+            </CustomSidebar>
          </div>
          <ConfirmModal
             isOpen={openConfirmModalUnderReview}

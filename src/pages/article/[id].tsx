@@ -366,15 +366,16 @@ const ArticleViewer: React.FC<Props> = ({
                         </div>
                      </h1>
                   </div>
-                  <div className="mt-6 mb-12 flex justify-center">
+                  <div className="mx-6 mt-6 mb-12 flex justify-center">
                      <Image
                         alt="Post picture"
                         className="rounded-xl shadow-xl"
                         src={article.cover}
-                        width={1280 / 2}
-                        height={720 / 2}
+                        width={1280}
+                        height={720}
                         blurDataURL={shimmer(1920, 1080)}
                         placeholder="blur"
+                        objectFit="cover"
                      />
                   </div>
                   <p className="ml-2 w-full max-w-5xl px-2 pb-6 text-justify">
