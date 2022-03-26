@@ -5,8 +5,7 @@ import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
-import { Disclosure, Popover, Transition } from "@headlessui/react";
-import { Tooltip } from "@mantine/core";
+import { Disclosure } from "@headlessui/react";
 
 import { MdArticle, MdPublish } from "react-icons/md";
 import {
@@ -18,7 +17,6 @@ import {
    AiOutlineDislike,
 } from "react-icons/ai";
 import { FaCommentDots } from "react-icons/fa";
-import { GrCircleInformation } from "react-icons/gr";
 
 import prisma from "../../lib/prisma";
 import { shimmer } from "../../lib/shimmer";
