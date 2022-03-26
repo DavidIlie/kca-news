@@ -246,6 +246,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                   onFocus={() => {
                      setHasEditedMarkdown(true);
                   }}
+                  controls={[
+                     ["bold", "italic", "link", "image"],
+                     ["unorderedList", "h1", "h2", "h3"],
+                  ]}
                />
                <div className="mt-4 border-t-2 pt-4">
                   <Button
