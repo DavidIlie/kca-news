@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-    reactStrictMode: true,
-    swcMinify: true,
-    images: {
-        domains: [
-            "lh3.googleusercontent.com",
-            "s3.davidapps.dev",
-            "media.davidapps.dev",
-            "img.rawpixel.com"
-        ],
-    },
+   reactStrictMode: true,
+   swcMinify: true,
+   images: {
+      domains: [
+         "lh3.googleusercontent.com",
+         "s3.davidapps.dev",
+         "media.davidapps.dev",
+         "cdn.davidilie.com",
+      ],
+   },
 };
