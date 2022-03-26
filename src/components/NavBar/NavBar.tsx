@@ -9,12 +9,7 @@ import { Spinner } from "../../ui/Spinner";
 import UserDropdown from "./UserDropdown";
 
 import NewsLink from "./NewsLink";
-import {
-   entertainmentLinks,
-   lifestyleLinks,
-   newsLinks,
-   sportLinks,
-} from "../../lib/categories";
+import { links } from "../../lib/categories";
 
 const NavBar: React.FC = () => {
    const { status } = useSession();
@@ -48,10 +43,26 @@ const NavBar: React.FC = () => {
                      Home
                   </a>
                </Link>
-               <NewsLink name="News" categories={newsLinks} />
-               <NewsLink name="Entertainment" categories={entertainmentLinks} />
-               <NewsLink name="Sport" categories={sportLinks} />
-               <NewsLink name="Lifestyle" categories={lifestyleLinks} />
+               <NewsLink
+                  name="News"
+                  categories={links.filter((s) => s.location.includes("news"))}
+               />
+               <NewsLink
+                  name="Entertainment"
+                  categories={links.filter((s) =>
+                     s.location.includes("entertainment")
+                  )}
+               />
+               <NewsLink
+                  name="Sport"
+                  categories={links.filter((s) => s.location.includes("sport"))}
+               />
+               <NewsLink
+                  name="Lifestyle"
+                  categories={links.filter((s) =>
+                     s.location.includes("lifestyle")
+                  )}
+               />
                <Link href="/about">
                   <a className="cursor-pointer rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-1 duration-150 hover:bg-gray-200 hover:text-gray-900">
                      About

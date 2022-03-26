@@ -111,6 +111,11 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                      </Button>
                   </div>
                   <div className="mt-4">
+                     {articles.length === 0 && (
+                        <h1 className="text-center text-4xl font-semibold">
+                           No articles...
+                        </h1>
+                     )}
                      {articles.map((article, index) => (
                         <Disclosure
                            as="div"

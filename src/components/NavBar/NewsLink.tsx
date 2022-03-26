@@ -44,9 +44,9 @@ const NewsLink: React.FC<Props> = ({ name, categories }) => {
                   <Menu.Item
                      as={NextLink}
                      href={
-                        news.url
-                           ? news.url
-                           : `/${name.toLowerCase()}?filter=${news.id}`
+                        news.location.length > 1
+                           ? `/${news.id}?filter=${name.toLocaleLowerCase()}`
+                           : `/${news.location[0]}?category=${news.id}`
                      }
                      key={index}
                   >

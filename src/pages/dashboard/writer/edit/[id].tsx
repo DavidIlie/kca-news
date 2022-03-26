@@ -12,6 +12,7 @@ import { RiRestartLine } from "react-icons/ri";
 import ContentEditable from "react-contenteditable";
 import { useNotifications } from "@mantine/notifications";
 import { useLocalStorage } from "@mantine/hooks";
+import { MultiSelect, SelectItem } from "@mantine/core";
 
 //@ts-ignore
 import MarkdownIt from "markdown-it";
@@ -23,6 +24,7 @@ import { Button } from "../../../../ui/Button";
 import EditorSettingsDisclosure from "../../../../components/EditorSettingsDisclosure";
 import ArticleBadge from "../../../../components/ArticleBadge";
 import RichTextEditor from "../../../../components/RichTextEditor";
+import { links } from "../../../../lib/categories";
 
 interface Props {
    user: User;
@@ -189,7 +191,13 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                   <h1>yo</h1>
                </EditorSettingsDisclosure>
                <EditorSettingsDisclosure name="Categories">
-                  <h1>yo</h1>
+                  <MultiSelect
+                     data={links.map((l) => {
+                        return { value: l.id, label: l.name };
+                     })}
+                     placeholder="Pick all the appropiate categories"
+                     onChange={setCategories}
+                  />
                </EditorSettingsDisclosure>
                <EditorSettingsDisclosure name="Filter">
                   <h1>yo</h1>
