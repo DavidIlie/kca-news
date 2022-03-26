@@ -12,7 +12,7 @@ import { RiRestartLine } from "react-icons/ri";
 import ContentEditable from "react-contenteditable";
 import { useNotifications } from "@mantine/notifications";
 import { useLocalStorage } from "@mantine/hooks";
-import { MultiSelect, SelectItem } from "@mantine/core";
+import { MultiSelect } from "@mantine/core";
 
 //@ts-ignore
 import MarkdownIt from "markdown-it";
