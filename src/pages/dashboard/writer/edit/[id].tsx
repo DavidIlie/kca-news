@@ -61,7 +61,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
    const [loadingRest, setLoadingRest] = useState<boolean>(false);
    const [openConfirmModalUnderReview, setOpenConfirmModalUnderReview] =
       useState<boolean>(false);
-   const [viewFullPhoto, setViewFullPhoto] = useState<boolean>(false);
 
    const notifications = useNotifications();
 
@@ -157,9 +156,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
    return (
       <>
          <DefaultSeo title={title} />
-         <div className="mt-4 flex flex-grow pb-10 sm:mt-[5.4rem] sm:pb-0">
+         <div className="mt-4 flex flex-grow sm:mt-[5.4rem]">
             <div
-               className={`container mx-auto h-full max-w-4xl px-4 sm:pt-10 ${
+               className={`container mx-auto h-full max-w-4xl px-4 pb-10 sm:pt-10 ${
                   openSidebar ? "w-4/5" : "w-full"
                }`}
             >
@@ -192,9 +191,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                </div>
                <div className="relative mt-3 flex justify-center">
                   <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
-                     <Button onClick={() => setViewFullPhoto(!viewFullPhoto)}>
-                        Show {viewFullPhoto ? "Small" : "Full"}
-                     </Button>
                      <Button
                         color="cyan"
                         onClick={() =>
@@ -213,7 +209,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                      className="rounded-xl shadow-xl"
                      src={article.cover}
                      width={1280}
-                     height={viewFullPhoto ? 720 / 1 : 720 / 3}
+                     height={720 / 2}
                      blurDataURL={shimmer(1920, 1080)}
                      placeholder="blur"
                      objectFit="cover"
