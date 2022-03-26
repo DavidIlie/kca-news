@@ -37,6 +37,7 @@ import ConfirmModal from "../../../../ui/ConfirmModal";
 import { shimmer } from "../../../../lib/shimmer";
 import { Consumer } from "../../../../components/CustomSidebar/CustomSidebar";
 import CustomSidebar from "../../../../components/CustomSidebar";
+import { usePreventUserFromLosingData } from "../../../../lib/usePreventUserFromLosingData";
 
 interface Props {
    user: User;
@@ -72,6 +73,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
    const canSaveRest =
       JSON.stringify(categories) !== JSON.stringify(article.categoryId) &&
       categories.length !== 0;
+
+   usePreventUserFromLosingData(canSave || canSaveRest);
 
    const handleEdit = async () => {
       setLoadingContentUpdate(true);
