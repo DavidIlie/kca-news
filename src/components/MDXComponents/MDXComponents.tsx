@@ -112,7 +112,7 @@ export const CustomListItem = ({
 }): JSX.Element => {
    return (
       <li className="text-indigo-500">
-         <span className="text-black dark:text-white">{children}</span>
+         <span className="text-black">{children}</span>
       </li>
    );
 };

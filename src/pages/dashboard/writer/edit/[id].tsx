@@ -3,7 +3,6 @@ import { GetServerSideProps } from "next";
 import { DefaultSeo } from "next-seo";
 import { getSession } from "next-auth/react";
 import {
-   AiOutlineCheck,
    AiOutlineClose,
    AiOutlineCloseCircle,
    AiOutlineMenu,
@@ -12,8 +11,13 @@ import { RiRestartLine } from "react-icons/ri";
 import ContentEditable from "react-contenteditable";
 import { useNotifications } from "@mantine/notifications";
 import { useLocalStorage } from "@mantine/hooks";
-import { MultiSelect, TextInput, Tooltip } from "@mantine/core";
-import { Textarea } from "@mantine/core";
+import {
+   MultiSelect,
+   TextInput,
+   Tooltip,
+   LoadingOverlay,
+   Textarea,
+} from "@mantine/core";
 
 //@ts-ignore
 import MarkdownIt from "markdown-it";
@@ -50,6 +54,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
    const [hasEditedMarkdown, setHasEditedMarkdown] = useState<boolean>(false);
    const [loadingContentUpdate, setLoadingContentUpdate] =
       useState<boolean>(false);
+   const [loadingRest, setLoadingRest] = useState<boolean>(false);
    const [openConfirmModalUnderReview, setOpenConfirmModalUnderReview] =
       useState<boolean>(false);
 
@@ -60,16 +65,13 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
       article.description !== description ||
       hasEditedMarkdown;
 
-   const handleEdit = async () => {
-      setLoadingContentUpdate(true);
+   const canSaveRest =
+      JSON.stringify(categories) !== JSON.stringify(article.categoryId) &&
+      categories.length !== 0;
 
-      const id = notifications.showNotification({
-         loading: true,
-         title: "Edit",
-         message: "Processing your request...",
-         autoClose: false,
-         disallowClose: true,
-      });
+   const handleEdit = async () => {
+      console.log("updating content...");
+      setLoadingContentUpdate(true);
 
       const r = await fetch(`/api/article/${article.id}/update/content`, {
          method: "POST",
@@ -83,18 +85,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
       const response = await r.json();
 
       if (r.status === 200) {
-         notifications.updateNotification(id, {
-            id,
-            color: "teal",
-            title: "Edit",
-            message: "Updated successfully!",
-            icon: <AiOutlineCheck />,
-            autoClose: 2000,
-         });
          setArticle(response.article);
+         if (hasEditedMarkdown) setHasEditedMarkdown(false);
       } else {
-         notifications.updateNotification(id, {
-            id,
+         notifications.showNotification({
             color: "red",
             title: "Edit - Error",
             message: response.message || "Unknown Error",
@@ -108,14 +102,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
 
    const handleSetUnderReview = async () => {
       if (article.underReview && !user.isAdmin) return;
-
-      const id = notifications.showNotification({
-         loading: true,
-         title: "Under Review",
-         message: "Processing your request...",
-         autoClose: false,
-         disallowClose: true,
-      });
+      setLoadingRest(true);
 
       const r = await fetch(`/api/article/${article.id}/update/underReview`, {
          credentials: "include",
@@ -123,18 +110,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
       const response = await r.json();
 
       if (r.status === 200) {
-         notifications.updateNotification(id, {
-            id,
-            color: "teal",
-            title: "Under Review",
-            message: "Updated successfully!",
-            icon: <AiOutlineCheck />,
-            autoClose: 2000,
-         });
          setArticle(response.article);
       } else {
-         notifications.updateNotification(id, {
-            id,
+         notifications.showNotification({
             color: "red",
             title: "Under Review - Error",
             message: response.message || "Unknown Error",
@@ -142,6 +120,34 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
             autoClose: 5000,
          });
       }
+      setLoadingRest(false);
+   };
+
+   const handleUpdateRest = async () => {
+      setLoadingRest(true);
+
+      const r = await fetch(`/api/article/${article.id}/update/rest`, {
+         method: "POST",
+         credentials: "include",
+         body: JSON.stringify({
+            categories,
+         }),
+      });
+      const response = await r.json();
+
+      if (r.status === 200) {
+         setArticle(response.article);
+      } else {
+         notifications.showNotification({
+            color: "red",
+            title: "Edit - Error",
+            message: response.message || "Unknown Error",
+            icon: <AiOutlineClose />,
+            autoClose: 5000,
+         });
+      }
+
+      setLoadingRest(false);
    };
 
    return (
@@ -153,6 +159,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                   openSidebar ? "w-4/5" : "w-full"
                }`}
             >
+               <LoadingOverlay visible={loadingContentUpdate} />
                <div className="border-b-2 pb-4">
                   <div className="mb-2 flex w-full flex-wrap justify-start">
                      {categories.map((category, index) => (
@@ -211,9 +218,18 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                <div className="mt-4 border-t-2 pt-4">
                   <Button
                      className="w-full"
-                     disabled={!canSave || loadingContentUpdate}
-                     loading={loadingContentUpdate}
-                     onClick={handleEdit}
+                     disabled={!canSave ? !canSaveRest : false}
+                     onClick={() => {
+                        if (canSave) {
+                           if (canSave && canSaveRest) {
+                              handleEdit();
+                              handleUpdateRest();
+                           }
+                           handleEdit();
+                        } else {
+                           handleUpdateRest();
+                        }
+                     }}
                   >
                      Save
                   </Button>
@@ -224,6 +240,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                   openSidebar ? "w-1/5" : "hidden"
                } relative border-l-2 py-4`}
             >
+               <LoadingOverlay visible={loadingRest && !loadingContentUpdate} />
                <div className="flex items-center justify-between gap-2 border-b-2 px-4 pb-4">
                   <h1 className="text-2xl font-semibold">Settings</h1>
                   <AiOutlineCloseCircle
@@ -265,7 +282,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                            checked={article.underReview}
                            labelSize="md"
                            disabled={article.underReview && !user.isAdmin}
-                           onClick={() => {
+                           onChange={() => {
                               if (!user.isAdmin) {
                                  setOpenConfirmModalUnderReview(
                                     !openConfirmModalUnderReview
@@ -286,16 +303,16 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                            label="Publish"
                            labelSize="md"
                            checked={article.published}
-                           disabled={article.underReview}
-                           labelDisabled={article.underReview}
-                           onClick={async () => {
-                              const id = notifications.showNotification({
-                                 loading: true,
-                                 title: "Publish",
-                                 message: "Processing your request...",
-                                 autoClose: false,
-                                 disallowClose: true,
-                              });
+                           disabled={
+                              article.underReview ||
+                              article.categoryId.length === 0
+                           }
+                           labelDisabled={
+                              article.underReview ||
+                              article.categoryId.length === 0
+                           }
+                           onChange={async () => {
+                              setLoadingRest(true);
 
                               const r = await fetch(
                                  `/api/article/${article.id}/update/publish`,
@@ -306,18 +323,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                               const response = await r.json();
 
                               if (r.status === 200) {
-                                 notifications.updateNotification(id, {
-                                    id,
-                                    color: "teal",
-                                    title: "Publish",
-                                    message: "Updated successfully!",
-                                    icon: <AiOutlineCheck />,
-                                    autoClose: 2000,
-                                 });
                                  setArticle(response.article);
                               } else {
-                                 notifications.updateNotification(id, {
-                                    id,
+                                 notifications.showNotification({
                                     color: "red",
                                     title: "Publish - Error",
                                     message:
@@ -326,6 +334,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                                     autoClose: 5000,
                                  });
                               }
+
+                              setLoadingRest(false);
                            }}
                         />
                      </div>
@@ -352,8 +362,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                      required
                      onChange={(e) => setDescription(e.currentTarget.value)}
                      value={description}
-                     minRows={2}
-                     maxRows={4}
+                     minRows={4}
+                     maxRows={8}
                   />
                </EditorSettingsDisclosure>
                <EditorSettingsDisclosure
@@ -367,7 +377,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                   )}
                   <MultiSelect
                      data={links.map((l) => {
-                        return { value: l.id, label: l.name };
+                        return { value: l.id, label: l.name.toLowerCase() };
                      })}
                      placeholder="Pick all the appropiate categories"
                      onChange={setCategories}
@@ -376,6 +386,21 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                      nothingFound="Nothing found"
                      clearable
                      maxDropdownHeight={160}
+                     // classNames={{
+                     //    value: `text-${
+                     //       colors[
+                     //          (categories[0].charCodeAt(1) +
+                     //             categories[0].charCodeAt(1)) %
+                     //             11
+                     //       ]
+                     //    }-50 bg-${
+                     //       colors[
+                     //          (categories[0].charCodeAt(1) +
+                     //             categories[0].charCodeAt(2)) %
+                     //             11
+                     //       ]
+                     //    }-500`,
+                     // }}
                   />
                </EditorSettingsDisclosure>
                <EditorSettingsDisclosure name="Filter">
@@ -385,7 +410,21 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                   <h1>yo</h1>
                </EditorSettingsDisclosure>
                <div className="absolute bottom-0 w-full px-2 py-4">
-                  <Button className="w-full" disabled>
+                  <Button
+                     className="w-full"
+                     disabled={!canSave ? !canSaveRest : false}
+                     onClick={() => {
+                        if (canSave) {
+                           if (canSave && canSaveRest) {
+                              handleEdit();
+                              handleUpdateRest();
+                           }
+                           handleEdit();
+                        } else {
+                           handleUpdateRest();
+                        }
+                     }}
+                  >
                      Save
                   </Button>
                </div>

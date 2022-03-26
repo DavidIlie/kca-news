@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
-import { NodeHtmlMarkdown } from "node-html-markdown";
 
 import prisma from "../../../../../lib/prisma";
-import { updateArticleSchema } from "../../../../../schema/article";
+import { updateArticleRestSchema } from "../../../../../schema/article";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    try {
@@ -27,16 +26,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       if (!article)
          return res.status(404).json({ message: "article not found" });
 
-      const body = await updateArticleSchema.validate(req.body);
-
-      const markdown = NodeHtmlMarkdown.translate(body.content);
+      const body = await updateArticleRestSchema.validate(req.body);
 
       const newArticle = await prisma.article.update({
          where: { id: article.id },
          data: {
-            title: body.title,
-            description: body.description,
-            mdx: markdown,
+            categoryId: body.categories,
             published: session?.user?.isAdmin ? article.published : false,
             underReview: session?.user?.isAdmin
                ? article.underReview
