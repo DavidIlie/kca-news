@@ -234,111 +234,109 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                   />
                </div>
                <EditorSettingsDisclosure name="Visibility">
-                  <div className="mx-4">
-                     <TextInput
-                        label="Title"
-                        onChange={(e) => setTitle(e.currentTarget.value)}
-                        value={title}
-                        required
-                     />
-                     <div className="mt-2 flex justify-between text-left">
-                        <h1 className="font-semibold">Status:</h1>
-                        <h1 className="text-blue-500">
-                           {article.published
-                              ? "Published"
-                              : article.underReview
-                              ? "Under Review"
-                              : "Not published"}
-                        </h1>
-                     </div>
-                     <div className="mt-2 flex items-center gap-2">
-                        <Tooltip
-                           label="Places article under review to be moderated by an administrator. This cannot be undone by you once changed."
-                           wrapLines
-                           width={220}
-                           withArrow
-                           transition="fade"
-                           transitionDuration={200}
-                           disabled={article.underReview || user.isAdmin}
-                        >
-                           <Radio
-                              label="Pending review"
-                              checked={article.underReview}
-                              labelSize="md"
-                              disabled={article.underReview && !user.isAdmin}
-                              onClick={() => {
-                                 if (!user.isAdmin) {
-                                    setOpenConfirmModalUnderReview(
-                                       !openConfirmModalUnderReview
-                                    );
-                                 } else {
-                                    handleSetUnderReview();
-                                 }
-                              }}
-                           />
-                        </Tooltip>
-                        {article.underReview && !user.isAdmin && (
-                           <ArticleUnderReviewCard />
-                        )}
-                     </div>
-                     {user.isAdmin && (
-                        <div className="mt-2 flex items-center gap-2">
-                           <Radio
-                              label="Publish"
-                              labelSize="md"
-                              checked={article.published}
-                              disabled={article.underReview}
-                              labelDisabled={article.underReview}
-                              onClick={async () => {
-                                 const id = notifications.showNotification({
-                                    loading: true,
-                                    title: "Publish",
-                                    message: "Processing your request...",
-                                    autoClose: false,
-                                    disallowClose: true,
-                                 });
-
-                                 const r = await fetch(
-                                    `/api/article/${article.id}/update/publish`,
-                                    {
-                                       credentials: "include",
-                                    }
-                                 );
-                                 const response = await r.json();
-
-                                 if (r.status === 200) {
-                                    notifications.updateNotification(id, {
-                                       id,
-                                       color: "teal",
-                                       title: "Publish",
-                                       message: "Updated successfully!",
-                                       icon: <AiOutlineCheck />,
-                                       autoClose: 2000,
-                                    });
-                                    setArticle(response.article);
-                                 } else {
-                                    notifications.updateNotification(id, {
-                                       id,
-                                       color: "red",
-                                       title: "Publish - Error",
-                                       message:
-                                          response.message || "Unknown Error",
-                                       icon: <AiOutlineClose />,
-                                       autoClose: 5000,
-                                    });
-                                 }
-                              }}
-                           />
-                        </div>
-                     )}
-                     <Button
-                        color="secondary"
-                        className="mt-3 -ml-1 w-full"
-                        disabled={article.underReview || article.published}
-                     >
-                        Delete
-                     </Button>
+                  <TextInput
+                     label="Title"
+                     onChange={(e) => setTitle(e.currentTarget.value)}
+                     value={title}
+                     required
+                  />
+                  <div className="mt-2 flex justify-between text-left">
+                     <h1 className="font-semibold">Status:</h1>
+                     <h1 className="text-blue-500">
+                        {article.published
+                           ? "Published"
+                           : article.underReview
+                           ? "Under Review"
+                           : "Not published"}
+                     </h1>
                   </div>
+                  <div className="mt-2 flex items-center gap-2">
+                     <Tooltip
+                        label="Places article under review to be moderated by an administrator. This cannot be undone by you once changed."
+                        wrapLines
+                        width={220}
+                        withArrow
+                        transition="fade"
+                        transitionDuration={200}
+                        disabled={article.underReview || user.isAdmin}
+                     >
+                        <Radio
+                           label="Pending review"
+                           checked={article.underReview}
+                           labelSize="md"
+                           disabled={article.underReview && !user.isAdmin}
+                           onClick={() => {
+                              if (!user.isAdmin) {
+                                 setOpenConfirmModalUnderReview(
+                                    !openConfirmModalUnderReview
+                                 );
+                              } else {
+                                 handleSetUnderReview();
+                              }
+                           }}
+                        />
+                     </Tooltip>
+                     {article.underReview && !user.isAdmin && (
+                        <ArticleUnderReviewCard />
+                     )}
+                  </div>
+                  {user.isAdmin && (
+                     <div className="mt-2 flex items-center gap-2">
+                        <Radio
+                           label="Publish"
+                           labelSize="md"
+                           checked={article.published}
+                           disabled={article.underReview}
+                           labelDisabled={article.underReview}
+                           onClick={async () => {
+                              const id = notifications.showNotification({
+                                 loading: true,
+                                 title: "Publish",
+                                 message: "Processing your request...",
+                                 autoClose: false,
+                                 disallowClose: true,
+                              });
+
+                              const r = await fetch(
+                                 `/api/article/${article.id}/update/publish`,
+                                 {
+                                    credentials: "include",
+                                 }
+                              );
+                              const response = await r.json();
+
+                              if (r.status === 200) {
+                                 notifications.updateNotification(id, {
+                                    id,
+                                    color: "teal",
+                                    title: "Publish",
+                                    message: "Updated successfully!",
+                                    icon: <AiOutlineCheck />,
+                                    autoClose: 2000,
+                                 });
+                                 setArticle(response.article);
+                              } else {
+                                 notifications.updateNotification(id, {
+                                    id,
+                                    color: "red",
+                                    title: "Publish - Error",
+                                    message:
+                                       response.message || "Unknown Error",
+                                    icon: <AiOutlineClose />,
+                                    autoClose: 5000,
+                                 });
+                              }
+                           }}
+                        />
+                     </div>
+                  )}
+                  <Button
+                     color="secondary"
+                     className="mt-3 -ml-1 w-full"
+                     disabled={article.underReview || article.published}
+                  >
+                     Delete
+                  </Button>
                </EditorSettingsDisclosure>
                <EditorSettingsDisclosure
                   name="Description"

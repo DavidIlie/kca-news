@@ -35,7 +35,7 @@ const EditorSettingsDisclosure: React.FC<Props> = ({
                </div>
             )}
          </Disclosure.Button>
-         <Disclosure.Panel className="border-t border-blue-500 px-2 py-4">
+         <Disclosure.Panel className="border-t border-blue-500 px-4 py-4">
             {children}
          </Disclosure.Panel>
       </Disclosure>
