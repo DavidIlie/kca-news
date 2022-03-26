@@ -19,9 +19,9 @@ import {
    LoadingOverlay,
    Textarea,
 } from "@mantine/core";
+import dynamic from "next/dynamic";
 
-//@ts-ignore
-import MarkdownIt from "markdown-it";
+const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
 
 import prisma from "../../../../lib/prisma";
 import { Article } from "../../../../types/Article";
@@ -29,7 +29,6 @@ import { User } from "../../../../types/User";
 import { Button } from "../../../../ui/Button";
 import EditorSettingsDisclosure from "../../../../components/EditorSettingsDisclosure";
 import ArticleBadge from "../../../../components/ArticleBadge";
-import RichTextEditor from "../../../../components/RichTextEditor";
 import { links } from "../../../../lib/categories";
 import Radio from "../../../../ui/Radio";
 import ArticleUnderReviewCard from "../../../../components/ArticleUnderReviewCard";
@@ -42,10 +41,9 @@ import { usePreventUserFromLosingData } from "../../../../lib/usePreventUserFrom
 interface Props {
    user: User;
    articleServer: Article;
-   html: string;
 }
 
-const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
+const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [openSidebar, setOpenSidebar] = useLocalStorage<boolean>({
       key: "editorOpenSidebar",
       defaultValue: true,
@@ -55,8 +53,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
    const [categories, setCategories] = useState<string[]>(article.categoryId);
    const [title, setTitle] = useState<string>(article.title);
    const [description, setDescription] = useState<string>(article.description);
-   const [markdownValue, changeMarkdownValue] = useState<string>(html);
-   const [hasEditedMarkdown, setHasEditedMarkdown] = useState<boolean>(false);
+   const [markdownValue, changeMarkdownValue] = useState<string>(article.mdx);
    const [loadingContentUpdate, setLoadingContentUpdate] =
       useState<boolean>(false);
    const [loadingRest, setLoadingRest] = useState<boolean>(false);
@@ -68,13 +65,13 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
    const canSave =
       article.title !== title ||
       article.description !== description ||
-      hasEditedMarkdown;
+      (article.mdx !== markdownValue && markdownValue.length > 2);
 
    const canSaveRest =
       JSON.stringify(categories) !== JSON.stringify(article.categoryId) &&
       categories.length !== 0;
 
-   usePreventUserFromLosingData(canSave || canSaveRest);
+   // usePreventUserFromLosingData(canSave || canSaveRest);
 
    const handleEdit = async () => {
       setLoadingContentUpdate(true);
@@ -92,7 +89,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
 
       if (r.status === 200) {
          setArticle(response.article);
-         if (hasEditedMarkdown) setHasEditedMarkdown(false);
       } else {
          notifications.showNotification({
             color: "red",
@@ -239,19 +235,19 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                      onClick={() => setOpenSidebar(true)}
                   />
                )}
-               <div className="mt-4" />
-               <RichTextEditor
-                  value={markdownValue}
-                  onChange={changeMarkdownValue}
-                  onFocus={() => {
-                     setHasEditedMarkdown(true);
-                  }}
-                  controls={[
-                     ["bold", "italic", "link", "image"],
-                     ["unorderedList", "h1", "h2", "h3"],
-                  ]}
+               <div
+                  className={`mt-2 ${
+                     markdownValue === "" && "-mb-1"
+                  } border-t-2 pt-4`}
                />
-               <div className="mt-4 border-t-2 pt-4">
+               {/*
+                  // @ts-ignore */}
+               <Editor
+                  placeholder="Start typing..."
+                  onChange={(markdown) => changeMarkdownValue(markdown())}
+                  defaultValue={markdownValue}
+               />
+               <div className="mt-5 border-t-2 pt-4">
                   <Button
                      className="w-full"
                      disabled={!canSave ? !canSaveRest : false}
@@ -406,7 +402,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                               color="secondary"
                               className="mt-3 -ml-1 w-full"
                               disabled={
-                                 article.underReview || article.published
+                                 !user.isAdmin
+                                    ? article.underReview || article.published
+                                    : false
                               }
                               title={
                                  article.underReview
@@ -534,17 +532,10 @@ export const getServerSideProps: GetServerSideProps = async ({
             permanent: false,
          },
       };
-
-   const markdown: MarkdownIt = MarkdownIt({
-      html: true,
-   });
-   const html = await markdown.render(article.mdx);
-
    return {
       props: {
          user: session?.user,
          articleServer: JSON.parse(JSON.stringify(article)),
-         html,
       },
    };
 };

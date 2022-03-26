@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
-import { NodeHtmlMarkdown } from "node-html-markdown";
 
 import prisma from "../../../../../lib/prisma";
 import { updateArticleSchema } from "../../../../../schema/article";
@@ -29,14 +28,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const body = await updateArticleSchema.validate(req.body);
 
-      const markdown = NodeHtmlMarkdown.translate(body.content);
+      // const markdown = NodeHtmlMarkdown.translate(body.content);
 
       const newArticle = await prisma.article.update({
          where: { id: article.id },
          data: {
             title: body.title,
             description: body.description,
-            mdx: markdown,
+            mdx: body.content,
             published: session?.user?.isAdmin ? article.published : false,
             underReview: session?.user?.isAdmin
                ? article.underReview

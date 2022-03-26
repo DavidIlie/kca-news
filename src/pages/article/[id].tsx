@@ -7,13 +7,11 @@ import Image from "next/image";
 import { useSession, signIn, getSession } from "next-auth/react";
 import { Slide } from "react-awesome-reveal";
 import { Formik, Field, Form } from "formik";
-import { MDXRemote } from "next-mdx-remote";
-import { serialize } from "next-mdx-remote/serialize";
-import remarkAutoLinkHeadings from "remark-autolink-headings";
-import remarkSlug from "remark-slug";
-import matter from "gray-matter";
 import { Popover, Transition } from "@headlessui/react";
 import { useNotifications } from "@mantine/notifications";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
 
 import {
    AiOutlineLike,
@@ -36,7 +34,6 @@ import ArticleBadge from "../../components/ArticleBadge";
 import ErrorMessage from "../../ui/ErrorMessage";
 import SuccessMessage from "../../ui/SuccessMessage";
 import ConfirmModal from "../../ui/ConfirmModal";
-import MDXComponents from "../../components/MDXComponents";
 
 interface Props {
    article: Article;
@@ -51,7 +48,6 @@ interface Props {
       self: boolean;
    };
    comments: Comment[];
-   mdxSource?: any;
 }
 
 const ArticleViewer: React.FC<Props> = ({
@@ -61,7 +57,6 @@ const ArticleViewer: React.FC<Props> = ({
    upvotes,
    downvotes,
    comments,
-   mdxSource,
 }) => {
    if (notFound) {
       return (
@@ -365,6 +360,19 @@ const ArticleViewer: React.FC<Props> = ({
                            )}
                         </div>
                      </h1>
+                     {(data?.user?.isAdmin ||
+                        article.writer?.id === data?.user?.id) && (
+                        <h1 className="ml-2 flex items-center text-blue-500">
+                           {" / "}
+                           <div className="ml-2">
+                              <Link
+                                 href={`/dashboard/writer/edit/${article.id}`}
+                              >
+                                 <a>Edit Article</a>
+                              </Link>
+                           </div>
+                        </h1>
+                     )}
                   </div>
                   <div className="mx-6 mt-6 mb-12 flex justify-center">
                      <Image
@@ -378,17 +386,16 @@ const ArticleViewer: React.FC<Props> = ({
                         objectFit="cover"
                      />
                   </div>
-                  <p className="ml-2 w-full max-w-5xl px-2 pb-6 text-justify">
+                  <p className="w-full max-w-5xl px-4 text-justify">
                      {article.description}
                   </p>
-                  <div className="ml-4 mb-7 border-t-2" />
-                  <div className="blog-content px-4">
-                     <MDXRemote
-                        components={{ ...MDXComponents }}
-                        {...mdxSource}
-                     />
+                  <div className="mt-4 ml-4 border-t-2" />
+                  <div className="px-4">
+                     {/*
+                        // @ts-ignore */}
+                     <Editor defaultValue={article.mdx} readOnly />
                   </div>
-                  <div className="mt-6 ml-4 border-t-2 pt-4">
+                  <div className="mt-2 ml-4 border-t-2 pt-4">
                      <h1 className="text-4xl font-semibold">
                         What do you think?
                      </h1>
@@ -598,13 +605,6 @@ export const getServerSideProps: GetServerSideProps = async ({
          },
       };
 
-   const { content } = matter(article.mdx);
-   const mdxSource = await serialize(content, {
-      mdxOptions: {
-         remarkPlugins: [remarkAutoLinkHeadings, remarkSlug],
-      },
-   });
-
    let hasSelfUpvoted = false;
    let hasSelfDownvoted = false;
 
@@ -630,7 +630,6 @@ export const getServerSideProps: GetServerSideProps = async ({
             self: hasSelfDownvoted,
          },
          comments: JSON.parse(JSON.stringify(article.comments)),
-         mdxSource,
       },
    };
 };

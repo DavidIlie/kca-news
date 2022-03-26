@@ -8,14 +8,13 @@ export interface Article {
    title: string;
    createdAt: Date;
    lastUpdated: Date;
-   pdf: string;
    cover: string;
    description: string;
    published: boolean;
    categoryId: string[];
    filter: string[];
    featured: boolean;
-   mdx?: string;
+   mdx: string;
    anonymous: boolean;
    writer?: User;
    coWriters: User[];
