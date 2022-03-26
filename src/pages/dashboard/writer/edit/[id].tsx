@@ -281,6 +281,56 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                            <ArticleUnderReviewCard />
                         )}
                      </div>
+                     {user.isAdmin && (
+                        <div className="mt-2 flex items-center gap-2">
+                           <Radio
+                              label="Publish"
+                              labelSize="md"
+                              checked={article.published}
+                              disabled={article.underReview}
+                              labelDisabled={article.underReview}
+                              onClick={async () => {
+                                 const id = notifications.showNotification({
+                                    loading: true,
+                                    title: "Publish",
+                                    message: "Processing your request...",
+                                    autoClose: false,
+                                    disallowClose: true,
+                                 });
+
+                                 const r = await fetch(
+                                    `/api/article/${article.id}/update/publish`,
+                                    {
+                                       credentials: "include",
+                                    }
+                                 );
+                                 const response = await r.json();
+
+                                 if (r.status === 200) {
+                                    notifications.updateNotification(id, {
+                                       id,
+                                       color: "teal",
+                                       title: "Publish",
+                                       message: "Updated successfully!",
+                                       icon: <AiOutlineCheck />,
+                                       autoClose: 2000,
+                                    });
+                                    setArticle(response.article);
+                                 } else {
+                                    notifications.updateNotification(id, {
+                                       id,
+                                       color: "red",
+                                       title: "Publish - Error",
+                                       message:
+                                          response.message || "Unknown Error",
+                                       icon: <AiOutlineClose />,
+                                       autoClose: 5000,
+                                    });
+                                 }
+                              }}
+                           />
+                        </div>
+                     )}
                      <Button
                         color="secondary"
                         className="mt-3 -ml-1 w-full"
