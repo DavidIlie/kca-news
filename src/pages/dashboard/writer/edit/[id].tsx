@@ -404,6 +404,11 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer, html }) => {
                               disabled={
                                  article.underReview || article.published
                               }
+                              title={
+                                 article.underReview
+                                    ? "You can't delete an article when it is under review"
+                                    : "Delete this article"
+                              }
                            >
                               Delete
                            </Button>
