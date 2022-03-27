@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { DefaultSeo } from "next-seo";
@@ -651,10 +651,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    );
 };
 
-const WrappedArticleBadge = forwardRef<HTMLDivElement, SelectItemProps>(
-   ({ value }) => {
-      return <ArticleBadge tag={value || ""} className="mb-1 mt-1" />;
-   }
+const WrappedArticleBadge = ({ value }: { value: string }) => (
+   <ArticleBadge tag={value} className="mb-1 mt-1" />
 );
 
 export const getServerSideProps: GetServerSideProps = async ({
