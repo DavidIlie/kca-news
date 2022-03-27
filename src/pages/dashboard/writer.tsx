@@ -48,19 +48,93 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
 
    const { push } = useRouter();
 
-   const [articlesState, setArticles] = useState<Article[]>(articles);
+   const [filteredArticles, setFilteredArticles] =
+      useState<Article[]>(articles);
+   const [articlesState, setArticles] = useState<Article[]>(filteredArticles);
    const [searchQuery, setSearchQuery] = useState<string>("");
+   const [hasSearched, setHasSearched] = useState<boolean>(false);
    const [filter, setFilter] = useState<string | null>(null);
 
    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
       const val = e.target.value;
+
+      setHasSearched(true);
       setSearchQuery(val);
 
       setArticles(
-         articles.filter((article) =>
-            article.title.toLowerCase().includes(searchQuery)
+         filteredArticles.filter(
+            (article) =>
+               article.title.toLowerCase().includes(val.toLowerCase()) ||
+               article.writer?.name.toLowerCase().includes(val.toLowerCase()) ||
+               article.writer?.email.toLowerCase().includes(val.toLowerCase())
          )
       );
+   };
+
+   const handleFilter = (v: string) => {
+      setFilter(v);
+      setSearchQuery("");
+      setArticles(filteredArticles);
+
+      switch (v) {
+         case "newest":
+            setArticles(
+               articles.sort(
+                  (a, b) =>
+                     new Date(b.createdAt).getTime() -
+                     new Date(a.createdAt).getTime()
+               )
+            );
+            break;
+         case "oldest":
+            setArticles(
+               articles.sort(
+                  (a, b) =>
+                     new Date(a.createdAt).getTime() -
+                     new Date(b.createdAt).getTime()
+               )
+            );
+            break;
+         case "most-likes":
+            setArticles(
+               articles.sort((a, b) => b.upvotes!.length - a.upvotes!.length)
+            );
+            break;
+         case "least-likes":
+            setArticles(
+               articles.sort((a, b) => a.upvotes!.length - b.upvotes!.length)
+            );
+            break;
+         case "most-dislikes":
+            setArticles(
+               articles.sort(
+                  (a, b) => b.downvotes!.length - a.downvotes!.length
+               )
+            );
+            break;
+         case "least-dislikes":
+            setArticles(
+               articles.sort(
+                  (a, b) => a.downvotes!.length - b.downvotes!.length
+               )
+            );
+            break;
+         case "published":
+            setArticles(articles.filter((article) => article.published));
+            break;
+         case "not-published":
+            setArticles(articles.filter((article) => !article.published));
+            break;
+         case "review":
+            setArticles(articles.filter((article) => article.underReview));
+            break;
+         case "not-review":
+            setArticles(articles.filter((article) => !article.underReview));
+            break;
+         default:
+            setFilteredArticles(articles);
+            break;
+      }
    };
 
    return (
@@ -134,11 +208,10 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            placeholder="Search"
                            value={searchQuery}
                            onChange={handleSearch}
-                           error={articlesState.length === 0}
+                           error={articlesState.length === 0 && hasSearched}
                         />
                         <Select
                            placeholder="Filter"
-                           searchable
                            clearable
                            allowDeselect
                            nothingFound="No options"
@@ -149,14 +222,27 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                               { value: "oldest", label: "Oldest" },
                               { value: "most-likes", label: "Most Likes" },
                               { value: "least-likes", label: "Least Likes" },
-                              { value: "most-dislikes", label: "Most Oldest" },
+                              {
+                                 value: "most-dislikes",
+                                 label: "Most Dislikes",
+                              },
                               {
                                  value: "least-dislikes",
                                  label: "Least Dislikes",
                               },
+                              { value: "published", label: "Published" },
+                              {
+                                 value: "not-published",
+                                 label: "Not Published",
+                              },
+                              { value: "review", label: "Under Review" },
+                              {
+                                 value: "not-review",
+                                 label: "Not Under Review",
+                              },
                            ]}
                            value={filter}
-                           onChange={setFilter}
+                           onChange={handleFilter}
                         />
                      </div>
                   </div>
