@@ -309,20 +309,26 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                     </Link>
                                  </h1>
                                  <div className="flex items-center gap-2">
-                                    <div className="mr-2 grid grid-cols-2 divide-x-2 divide-gray-500">
-                                       <div className="mr-2 flex items-center justify-center gap-1">
-                                          <AiOutlineLike size="25" />
-                                          <p className="font-medium">
-                                             {article.upvotes?.length || 0}
-                                          </p>
+                                    {article.published ? (
+                                       <div className="mr-2 grid grid-cols-2 divide-x-2 divide-gray-500">
+                                          <div className="mr-2 flex items-center justify-center gap-1">
+                                             <AiOutlineLike size="25" />
+                                             <p className="font-medium">
+                                                {article.upvotes?.length || 0}
+                                             </p>
+                                          </div>
+                                          <div className="flex items-center justify-center gap-1 pl-2">
+                                             <AiOutlineDislike size="25" />
+                                             <p className="font-medium">
+                                                {article.downvotes?.length || 0}
+                                             </p>
+                                          </div>
                                        </div>
-                                       <div className="flex items-center justify-center gap-1 pl-2">
-                                          <AiOutlineDislike size="25" />
-                                          <p className="font-medium">
-                                             {article.downvotes?.length || 0}
-                                          </p>
-                                       </div>
-                                    </div>
+                                    ) : (
+                                       <h1 className="font-semibold">
+                                          not published
+                                       </h1>
+                                    )}
                                     <div>
                                        {article.categoryId.map((tag, i) => (
                                           <ArticleBadge tag={tag} key={i} />

@@ -228,44 +228,46 @@ const ArticleViewer: React.FC<Props> = ({
                      <h1 className="px-4 text-4xl font-semibold">
                         {article.title}
                      </h1>
-                     <div className="grid grid-cols-2 divide-x-2 divide-gray-500">
-                        <div className="mr-4 flex items-center justify-center gap-1">
-                           {selfUpvote && data ? (
-                              <AiFillLike
-                                 size="30"
-                                 className="cursor-pointer text-blue-500 duration-150 hover:text-blue-500"
-                                 onClick={() => handleOpinion("upvote")}
-                              />
-                           ) : (
-                              <AiOutlineLike
-                                 size="30"
-                                 className="cursor-pointer duration-150 hover:text-blue-500"
-                                 onClick={() => handleOpinion("upvote")}
-                              />
-                           )}
-                           <p className="select-none font-medium">
-                              {upvoteCount}
-                           </p>
+                     {article.published && (
+                        <div className="grid grid-cols-2 divide-x-2 divide-gray-500">
+                           <div className="mr-4 flex items-center justify-center gap-1">
+                              {selfUpvote && data ? (
+                                 <AiFillLike
+                                    size="30"
+                                    className="cursor-pointer text-blue-500 duration-150 hover:text-blue-500"
+                                    onClick={() => handleOpinion("upvote")}
+                                 />
+                              ) : (
+                                 <AiOutlineLike
+                                    size="30"
+                                    className="cursor-pointer duration-150 hover:text-blue-500"
+                                    onClick={() => handleOpinion("upvote")}
+                                 />
+                              )}
+                              <p className="select-none font-medium">
+                                 {upvoteCount}
+                              </p>
+                           </div>
+                           <div className="flex items-center justify-center gap-1 pl-4">
+                              {selfDownvote && data ? (
+                                 <AiFillDislike
+                                    size="30"
+                                    className="cursor-pointer text-red-500 duration-150 hover:text-red-500"
+                                    onClick={() => handleOpinion("downvote")}
+                                 />
+                              ) : (
+                                 <AiOutlineDislike
+                                    size="30"
+                                    className="cursor-pointer duration-150 hover:text-red-500"
+                                    onClick={() => handleOpinion("downvote")}
+                                 />
+                              )}
+                              <p className="select-none font-medium">
+                                 {downvoteCount}
+                              </p>
+                           </div>
                         </div>
-                        <div className="flex items-center justify-center gap-1 pl-4">
-                           {selfDownvote && data ? (
-                              <AiFillDislike
-                                 size="30"
-                                 className="cursor-pointer text-red-500 duration-150 hover:text-red-500"
-                                 onClick={() => handleOpinion("downvote")}
-                              />
-                           ) : (
-                              <AiOutlineDislike
-                                 size="30"
-                                 className="cursor-pointer duration-150 hover:text-red-500"
-                                 onClick={() => handleOpinion("downvote")}
-                              />
-                           )}
-                           <p className="select-none font-medium">
-                              {downvoteCount}
-                           </p>
-                        </div>
-                     </div>
+                     )}
                   </div>
                   <div className="ml-4 mt-1 flex items-center">
                      <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
@@ -578,10 +580,10 @@ export const getServerSideProps: GetServerSideProps = async ({
    const session = await getSession({ req });
 
    const article = await prisma.article.findFirst({
-      where: session?.user?.isWriter
-         ? { id: id as string, user: session?.user?.id }
-         : session?.user?.isAdmin
+      where: session?.user?.isAdmin
          ? { id: id as string }
+         : session?.user?.isWriter
+         ? { id: id as string, user: session?.user?.id }
          : { id: id as string, published: true, underReview: false },
       include: {
          coWriters: true,

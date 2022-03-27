@@ -16,19 +16,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
    if (!article) return res.status(404).json({ message: "article not found" });
 
-   const user = await prisma.user.findFirst({
-      where: { email: session.user?.email },
-   });
+   if (!article.published)
+      return res
+         .status(400)
+         .json({ message: "this article has not been published yet." });
 
    const downvoteCheck = await prisma.downvote.findFirst({
-      where: { articleId: article.id, votedBy: user?.id },
+      where: { articleId: article.id, votedBy: session?.user?.id },
    });
 
    if (downvoteCheck) {
       await prisma.downvote.delete({ where: { id: downvoteCheck.id } });
    } else {
       const upvoteCheck = await prisma.upvote.findFirst({
-         where: { articleId: article.id, votedBy: user?.id },
+         where: { articleId: article.id, votedBy: session?.user?.id },
       });
       if (upvoteCheck)
          await prisma.upvote.delete({ where: { id: upvoteCheck.id } });
@@ -36,7 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await prisma.downvote.create({
          data: {
             articleId: article.id,
-            votedBy: user!.id,
+            votedBy: session?.user!.id,
          },
       });
    }
