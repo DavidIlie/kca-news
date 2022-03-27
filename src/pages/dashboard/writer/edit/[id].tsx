@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useRef } from "react";
+import React, { forwardRef, useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { DefaultSeo } from "next-seo";
@@ -14,8 +14,8 @@ import ContentEditable from "react-contenteditable";
 import { useNotifications } from "@mantine/notifications";
 import {
    useLocalStorage,
-   useIntersection,
    useElementSize,
+   useViewportSize,
 } from "@mantine/hooks";
 import {
    MultiSelect,
@@ -59,12 +59,12 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       defaultValue: true,
    });
 
+   const { height: viewportHeight } = useViewportSize();
    const { ref, height } = useElementSize();
 
-   const settingsRef = useRef<HTMLDivElement | null>(null);
-   const [settings, settingsObserver] = useIntersection({
-      root: settingsRef.current,
-      threshold: 1,
+   useEffect(() => {
+      console.log(viewportHeight);
+      // console.log(height);
    });
 
    const [article, setArticle] = useState<Article>(articleServer);
@@ -431,10 +431,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            visible={loadingRest && !loadingContentUpdate}
                         />
                         {!mobile && (
-                           <div
-                              className="flex items-center justify-between gap-2 border-b-2 px-4 pb-4"
-                              ref={settings}
-                           >
+                           <div className="flex items-center justify-between gap-2 border-b-2 px-4 pb-4">
                               <h1 className="text-2xl font-semibold">
                                  Settings
                               </h1>
@@ -608,11 +605,16 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         <EditorSettingsDisclosure name="Cover">
                            <h1>yo</h1>
                         </EditorSettingsDisclosure>
-                        <div className="flex-grow" ref={ref}>
+                        <div
+                           className={viewportHeight > 550 ? "flex-grow" : ""}
+                           ref={ref}
+                        >
                            <div
                               className={`${
-                                 height > 500 && "absolute bottom-0"
-                              } w-full px-2 py-4`}
+                                 height > 100
+                                    ? "fixed bottom-0 w-[20%]"
+                                    : "w-full"
+                              } px-2 py-4`}
                            >
                               <Button
                                  className="w-full"
