@@ -70,8 +70,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const notifications = useNotifications();
 
    const canSave =
-      article.title !== title ||
-      article.description !== description ||
+      (article.title !== title && title !== "") ||
+      (article.description !== description && description !== "") ||
       (article.mdx !== markdownValue && markdownValue.length > 2);
 
    const canSaveRest =
