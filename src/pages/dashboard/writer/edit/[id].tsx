@@ -222,7 +222,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      onChange={(e) => setTitle(e.target.value)}
                   />
                </div>
-               <div className="mt-1 flex items-center">
+               <div className="flex items-center">
                   <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
                      <Image
                         className="rounded-full"
@@ -313,7 +313,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      </div>
                   </h1>
                </div>
-               <div className="relative mt-4 flex justify-center">
+               <div className="relative mt-1 flex justify-center">
                   <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
                      <Button
                         color="cyan"
