@@ -15,7 +15,7 @@ import { useNotifications } from "@mantine/notifications";
 import {
    useLocalStorage,
    useIntersection,
-   useViewportSize,
+   useElementSize,
 } from "@mantine/hooks";
 import {
    MultiSelect,
@@ -59,7 +59,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       defaultValue: true,
    });
 
-   const { height } = useViewportSize();
+   const { ref, height } = useElementSize();
 
    const settingsRef = useRef<HTMLDivElement | null>(null);
    const [settings, settingsObserver] = useIntersection({
@@ -421,7 +421,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                normalProps={{
                   className: `h-full ${
                      openSidebar ? "w-1/5" : "hidden"
-                  } relative border-l-2 py-4`,
+                  } relative border-l-2 py-4 flex h-full flex-col`,
                }}
             >
                <Consumer>
@@ -608,30 +608,30 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         <EditorSettingsDisclosure name="Cover">
                            <h1>yo</h1>
                         </EditorSettingsDisclosure>
-                        <div
-                           className={`${
-                              settingsObserver?.isIntersecting &&
-                              height > 1000 &&
-                              "absolute bottom-0"
-                           } w-full px-2 py-4`}
-                        >
-                           <Button
-                              className="w-full"
-                              disabled={!canSave ? !canSaveRest : false}
-                              onClick={() => {
-                                 if (canSave) {
-                                    if (canSave && canSaveRest) {
+                        <div className="flex-grow" ref={ref}>
+                           <div
+                              className={`${
+                                 height > 500 && "absolute bottom-0"
+                              } w-full px-2 py-4`}
+                           >
+                              <Button
+                                 className="w-full"
+                                 disabled={!canSave ? !canSaveRest : false}
+                                 onClick={() => {
+                                    if (canSave) {
+                                       if (canSave && canSaveRest) {
+                                          handleEdit();
+                                          handleUpdateRest();
+                                       }
                                        handleEdit();
+                                    } else {
                                        handleUpdateRest();
                                     }
-                                    handleEdit();
-                                 } else {
-                                    handleUpdateRest();
-                                 }
-                              }}
-                           >
-                              Save
-                           </Button>
+                                 }}
+                              >
+                                 Save
+                              </Button>
+                           </div>
                         </div>
                      </>
                   )}
