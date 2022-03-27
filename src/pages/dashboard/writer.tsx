@@ -6,6 +6,7 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import { Disclosure } from "@headlessui/react";
+import { Select, TextInput } from "@mantine/core";
 
 import { MdArticle, MdPublish } from "react-icons/md";
 import {
@@ -15,6 +16,8 @@ import {
    AiOutlineArrowUp,
    AiOutlineLike,
    AiOutlineDislike,
+   AiOutlineSearch,
+   AiOutlineFilter,
 } from "react-icons/ai";
 import { FaCommentDots } from "react-icons/fa";
 
@@ -44,6 +47,21 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
    const [selected, setSelected] = useState<Article | null>(null);
 
    const { push } = useRouter();
+
+   const [articlesState, setArticles] = useState<Article[]>(articles);
+   const [searchQuery, setSearchQuery] = useState<string>("");
+   const [filter, setFilter] = useState<string | null>(null);
+
+   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      setSearchQuery(val);
+
+      setArticles(
+         articles.filter((article) =>
+            article.title.toLowerCase().includes(searchQuery)
+         )
+      );
+   };
 
    return (
       <>
@@ -81,41 +99,74 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                   <h1 className="mb-4 text-4xl font-semibold">
                      {user.isAdmin ? "Total" : "Your"} Articles
                   </h1>
-                  <div className="flex items-center gap-2">
-                     <Link href="/dashboard/writer/create">
-                        <a>
-                           <Button>Create Article</Button>
-                        </a>
-                     </Link>
-                     <Button
-                        disabled={selected === null}
-                        color="sky"
-                        onClick={() =>
-                           selected !== null &&
-                           push(`/dashboard/writer/edit/${selected.id}`)
-                        }
-                     >
-                        Edit Article
-                     </Button>
-                     <Button
-                        disabled={
-                           selected === null ||
-                           (articles.length === 1 && user.isAdmin) ||
-                           selected.underReview ||
-                           selected.published
-                        }
-                        color="secondary"
-                     >
-                        Delete Article
-                     </Button>
+                  <div className="flex justify-between">
+                     <div className="flex items-center gap-2">
+                        <Link href="/dashboard/writer/create">
+                           <a>
+                              <Button>Create Article</Button>
+                           </a>
+                        </Link>
+                        <Button
+                           disabled={selected === null}
+                           color="sky"
+                           onClick={() =>
+                              selected !== null &&
+                              push(`/dashboard/writer/edit/${selected.id}`)
+                           }
+                        >
+                           Edit Article
+                        </Button>
+                        <Button
+                           disabled={
+                              selected === null ||
+                              (articles.length === 1 && user.isAdmin) ||
+                              selected.underReview ||
+                              selected.published
+                           }
+                           color="secondary"
+                        >
+                           Delete Article
+                        </Button>
+                     </div>
+                     <div className="flex items-center gap-2">
+                        <TextInput
+                           icon={<AiOutlineSearch />}
+                           placeholder="Search"
+                           value={searchQuery}
+                           onChange={handleSearch}
+                           error={articlesState.length === 0}
+                        />
+                        <Select
+                           placeholder="Filter"
+                           searchable
+                           clearable
+                           allowDeselect
+                           nothingFound="No options"
+                           maxDropdownHeight={180}
+                           icon={<AiOutlineFilter />}
+                           data={[
+                              { value: "newest", label: "Newest" },
+                              { value: "oldest", label: "Oldest" },
+                              { value: "most-likes", label: "Most Likes" },
+                              { value: "least-likes", label: "Least Likes" },
+                              { value: "most-dislikes", label: "Most Oldest" },
+                              {
+                                 value: "least-dislikes",
+                                 label: "Least Dislikes",
+                              },
+                           ]}
+                           value={filter}
+                           onChange={setFilter}
+                        />
+                     </div>
                   </div>
-                  <div className="mt-4">
-                     {articles.length === 0 && (
+                  <div className="my-4">
+                     {articlesState.length === 0 && (
                         <h1 className="text-center text-4xl font-semibold">
                            No articles...
                         </h1>
                      )}
-                     {articles.map((article, index) => (
+                     {articlesState.map((article, index) => (
                         <Disclosure
                            as="div"
                            className={`rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-4 ${
@@ -160,6 +211,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                     {article.published &&
                                        !article.underReview && (
                                           <span className="font-semibold">
+                                             {" "}
                                              (published)
                                           </span>
                                        )}{" "}
