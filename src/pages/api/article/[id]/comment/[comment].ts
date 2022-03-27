@@ -19,6 +19,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
    if (!article) return res.status(404).json({ message: "article not found" });
 
+   if (!article.published)
+      return res
+         .status(404)
+         .json({ message: "this article has not been published yet." });
+
    const commentCheck = await prisma.comment.findFirst({
       where: {
          articleId: article.id,

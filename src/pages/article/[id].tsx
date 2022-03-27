@@ -398,167 +398,176 @@ const ArticleViewer: React.FC<Props> = ({
                         // @ts-ignore */}
                      <Editor defaultValue={article.mdx} readOnly />
                   </div>
-                  <div className="mt-11 ml-4 border-t-2 pt-4">
-                     <h1 className="text-4xl font-semibold">
-                        What do you think?
-                     </h1>
-                     <div className="my-4 w-full rounded border border-gray-200 bg-gray-50 p-6">
-                        <h5 className="text-lg font-semibold text-gray-900 md:text-xl">
-                           Leave a comment
-                        </h5>
-                        <p className="my-1 text-gray-800">
-                           Share your opinion regarding this article for other
-                           students/teachers to see.
-                        </p>
-                        {!data ? (
-                           <a
-                              className="my-4 flex h-8 w-28 cursor-pointer items-center justify-center rounded bg-gray-200 font-bold text-gray-900 duration-150 hover:bg-gray-300"
-                              onClick={() => signIn("google")}
-                           >
-                              Login
-                           </a>
-                        ) : (
-                           <div className="mt-2">
-                              <Formik
-                                 validateOnChange={false}
-                                 validateOnBlur={false}
-                                 validationSchema={crudCommentSchema}
-                                 initialValues={{
-                                    message: "",
-                                 }}
-                                 onSubmit={async (
-                                    data,
-                                    { setSubmitting, setFieldError, resetForm }
-                                 ) => {
-                                    setSubmitting(true);
-
-                                    const r = await fetch(
-                                       `/api/article/${article.id}/comment`,
-                                       {
-                                          method: "POST",
-                                          body: JSON.stringify(data),
-                                          credentials: "include",
-                                       }
-                                    );
-                                    const response = await r.json();
-
-                                    if (r.status !== 200) {
-                                       setFieldError(
-                                          "message",
-                                          response.message
-                                       );
-                                    } else {
-                                       resetForm();
-                                       setFormSuccess(true);
-                                       setInterval(
-                                          () => setFormSuccess(false),
-                                          2000
-                                       );
-                                       setComments([
-                                          response,
-                                          ...commentsState,
-                                       ]);
-                                    }
-
-                                    setSubmitting(false);
-                                 }}
+                  <div className="mt-11 ml-4 border-t-2 pt-4" />
+                  {article.published && (
+                     <>
+                        <h1 className="text-4xl font-semibold">
+                           What do you think?
+                        </h1>
+                        <div className="my-4 w-full rounded border border-gray-200 bg-gray-50 p-6">
+                           <h5 className="text-lg font-semibold text-gray-900 md:text-xl">
+                              Leave a comment
+                           </h5>
+                           <p className="my-1 text-gray-800">
+                              Share your opinion regarding this article for
+                              other students/teachers to see.
+                           </p>
+                           {!data ? (
+                              <a
+                                 className="my-4 flex h-8 w-28 cursor-pointer items-center justify-center rounded bg-gray-200 font-bold text-gray-900 duration-150 hover:bg-gray-300"
+                                 onClick={() => signIn("google")}
                               >
-                                 {({ errors, isSubmitting }) => (
-                                    <Form>
-                                       <Field
-                                          as="input"
-                                          aria-label="Your comment"
-                                          placeholder="Your comment..."
-                                          required
-                                          name="message"
-                                          className="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 py-2 pl-4 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                                       />
-                                       <Button
-                                          className="mt-2 mb-2 w-full"
-                                          type="submit"
-                                          disabled={isSubmitting}
-                                          loading={isSubmitting}
-                                       >
-                                          Comment
-                                       </Button>
-                                       {errors.message ? (
-                                          <ErrorMessage>
-                                             {errors.message}
-                                          </ErrorMessage>
-                                       ) : formSuccess ? (
-                                          <SuccessMessage>
-                                             Created successfully!
-                                          </SuccessMessage>
-                                       ) : (
-                                          <p className="text-sm text-gray-800">
-                                             Your information is only used to
-                                             display your name and reply by
-                                             email.
-                                          </p>
-                                       )}
-                                    </Form>
-                                 )}
-                              </Formik>
-                           </div>
-                        )}
-                     </div>
-                     <div id="comments">
-                        {commentsState.map((comment, index) => (
-                           <div
-                              className={`flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4 ${
-                                 index !== commentsState.length - 1 && "mb-4"
-                              }`}
-                              key={index}
-                           >
-                              <Image
-                                 src={comment.user?.image || "/no-pfp.jpg"}
-                                 width={55}
-                                 height={24}
-                                 blurDataURL={shimmer(10, 10)}
-                                 placeholder="blur"
-                                 className="rounded-full object-cover"
-                                 alt={`${
-                                    comment.user?.name.split(" ")[0]
-                                 }'s profile image`}
-                              />
-                              <div className="flex flex-col space-y-2 ">
-                                 <div className="w-full">{comment.comment}</div>
-                                 <div className="flex items-center space-x-2">
-                                    <p className="text-sm text-gray-500">
-                                       {comment.user?.name}
-                                    </p>
-                                    <span className=" text-gray-800">/</span>
-                                    <p className="text-sm text-gray-400">
-                                       {format(
-                                          new Date(comment.createdAt),
-                                          "d MMM yyyy 'at' h:mm bb"
-                                       )}
-                                    </p>
-                                    {data?.user &&
-                                       comment.userId === data.user?.id && (
-                                          <>
-                                             <span className="text-gray-200">
-                                                /
-                                             </span>
-                                             <button
-                                                className="text-sm text-red-600"
-                                                onClick={() => {
-                                                   setDeleteCommentId(
-                                                      comment.id
-                                                   );
-                                                   setOpenConfirmModal(true);
-                                                }}
-                                             >
-                                                Delete
-                                             </button>
-                                          </>
-                                       )}
+                                 Login
+                              </a>
+                           ) : (
+                              <div className="mt-2">
+                                 <Formik
+                                    validateOnChange={false}
+                                    validateOnBlur={false}
+                                    validationSchema={crudCommentSchema}
+                                    initialValues={{
+                                       message: "",
+                                    }}
+                                    onSubmit={async (
+                                       data,
+                                       {
+                                          setSubmitting,
+                                          setFieldError,
+                                          resetForm,
+                                       }
+                                    ) => {
+                                       setSubmitting(true);
+
+                                       const r = await fetch(
+                                          `/api/article/${article.id}/comment`,
+                                          {
+                                             method: "POST",
+                                             body: JSON.stringify(data),
+                                             credentials: "include",
+                                          }
+                                       );
+                                       const response = await r.json();
+
+                                       if (r.status !== 200) {
+                                          setFieldError(
+                                             "message",
+                                             response.message
+                                          );
+                                       } else {
+                                          resetForm();
+                                          setFormSuccess(true);
+                                          setInterval(
+                                             () => setFormSuccess(false),
+                                             2000
+                                          );
+                                          setComments([
+                                             response,
+                                             ...commentsState,
+                                          ]);
+                                       }
+
+                                       setSubmitting(false);
+                                    }}
+                                 >
+                                    {({ errors, isSubmitting }) => (
+                                       <Form>
+                                          <Field
+                                             as="input"
+                                             aria-label="Your comment"
+                                             placeholder="Your comment..."
+                                             required
+                                             name="message"
+                                             className="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 py-2 pl-4 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                                          />
+                                          <Button
+                                             className="mt-2 mb-2 w-full"
+                                             type="submit"
+                                             disabled={isSubmitting}
+                                             loading={isSubmitting}
+                                          >
+                                             Comment
+                                          </Button>
+                                          {errors.message ? (
+                                             <ErrorMessage>
+                                                {errors.message}
+                                             </ErrorMessage>
+                                          ) : formSuccess ? (
+                                             <SuccessMessage>
+                                                Created successfully!
+                                             </SuccessMessage>
+                                          ) : (
+                                             <p className="text-sm text-gray-800">
+                                                Your information is only used to
+                                                display your name and reply by
+                                                email.
+                                             </p>
+                                          )}
+                                       </Form>
+                                    )}
+                                 </Formik>
+                              </div>
+                           )}
+                        </div>
+                        <div id="comments">
+                           {commentsState.map((comment, index) => (
+                              <div
+                                 className={`flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4 ${
+                                    index !== commentsState.length - 1 && "mb-4"
+                                 }`}
+                                 key={index}
+                              >
+                                 <Image
+                                    src={comment.user?.image || "/no-pfp.jpg"}
+                                    width={55}
+                                    height={24}
+                                    blurDataURL={shimmer(10, 10)}
+                                    placeholder="blur"
+                                    className="rounded-full object-cover"
+                                    alt={`${
+                                       comment.user?.name.split(" ")[0]
+                                    }'s profile image`}
+                                 />
+                                 <div className="flex flex-col space-y-2 ">
+                                    <div className="w-full">
+                                       {comment.comment}
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                       <p className="text-sm text-gray-500">
+                                          {comment.user?.name}
+                                       </p>
+                                       <span className=" text-gray-800">/</span>
+                                       <p className="text-sm text-gray-400">
+                                          {format(
+                                             new Date(comment.createdAt),
+                                             "d MMM yyyy 'at' h:mm bb"
+                                          )}
+                                       </p>
+                                       {data?.user &&
+                                          comment.userId === data.user?.id && (
+                                             <>
+                                                <span className="text-gray-200">
+                                                   /
+                                                </span>
+                                                <button
+                                                   className="text-sm text-red-600"
+                                                   onClick={() => {
+                                                      setDeleteCommentId(
+                                                         comment.id
+                                                      );
+                                                      setOpenConfirmModal(true);
+                                                   }}
+                                                >
+                                                   Delete
+                                                </button>
+                                             </>
+                                          )}
+                                    </div>
                                  </div>
                               </div>
-                           </div>
-                        ))}
-                     </div>
-                  </div>
+                           ))}
+                        </div>
+                     </>
+                  )}
                </div>
             </Slide>
          </div>
