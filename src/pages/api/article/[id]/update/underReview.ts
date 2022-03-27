@@ -6,7 +6,7 @@ import prisma from "../../../../../lib/prisma";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    const session = await getSession({ req });
 
-   if (!session || session?.user?.isAdmin ? false : !session?.user?.isWriter)
+   if (!session || (session?.user?.isAdmin ? false : !session?.user?.isWriter))
       return res.status(401).json({ message: "not authenticated" });
 
    const { id } = req.query;

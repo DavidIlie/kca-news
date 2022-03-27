@@ -29,7 +29,7 @@ const CreatePage: React.FC = () => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const session = await getSession({ req });
 
-   if (!session || session?.user?.isAdmin ? false : !session?.user?.isWriter)
+   if (!session || (session?.user?.isAdmin ? false : !session?.user?.isWriter))
       return {
          redirect: {
             destination: "/",
