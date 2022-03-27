@@ -300,7 +300,8 @@ const ArticleViewer: React.FC<Props> = ({
                                           className="cursor-pointer select-none duration-150 hover:text-blue-500"
                                        >
                                           {" "}
-                                          and {article.coWriters.length} others
+                                          and {article.coWriters.length} other
+                                          {article.coWriters.length > 1 && "s"}
                                        </Popover.Button>
                                        <Transition
                                           as={React.Fragment}
