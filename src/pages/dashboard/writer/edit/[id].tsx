@@ -24,7 +24,6 @@ import {
    LoadingOverlay,
    Textarea,
    Alert,
-   SelectItemProps,
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import Link from "next/link";
