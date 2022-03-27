@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { DefaultSeo } from "next-seo";
@@ -61,11 +61,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
    const { height: viewportHeight } = useViewportSize();
    const { ref, height } = useElementSize();
-
-   useEffect(() => {
-      console.log(viewportHeight);
-      // console.log(height);
-   });
 
    const [article, setArticle] = useState<Article>(articleServer);
    const [categories, setCategories] = useState<string[]>(article.categoryId);
