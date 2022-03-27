@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useState, useRef } from "react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { DefaultSeo } from "next-seo";
@@ -12,7 +12,11 @@ import {
 import { RiRestartLine } from "react-icons/ri";
 import ContentEditable from "react-contenteditable";
 import { useNotifications } from "@mantine/notifications";
-import { useLocalStorage } from "@mantine/hooks";
+import {
+   useLocalStorage,
+   useIntersection,
+   useViewportSize,
+} from "@mantine/hooks";
 import {
    MultiSelect,
    TextInput,
@@ -53,6 +57,14 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [openSidebar, setOpenSidebar] = useLocalStorage<boolean>({
       key: "editorOpenSidebar",
       defaultValue: true,
+   });
+
+   const { height } = useViewportSize();
+
+   const settingsRef = useRef<HTMLDivElement | null>(null);
+   const [settings, settingsObserver] = useIntersection({
+      root: settingsRef.current,
+      threshold: 1,
    });
 
    const [article, setArticle] = useState<Article>(articleServer);
@@ -419,7 +431,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            visible={loadingRest && !loadingContentUpdate}
                         />
                         {!mobile && (
-                           <div className="flex items-center justify-between gap-2 border-b-2 px-4 pb-4">
+                           <div
+                              className="flex items-center justify-between gap-2 border-b-2 px-4 pb-4"
+                              ref={settings}
+                           >
                               <h1 className="text-2xl font-semibold">
                                  Settings
                               </h1>
@@ -593,7 +608,13 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         <EditorSettingsDisclosure name="Cover">
                            <h1>yo</h1>
                         </EditorSettingsDisclosure>
-                        <div className="absolute bottom-0 w-full px-2 py-4">
+                        <div
+                           className={`${
+                              settingsObserver?.isIntersecting &&
+                              height > 860 &&
+                              "absolute bottom-0"
+                           } w-full px-2 py-4`}
+                        >
                            <Button
                               className="w-full"
                               disabled={!canSave ? !canSaveRest : false}
