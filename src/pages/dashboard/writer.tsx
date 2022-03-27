@@ -144,7 +144,19 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                               />
                               <div className="flex w-full items-center justify-between">
                                  <h1 className="-ml-2">
-                                    {article.title}{" "}
+                                    {article.title} {" - "}
+                                    {article.writer?.id !== user?.id && (
+                                       <span>
+                                          by{" "}
+                                          <Link
+                                             href={`/profile/${article.writer?.id}`}
+                                          >
+                                             <a className="hover:underline">
+                                                {article.writer?.name}
+                                             </a>
+                                          </Link>
+                                       </span>
+                                    )}
                                     {article.published &&
                                        !article.underReview && (
                                           <span className="font-semibold">
@@ -348,6 +360,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             user: true,
          },
       },
+      writer: true,
       upvotes: true,
       downvotes: true,
    };
@@ -355,9 +368,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const articles = session?.user?.isAdmin
       ? await prisma.article.findMany({
            include: includeParams as any,
-           where: { user: session?.user?.id },
+           orderBy: {
+              createdAt: "desc",
+           },
         })
-      : await prisma.article.findMany({ include: includeParams as any });
+      : await prisma.article.findMany({
+           include: includeParams as any,
+           where: { user: session?.user?.id },
+           orderBy: {
+              createdAt: "desc",
+           },
+        });
 
    return {
       props: {
