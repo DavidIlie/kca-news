@@ -95,6 +95,7 @@ router.post(async (req: NextApiRequest, res) => {
          data: { cover: `https://${minioUrl}/cover/${name}` },
          include: {
             writer: true,
+            coWriters: true,
          },
       });
 

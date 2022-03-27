@@ -96,9 +96,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       if (r.status === 200) {
          setArticle(response.article);
          setDisplayAlert(true);
-         setTimeout(() => {
-            setDisplayAlert(false);
-         }, 5000);
       } else {
          notifications.showNotification({
             color: "red",
@@ -125,9 +122,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
          setArticle(response.article);
          if (!user.isAdmin) {
             setDisplayAlert(true);
-            setTimeout(() => {
-               setDisplayAlert(false);
-            }, 5000);
          }
       } else {
          notifications.showNotification({
@@ -156,9 +150,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       if (r.status === 200) {
          setArticle(response.article);
          setDisplayAlert(true);
-         setTimeout(() => {
-            setDisplayAlert(false);
-         }, 5000);
       } else {
          notifications.showNotification({
             color: "red",
@@ -520,9 +511,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                        if (r.status === 200) {
                                           setArticle(response.article);
                                           setDisplayAlert(true);
-                                          setTimeout(() => {
-                                             setDisplayAlert(false);
-                                          }, 5000);
                                        } else {
                                           notifications.showNotification({
                                              color: "red",

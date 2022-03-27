@@ -40,12 +40,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             published: session?.user?.isAdmin ? article.published : false,
             underReview: session?.user?.isAdmin
                ? article.underReview
-               : article.underReview
+               : article.published
                ? true
-               : true,
+               : false,
          },
          include: {
             writer: true,
+            coWriters: true,
          },
       });
 

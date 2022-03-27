@@ -33,6 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
       include: {
          writer: true,
+         coWriters: true,
       },
    });
 
