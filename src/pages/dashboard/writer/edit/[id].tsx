@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { DefaultSeo } from "next-seo";
@@ -20,6 +20,7 @@ import {
    LoadingOverlay,
    Textarea,
    Alert,
+   SelectItemProps,
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -244,11 +245,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            "KCA News Team"
                         ) : (
                            <div className="flex gap-2">
-                              <Link href={`/profile/${article.writer?.id}`}>
-                                 <a className="duration-150 hover:text-blue-500">
-                                    {article.writer?.name}
-                                 </a>
-                              </Link>
+                              <a>{article.writer?.name}</a>
                               {article.coWriters.length !== 0 && (
                                  <Popover className="relative">
                                     <Popover.Button
@@ -587,6 +584,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               clearable
                               maxDropdownHeight={160}
                               maxSelectedValues={5}
+                              valueComponent={WrappedArticleBadge}
                            />
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure name="Filter">
@@ -629,6 +627,12 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       </>
    );
 };
+
+const WrappedArticleBadge = forwardRef<HTMLDivElement, SelectItemProps>(
+   ({ value }) => {
+      return <ArticleBadge tag={value || ""} className="mb-1 mt-1" />;
+   }
+);
 
 export const getServerSideProps: GetServerSideProps = async ({
    query,

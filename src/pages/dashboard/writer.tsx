@@ -144,10 +144,10 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                               />
                               <div className="flex w-full items-center justify-between">
                                  <h1 className="-ml-2">
-                                    {article.title} {" - "}
+                                    {article.title}
                                     {article.writer?.id !== user?.id && (
                                        <span>
-                                          by{" "}
+                                          {" - by "}
                                           <Link
                                              href={`/profile/${article.writer?.id}`}
                                           >
