@@ -611,7 +611,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         <div
                            className={`${
                               settingsObserver?.isIntersecting &&
-                              height > 860 &&
+                              height > 1000 &&
                               "absolute bottom-0"
                            } w-full px-2 py-4`}
                         >
