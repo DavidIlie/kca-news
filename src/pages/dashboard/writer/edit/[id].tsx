@@ -86,7 +86,18 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       JSON.stringify(categories) !== JSON.stringify(article.categoryId) &&
       categories.length !== 0;
 
-   // usePreventUserFromLosingData(canSave || canSaveRest);
+   const canBeAttemptedSave = !canSave ? !canSaveRest : false;
+
+   const combinedMethods = () => {
+      handleEdit();
+      handleUpdateRest();
+   };
+   const attemptToSave = () =>
+      canSave
+         ? canSave && canSaveRest
+            ? combinedMethods()
+            : handleEdit()
+         : handleUpdateRest();
 
    const handleEdit = async () => {
       setLoadingContentUpdate(true);
@@ -402,18 +413,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                   <div className="mt-7 border-t-2 pt-4">
                      <Button
                         className="w-full"
-                        disabled={!canSave ? !canSaveRest : false}
-                        onClick={() => {
-                           if (canSave) {
-                              if (canSave && canSaveRest) {
-                                 handleEdit();
-                                 handleUpdateRest();
-                              }
-                              handleEdit();
-                           } else {
-                              handleUpdateRest();
-                           }
-                        }}
+                        disabled={canBeAttemptedSave}
+                        onClick={attemptToSave}
                      >
                         Save
                      </Button>
@@ -636,18 +637,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            >
                               <Button
                                  className="w-full"
-                                 disabled={!canSave ? !canSaveRest : false}
-                                 onClick={() => {
-                                    if (canSave) {
-                                       if (canSave && canSaveRest) {
-                                          handleEdit();
-                                          handleUpdateRest();
-                                       }
-                                       handleEdit();
-                                    } else {
-                                       handleUpdateRest();
-                                    }
-                                 }}
+                                 disabled={canBeAttemptedSave}
+                                 onClick={attemptToSave}
                               >
                                  Save
                               </Button>
