@@ -223,12 +223,36 @@ const ArticleViewer: React.FC<Props> = ({
             openGraph={{
                title: article.title,
                site_name: "KCA News",
-               description: article.description,
+               article: {
+                  publishedTime: new Date(article.createdAt).toDateString(),
+                  authors:
+                     article.coWriters.length !== 0
+                        ? [
+                             `https://davidilie.com/profile/${article.writer?.id}`,
+                             ...article.coWriters?.map(
+                                (co) => `https://davidilie.com/profile/${co.id}`
+                             ),
+                          ]
+                        : [
+                             `https://davidilie.com/profile/${article.writer?.id}`,
+                          ],
+                  tags: article.categoryId,
+               },
+               description: `${article.description} ${
+                  article.published
+                     ? ` ${upvoteCount} like${
+                          upvoteCount > 1 || upvoteCount === 0 ? "s" : ""
+                       } - ${downvoteCount} dislike${
+                          downvoteCount > 1 || downvoteCount === 0 ? "s" : ""
+                       } - ${commentsState.length} comment${
+                          commentsState.length > 1 || commentsState.length === 0
+                             ? "s"
+                             : ""
+                       }`
+                     : ""
+               }`,
                url: `https://davidilie.com/${router.asPath}`,
                type: "article",
-               article: {
-                  publishedTime: new Date(article.createdAt).toISOString(),
-               },
                images: [
                   {
                      url: article.cover,
