@@ -86,6 +86,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       JSON.stringify(categories) !== JSON.stringify(article.categoryId) &&
       categories.length !== 0;
 
+   usePreventUserFromLosingData(
+      (canSave && canSaveRest) || canSave || canSaveRest
+   );
+
    const canBeAttemptedSave = !canSave ? !canSaveRest : false;
 
    const combinedMethods = () => {
