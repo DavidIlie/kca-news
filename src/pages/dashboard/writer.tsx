@@ -140,9 +140,9 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
    return (
       <>
          <DefaultSeo title="Writer Panel" />
-         <div className="flex flex-grow min-h-screen px-4 pt-10 mb-20 sm:pt-32">
+         <div className="mb-20 flex flex-grow px-4 pt-10 sm:pt-32">
             <div className="mx-auto">
-               <div className="grid grid-cols-2 gap-4 px-2 mx-auto max-w-7xl md:grid-cols-4 lg:grid-cols-5 lg:px-8">
+               <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-2 md:grid-cols-4 lg:grid-cols-5 lg:px-8">
                   <StatisticCard
                      title={`${user.isAdmin ? "Total" : "Your"} Articles`}
                      value={statistics.totalArticles}
@@ -169,11 +169,11 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                      icon={AiFillDislike}
                   />
                </div>
-               <div className="container px-2 mt-8 max-w-7xl sm:px-8">
+               <div className="container mt-4 max-w-7xl px-2 sm:px-8">
                   <h1 className="mb-4 text-4xl font-semibold">
                      {user.isAdmin ? "Total" : "Your"} Articles
                   </h1>
-                  <div className="flex justify-between pb-4 border-b-2">
+                  <div className="flex justify-between border-b-2 pb-4">
                      <div className="flex items-center gap-2">
                         <Link href="/dashboard/writer/create">
                            <a>
@@ -248,7 +248,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                   </div>
                   <div className="my-4">
                      {articlesState.length === 0 && (
-                        <h1 className="text-4xl font-semibold text-center">
+                        <h1 className="text-center text-4xl font-semibold">
                            No articles...
                         </h1>
                      )}
@@ -261,7 +261,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            key={article.id}
                         >
                            <div className="flex items-center gap-2">
-                              <Disclosure.Button className="text-lg cursor-pointer">
+                              <Disclosure.Button className="cursor-pointer text-lg">
                                  {({ open }) =>
                                     open ? (
                                        <AiOutlineArrowUp title="Less Details" />
@@ -279,7 +279,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  }}
                                  className="focus:none"
                               />
-                              <div className="flex items-center justify-between w-full">
+                              <div className="flex w-full items-center justify-between">
                                  <h1 className="-ml-2">
                                     {article.title}
                                     {article.writer?.id !== user?.id && (
@@ -310,8 +310,8 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  </h1>
                                  <div className="flex items-center gap-2">
                                     {article.published ? (
-                                       <div className="grid grid-cols-2 mr-2 divide-x-2 divide-gray-500">
-                                          <div className="flex items-center justify-center gap-1 mr-2">
+                                       <div className="mr-2 grid grid-cols-2 divide-x-2 divide-gray-500">
+                                          <div className="mr-2 flex items-center justify-center gap-1">
                                              <AiOutlineLike size="25" />
                                              <p className="font-medium">
                                                 {article.upvotes?.length || 0}
@@ -345,7 +345,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  </div>
                               </div>
                            </div>
-                           <Disclosure.Panel className="relative flex gap-4 pt-4 mt-4 border-t-2 border-blue-500 justify-evenly">
+                           <Disclosure.Panel className="relative mt-4 flex justify-evenly gap-4 border-t-2 border-blue-500 pt-4">
                               <Image
                                  alt="Post picture"
                                  className="rounded shadow-xl"
@@ -357,13 +357,13 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  objectFit="cover"
                               />
                               <div className="relative max-w-lg">
-                                 <h1 className="pb-2 mb-2 text-3xl font-semibold border-b-2">
+                                 <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
                                     Description
                                  </h1>
                                  <p className="mb-2 text-justify">
                                     {article.description}
                                  </p>
-                                 <h1 className="pb-2 mb-2 text-3xl font-semibold border-b-2">
+                                 <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
                                     Extra Details
                                  </h1>
                                  {article.coWriters.length !== 0 && (

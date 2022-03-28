@@ -24,6 +24,7 @@ import {
    LoadingOverlay,
    Textarea,
    Alert,
+   ScrollArea,
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -174,246 +175,244 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       <>
          <DefaultSeo title={title} />
          <div className="mt-4 flex flex-grow sm:mt-[5.4rem]">
-            <div
-               className={`container mx-auto h-full max-w-4xl px-4 pb-10 sm:pt-10 ${
+            {!openSidebar && (
+               <AiOutlineMenu
+                  className="absolute right-0 top-0 z-50 mt-[75%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 sm:mt-24"
+                  title="Open Settings"
+                  onClick={() => setOpenSidebar(true)}
+               />
+            )}
+            <ScrollArea
+               className={`mx-auto flex-grow px-4 pb-5 sm:pt-10 ${
                   openSidebar ? "w-4/5" : "w-full"
                }`}
             >
-               <LoadingOverlay visible={loadingContentUpdate} />
-               <div className="border-b-2 pb-4">
-                  {displayAlert && (
-                     <Alert
-                        icon={<AiOutlineCheck />}
-                        title="Perfect!"
-                        color="green"
-                        className="mb-4"
-                        withCloseButton
-                        onClose={() => setDisplayAlert(false)}
-                     >
-                        {article.underReview && !article.published
-                           ? "Your article has been put under review so that your changes can be moderated."
-                           : `                     ${
-                                article.writer!.id === user.id ? "Your" : "This"
-                             } article
+               <div className="container mx-auto max-w-4xl">
+                  <LoadingOverlay visible={loadingContentUpdate} />
+                  <div className="border-b-2 pb-4">
+                     {displayAlert && (
+                        <Alert
+                           icon={<AiOutlineCheck />}
+                           title="Perfect!"
+                           color="green"
+                           className="mb-4"
+                           withCloseButton
+                           onClose={() => setDisplayAlert(false)}
+                        >
+                           {article.underReview && !article.published
+                              ? "Your article has been put under review so that your changes can be moderated."
+                              : `                     ${
+                                   article.writer!.id === user.id
+                                      ? "Your"
+                                      : "This"
+                                } article
                      has successfully been updated!`}{" "}
-                        <Link href={`/article/${article.id}`}>
-                           <a className="font-semibold text-blue-500 duration-150 hover:text-blue-800">
-                              See article
-                           </a>
-                        </Link>
-                     </Alert>
-                  )}
-                  <div className="mb-2 flex w-full flex-wrap justify-start">
-                     {categories.map((category, index) => (
-                        <ArticleBadge tag={category} key={index} />
-                     ))}
-                     {categories.length === 0 && (
-                        <div className="invisible">
-                           <ArticleBadge tag="i love surds" />
-                        </div>
+                           <Link href={`/article/${article.id}`}>
+                              <a className="font-semibold text-blue-500 duration-150 hover:text-blue-800">
+                                 See article
+                              </a>
+                           </Link>
+                        </Alert>
                      )}
+                     <div className="mb-2 flex w-full flex-wrap justify-start">
+                        {categories.map((category, index) => (
+                           <ArticleBadge tag={category} key={index} />
+                        ))}
+                        {categories.length === 0 && (
+                           <div className="invisible">
+                              <ArticleBadge tag="i love surds" />
+                           </div>
+                        )}
+                     </div>
+                     {title !== article.title && (
+                        <RiRestartLine
+                           className="absolute -ml-10 mt-[0.9rem] cursor-pointer text-2xl"
+                           onClick={() => {
+                              setTitle(article.title);
+                           }}
+                        />
+                     )}
+                     <ContentEditable
+                        tagName="h1"
+                        className="text-4xl font-semibold"
+                        html={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                     />
                   </div>
-                  {title !== article.title && (
+                  <div className="flex items-center">
+                     <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
+                        <Image
+                           className="rounded-full"
+                           src={
+                              article.anonymous
+                                 ? "/no-pfp.jpg"
+                                 : article.writer?.image || "/no-pfp.jpg"
+                           }
+                           width="25px"
+                           height="25px"
+                           blurDataURL={shimmer(1920, 1080)}
+                           alt={`${
+                              article.anonymous
+                                 ? "KCA News"
+                                 : article.writer?.name.split(" ")[0]
+                           }'s profile image`}
+                        />
+                        <span className="ml-2 mr-1 text-lg">
+                           {article.anonymous ? (
+                              "KCA News Team"
+                           ) : (
+                              <div className="flex gap-2">
+                                 <a>{article.writer?.name}</a>
+                                 {article.coWriters.length !== 0 && (
+                                    <Popover className="relative">
+                                       <Popover.Button
+                                          as="span"
+                                          className="cursor-pointer select-none duration-150 hover:text-blue-500"
+                                       >
+                                          {" "}
+                                          and {article.coWriters.length} other
+                                          {article.coWriters.length > 1 && "s"}
+                                       </Popover.Button>
+                                       <Transition
+                                          as={React.Fragment}
+                                          enter="transition ease-out duration-200"
+                                          enterFrom="opacity-0 translate-y-1"
+                                          enterTo="opacity-100 translate-y-0"
+                                          leave="transition ease-in duration-150"
+                                          leaveFrom="opacity-100 translate-y-0"
+                                          leaveTo="opacity-0 translate-y-1"
+                                       >
+                                          <Popover.Panel className="absolute z-10 w-[20rem] rounded-md border-2 border-gray-100 bg-white shadow-md">
+                                             {article.coWriters.map(
+                                                (co, index) => (
+                                                   <Link
+                                                      href={`/profile/${co.id}`}
+                                                   >
+                                                      <a
+                                                         key={index}
+                                                         className="flex select-none items-center gap-2 py-3 px-4 duration-150 hover:bg-gray-100 hover:text-blue-500"
+                                                      >
+                                                         <Image
+                                                            className="rounded-full"
+                                                            src={co.image}
+                                                            width="25px"
+                                                            height="25px"
+                                                            blurDataURL={shimmer(
+                                                               1920,
+                                                               1080
+                                                            )}
+                                                            alt={`${
+                                                               co.name.split(
+                                                                  " "
+                                                               )[0]
+                                                            }'s profile image`}
+                                                         />
+                                                         <span> {co.name}</span>
+                                                      </a>
+                                                   </Link>
+                                                )
+                                             )}
+                                          </Popover.Panel>
+                                       </Transition>
+                                    </Popover>
+                                 )}
+                              </div>
+                           )}
+                        </span>
+                     </span>
+                     <h1 className="ml-1 flex items-center text-gray-800">
+                        {" / "}
+                        <div className="ml-2">
+                           {format(
+                              parseISO(
+                                 new Date(article.createdAt).toISOString()
+                              ),
+                              "MMMM dd, yyyy"
+                           )}
+                        </div>
+                     </h1>
+                  </div>
+                  <div className="relative mt-1 flex justify-center">
+                     <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
+                        <Button
+                           color="cyan"
+                           onClick={() =>
+                              notifications.showNotification({
+                                 title: "Cover Photo",
+                                 message: "Not available yet!",
+                                 autoClose: 2000,
+                              })
+                           }
+                        >
+                           Replace
+                        </Button>
+                     </div>
+                     <Image
+                        alt="Post picture"
+                        className="rounded-xl shadow-xl"
+                        src={article.cover}
+                        width={1280}
+                        height={720 / 2}
+                        blurDataURL={shimmer(1920, 1080)}
+                        placeholder="blur"
+                        objectFit="cover"
+                     />
+                  </div>
+                  {description !== article.description && (
                      <RiRestartLine
-                        className="absolute -ml-10 mt-[0.9rem] cursor-pointer text-2xl"
+                        className="absolute -ml-10 mt-5 cursor-pointer text-2xl"
                         onClick={() => {
-                           setTitle(article.title);
+                           setDescription(article.description);
                         }}
                      />
                   )}
                   <ContentEditable
-                     tagName="h1"
-                     className="text-4xl font-semibold"
-                     html={title}
-                     onChange={(e) => setTitle(e.target.value)}
+                     tagName="p"
+                     className="mt-4 text-justify"
+                     html={description}
+                     onChange={(e) => setDescription(e.target.value)}
                   />
-               </div>
-               <div className="flex items-center">
-                  <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
-                     <Image
-                        className="rounded-full"
-                        src={
-                           article.anonymous
-                              ? "/no-pfp.jpg"
-                              : article.writer?.image || "/no-pfp.jpg"
-                        }
-                        width="25px"
-                        height="25px"
-                        blurDataURL={shimmer(1920, 1080)}
-                        alt={`${
-                           article.anonymous
-                              ? "KCA News"
-                              : article.writer?.name.split(" ")[0]
-                        }'s profile image`}
-                     />
-                     <span className="ml-2 mr-1 text-lg">
-                        {article.anonymous ? (
-                           "KCA News Team"
-                        ) : (
-                           <div className="flex gap-2">
-                              <a>{article.writer?.name}</a>
-                              {article.coWriters.length !== 0 && (
-                                 <Popover className="relative">
-                                    <Popover.Button
-                                       as="span"
-                                       className="cursor-pointer select-none duration-150 hover:text-blue-500"
-                                    >
-                                       {" "}
-                                       and {article.coWriters.length} other
-                                       {article.coWriters.length > 1 && "s"}
-                                    </Popover.Button>
-                                    <Transition
-                                       as={React.Fragment}
-                                       enter="transition ease-out duration-200"
-                                       enterFrom="opacity-0 translate-y-1"
-                                       enterTo="opacity-100 translate-y-0"
-                                       leave="transition ease-in duration-150"
-                                       leaveFrom="opacity-100 translate-y-0"
-                                       leaveTo="opacity-0 translate-y-1"
-                                    >
-                                       <Popover.Panel className="absolute z-10 w-[20rem] rounded-md border-2 border-gray-100 bg-white shadow-md">
-                                          {article.coWriters.map(
-                                             (co, index) => (
-                                                <Link
-                                                   href={`/profile/${co.id}`}
-                                                >
-                                                   <a
-                                                      key={index}
-                                                      className="flex select-none items-center gap-2 py-3 px-4 duration-150 hover:bg-gray-100 hover:text-blue-500"
-                                                   >
-                                                      <Image
-                                                         className="rounded-full"
-                                                         src={co.image}
-                                                         width="25px"
-                                                         height="25px"
-                                                         blurDataURL={shimmer(
-                                                            1920,
-                                                            1080
-                                                         )}
-                                                         alt={`${
-                                                            co.name.split(
-                                                               " "
-                                                            )[0]
-                                                         }'s profile image`}
-                                                      />
-                                                      <span> {co.name}</span>
-                                                   </a>
-                                                </Link>
-                                             )
-                                          )}
-                                       </Popover.Panel>
-                                    </Transition>
-                                 </Popover>
-                              )}
-                           </div>
-                        )}
-                     </span>
-                  </span>
-                  <h1 className="ml-1 flex items-center text-gray-800">
-                     {" / "}
-                     <div className="ml-2">
-                        {format(
-                           parseISO(new Date(article.createdAt).toISOString()),
-                           "MMMM dd, yyyy"
-                        )}
-                     </div>
-                  </h1>
-               </div>
-               <div className="relative mt-1 flex justify-center">
-                  <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
-                     <Button
-                        color="cyan"
-                        onClick={() =>
-                           notifications.showNotification({
-                              title: "Cover Photo",
-                              message: "Not available yet!",
-                              autoClose: 2000,
-                           })
-                        }
-                     >
-                        Replace
-                     </Button>
-                  </div>
-                  <Image
-                     alt="Post picture"
-                     className="rounded-xl shadow-xl"
-                     src={article.cover}
-                     width={1280}
-                     height={720 / 2}
-                     blurDataURL={shimmer(1920, 1080)}
-                     placeholder="blur"
-                     objectFit="cover"
+                  <div
+                     className={`mt-6 ${
+                        markdownValue.length < 2 && "-mb-1"
+                     } border-t-2`}
                   />
-               </div>
-               {description !== article.description && (
-                  <RiRestartLine
-                     className="absolute -ml-10 mt-5 cursor-pointer text-2xl"
-                     onClick={() => {
-                        setDescription(article.description);
-                     }}
-                  />
-               )}
-               <ContentEditable
-                  tagName="p"
-                  className="mt-4 text-justify"
-                  html={description}
-                  onChange={(e) => setDescription(e.target.value)}
-               />
-               {!openSidebar && (
-                  <AiOutlineMenu
-                     className="absolute right-0 top-0 z-50 mt-[75%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 sm:mt-24"
-                     title="Open Settings"
-                     onClick={() => setOpenSidebar(true)}
-                  />
-               )}
-               <div
-                  className={`mt-6 ${
-                     markdownValue.length < 2 && "-mb-1"
-                  } border-t-2`}
-               />
-               {/*
+                  {/*
                   // @ts-ignore */}
-               <Editor
-                  placeholder="Start typing..."
-                  onChange={(markdown) => changeMarkdownValue(markdown())}
-                  defaultValue={markdownValue}
-                  className="z-0"
-               />
-               <div className="mt-11 border-t-2 pt-4">
-                  <Button
-                     className="w-full"
-                     disabled={!canSave ? !canSaveRest : false}
-                     onClick={() => {
-                        if (canSave) {
-                           if (canSave && canSaveRest) {
+                  <Editor
+                     placeholder="Start typing..."
+                     onChange={(markdown) => changeMarkdownValue(markdown())}
+                     defaultValue={markdownValue}
+                     className="z-0"
+                  />
+                  <div className="mt-7 border-t-2 pt-4">
+                     <Button
+                        className="w-full"
+                        disabled={!canSave ? !canSaveRest : false}
+                        onClick={() => {
+                           if (canSave) {
+                              if (canSave && canSaveRest) {
+                                 handleEdit();
+                                 handleUpdateRest();
+                              }
                               handleEdit();
+                           } else {
                               handleUpdateRest();
                            }
-                           handleEdit();
-                        } else {
-                           handleUpdateRest();
-                        }
-                     }}
-                  >
-                     Save
-                  </Button>
+                        }}
+                     >
+                        Save
+                     </Button>
+                  </div>
                </div>
-            </div>
+            </ScrollArea>
             <CustomSidebar
                drawerProps={{
                   opened: openSidebar,
                   onClose: () => setOpenSidebar(!openSidebar),
-                  title: "Settings",
-                  size: "xl",
-                  position: "right",
-                  overlayOpacity: 0.25,
-                  classNames: {
-                     header: "px-4 border-b-2 py-4 -mb-0.5",
-                     title: "font-semibold text-2xl",
-                  },
                }}
                normalProps={{
-                  className: `h-full ${
+                  className: `${
                      openSidebar ? "w-1/5" : "hidden"
                   } relative border-l-2 py-4 flex h-full flex-col`,
                }}
