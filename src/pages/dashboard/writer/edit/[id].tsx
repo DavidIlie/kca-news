@@ -436,7 +436,16 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               />
                            </div>
                         )}
-                        <EditorSettingsDisclosure name="Visibility">
+                        <EditorSettingsDisclosure
+                           name="Visibility"
+                           defaultOpen={title === ""}
+                           warning={title === ""}
+                        >
+                           {title === "" && (
+                              <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
+                                 You need a title in order to publish
+                              </h1>
+                           )}
                            <TextInput
                               label="Title"
                               onChange={(e) => setTitle(e.currentTarget.value)}
@@ -550,6 +559,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         <EditorSettingsDisclosure
                            name="Description"
                            warning={description === ""}
+                           defaultOpen={description === ""}
                         >
                            {description === "" && (
                               <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
@@ -570,6 +580,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         <EditorSettingsDisclosure
                            name="Categories"
                            warning={categories.length === 0}
+                           defaultOpen={categories.length === 0}
                         >
                            {categories.length === 0 && (
                               <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">

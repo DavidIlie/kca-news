@@ -1,6 +1,5 @@
 import React from "react";
 import { Disclosure } from "@headlessui/react";
-import { useLocalStorage } from "@mantine/hooks";
 
 import {
    AiOutlineArrowDown,
@@ -12,26 +11,20 @@ interface Props {
    name: string;
    children: React.ReactNode | React.ReactNode[];
    warning?: boolean;
+   defaultOpen?: boolean;
 }
 
 const EditorSettingsDisclosure: React.FC<Props> = ({
    name,
    children,
    warning = false,
+   defaultOpen = false,
 }) => {
-   const [openDefault, setOpenDefault] = useLocalStorage<boolean>({
-      key: `editorOpen${name}Disclosure`,
-      defaultValue: false,
-   });
-
    return (
-      <Disclosure as="div" className="border-b-2" defaultOpen={openDefault}>
+      <Disclosure as="div" className="border-b-2" defaultOpen={defaultOpen}>
          <Disclosure.Button className="w-[99.5%] select-none p-0 py-4 ring-blue-500 duration-150 hover:bg-gray-100 focus:ring-1">
             {({ open }) => (
-               <div
-                  className="mx-4 flex w-[93%] items-center justify-between gap-2"
-                  onClick={() => setOpenDefault(!openDefault)}
-               >
+               <div className="mx-4 flex w-[93%] items-center justify-between gap-2">
                   <div
                      className={`flex items-center gap-2 ${
                         warning && "font-semibold text-red-500"
