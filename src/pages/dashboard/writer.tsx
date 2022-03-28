@@ -325,7 +325,13 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                           </div>
                                        </div>
                                     ) : (
-                                       <h1 className="font-semibold">
+                                       <h1
+                                          className={`font-semibold ${
+                                             (article.categoryId.length > 0 ||
+                                                article.underReview) &&
+                                             "mr-2"
+                                          }`}
+                                       >
                                           not published
                                        </h1>
                                     )}
