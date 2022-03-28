@@ -10,6 +10,7 @@ import { Formik, Field, Form } from "formik";
 import { Popover, Transition } from "@headlessui/react";
 import { useNotifications } from "@mantine/notifications";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
 
@@ -78,6 +79,7 @@ const ArticleViewer: React.FC<Props> = ({
    }
 
    const notifications = useNotifications();
+   const router = useRouter();
 
    const { data } = useSession();
 
@@ -210,7 +212,30 @@ const ArticleViewer: React.FC<Props> = ({
 
    return (
       <>
-         <NextSeo title={article.title} />
+         <NextSeo
+            title={article.title}
+            description={article.description}
+            canonical={`https://davidilie.com/${router.asPath}`}
+            twitter={{
+               cardType: "summary_large_image",
+               site: "@KCAlicante",
+            }}
+            openGraph={{
+               title: article.title,
+               site_name: "KCA News",
+               description: article.description,
+               url: `https://davidilie.com/${router.asPath}`,
+               type: "article",
+               article: {
+                  publishedTime: new Date(article.createdAt).toISOString(),
+               },
+               images: [
+                  {
+                     url: article.cover,
+                  },
+               ],
+            }}
+         />
          <div className="sm:pt-42 mb-20 flex flex-grow px-4 md:pt-36 lg:px-0 xl:pt-24">
             <Slide
                triggerOnce
