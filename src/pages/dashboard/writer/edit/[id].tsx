@@ -60,6 +60,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    });
 
    const { height: viewportHeight } = useViewportSize();
+   const { ref: restEmptyRef, height: restEmptyHeight } = useElementSize();
    const { ref, height } = useElementSize();
 
    const [article, setArticle] = useState<Article>(articleServer);
@@ -171,6 +172,18 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       setLoadingRest(false);
    };
 
+   const contentHeightSystem = `${
+      height > 1100
+         ? "h-[93vh]"
+         : height > 1000
+         ? "h-[92vh]"
+         : height > 900
+         ? "h-[91vh]"
+         : height > 800
+         ? "h-[90vh]"
+         : "h-[89vh]"
+   }`;
+
    return (
       <>
          <DefaultSeo title={title} />
@@ -183,7 +196,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                />
             )}
             <ScrollArea
-               className={`mx-auto h-[89vh] px-4 pb-5 sm:pt-10 ${
+               ref={ref}
+               className={`mx-auto ${contentHeightSystem} px-4 pb-5 sm:pt-10 ${
                   openSidebar ? "w-4/5" : "w-full"
                }`}
             >
@@ -611,11 +625,11 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         </EditorSettingsDisclosure>
                         <div
                            className={viewportHeight > 550 ? "flex-grow" : ""}
-                           ref={ref}
+                           ref={restEmptyRef}
                         >
                            <div
                               className={`${
-                                 height > 100
+                                 restEmptyHeight > 100
                                     ? "fixed bottom-0 w-[20%]"
                                     : "w-full"
                               } px-2 py-4`}
