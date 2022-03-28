@@ -183,7 +183,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                />
             )}
             <ScrollArea
-               className={`mx-auto flex-grow px-4 pb-5 sm:pt-10 ${
+               className={`mx-auto h-[89vh] px-4 pb-5 sm:pt-10 ${
                   openSidebar ? "w-4/5" : "w-full"
                }`}
             >
@@ -414,7 +414,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                normalProps={{
                   className: `${
                      openSidebar ? "w-1/5" : "hidden"
-                  } relative border-l-2 py-4 flex h-full flex-col`,
+                  } relative border-l-2 py-4 flex h-full flex-col flex-grow`,
                }}
             >
                <Consumer>
