@@ -219,6 +219,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       <>
          <DefaultSeo title={title} />
          <div className="mt-4 flex flex-grow sm:mt-[5.4rem]">
+            <LoadingOverlay visible={loadingContentUpdate} />
             {!openSidebar && (
                <AiOutlineMenu
                   className="absolute right-0 top-0 z-50 mt-[75%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 sm:mt-24"
@@ -233,7 +234,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                }`}
             >
                <div className="container mx-auto max-w-4xl">
-                  <LoadingOverlay visible={loadingContentUpdate} />
                   <div className="border-b-2 pb-4">
                      {displayAlert && (
                         <Alert
