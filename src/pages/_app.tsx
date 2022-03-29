@@ -2,20 +2,17 @@ import type { AppProps } from "next/app";
 import { DefaultSeo } from "next-seo";
 import NextNprogress from "nextjs-progressbar";
 import { SessionProvider } from "next-auth/react";
-import { MantineProvider } from "@mantine/core";
-import { NotificationsProvider } from "@mantine/notifications";
+import { ThemeProvider } from "next-themes";
 
 import "../styles/globals.css";
 
 import { isServer } from "../lib/isServer";
 
-import NavBar from "../components/NavBar";
-import Footer from "../components/Footer";
+import AppLayout from "../components/AppLayout";
 
 const KingsNews = ({
    Component,
    pageProps: { session, ...pageProps },
-   router,
 }: AppProps) => {
    if (isServer && !Component.getInitialProps) {
       return null;
@@ -47,17 +44,11 @@ const KingsNews = ({
             showOnShallow={true}
          />
          <SessionProvider session={session}>
-            <MantineProvider>
-               <NotificationsProvider>
-                  <div className="flex h-screen flex-col">
-                     <NavBar />
-                     <Component {...pageProps} />
-                     {!router.asPath.includes("/dashboard/writer/edit") && (
-                        <Footer />
-                     )}
-                  </div>
-               </NotificationsProvider>
-            </MantineProvider>
+            <ThemeProvider attribute="class">
+               <AppLayout>
+                  <Component {...pageProps} />
+               </AppLayout>
+            </ThemeProvider>
          </SessionProvider>
       </>
    );

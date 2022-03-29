@@ -8,7 +8,7 @@ const OurTeam: React.FC = () => {
    return (
       <>
          <NextSeo title="About" />
-         <div className="mb-20 flex flex-grow px-4 sm:pt-24 lg:px-0">
+         <div className="flex flex-grow px-4 dark:bg-gray-900 sm:pt-24 lg:px-0">
             <div className="container mx-auto mt-10 max-w-7xl">
                <Fade cascade triggerOnce duration={300}>
                   <h1 className="mb-4 text-5xl font-medium">
@@ -95,7 +95,7 @@ const OurTeam: React.FC = () => {
                         </h1>
                      </div>
                   </div>
-                  <div className="mt-24 flex justify-evenly">
+                  <div className="mt-24 mb-20 flex justify-evenly dark:bg-gray-900">
                      <div>
                         <h1 className="text-5xl font-semibold">
                            The Creative Team

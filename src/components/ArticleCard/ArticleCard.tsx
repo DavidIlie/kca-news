@@ -14,7 +14,7 @@ interface ArticleCardProps {
 const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
    return (
       <Link href={`/article/${article.id}`}>
-         <a className="hoverItem t-11 mb-4 flex cursor-pointer gap-4 rounded-xl border-2 border-gray-200 bg-gray-50 duration-200 md:flex-nowrap md:px-3 md:py-2">
+         <a className="hoverItem t-11 mb-4 flex cursor-pointer gap-4 rounded-xl border-2 border-gray-200 bg-gray-50 duration-200 dark:border-gray-700 dark:bg-gray-800 md:flex-nowrap md:px-3 md:py-2">
             <Image
                alt="Post picture"
                className="rounded shadow-xl"
@@ -32,7 +32,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                <h1 className="text-section mt-1 mb-1 font-semibold md:text-2xl xl:text-2xl">
                   {article.title}
                </h1>
-               <p className="text-gray-800 line-clamp-6">
+               <p className="text-gray-800 line-clamp-6 dark:text-gray-100">
                   {article.description}
                </p>
                <div className="flex items-center">
@@ -54,12 +54,12 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                         }'s profile image`}
                      />
                      <div className="ml-2">
-                        <span className="text-sm text-gray-700">
+                        <span className="text-sm text-gray-700 dark:text-gray-200">
                            {article.anonymous
                               ? "KCA News Team"
                               : article.writer!.name}
                         </span>
-                        <h1 className="mt-0.5 text-gray-800">
+                        <h1 className="mt-0.5 text-gray-800 dark:text-gray-300">
                            {formatDistance(
                               new Date(article.createdAt),
                               new Date(),

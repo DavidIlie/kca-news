@@ -3,15 +3,16 @@ import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { BiUserCircle } from "react-icons/bi";
 import { BsFillPenFill } from "react-icons/bs";
-import { MdPreview } from "react-icons/md";
-import { GrUserAdmin } from "react-icons/gr";
+import { MdPreview, MdDarkMode, MdLightMode } from "react-icons/md";
 import { useSession, signOut } from "next-auth/react";
+import { useTheme } from "next-themes";
 
 import DropdownElement from "../../ui/DropdownElement";
 import NextLink from "../../ui/NextLink";
 
 const UserDropdown: React.FC = () => {
    const { data } = useSession();
+   const { resolvedTheme, setTheme } = useTheme();
 
    const isWriter = data?.user?.isAdmin ? true : data?.user?.isWriter;
    const isReviewer = data?.user?.isAdmin ? true : data?.user?.isReviewer;
@@ -37,7 +38,7 @@ const UserDropdown: React.FC = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
          >
-            <Menu.Items className="absolute right-0 z-10 mt-12 w-36 rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items className="absolute right-0 z-10 mt-12 w-36 rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-700 dark:bg-gray-800">
                <div className="border-1 rounded-t-md border-gray-300">
                   <Menu.Item as={NextLink} href="/profile">
                      <DropdownElement>
@@ -61,6 +62,20 @@ const UserDropdown: React.FC = () => {
                         </DropdownElement>
                      </Menu.Item>
                   )}
+                  <DropdownElement
+                     onClick={() =>
+                        resolvedTheme === "dark"
+                           ? setTheme("light")
+                           : setTheme("dark")
+                     }
+                  >
+                     {resolvedTheme === "dark" ? (
+                        <MdLightMode className="mx-0.5 text-xl" />
+                     ) : (
+                        <MdDarkMode className="mx-0.5 text-xl" />
+                     )}
+                     {resolvedTheme === "dark" ? "Light Mode" : "Dark Mode"}
+                  </DropdownElement>
                </div>
                <Menu.Item
                   as="a"

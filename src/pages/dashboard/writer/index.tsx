@@ -147,7 +147,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                   <h1 className="mb-4 text-4xl font-semibold">
                      {user.isAdmin ? "Total" : "Your"} Articles
                   </h1>
-                  <div className="flex justify-between border-b-2 pb-4">
+                  <div className="flex justify-between border-b-2 border-gray-300 pb-4 dark:border-blue-900">
                      <div className="flex items-center gap-2">
                         <Link href="/dashboard/writer/create">
                            <a>
@@ -229,7 +229,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                      {articlesState.map((article, index) => (
                         <Disclosure
                            as="div"
-                           className={`rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-4 ${
+                           className={`rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-gray-800 ${
                               index !== articles.length - 1 && "mb-4"
                            }`}
                            key={article.id}
@@ -277,7 +277,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                        )}{" "}
                                     {" - "}
                                     <Link href={`/article/${article.id}`}>
-                                       <a className="font-semibold text-blue-600 duration-150 hover:text-blue-800 hover:underline">
+                                       <a className="font-semibold text-blue-600 duration-150 hover:text-blue-800 hover:underline dark:text-blue-400 dark:hover:text-blue-600">
                                           See article
                                        </a>
                                     </Link>
@@ -412,19 +412,33 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                           </Button>
                                        </a>
                                     </Link>
-                                    <Link
-                                       href={`/dashboard/writer/edit/${article.id}?menu=true&visibility=true`}
-                                    >
-                                       <a className="w-1/3">
-                                          <Button
-                                             className="w-full"
-                                             color="sky"
-                                             disabled={article.underReview}
-                                          >
-                                             Change Visibility
-                                          </Button>
-                                       </a>
-                                    </Link>
+                                    {user.isAdmin || !article.underReview ? (
+                                       <Link
+                                          href={`/dashboard/writer/edit/${article.id}?menu=true&visibility=true`}
+                                       >
+                                          <a className="w-1/3">
+                                             <Button
+                                                className="w-full"
+                                                color="sky"
+                                                disabled={
+                                                   !user.isAdmin &&
+                                                   article.underReview
+                                                }
+                                             >
+                                                Change Visibility
+                                             </Button>
+                                          </a>
+                                       </Link>
+                                    ) : (
+                                       <Button
+                                          className="w-1/3"
+                                          color="sky"
+                                          disabled={article.underReview}
+                                       >
+                                          Change Visibility
+                                       </Button>
+                                    )}
+
                                     <div className="w-1/3">
                                        <Button
                                           className="w-full"

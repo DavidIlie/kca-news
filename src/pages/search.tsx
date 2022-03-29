@@ -64,7 +64,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
                </h1>
                <div className="relative mx-auto text-gray-600">
                   <input
-                     className="h-10 w-full rounded-lg border-2 border-gray-300 bg-white px-5 pr-16 text-sm focus:outline-none"
+                     className="h-10 w-full rounded-lg border-2 border-gray-300 bg-white px-5 pr-16 text-sm text-black focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                      type="search"
                      name="search"
                      placeholder="Search"

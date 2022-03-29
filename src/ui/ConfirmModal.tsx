@@ -25,14 +25,14 @@ const ConfirmModal: React.FC<Props> = ({
       >
          <>
             <div className="mt-2">
-               <h1 className="text-gray-800">
+               <h1 className="text-gray-800 dark:text-gray-200">
                   There is no going back once you do this.
                </h1>
             </div>
             <div className="mt-4 flex justify-end gap-2">
                <button
                   type="button"
-                  className="inline-flex justify-center rounded-md border border-transparent bg-blue-200 px-4 py-2 text-sm font-medium text-black duration-150 hover:bg-blue-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  className="inline-flex justify-center rounded-md border border-transparent bg-blue-200 px-4 py-2 text-sm font-medium text-black duration-150 hover:bg-blue-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600"
                   onClick={() => {
                      updateModalState();
                      setString("Nevermind");
@@ -50,7 +50,7 @@ const ConfirmModal: React.FC<Props> = ({
                </button>
                <button
                   type="button"
-                  className="inline-flex justify-center rounded-md border border-transparent bg-red-300 px-4 py-2 text-sm font-medium text-black duration-150 hover:bg-red-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  className="inline-flex justify-center rounded-md border border-transparent bg-red-300 px-4 py-2 text-sm font-medium text-black duration-150 hover:bg-red-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:bg-red-400 dark:text-white dark:hover:bg-red-500"
                   onClick={() => {
                      successFunction();
                      updateModalState();

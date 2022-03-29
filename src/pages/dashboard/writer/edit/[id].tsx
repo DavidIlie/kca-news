@@ -31,6 +31,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
 import { format, parseISO } from "date-fns";
+import { useTheme } from "next-themes";
 
 const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
 
@@ -49,6 +50,7 @@ import { Consumer } from "../../../../components/CustomSidebar/CustomSidebar";
 import CustomSidebar from "../../../../components/CustomSidebar";
 import { usePreventUserFromLosingData } from "../../../../lib/usePreventUserFromLosingData";
 import useDetermineCustomQueryEditor from "../../../../hooks/useDetermineCustomQueryEditor";
+import ArticleWriterInfo from "../../../../components/ArticleWriterInfo";
 
 interface Props {
    user: User;
@@ -68,6 +70,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
    const finalUrl = useDetermineCustomQueryEditor("menu");
 
+   const { resolvedTheme } = useTheme();
    const notifications = useNotifications();
    const { height: viewportHeight } = useViewportSize();
    const { ref: restEmptyRef, height: restEmptyHeight } = useElementSize();
@@ -222,7 +225,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
             <LoadingOverlay visible={loadingContentUpdate} />
             {!openSidebar && (
                <AiOutlineMenu
-                  className="absolute right-0 top-0 z-50 mt-[75%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 sm:mt-24"
+                  className="absolute right-0 top-0 z-50 mt-[75%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 sm:mt-24"
                   title="Open Settings"
                   onClick={() => setOpenSidebar(true)}
                />
@@ -253,7 +256,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                 } article
                      has successfully been updated!`}{" "}
                            <Link href={`/article/${article.id}`}>
-                              <a className="font-semibold text-blue-500 duration-150 hover:text-blue-800">
+                              <a className="font-semibold text-blue-500 duration-150 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-600">
                                  See article
                               </a>
                            </Link>
@@ -284,99 +287,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         onChange={(e) => setTitle(e.target.value)}
                      />
                   </div>
-                  <div className="flex items-center">
-                     <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
-                        <Image
-                           className="rounded-full"
-                           src={
-                              article.anonymous
-                                 ? "/no-pfp.jpg"
-                                 : article.writer?.image || "/no-pfp.jpg"
-                           }
-                           width="25px"
-                           height="25px"
-                           blurDataURL={shimmer(1920, 1080)}
-                           alt={`${
-                              article.anonymous
-                                 ? "KCA News"
-                                 : article.writer?.name.split(" ")[0]
-                           }'s profile image`}
-                        />
-                        <span className="ml-2 mr-1 text-lg">
-                           {article.anonymous ? (
-                              "KCA News Team"
-                           ) : (
-                              <div className="flex gap-2">
-                                 <a>{article.writer?.name}</a>
-                                 {article.coWriters.length !== 0 && (
-                                    <Popover className="relative">
-                                       <Popover.Button
-                                          as="span"
-                                          className="cursor-pointer select-none duration-150 hover:text-blue-500"
-                                       >
-                                          {" "}
-                                          and {article.coWriters.length} other
-                                          {article.coWriters.length > 1 && "s"}
-                                       </Popover.Button>
-                                       <Transition
-                                          as={React.Fragment}
-                                          enter="transition ease-out duration-200"
-                                          enterFrom="opacity-0 translate-y-1"
-                                          enterTo="opacity-100 translate-y-0"
-                                          leave="transition ease-in duration-150"
-                                          leaveFrom="opacity-100 translate-y-0"
-                                          leaveTo="opacity-0 translate-y-1"
-                                       >
-                                          <Popover.Panel className="absolute z-10 w-[20rem] rounded-md border-2 border-gray-100 bg-white shadow-md">
-                                             {article.coWriters.map(
-                                                (co, index) => (
-                                                   <Link
-                                                      href={`/profile/${co.id}`}
-                                                   >
-                                                      <a
-                                                         key={index}
-                                                         className="flex select-none items-center gap-2 py-3 px-4 duration-150 hover:bg-gray-100 hover:text-blue-500"
-                                                      >
-                                                         <Image
-                                                            className="rounded-full"
-                                                            src={co.image}
-                                                            width="25px"
-                                                            height="25px"
-                                                            blurDataURL={shimmer(
-                                                               1920,
-                                                               1080
-                                                            )}
-                                                            alt={`${
-                                                               co.name.split(
-                                                                  " "
-                                                               )[0]
-                                                            }'s profile image`}
-                                                         />
-                                                         <span> {co.name}</span>
-                                                      </a>
-                                                   </Link>
-                                                )
-                                             )}
-                                          </Popover.Panel>
-                                       </Transition>
-                                    </Popover>
-                                 )}
-                              </div>
-                           )}
-                        </span>
-                     </span>
-                     <h1 className="ml-1 flex items-center text-gray-800">
-                        {" / "}
-                        <div className="ml-2">
-                           {format(
-                              parseISO(
-                                 new Date(article.createdAt).toISOString()
-                              ),
-                              "MMMM dd, yyyy"
-                           )}
-                        </div>
-                     </h1>
-                  </div>
+                  <ArticleWriterInfo article={article} user={user} />
                   <div className="relative mt-1 flex justify-center">
                      <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
                         <Button
@@ -429,6 +340,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      onChange={(markdown) => changeMarkdownValue(markdown())}
                      defaultValue={markdownValue}
                      className="z-0"
+                     dark={resolvedTheme === "dark"}
                   />
                   <div className="mt-7 border-t-2 pt-4">
                      <Button
@@ -449,7 +361,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                normalProps={{
                   className: `${
                      openSidebar ? "w-1/5" : "hidden"
-                  } relative border-l-2 py-4 flex h-full flex-col flex-grow`,
+                  } relative border-l-2 border-gray-300 dark:border-blue-900 py-4 flex h-full flex-col flex-grow`,
                }}
             >
                <Consumer>
@@ -459,13 +371,13 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            visible={loadingRest && !loadingContentUpdate}
                         />
                         {!mobile && (
-                           <div className="flex items-center justify-between gap-2 border-b-2 px-4 pb-4">
+                           <div className="flex items-center justify-between gap-2 border-b-2 border-gray-300 px-4 pb-4 dark:border-blue-900">
                               <h1 className="text-2xl font-semibold">
                                  Settings
                               </h1>
                               <AiOutlineCloseCircle
                                  size="25"
-                                 className="mt-1 cursor-pointer duration-150 hover:text-blue-600"
+                                 className="mt-1 cursor-pointer text-black duration-150 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
                                  title="Close"
                                  onClick={closeSidebar}
                               />

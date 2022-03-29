@@ -51,13 +51,13 @@ const Modal: React.FC<ModalProps> = ({
                   leaveTo="opacity-0 scale-95"
                >
                   <div
-                     className={`my-8 inline-block w-full max-w-md transform overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-6 text-left align-middle shadow-xl transition-all`}
+                     className={`my-8 inline-block w-full max-w-md transform overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-6 text-left align-middle shadow-xl transition-all dark:border-gray-700 dark:bg-gray-800`}
                   >
-                     <div className="grid divide-y divide-gray-300">
+                     <div className="grid divide-y divide-gray-300 dark:divide-gray-500">
                         <div className="flex items-center justify-between">
                            <Dialog.Title
                               as="h3"
-                              className="mb-2 text-xl font-medium leading-6 text-gray-900"
+                              className="mb-2 text-xl font-medium leading-6 text-gray-900 dark:text-gray-100"
                            >
                               {title}
                            </Dialog.Title>

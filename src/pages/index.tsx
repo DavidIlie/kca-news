@@ -41,7 +41,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                <Slide cascade triggerOnce direction="left">
                   <div className="relative -mr-96 flex items-center gap-4">
                      <button
-                        className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100"
+                        className="cursor-pointer rounded-full border bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 dark:focus:ring-gray-900 dark:disabled:text-gray-500"
                         disabled={index === 0}
                         onClick={() => setSelectedIndex(index - 1)}
                         title="Back"
@@ -50,7 +50,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                      </button>
                      <Link href={`/article/${featuredPosts[index].id}`}>
                         <a className="w-[50%]">
-                           <h1 className="absolute top-0 left-0 z-50 ml-[4.9rem] w-[50%] rounded-t-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg font-medium text-white">
+                           <h1 className="absolute top-0 left-0 z-50 ml-[5rem] w-[50%] rounded-t-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg font-medium text-white">
                               {featuredPosts[index].title} -{" "}
                               <span className="font-normal italic text-gray-300">
                                  {formatDistance(
@@ -79,7 +79,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                         </a>
                      </Link>
                      <button
-                        className="cursor-pointer rounded-full bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100"
+                        className="cursor-pointer rounded-full border bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 dark:focus:ring-gray-900 dark:disabled:text-gray-500"
                         disabled={index === featuredPosts.length - 1}
                         onClick={() => setSelectedIndex(index + 1)}
                         title="Next"
@@ -90,7 +90,9 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                </Slide>
                <Slide cascade triggerOnce direction="down">
                   <div className="mt-6 text-center">
-                     <h1 className="text-4xl font-medium">Latest Posts:</h1>
+                     <h1 className="text-4xl font-medium text-black dark:text-gray-200">
+                        Latest Posts:
+                     </h1>
                   </div>
                </Slide>
             </div>

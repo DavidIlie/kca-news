@@ -60,26 +60,30 @@
    scrollbar-width: none;
 }
 
+.ProseMirror {
+   @apply dark:bg-gray-900;
+}
+
 .ProseMirror h1 {
-   @apply text-4xl text-black;
+   @apply text-4xl text-black dark:text-white;
 }
 
 .ProseMirror h2 {
-   @apply text-3xl text-black;
+   @apply text-3xl text-black dark:text-white;
 }
 
 .ProseMirror h3 {
-   @apply text-2xl text-black;
+   @apply text-2xl text-black dark:text-white;
 }
 
 .ProseMirror h4 {
-   @apply text-xl text-black;
+   @apply text-xl text-black dark:text-white;
 }
 
 .ProseMirror h5 {
-   @apply text-lg text-black;
+   @apply text-lg text-black dark:text-white;
 }
 
 .ProseMirror h6 {
-   @apply text-sm text-black;
+   @apply text-sm text-black dark:text-white;
 }

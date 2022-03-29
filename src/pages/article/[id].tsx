@@ -11,6 +11,7 @@ import { Popover, Transition } from "@headlessui/react";
 import { useNotifications } from "@mantine/notifications";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { useTheme } from "next-themes";
 
 const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
 
@@ -35,6 +36,7 @@ import ArticleBadge from "../../components/ArticleBadge";
 import ErrorMessage from "../../ui/ErrorMessage";
 import SuccessMessage from "../../ui/SuccessMessage";
 import ConfirmModal from "../../ui/ConfirmModal";
+import ArticleWriterInfo from "../../components/ArticleWriterInfo";
 
 interface Props {
    article: Article;
@@ -80,6 +82,7 @@ const ArticleViewer: React.FC<Props> = ({
 
    const notifications = useNotifications();
    const router = useRouter();
+   const { resolvedTheme } = useTheme();
 
    const { data } = useSession();
 
@@ -260,7 +263,7 @@ const ArticleViewer: React.FC<Props> = ({
                ],
             }}
          />
-         <div className="sm:pt-42 mb-20 flex flex-grow px-4 md:pt-36 lg:px-0 xl:pt-24">
+         <div className="sm:pt-42 flex flex-grow px-4 dark:bg-gray-900 md:pt-36 lg:px-0 xl:pt-24">
             <Slide
                triggerOnce
                className="mx-auto"
@@ -318,114 +321,12 @@ const ArticleViewer: React.FC<Props> = ({
                         </div>
                      )}
                   </div>
-                  <div className="ml-4 mt-1 flex items-center">
-                     <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
-                        <Image
-                           className="rounded-full"
-                           src={
-                              article.anonymous ? "/no-pfp.jpg" : writer.image
-                           }
-                           width="25px"
-                           height="25px"
-                           blurDataURL={shimmer(1920, 1080)}
-                           alt={`${
-                              article.anonymous
-                                 ? "KCA News"
-                                 : writer.name.split(" ")[0]
-                           }'s profile image`}
-                        />
-                        <span className="ml-2 mr-1 text-lg">
-                           {article.anonymous ? (
-                              "KCA News Team"
-                           ) : (
-                              <div className="flex gap-2">
-                                 <Link href={`/profile/${writer.id}`}>
-                                    <a className="duration-150 hover:text-blue-500">
-                                       {writer.name}
-                                    </a>
-                                 </Link>
-                                 {article.coWriters.length !== 0 && (
-                                    <Popover className="relative">
-                                       <Popover.Button
-                                          as="span"
-                                          className="cursor-pointer select-none duration-150 hover:text-blue-500"
-                                       >
-                                          {" "}
-                                          and {article.coWriters.length} other
-                                          {article.coWriters.length > 1 && "s"}
-                                       </Popover.Button>
-                                       <Transition
-                                          as={React.Fragment}
-                                          enter="transition ease-out duration-200"
-                                          enterFrom="opacity-0 translate-y-1"
-                                          enterTo="opacity-100 translate-y-0"
-                                          leave="transition ease-in duration-150"
-                                          leaveFrom="opacity-100 translate-y-0"
-                                          leaveTo="opacity-0 translate-y-1"
-                                       >
-                                          <Popover.Panel className="absolute z-10 w-[20rem] rounded-md border-2 border-gray-100 bg-white shadow-md">
-                                             {article.coWriters.map(
-                                                (co, index) => (
-                                                   <Link
-                                                      href={`/profile/${co.id}`}
-                                                   >
-                                                      <a
-                                                         key={index}
-                                                         className="flex select-none items-center gap-2 py-3 px-4 duration-150 hover:bg-gray-100 hover:text-blue-500"
-                                                      >
-                                                         <Image
-                                                            className="rounded-full"
-                                                            src={co.image}
-                                                            width="25px"
-                                                            height="25px"
-                                                            blurDataURL={shimmer(
-                                                               1920,
-                                                               1080
-                                                            )}
-                                                            alt={`${
-                                                               co.name.split(
-                                                                  " "
-                                                               )[0]
-                                                            }'s profile image`}
-                                                         />
-                                                         <span> {co.name}</span>
-                                                      </a>
-                                                   </Link>
-                                                )
-                                             )}
-                                          </Popover.Panel>
-                                       </Transition>
-                                    </Popover>
-                                 )}
-                              </div>
-                           )}
-                        </span>
-                     </span>
-                     <h1 className="ml-1 flex items-center text-gray-800">
-                        {" / "}
-                        <div className="ml-2">
-                           {format(
-                              parseISO(
-                                 new Date(article.createdAt).toISOString()
-                              ),
-                              "MMMM dd, yyyy"
-                           )}
-                        </div>
-                     </h1>
-                     {(data?.user?.isAdmin ||
-                        article.writer?.id === data?.user?.id) && (
-                        <h1 className="ml-2 flex items-center text-blue-500">
-                           {" / "}
-                           <div className="ml-2">
-                              <Link
-                                 href={`/dashboard/writer/edit/${article.id}`}
-                              >
-                                 <a>Edit Article</a>
-                              </Link>
-                           </div>
-                        </h1>
-                     )}
-                  </div>
+                  <ArticleWriterInfo
+                     article={article}
+                     user={data?.user}
+                     showEdit={true}
+                     className="ml-4 mt-1"
+                  />
                   <div className="mx-4 mt-2 mb-6 flex justify-center">
                      <Image
                         alt="Post picture"
@@ -445,29 +346,37 @@ const ArticleViewer: React.FC<Props> = ({
                   <div className="px-4">
                      {/*
                         // @ts-ignore */}
-                     <Editor defaultValue={article.mdx} readOnly />
+                     <Editor
+                        defaultValue={article.mdx}
+                        readOnly
+                        dark={resolvedTheme === "dark"}
+                     />
                   </div>
-                  <div className="mt-6 border-t-2 pt-4" />
+                  <div
+                     className={`mt-6 border-t-2 pt-4 ${
+                        !article.published && "mb-20"
+                     }`}
+                  />
                   {article.published && (
-                     <div className="px-4">
+                     <div className="px-4 pb-10">
                         <h1 className="text-4xl font-semibold">
                            What do you think?
                         </h1>
-                        <div className="my-4 w-full rounded border border-gray-200 bg-gray-50 p-6">
-                           <h5 className="text-lg font-semibold text-gray-900 md:text-xl">
+                        <div className="my-4 w-full rounded border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
+                           <h5 className="text-lg font-semibold text-gray-900 dark:text-gray-100 md:text-xl">
                               Leave a comment
                            </h5>
-                           <p className="my-1 text-gray-800">
+                           <p className="my-1 text-gray-800 dark:text-gray-200">
                               Share your opinion regarding this article for
                               other students/teachers to see.
                            </p>
                            {!data ? (
-                              <a
-                                 className="my-4 flex h-8 w-28 cursor-pointer items-center justify-center rounded bg-gray-200 font-bold text-gray-900 duration-150 hover:bg-gray-300"
+                              <Button
                                  onClick={() => signIn("google")}
+                                 className="mt-2"
                               >
                                  Login
-                              </a>
+                              </Button>
                            ) : (
                               <div className="mt-2">
                                  <Formik
@@ -526,7 +435,7 @@ const ArticleViewer: React.FC<Props> = ({
                                              placeholder="Your comment..."
                                              required
                                              name="message"
-                                             className="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 py-2 pl-4 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                                             className="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 py-2 pl-4 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-900 dark:focus:ring-blue-900"
                                           />
                                           <Button
                                              className="mt-2 mb-2 w-full"
@@ -560,7 +469,7 @@ const ArticleViewer: React.FC<Props> = ({
                         <div id="comments">
                            {commentsState.map((comment, index) => (
                               <div
-                                 className={`flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4 ${
+                                 className={`flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4 dark:border-gray-700 dark:bg-gray-800 ${
                                     index !== commentsState.length - 1 && "mb-4"
                                  }`}
                                  key={index}
@@ -576,16 +485,18 @@ const ArticleViewer: React.FC<Props> = ({
                                        comment.user?.name.split(" ")[0]
                                     }'s profile image`}
                                  />
-                                 <div className="flex flex-col space-y-2 ">
+                                 <div className="flex flex-col items-center space-y-2">
                                     <div className="w-full">
                                        {comment.comment}
                                     </div>
                                     <div className="flex items-center space-x-2">
-                                       <p className="text-sm text-gray-500">
+                                       <p className="text-sm text-gray-500 dark:text-gray-300">
                                           {comment.user?.name}
                                        </p>
-                                       <span className=" text-gray-800">/</span>
-                                       <p className="text-sm text-gray-400">
+                                       <span className="text-gray-800 dark:text-gray-200">
+                                          /
+                                       </span>
+                                       <p className="text-sm text-gray-400 dark:text-gray-300">
                                           {format(
                                              new Date(comment.createdAt),
                                              "d MMM yyyy 'at' h:mm bb"
@@ -594,11 +505,11 @@ const ArticleViewer: React.FC<Props> = ({
                                        {data?.user &&
                                           comment.userId === data.user?.id && (
                                              <>
-                                                <span className="text-gray-200">
+                                                <span className="text-gray-800 dark:text-gray-200">
                                                    /
                                                 </span>
                                                 <button
-                                                   className="text-sm text-red-600"
+                                                   className="text-sm text-red-600 dark:text-red-500"
                                                    onClick={() => {
                                                       setDeleteCommentId(
                                                          comment.id

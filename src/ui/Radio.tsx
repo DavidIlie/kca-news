@@ -1,4 +1,5 @@
 import React, { InputHTMLAttributes, DetailedHTMLProps } from "react";
+import { useTheme } from "next-themes";
 
 type RadioProps = DetailedHTMLProps<
    InputHTMLAttributes<HTMLInputElement>,
@@ -15,6 +16,8 @@ const Radio: React.FC<RadioProps> = ({
    labelDisabled = false,
    ...rest
 }) => {
+   const { resolvedTheme } = useTheme();
+
    return (
       <div className="flex items-center justify-between">
          <div className="block">
@@ -29,8 +32,10 @@ const Radio: React.FC<RadioProps> = ({
                   {...rest}
                />
                <span
-                  className={`ml-2 text-${labelSize} font-semibold text-gray-${
-                     labelDisabled ? "300" : "700"
+                  className={`ml-2 text-${labelSize} font-semibold ${
+                     resolvedTheme === "dark"
+                        ? `text-gray-${labelDisabled ? "800" : "300"}`
+                        : `text-gray-${labelDisabled ? "100" : "700"}`
                   }`}
                >
                   {label}
