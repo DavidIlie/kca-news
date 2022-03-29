@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { DefaultSeo } from "next-seo";
 import { getSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import {
    AiOutlineCheck,
    AiOutlineClose,
@@ -54,11 +55,17 @@ interface Props {
 }
 
 const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
+   const router = useRouter();
+   const { menu } = router.query;
+
    const [openSidebar, setOpenSidebar] = useLocalStorage<boolean>({
       key: "editorOpenSidebar",
-      defaultValue: true,
+      defaultValue: (menu as any as boolean) || true,
    });
 
+   useEffect(() => setOpenSidebar((menu as any as boolean) || openSidebar), []);
+
+   const notifications = useNotifications();
    const { height: viewportHeight } = useViewportSize();
    const { ref: restEmptyRef, height: restEmptyHeight } = useElementSize();
    const { ref, height } = useElementSize();
@@ -74,8 +81,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [openConfirmModalUnderReview, setOpenConfirmModalUnderReview] =
       useState<boolean>(false);
    const [displayAlert, setDisplayAlert] = useState<boolean>(false);
-
-   const notifications = useNotifications();
 
    const canSave =
       (article.title !== title && title !== "") ||
@@ -451,7 +456,17 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  size="25"
                                  className="mt-1 cursor-pointer duration-150 hover:text-blue-600"
                                  title="Close"
-                                 onClick={() => setOpenSidebar(false)}
+                                 onClick={() => {
+                                    if (menu as any as boolean)
+                                       router.push(
+                                          router.asPath
+                                             .split("?menu=true")
+                                             .join(""),
+                                          "",
+                                          { shallow: true }
+                                       );
+                                    setOpenSidebar(false);
+                                 }}
                               />
                            </div>
                         )}
@@ -562,9 +577,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               color="secondary"
                               className="mt-3 -ml-1 w-full"
                               disabled={
-                                 !user.isAdmin
-                                    ? article.underReview || article.published
-                                    : false
+                                 article.underReview || article.published
                               }
                               title={
                                  article.underReview

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { Disclosure } from "@headlessui/react";
 
 import {
@@ -20,11 +21,37 @@ const EditorSettingsDisclosure: React.FC<Props> = ({
    warning = false,
    defaultOpen = false,
 }) => {
+   const router = useRouter();
+   const { visibility } = router.query;
+
+   const [defaultOpenState, setDefaultOpenState] = useState<boolean>(
+      ((visibility as any as boolean) && name === "Visibility") || defaultOpen
+   );
+
    return (
-      <Disclosure as="div" className="border-b-2" defaultOpen={defaultOpen}>
+      <Disclosure
+         as="div"
+         className="border-b-2"
+         defaultOpen={defaultOpenState}
+      >
          <Disclosure.Button className="w-[99.5%] select-none p-0 py-4 ring-blue-500 duration-150 hover:bg-gray-100 focus:ring-1">
             {({ open }) => (
-               <div className="mx-4 flex w-[93%] items-center justify-between gap-2">
+               <div
+                  className="mx-4 flex w-[93%] items-center justify-between gap-2"
+                  onClick={() => {
+                     if (
+                        name === "Visibility" &&
+                        (visibility as any as boolean)
+                     ) {
+                        router.push(
+                           router.asPath.split("&visibility=true").join(""),
+                           "",
+                           { shallow: true }
+                        );
+                        setDefaultOpenState(defaultOpen);
+                     }
+                  }}
+               >
                   <div
                      className={`flex items-center gap-2 ${
                         warning && "font-semibold text-red-500"

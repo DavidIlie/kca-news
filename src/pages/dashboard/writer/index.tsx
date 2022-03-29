@@ -412,15 +412,19 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                           </Button>
                                        </a>
                                     </Link>
-                                    <div className="w-1/3">
-                                       <Button
-                                          className="w-full"
-                                          color="sky"
-                                          disabled={article.underReview}
-                                       >
-                                          Change Visibility
-                                       </Button>
-                                    </div>
+                                    <Link
+                                       href={`/dashboard/writer/edit/${article.id}?menu=true&visibility=true`}
+                                    >
+                                       <a className="w-1/3">
+                                          <Button
+                                             className="w-full"
+                                             color="sky"
+                                             disabled={article.underReview}
+                                          >
+                                             Change Visibility
+                                          </Button>
+                                       </a>
+                                    </Link>
                                     <div className="w-1/3">
                                        <Button
                                           className="w-full"
