@@ -454,7 +454,7 @@ const ArticleViewer: React.FC<Props> = ({
                                                 Created successfully!
                                              </SuccessMessage>
                                           ) : (
-                                             <p className="text-sm text-gray-800">
+                                             <p className="text-sm text-gray-800 dark:text-gray-200">
                                                 Your information is only used to
                                                 display your name and reply by
                                                 email.
