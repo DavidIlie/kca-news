@@ -8,10 +8,7 @@ import { DefaultSeo } from "next-seo";
 import { Disclosure } from "@headlessui/react";
 import { Select, TextInput } from "@mantine/core";
 
-import { MdArticle, MdPublish } from "react-icons/md";
 import {
-   AiFillLike,
-   AiFillDislike,
    AiOutlineArrowDown,
    AiOutlineArrowUp,
    AiOutlineLike,
@@ -19,13 +16,11 @@ import {
    AiOutlineSearch,
    AiOutlineFilter,
 } from "react-icons/ai";
-import { FaCommentDots } from "react-icons/fa";
 
 import prisma from "../../../lib/prisma";
 import { shimmer } from "../../../lib/shimmer";
 import { Article } from "../../../types/Article";
 import { Button } from "../../../ui/Button";
-import StatisticCard from "../../../components/StatisticCard";
 import { User } from "../../../types/User";
 import Radio from "../../../ui/Radio";
 import ArticleBadge from "../../../components/ArticleBadge";
