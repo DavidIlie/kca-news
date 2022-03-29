@@ -207,6 +207,14 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
          : "h-[89vh]"
    }`;
 
+   const closeSidebar = () => {
+      if (menu as any as boolean)
+         router.push(finalUrl, "", {
+            shallow: true,
+         });
+      setOpenSidebar(false);
+   };
+
    return (
       <>
          <DefaultSeo title={title} />
@@ -436,13 +444,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
             <CustomSidebar
                drawerProps={{
                   opened: openSidebar,
-                  onClose: () => {
-                     if (menu as any as boolean)
-                        router.push(finalUrl, "", {
-                           shallow: true,
-                        });
-                     setOpenSidebar(false);
-                  },
+                  onClose: closeSidebar,
                }}
                normalProps={{
                   className: `${
@@ -465,13 +467,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  size="25"
                                  className="mt-1 cursor-pointer duration-150 hover:text-blue-600"
                                  title="Close"
-                                 onClick={() => {
-                                    if (menu as any as boolean)
-                                       router.push(finalUrl, "", {
-                                          shallow: true,
-                                       });
-                                    setOpenSidebar(false);
-                                 }}
+                                 onClick={closeSidebar}
                               />
                            </div>
                         )}
