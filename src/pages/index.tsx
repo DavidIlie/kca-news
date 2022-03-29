@@ -37,7 +37,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
       <>
          <NextSeo title="Home" />
          <div className="flex flex-grow items-center">
-            <div className="-ml-20 mt-20 flex w-full justify-center gap-24">
+            <div className="-ml-20 mt-20 flex w-full justify-center gap-24 py-28">
                <Slide cascade triggerOnce direction="left">
                   <div className="relative -mr-96 flex items-center gap-4">
                      <button

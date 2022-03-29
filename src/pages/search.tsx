@@ -57,7 +57,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
    return (
       <>
          <DefaultSeo title={previousSearchQuery} />
-         <div className="mb-20 flex min-h-screen flex-grow px-4 sm:pt-32 lg:px-0">
+         <div className="mb-20 flex flex-grow px-4 sm:pt-32 lg:px-0">
             <div className="container mx-auto max-w-5xl">
                <h1 className="mb-4 text-4xl font-semibold">
                   Search results for: {previousSearchQuery}
