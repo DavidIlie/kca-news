@@ -21,15 +21,16 @@ import {
 } from "react-icons/ai";
 import { FaCommentDots } from "react-icons/fa";
 
-import prisma from "../../lib/prisma";
-import { shimmer } from "../../lib/shimmer";
-import { Article } from "../../types/Article";
-import { Button } from "../../ui/Button";
-import StatisticCard from "../../components/StatisticCard";
-import { User } from "../../types/User";
-import Radio from "../../ui/Radio";
-import ArticleBadge from "../../components/ArticleBadge";
-import ArticleUnderReviewCard from "../../components/ArticleUnderReviewCard";
+import prisma from "../../../lib/prisma";
+import { shimmer } from "../../../lib/shimmer";
+import { Article } from "../../../types/Article";
+import { Button } from "../../../ui/Button";
+import StatisticCard from "../../../components/StatisticCard";
+import { User } from "../../../types/User";
+import Radio from "../../../ui/Radio";
+import ArticleBadge from "../../../components/ArticleBadge";
+import ArticleUnderReviewCard from "../../../components/ArticleUnderReviewCard";
+import DashboardStatistics from "../../../components/DashboardStatistics";
 
 interface Props {
    user: User;
@@ -142,33 +143,11 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
          <DefaultSeo title="Writer Panel" />
          <div className="mb-20 flex flex-grow px-4 pt-10 sm:pt-32">
             <div className="mx-auto">
-               <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-2 md:grid-cols-4 lg:grid-cols-5 lg:px-8">
-                  <StatisticCard
-                     title={`${user.isAdmin ? "Total" : "Your"} Articles`}
-                     value={statistics.totalArticles}
-                     icon={MdArticle}
-                  />
-                  <StatisticCard
-                     title="Published"
-                     value={statistics.publishedArticles}
-                     icon={MdPublish}
-                  />
-                  <StatisticCard
-                     title="Comments"
-                     value={statistics.totalComments}
-                     icon={FaCommentDots}
-                  />
-                  <StatisticCard
-                     title="Total Likes"
-                     value={statistics.totalUpvotes}
-                     icon={AiFillLike}
-                  />
-                  <StatisticCard
-                     title="Total Dislikes"
-                     value={statistics.totalDownvotes}
-                     icon={AiFillDislike}
-                  />
-               </div>
+               <DashboardStatistics
+                  isAdmin={user.isAdmin}
+                  {...statistics}
+                  className="mx-auto max-w-7xl lg:px-8"
+               />
                <div className="container mt-4 max-w-7xl px-2 sm:px-8">
                   <h1 className="mb-4 text-4xl font-semibold">
                      {user.isAdmin ? "Total" : "Your"} Articles
