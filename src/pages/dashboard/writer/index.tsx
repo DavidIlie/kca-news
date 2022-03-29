@@ -336,11 +336,11 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  placeholder="blur"
                                  objectFit="cover"
                               />
-                              <div className="relative max-w-lg">
+                              <div className="relative w-full max-w-lg">
                                  <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
                                     Description
                                  </h1>
-                                 <p className="mb-2 text-justify">
+                                 <p className=" mb-2 text-justify">
                                     {article.description}
                                  </p>
                                  <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">

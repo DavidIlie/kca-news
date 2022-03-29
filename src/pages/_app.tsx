@@ -37,7 +37,7 @@ const KingsNews = ({
                   },
                ],
             }}
-            description="Make the school cool."
+            description="KCA News is a website run by the students for other students or teachers to visit in King's College Alicante. KCA News has many articles written for many categories and topics occuring throughout the world. Make the school cool."
          />
          <NextNprogress
             color="#156896"
