@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             mdx: `# Welcome to the template article`,
             cover: "https://cdn.davidilie.com/kca-news/kings-alicante-1.jpg",
             description:
-               "This is an example of the description for the untitled article. This can be modified from the menu or the right or by simply editing this text field.",
+               "This is an example of the description for the untitled article. This can be modified from the menu on the right or by simply editing this text field.",
          },
       });
 
