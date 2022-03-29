@@ -48,6 +48,7 @@ import { shimmer } from "../../../../lib/shimmer";
 import { Consumer } from "../../../../components/CustomSidebar/CustomSidebar";
 import CustomSidebar from "../../../../components/CustomSidebar";
 import { usePreventUserFromLosingData } from "../../../../lib/usePreventUserFromLosingData";
+import useDetermineCustomQueryEditor from "../../../../hooks/useDetermineCustomQueryEditor";
 
 interface Props {
    user: User;
@@ -64,6 +65,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    });
 
    useEffect(() => setOpenSidebar((menu as any as boolean) || openSidebar), []);
+
+   const finalUrl = useDetermineCustomQueryEditor("menu");
 
    const notifications = useNotifications();
    const { height: viewportHeight } = useViewportSize();
@@ -433,7 +436,13 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
             <CustomSidebar
                drawerProps={{
                   opened: openSidebar,
-                  onClose: () => setOpenSidebar(!openSidebar),
+                  onClose: () => {
+                     if (menu as any as boolean)
+                        router.push(finalUrl, "", {
+                           shallow: true,
+                        });
+                     setOpenSidebar(false);
+                  },
                }}
                normalProps={{
                   className: `${
@@ -458,13 +467,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  title="Close"
                                  onClick={() => {
                                     if (menu as any as boolean)
-                                       router.push(
-                                          router.asPath
-                                             .split("?menu=true")
-                                             .join(""),
-                                          "",
-                                          { shallow: true }
-                                       );
+                                       router.push(finalUrl, "", {
+                                          shallow: true,
+                                       });
                                     setOpenSidebar(false);
                                  }}
                               />

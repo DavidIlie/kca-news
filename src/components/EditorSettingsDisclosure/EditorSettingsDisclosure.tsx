@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Disclosure } from "@headlessui/react";
-
 import {
    AiOutlineArrowDown,
    AiOutlineArrowUp,
    AiOutlineWarning,
 } from "react-icons/ai";
+
+import useDetermineCustomQueryEditor from "../../hooks/useDetermineCustomQueryEditor";
 
 interface Props {
    name: string;
@@ -28,6 +29,8 @@ const EditorSettingsDisclosure: React.FC<Props> = ({
       ((visibility as any as boolean) && name === "Visibility") || defaultOpen
    );
 
+   const finalUrl = useDetermineCustomQueryEditor("visibility");
+
    return (
       <Disclosure
          as="div"
@@ -43,11 +46,7 @@ const EditorSettingsDisclosure: React.FC<Props> = ({
                         name === "Visibility" &&
                         (visibility as any as boolean)
                      ) {
-                        router.push(
-                           router.asPath.split("&visibility=true").join(""),
-                           "",
-                           { shallow: true }
-                        );
+                        router.push(finalUrl, "", { shallow: true });
                         setDefaultOpenState(defaultOpen);
                      }
                   }}
