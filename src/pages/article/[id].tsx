@@ -61,7 +61,7 @@ const ArticleViewer: React.FC<Props> = ({
 }) => {
    if (notFound) {
       return (
-         <div className="flex min-h-screen flex-grow items-center justify-center">
+         <div className="flex flex-grow items-center justify-center">
             <Slide triggerOnce direction="down">
                <div>
                   <h1 className="mb-4 text-6xl font-bold text-red-500">
