@@ -319,7 +319,7 @@ const ArticleViewer: React.FC<Props> = ({
                         </div>
                      )}
                   </div>
-                  <div className="border-b-2" />
+                  <div className="mx-4 border-b-2" />
                   <ArticleWriterInfo
                      article={article}
                      user={data?.user}
@@ -341,7 +341,7 @@ const ArticleViewer: React.FC<Props> = ({
                   <p className="w-full max-w-5xl px-4 text-justify">
                      {article.description}
                   </p>
-                  <div className="mt-4 border-t-2" />
+                  <div className="mx-4 mt-4 border-t-2" />
                   <div className="px-4">
                      {/*
                         // @ts-ignore */}
@@ -352,7 +352,7 @@ const ArticleViewer: React.FC<Props> = ({
                      />
                   </div>
                   <div
-                     className={`mt-6 border-t-2 pt-4 ${
+                     className={`mx-4 mt-6 border-t-2 pt-4 ${
                         !article.published && "mb-20"
                      }`}
                   />
