@@ -2,7 +2,7 @@ import React from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { BiUserCircle } from "react-icons/bi";
-import { BsFillPenFill } from "react-icons/bs";
+import { BsPen } from "react-icons/bs";
 import { MdPreview, MdDarkMode, MdLightMode } from "react-icons/md";
 import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
@@ -52,6 +52,7 @@ const UserDropdown: React.FC = () => {
                            ? setTheme("light")
                            : setTheme("dark")
                      }
+                     title="ctrl+shift+e"
                   >
                      {resolvedTheme === "dark" ? (
                         <MdLightMode className="mx-0.5 text-xl" />
@@ -63,7 +64,7 @@ const UserDropdown: React.FC = () => {
                   {isWriter && (
                      <Menu.Item as={NextLink} href="/dashboard/writer">
                         <DropdownElement>
-                           <BsFillPenFill className="mx-0.5 text-xl" />
+                           <BsPen className="mx-0.5 text-xl" />
                            Writer Panel
                         </DropdownElement>
                      </Menu.Item>

@@ -38,6 +38,7 @@ CREATE TABLE "User" (
     "extraName" TEXT,
     "year" TEXT NOT NULL,
     "showYear" BOOLEAN NOT NULL DEFAULT true,
+    "joinedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "description" TEXT,
     "status" TEXT,
     "nickname" TEXT,

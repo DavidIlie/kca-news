@@ -1,3 +1,7 @@
+import { Comment } from "./Comment";
+import { Upvote, Downvote } from "@prisma/client";
+import { Tag } from "./Tag";
+
 export interface User {
    id: string;
    name: string;
@@ -6,7 +10,7 @@ export interface User {
    description?: string;
    status?: string;
    nickname?: string;
-   tags: string[];
+   tags: Tag[];
    isAdmin: boolean;
    isWriter: boolean;
    isReviewer: boolean;
@@ -15,4 +19,8 @@ export interface User {
    year: string;
    showYear: boolean;
    extraName?: string;
+   joinedAt: Date;
+   comments?: Comment[];
+   upvotes?: Upvote[];
+   downvotes?: Downvote[];
 }

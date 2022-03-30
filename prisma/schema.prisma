@@ -49,6 +49,8 @@ model User {
   year          String
   showYear      Boolean @default(true)
 
+  joinedAt      DateTime  @default(now())
+
   comments      Comment[]
   upvotes       Upvote[]
   downvotes     Downvote[]

@@ -5,6 +5,7 @@ import { DefaultSeo } from "next-seo";
 
 import prisma from "../../lib/prisma";
 import { User } from "../../types/User";
+import ProfileViewer from "../../components/ProfileViewer";
 
 interface Props {
    user: User;
@@ -14,7 +15,9 @@ const PersonalProfileViewer: React.FC<Props> = ({ user }) => {
    return (
       <>
          <DefaultSeo title="Profile" />
-         <div className="mt-10 flex flex-grow px-4 sm:pt-24 lg:px-0"></div>
+         <div className="flex flex-grow items-center justify-center px-4 sm:pt-12 lg:px-0">
+            <ProfileViewer user={user} editable={true} />
+         </div>
       </>
    );
 };
@@ -32,6 +35,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
    const user = await prisma.user.findUnique({
       where: { id: session.user!.id },
+      include: {
+         comments: true,
+         upvotes: true,
+         downvotes: true,
+      },
    });
 
    return {
