@@ -1,7 +1,7 @@
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useRef } from "react";
-import { GrFormClose } from "react-icons/gr";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 export interface ModalProps extends Partial<typeof Dialog> {
    isOpen: boolean;
@@ -56,15 +56,15 @@ const Modal: React.FC<ModalProps> = ({
                      className={`my-8 inline-block w-full max-w-${width} transform overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-6 text-left align-middle shadow-xl transition-all dark:border-gray-800 dark:bg-foot`}
                   >
                      <div className="grid divide-y divide-gray-300 dark:divide-gray-500">
-                        <div className="flex items-center justify-between">
+                        <div className="mb-1 flex items-center justify-between">
                            <Dialog.Title
                               as="h3"
                               className="mb-2 text-xl font-medium leading-6 text-gray-900 dark:text-gray-100"
                            >
                               {title}
                            </Dialog.Title>
-                           <GrFormClose
-                              className="cursor-pointer text-[1.75rem]"
+                           <AiOutlineCloseCircle
+                              className="cursor-pointer text-[1.75rem] text-black dark:text-white"
                               onClick={updateModalState}
                            />
                         </div>

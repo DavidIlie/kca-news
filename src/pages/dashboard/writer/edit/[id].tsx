@@ -520,16 +520,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               maxRows={8}
                            />
                         </EditorSettingsDisclosure>
-                        <EditorSettingsDisclosure name="Co-Writers">
-                           <h1>yo</h1>
-                        </EditorSettingsDisclosure>
-                        <EditorSettingsDisclosure name="Cover">
-                           <ArticleCoverUploader
-                              article={article}
-                              updateArticle={setArticle}
-                              setMainLoading={setBigLoad}
-                           />
-                        </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure
                            name="Categories"
                            warning={categories.length === 0}
@@ -555,6 +545,16 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               maxSelectedValues={5}
                               valueComponent={WrappedArticleBadge}
                            />
+                        </EditorSettingsDisclosure>
+                        <EditorSettingsDisclosure name="Cover">
+                           <ArticleCoverUploader
+                              article={article}
+                              updateArticle={setArticle}
+                              setMainLoading={setBigLoad}
+                           />
+                        </EditorSettingsDisclosure>
+                        <EditorSettingsDisclosure name="Co-Writers">
+                           <h1>yo</h1>
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure name="Filter">
                            <h1>yo</h1>

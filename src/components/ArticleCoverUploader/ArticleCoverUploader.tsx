@@ -30,6 +30,9 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
 
    const [uploadFileState, setUploadFileState] = useState<boolean>(false);
    const [isLoading, setIsLoading] = useState<boolean>(false);
+   const [uploadCycle, setUploadCycle] = useState<string>(
+      Math.random().toString(36)
+   );
 
    const notifications = useNotifications();
 
@@ -134,11 +137,17 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
                      ref={inputRef as any}
                      type="file"
                      className="hidden"
-                     onChange={(e) => setFiles(e as any)}
+                     onChange={(e) => {
+                        console.log(e);
+                        setFiles(e as any);
+                     }}
                      accept="image/*"
+                     key={uploadCycle}
                   />
                   <Button
-                     className={`mt-4 ${modal && "mb-2"} w-full`}
+                     className={`mt-${modal ? "3" : "2"} ${
+                        modal ? "mb-2" : files.length === 0 && "-mb-1"
+                     } w-full`}
                      color="sky"
                      onClick={() => inputRef.current?.click()}
                   >
@@ -146,32 +155,45 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
                   </Button>
                </div>
                {files.length !== 0 && (
-                  <p className={`px-0.5 ${!modal && "mt-2 text-sm"}`}>
+                  <p
+                     className={`px-0.5 ${
+                        !modal &&
+                        `mt-2 ${files.length !== 0 && "-mb-2"} text-sm`
+                     }`}
+                  >
                      {(files as any)[0].name}
                   </p>
                )}
             </div>
          </div>
-         <div className={`mt-4 ${modal && "flex"} justify-end gap-2`}>
+         <div className={`mt-3 ${modal && "flex"} justify-end gap-2`}>
             {article.cover !==
                "https://cdn.davidilie.com/kca-news/kings-alicante-1.jpg" && (
                <button
                   type="button"
                   className={`${
-                     !modal && "mb-2 w-full"
+                     !modal && `w-full ${files.length === 0 ? "mb-2" : "mt-4"}`
                   } inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 duration-150 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:bg-red-500 dark:text-white dark:hover:bg-red-600`}
                   onClick={() => HandleRestCover()}
                >
                   Reset Cover
                </button>
             )}
-            {modal && (
+            {(modal || files.length !== 0) && (
                <button
                   type="button"
-                  className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 duration-150 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600"
-                  onClick={() => HandleClose()}
+                  className={`${
+                     !modal && `mb-2 ${article.cover ? "mt-2" : "mt-4"} w-full`
+                  }  inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 duration-150 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 dark:bg-sky-500 dark:text-white dark:hover:bg-sky-600`}
+                  onClick={() => {
+                     if (modal) return HandleClose();
+
+                     setUploadFileState(false);
+                     clearAllFiles();
+                     setUploadCycle(Math.random().toString(36));
+                  }}
                >
-                  Cancel
+                  {modal ? "Close" : "Reset Upload"}
                </button>
             )}
             <button
