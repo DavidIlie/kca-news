@@ -7,6 +7,7 @@ import { Article } from "../../types/Article";
 import { User } from "../../types/User";
 import { shimmer } from "../../lib/shimmer";
 import { format, parseISO } from "date-fns";
+import { computeKCAName } from "../../lib/computeKCAName";
 
 interface ArticleWriterInfoProps {
    article: Article;
@@ -33,7 +34,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                alt={`${
                   article.anonymous
                      ? "KCA News"
-                     : article.writer!.name.split(" ")[0]
+                     : article.writer?.names[article.writer?.nameIndex]
                }'s profile image`}
             />
             <span className="ml-2 mr-1 text-lg">
@@ -44,11 +45,11 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                      {showEdit ? (
                         <Link href={`/profile/${article.writer!.id}`}>
                            <a className="duration-150 hover:text-blue-500">
-                              {article.writer!.name}
+                              {computeKCAName(article.writer!)}
                            </a>
                         </Link>
                      ) : (
-                        <span>{article.writer!.name}</span>
+                        <span>{computeKCAName(article.writer!)}</span>
                      )}
                      {article.coWriters.length !== 0 && (
                         <Popover className="relative">
@@ -86,7 +87,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                                                 co.name.split(" ")[0]
                                              }'s profile image`}
                                           />
-                                          <span> {co.name}</span>
+                                          <span>{computeKCAName(co)}</span>
                                        </a>
                                     </Link>
                                  ))}

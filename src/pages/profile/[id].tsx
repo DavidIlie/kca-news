@@ -4,6 +4,7 @@ import { GetServerSideProps } from "next";
 
 import { User } from "../../types/User";
 import prisma from "../../lib/prisma";
+import { computeKCAName } from "../../lib/computeKCAName";
 
 interface Props {
    user: User;
@@ -12,7 +13,7 @@ interface Props {
 const ProfileViewer: React.FC<Props> = ({ user }) => {
    return (
       <>
-         <DefaultSeo title={user.name} />
+         <DefaultSeo title={computeKCAName(user)} />
          <div className="mt-10 flex flex-grow px-4 sm:pt-24 lg:px-0"></div>
       </>
    );

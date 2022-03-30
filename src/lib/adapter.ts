@@ -3,7 +3,21 @@ import type { Adapter } from "next-auth/adapters";
 
 export function PrismaAdapter(p: PrismaClient): Adapter {
    return {
-      createUser: (data) => p.user.create({ data }),
+      createUser: (data) => {
+         const name = data.name as string;
+
+         const fullName = name.split("Year")[0];
+         const year = name.split(fullName)[1];
+
+         let names = fullName.split(" ");
+         names.pop();
+
+         data.nameIndex = 0;
+         data.year = year;
+         data.names = names;
+
+         return p.user.create({ data: data as any });
+      },
       getUser: (id) => p.user.findUnique({ where: { id } }),
       getUserByEmail: (email) => p.user.findUnique({ where: { email } }),
       async getUserByAccount(provider_providerAccountId) {

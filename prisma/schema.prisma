@@ -43,6 +43,12 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
+  nameIndex     Int
+  names         String[]
+  extraName     String?
+  year          String
+  showYear      Boolean @default(true)
+
   comments      Comment[]
   upvotes       Upvote[]
   downvotes     Downvote[]

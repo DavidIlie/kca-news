@@ -17,8 +17,7 @@ export default NextAuth({
       async signIn({ user }) {
          if (
             user.email?.includes("kcpupils.org") ||
-            user.email?.includes("kings.education") ||
-            user.email?.includes("davidilie.com")
+            user.email?.includes("kings.education")
          )
             return true;
          return true;
@@ -33,6 +32,9 @@ export default NextAuth({
             session.user.isAdmin = user.isAdmin as boolean;
             session.user.isWriter = user.isWriter as boolean;
             session.user.isReviewer = user.isReviewer as boolean;
+            session.user.nameIndex = user.nameIndex as number;
+            session.user.names = user.names as string[];
+            session.user.showYear = user.showYear as boolean;
          }
          return session;
       },

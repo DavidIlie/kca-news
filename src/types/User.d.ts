@@ -10,4 +10,9 @@ export interface User {
    isAdmin: boolean;
    isWriter: boolean;
    isReviewer: boolean;
+   nameIndex: number;
+   names: string[];
+   year: string;
+   showYear: boolean;
+   extraName?: string;
 }
