@@ -520,6 +520,16 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               maxRows={8}
                            />
                         </EditorSettingsDisclosure>
+                        <EditorSettingsDisclosure name="Co-Writers">
+                           <h1>yo</h1>
+                        </EditorSettingsDisclosure>
+                        <EditorSettingsDisclosure name="Cover">
+                           <ArticleCoverUploader
+                              article={article}
+                              updateArticle={setArticle}
+                              setMainLoading={setBigLoad}
+                           />
+                        </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure
                            name="Categories"
                            warning={categories.length === 0}
@@ -548,16 +558,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure name="Filter">
                            <h1>yo</h1>
-                        </EditorSettingsDisclosure>
-                        <EditorSettingsDisclosure name="Co-Writers">
-                           <h1>yo</h1>
-                        </EditorSettingsDisclosure>
-                        <EditorSettingsDisclosure name="Cover">
-                           <ArticleCoverUploader
-                              article={article}
-                              updateArticle={setArticle}
-                              setMainLoading={setBigLoad}
-                           />
                         </EditorSettingsDisclosure>
                         <div
                            className={viewportHeight > 550 ? "flex-grow" : ""}
