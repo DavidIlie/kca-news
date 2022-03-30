@@ -20,7 +20,7 @@ export default NextAuth({
             user.email?.includes("kings.education")
          )
             return true;
-         return true;
+         return false;
       },
       async session({ session, user }) {
          if (session?.user) {
