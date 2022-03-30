@@ -10,6 +10,7 @@ export interface ModalProps extends Partial<typeof Dialog> {
    children: JSX.Element;
    className?: string;
    noAutoClose?: boolean;
+   width?: "sm" | "md" | "lg" | "xl";
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -19,6 +20,7 @@ const Modal: React.FC<ModalProps> = ({
    children,
    className,
    noAutoClose = false,
+   width = "md",
    ...rest
 }) => {
    let refDiv = useRef(null);
@@ -27,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({
       <Transition appear show={isOpen} as={Fragment}>
          <Dialog
             as="div"
-            className={`container fixed inset-0 z-50 mx-auto overflow-y-auto ${className}`}
+            className={`container fixed inset-0 z-[150] mx-auto overflow-y-auto ${className}`}
             onClose={!noAutoClose ? updateModalState : () => true}
             initialFocus={refDiv}
             {...rest}
@@ -51,7 +53,7 @@ const Modal: React.FC<ModalProps> = ({
                   leaveTo="opacity-0 scale-95"
                >
                   <div
-                     className={`my-8 inline-block w-full max-w-md transform overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-6 text-left align-middle shadow-xl transition-all dark:border-gray-700 dark:bg-gray-800`}
+                     className={`my-8 inline-block w-full max-w-${width} transform overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-6 text-left align-middle shadow-xl transition-all dark:border-gray-800 dark:bg-foot`}
                   >
                      <div className="grid divide-y divide-gray-300 dark:divide-gray-500">
                         <div className="flex items-center justify-between">

@@ -71,11 +71,11 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                            >
                               <Popover.Panel className="absolute z-10 w-[20rem] rounded-md border-2 border-gray-100 bg-white shadow-md dark:border-gray-800 dark:bg-foot">
                                  {article.coWriters.map((co, index) => (
-                                    <Link href={`/profile/${co.id}`}>
-                                       <a
-                                          key={index}
-                                          className="flex select-none items-center gap-2 py-3 px-4 duration-150 hover:bg-gray-100 hover:text-blue-500 dark:border-gray-900 dark:hover:bg-gray-900 dark:hover:text-white"
-                                       >
+                                    <Link
+                                       href={`/profile/${co.id}`}
+                                       key={index}
+                                    >
+                                       <a className="flex select-none items-center gap-2 py-3 px-4 duration-150 hover:bg-gray-100 hover:text-blue-500 dark:border-gray-900 dark:hover:bg-gray-900 dark:hover:text-white">
                                           <Image
                                              className="rounded-full"
                                              src={co.image}

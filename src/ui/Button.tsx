@@ -9,11 +9,11 @@ const colorClassnames = {
    primary:
       "rounded py-2 px-4 bg-blue-500 transition duration-150 ease-in-out hover:bg-blue-600 disabled:bg-blue-200 dark:bg-blue-800 dark:hover:bg-blue-900 dark:disabled:bg-blue-800 text-white dark:disabled:border dark:border-blue-500 border dark:border-blue-800 dark:hover:border-blue-900",
    secondary:
-      "rounded py-2 px-4 bg-red-500 transition duration-150 ease-in-out hover:bg-red-600 disabled:bg-red-200 text-white text-white dark:bg-red-800 dark:hover:bg-red-900 dark:disabled:bg-foot dark:disabled:border dark:border-red-500 border dark:border-red-800 dark:hover:border-red-900",
+      "rounded py-2 px-4 bg-red-500 transition duration-150 ease-in-out hover:bg-red-600 disabled:bg-red-200 text-white text-white dark:bg-red-800 dark:hover:bg-red-900 dark:disabled:bg-foot dark:disabled:border dark:border-red-500 border dark:border-red-800 dark:hover:border-red-900 border-red-500",
    transparent:
       "rounded py-1.5 px-3 border-2 border-blue-500 hover:bg-blue-600 hover:text-white transition duration-150 ease-in-out text-black",
-   cyan: "rounded py-2 px-4 bg-cyan-500 transition duration-150 ease-in-out hover:bg-cyan-600 disabled:bg-cyan-200 text-white dark:bg-cyan-800 dark:hover:bg-cyan-900 dark:disabled:bg-foot dark:disabled:border dark:border-gray-500 border dark:border-cyan-800 dark:hover:border-cyan-900",
-   sky: "rounded py-2 px-4 bg-sky-500 transition duration-150 ease-in-out hover:bg-sky-600 disabled:bg-sky-200 text-white text-white dark:bg-sky-800 dark:hover:bg-sky-900 dark:disabled:bg-foot dark:disabled:border dark:border-sky-500 border dark:border-sky-800 dark:hover:border-sky-900",
+   cyan: "rounded py-2 px-4 bg-cyan-500 transition duration-150 ease-in-out hover:bg-cyan-600 disabled:bg-cyan-200 text-white dark:bg-cyan-800 dark:hover:bg-cyan-900 dark:disabled:bg-foot dark:disabled:border dark:border-gray-500 border dark:border-cyan-800 dark:hover:border-cyan-900 border-cyan-500",
+   sky: "rounded py-2 px-4 bg-sky-500 transition duration-150 ease-in-out hover:bg-sky-600 disabled:bg-sky-200 text-white text-white dark:bg-sky-800 dark:hover:bg-sky-900 dark:disabled:bg-foot dark:disabled:border dark:border-sky-500 border dark:border-sky-800 dark:hover:border-sky-900 border-sky-500",
 };
 
 export type ButtonProps = DetailedHTMLProps<

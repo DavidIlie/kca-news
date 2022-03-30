@@ -29,8 +29,6 @@ import {
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { Popover, Transition } from "@headlessui/react";
-import { format, parseISO } from "date-fns";
 import { useTheme } from "next-themes";
 
 const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
@@ -51,6 +49,9 @@ import CustomSidebar from "../../../../components/CustomSidebar";
 import { usePreventUserFromLosingData } from "../../../../lib/usePreventUserFromLosingData";
 import useDetermineCustomQueryEditor from "../../../../hooks/useDetermineCustomQueryEditor";
 import ArticleWriterInfo from "../../../../components/ArticleWriterInfo";
+import ArticleCoverUploader, {
+   ModalArticleCoverUploaderWrapper,
+} from "../../../../components/ArticleCoverUploader/ArticleCoverUploader";
 
 interface Props {
    user: User;
@@ -87,6 +88,12 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [openConfirmModalUnderReview, setOpenConfirmModalUnderReview] =
       useState<boolean>(false);
    const [displayAlert, setDisplayAlert] = useState<boolean>(false);
+   const [bigLoad, setBigLoad] = useState<boolean>(false);
+
+   const [openChangeCoverModal, setOpenChangeCoverModal] =
+      useState<boolean>(false);
+   const toggleChangeCoverModal = () =>
+      setOpenChangeCoverModal(!openChangeCoverModal);
 
    const canSave =
       (article.title !== title && title !== "") ||
@@ -222,7 +229,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       <>
          <DefaultSeo title={title} />
          <div className="mt-4 flex flex-grow sm:mt-[5.4rem]">
-            <LoadingOverlay visible={loadingContentUpdate} />
+            <LoadingOverlay visible={loadingContentUpdate || bigLoad} />
             {!openSidebar && (
                <AiOutlineMenu
                   className="absolute right-0 top-0 z-50 mt-[75%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 sm:mt-24"
@@ -290,16 +297,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                   <ArticleWriterInfo article={article} user={user} />
                   <div className="relative mt-1 flex justify-center">
                      <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
-                        <Button
-                           color="cyan"
-                           onClick={() =>
-                              notifications.showNotification({
-                                 title: "Cover Photo",
-                                 message: "Not available yet!",
-                                 autoClose: 2000,
-                              })
-                           }
-                        >
+                        <Button color="cyan" onClick={toggleChangeCoverModal}>
                            Replace
                         </Button>
                      </div>
@@ -551,8 +549,15 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         <EditorSettingsDisclosure name="Filter">
                            <h1>yo</h1>
                         </EditorSettingsDisclosure>
-                        <EditorSettingsDisclosure name="Cover">
+                        <EditorSettingsDisclosure name="Co-Writers">
                            <h1>yo</h1>
+                        </EditorSettingsDisclosure>
+                        <EditorSettingsDisclosure name="Cover">
+                           <ArticleCoverUploader
+                              article={article}
+                              updateArticle={setArticle}
+                              setMainLoading={setBigLoad}
+                           />
                         </EditorSettingsDisclosure>
                         <div
                            className={viewportHeight > 550 ? "flex-grow" : ""}
@@ -585,6 +590,16 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
             updateModalState={() =>
                setOpenConfirmModalUnderReview(!openConfirmModalUnderReview)
             }
+         />
+         <ModalArticleCoverUploaderWrapper
+            isOpen={openChangeCoverModal}
+            updateModalState={toggleChangeCoverModal}
+            article={article}
+            updateArticle={(v) => {
+               setArticle(v);
+               setDisplayAlert(true);
+            }}
+            setMainLoading={setBigLoad}
          />
       </>
    );

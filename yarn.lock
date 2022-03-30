@@ -608,6 +608,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/multiparty@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@types/multiparty/-/multiparty-0.0.33.tgz#60a5c23a3bb313961afe1fb49ba418559c30c34a"
+  integrity sha512-Il6cJUpSqgojT7NxbVJUvXkCblm50/yEJYtblISDsNIeNYf4yMAhdizzidUk6h8pJ8yhwK/3Fkb+3Dwcgtwl8w==
+  dependencies:
+    "@types/node" "*"
+
 "@types/node@*":
   version "17.0.23"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.23.tgz#3b41a6e643589ac6442bdbd7a4a3ded62f33f7da"
@@ -2983,6 +2990,11 @@ react-universal-interface@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/react-universal-interface/-/react-universal-interface-0.6.2.tgz#5e8d438a01729a4dbbcbeeceb0b86be146fe2b3b"
   integrity sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==
+
+react-use-file-upload@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/react-use-file-upload/-/react-use-file-upload-0.9.1.tgz#8d1a3114c1c796719ce6db00553f7722d2056e4c"
+  integrity sha512-2VaMrF+2OJ8TriyPKv9EnCpcWrON9uvEkfol72erFCsE8W2sp79UaqVuJrxzKSncbR21Y2oybLcsZAi6g3iMwQ==
 
 react-use@^17.3.2:
   version "17.3.2"

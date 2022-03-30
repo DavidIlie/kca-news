@@ -3,52 +3,52 @@ import * as minio from "minio";
 export const minioUrl = "cdn.davidilie.com";
 
 export const minioClient = new minio.Client({
-    endPoint: minioUrl,
-    port: 443,
-    useSSL: true,
-    accessKey: process.env.MINIO_ACCESS_KEY || "",
-    secretKey: process.env.MINIO_SECRET_KEY || "",
+   endPoint: minioUrl,
+   port: 443,
+   useSSL: true,
+   accessKey: "worklog-development",
+   secretKey: "W0rkL0g-D3v3l0pment6969",
 });
 
 export type BucketItem = minio.BucketItemWithMetadata;
 
 export const getObjects = async (bucket: string) => {
-    const objectsList = await new Promise<Array<any>>((resolve, reject) => {
-        const objectsListTemp = [] as Array<any>;
-        const stream = minioClient.extensions.listObjectsV2WithMetadata(
-            bucket,
-            "",
-            true,
-            ""
-        );
+   const objectsList = await new Promise<Array<any>>((resolve, reject) => {
+      const objectsListTemp = [] as Array<any>;
+      const stream = minioClient.extensions.listObjectsV2WithMetadata(
+         bucket,
+         "",
+         true,
+         ""
+      );
 
-        stream.on("data", (obj) => objectsListTemp.push(obj));
-        stream.on("error", reject);
-        stream.on("end", () => {
-            resolve(objectsListTemp);
-        });
-    });
+      stream.on("data", (obj) => objectsListTemp.push(obj));
+      stream.on("error", reject);
+      stream.on("end", () => {
+         resolve(objectsListTemp);
+      });
+   });
 
-    return objectsList;
+   return objectsList;
 };
 
 export const getObjectsByMetadata = async (
-    bucket: string,
-    metadata: Object
+   bucket: string,
+   metadata: Object
 ) => {
-    const data = await getObjects(bucket);
+   const data = await getObjects(bucket);
 
-    const keys = Object.keys(metadata);
-    let match = [] as minio.BucketItemWithMetadata[];
+   const keys = Object.keys(metadata);
+   let match = [] as minio.BucketItemWithMetadata[];
 
-    data.forEach((object: minio.BucketItemWithMetadata) => {
-        let found = false;
-        keys.forEach((key) => {
-            if (key in object.metadata) found = true;
-        });
+   data.forEach((object: minio.BucketItemWithMetadata) => {
+      let found = false;
+      keys.forEach((key) => {
+         if (key in object.metadata) found = true;
+      });
 
-        if (found) match.push(object);
-    });
+      if (found) match.push(object);
+   });
 
-    return match;
+   return match;
 };

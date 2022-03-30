@@ -57,13 +57,13 @@ router.post(async (req: NextApiRequest, res) => {
       }
 
       try {
-         const objects = await getObjectsByMetadata("cover", {
+         const objects = await getObjectsByMetadata("news-covers", {
             "X-Amz-Meta-Article": article.id,
          });
 
          let names = [] as Array<string>;
          objects.forEach((object) => names.push(object.name));
-         await minioClient.removeObjects("cover", names);
+         await minioClient.removeObjects("news-covers", names);
       } catch (error) {
          return res
             .status(503)
@@ -75,15 +75,14 @@ router.post(async (req: NextApiRequest, res) => {
       let compressedFile;
       try {
          compressedFile = await sharp(file.data)
-            .resize({ width: 1024 })
-            .webp({ quality: 50 })
+            .webp({ quality: 75 })
             .toBuffer();
       } catch (error) {
          return res.status(500).json({ message: "failed to compress image" });
       }
 
       try {
-         await minioClient.putObject("cover", name, compressedFile, {
+         await minioClient.putObject("news-covers", name, compressedFile, {
             article: article.id,
          });
       } catch (error) {
@@ -92,7 +91,7 @@ router.post(async (req: NextApiRequest, res) => {
 
       const newArticle = await prisma.article.update({
          where: { id: article.id },
-         data: { cover: `https://${minioUrl}/cover/${name}` },
+         data: { cover: `https://${minioUrl}/news-covers/${name}` },
          include: {
             writer: true,
             coWriters: true,
@@ -104,3 +103,11 @@ router.post(async (req: NextApiRequest, res) => {
       return res.status(500).json({ message: error.message });
    }
 });
+
+export const config = {
+   api: {
+      bodyParser: false,
+   },
+};
+
+export default router;
