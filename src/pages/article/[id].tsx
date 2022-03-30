@@ -212,11 +212,23 @@ const ArticleViewer: React.FC<Props> = ({
       }
    };
 
+   const description = `${article.description} ${
+      article.published
+         ? ` ${upvoteCount} like${
+              upvoteCount > 1 || upvoteCount === 0 ? "s" : ""
+           } - ${downvoteCount} dislike${
+              downvoteCount > 1 || downvoteCount === 0 ? "s" : ""
+           } - ${commentsState.length} comment${
+              commentsState.length > 1 || commentsState.length === 0 ? "s" : ""
+           }`
+         : ""
+   }`;
+
    return (
       <>
          <NextSeo
             title={article.title}
-            description={article.description}
+            description={description}
             canonical={`https://davidilie.com/${router.asPath}`}
             twitter={{
                cardType: "summary_large_image",
@@ -240,19 +252,7 @@ const ArticleViewer: React.FC<Props> = ({
                           ],
                   tags: article.categoryId,
                },
-               description: `${article.description} ${
-                  article.published
-                     ? ` ${upvoteCount} like${
-                          upvoteCount > 1 || upvoteCount === 0 ? "s" : ""
-                       } - ${downvoteCount} dislike${
-                          downvoteCount > 1 || downvoteCount === 0 ? "s" : ""
-                       } - ${commentsState.length} comment${
-                          commentsState.length > 1 || commentsState.length === 0
-                             ? "s"
-                             : ""
-                       }`
-                     : ""
-               }`,
+               description: description,
                url: `https://davidilie.com/${router.asPath}`,
                type: "article",
                images: [
