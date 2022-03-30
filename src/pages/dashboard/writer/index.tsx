@@ -220,7 +220,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                         />
                      </div>
                   </div>
-                  <div className="my-4 mb-20 dark:bg-dark-bg">
+                  <div className="my-4 mb-10 dark:bg-dark-bg">
                      {articlesState.length === 0 && (
                         <h1 className="text-center text-4xl font-semibold">
                            No articles...
