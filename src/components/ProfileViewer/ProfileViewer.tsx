@@ -17,8 +17,8 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
    editable = false,
 }) => {
    return (
-      <div className="container max-w-5xl border-2 border-gray-200 bg-white">
-         <div className="h-full w-1/4 border-r-2 border-gray-200">
+      <div className="container max-w-5xl rounded-md border-2 border-gray-200 bg-white dark:border-gray-800 dark:bg-foot">
+         <div className="h-full w-1/4 border-r-2 border-gray-200 dark:border-gray-700">
             <div className="h-1/2 px-6 pt-4">
                <Tooltip
                   label="This can be changed by changing your Google profile picture."
@@ -50,18 +50,24 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                   </div>
                </div>
             </div>
-            <div className="h-1/2 border-t-2 py-4 px-6">
+            <div className="h-1/2 border-t-2 py-4 px-6 dark:border-gray-700">
                <div className="mb-2">
                   <h1 className="text-lg font-semibold">Description</h1>
-                  <h1>{user.description || "No description..."}</h1>
+                  <h1 className="text-gray-700 dark:text-gray-200">
+                     {user.description || "No description..."}
+                  </h1>
                </div>
                <div className="mb-2">
                   <h1 className="text-lg font-semibold">Year Group</h1>
-                  <h1>{user.showYear ? user.year : "Redacted"}</h1>
+                  <h1 className="text-gray-700 dark:text-gray-200">
+                     {user.showYear ? user.year : "Redacted"}
+                  </h1>
                </div>
                <div className="mb-4">
                   <h1 className="text-lg font-semibold">Status</h1>
-                  <h1>{user.status || "No status..."}</h1>
+                  <h1 className="text-gray-700 dark:text-gray-200">
+                     {user.status || "No status..."}
+                  </h1>
                </div>
                <Button className={`w-full ${!editable && "invisible"}`}>
                   Save

@@ -9,11 +9,11 @@ import {
    AiOutlineDislike,
    AiOutlineQuestion,
 } from "react-icons/ai";
-import { GrUserAdmin } from "react-icons/gr";
+import { MdPreview } from "react-icons/md";
+import { RiAdminLine } from "react-icons/ri";
 
 import { Tag } from "../../types/Tag";
 import { BsPen } from "react-icons/bs";
-import { MdPreview } from "react-icons/md";
 
 interface ProfileTagsProps {
    tags: Tag[];
@@ -87,7 +87,7 @@ const ProfileTags: React.FC<ProfileTagsProps> = ({
                   );
             }
          })}
-         {isAdmin && <BaseTag label="Administrator" Icon={GrUserAdmin} />}
+         {isAdmin && <BaseTag label="Administrator" Icon={RiAdminLine} />}
          {isWriter && <BaseTag label="Writer" Icon={BsPen} />}
          {isReviewer && <BaseTag label="Reviewer" Icon={MdPreview} />}
       </div>
