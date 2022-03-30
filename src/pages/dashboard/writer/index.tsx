@@ -364,7 +364,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                                    {index !==
                                                       article.coWriters.length -
                                                          1 && (
-                                                      <span className="text-black">
+                                                      <span className="text-black dark:text-white">
                                                          ,{" "}
                                                       </span>
                                                    )}
