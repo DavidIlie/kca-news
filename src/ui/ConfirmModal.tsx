@@ -21,6 +21,7 @@ const ConfirmModal: React.FC<Props> = ({
          isOpen={isOpen}
          updateModalState={updateModalState}
          title="Are you sure?"
+         width="lg"
          {...rest}
       >
          <>

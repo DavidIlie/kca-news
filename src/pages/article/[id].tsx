@@ -36,6 +36,7 @@ import ErrorMessage from "../../ui/ErrorMessage";
 import SuccessMessage from "../../ui/SuccessMessage";
 import ConfirmModal from "../../ui/ConfirmModal";
 import ArticleWriterInfo from "../../components/ArticleWriterInfo";
+import { computeKCAName } from "../../lib/computeKCAName";
 
 interface Props {
    article: Article;
@@ -480,7 +481,9 @@ const ArticleViewer: React.FC<Props> = ({
                                     placeholder="blur"
                                     className="rounded-full object-cover"
                                     alt={`${
-                                       comment.user?.name.split(" ")[0]
+                                       comment.user?.names[
+                                          comment.user?.nameIndex
+                                       ]
                                     }'s profile image`}
                                  />
                                  <div className="flex flex-col items-center space-y-2">
@@ -489,7 +492,7 @@ const ArticleViewer: React.FC<Props> = ({
                                     </div>
                                     <div className="flex items-center space-x-2">
                                        <p className="text-sm text-gray-500 dark:text-gray-300">
-                                          {comment.user?.name}
+                                          {computeKCAName(comment.user!)}
                                        </p>
                                        <span className="text-gray-800 dark:text-gray-200">
                                           /
