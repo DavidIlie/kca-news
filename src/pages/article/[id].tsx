@@ -276,10 +276,8 @@ const ArticleViewer: React.FC<Props> = ({
                         <ArticleBadge tag={category} key={index} />
                      ))}
                   </div>
-                  <div className="flex justify-between border-b-2 pb-2">
-                     <h1 className="px-4 text-4xl font-semibold">
-                        {article.title}
-                     </h1>
+                  <div className="flex justify-between border-b-2 px-4 pb-2">
+                     <h1 className="text-4xl font-semibold">{article.title}</h1>
                      {article.published && (
                         <div className="grid grid-cols-2 divide-x-2 divide-gray-500">
                            <div className="mr-4 flex items-center justify-center gap-1">
