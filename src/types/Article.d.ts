@@ -22,4 +22,5 @@ export interface Article {
    comments?: Comment[];
    upvotes?: Upvote[];
    downvotes?: Downvote[];
+   tags: string[];
 }

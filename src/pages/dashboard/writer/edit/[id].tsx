@@ -5,6 +5,7 @@ import { DefaultSeo } from "next-seo";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
+   AiFillTag,
    AiOutlineCheck,
    AiOutlineClose,
    AiOutlineCloseCircle,
@@ -30,6 +31,7 @@ import {
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { BiCategory } from "react-icons/bi";
 
 const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
 
@@ -79,6 +81,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
    const [article, setArticle] = useState<Article>(articleServer);
    const [categories, setCategories] = useState<string[]>(article.categoryId);
+   const [tags, setTags] = useState<string[]>(article.tags);
    const [title, setTitle] = useState<string>(article.title);
    const [description, setDescription] = useState<string>(article.description);
    const [markdownValue, changeMarkdownValue] = useState<string>(article.mdx);
@@ -101,9 +104,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       (article.mdx !== markdownValue && markdownValue.length > 2);
 
    const canSaveRest =
-      JSON.stringify(categories) !== JSON.stringify(article.categoryId) &&
-      categories.length !== 0;
-
+      (JSON.stringify(categories) !== JSON.stringify(article.categoryId) &&
+         categories.length !== 0) ||
+      JSON.stringify(tags) !== JSON.stringify(article.tags);
    usePreventUserFromLosingData(
       (canSave && canSaveRest) || canSave || canSaveRest
    );
@@ -185,6 +188,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
          credentials: "include",
          body: JSON.stringify({
             categories,
+            tags,
          }),
       });
       const response = await r.json();
@@ -270,7 +274,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         </Alert>
                      )}
                      <div className="mb-2 flex w-full flex-wrap justify-start">
-                        {categories.map((category, index) => (
+                        {categories.concat(tags).map((category, index) => (
                            <ArticleBadge tag={category} key={index} />
                         ))}
                         {categories.length === 0 && (
@@ -521,7 +525,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            />
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure
-                           name="Categories"
+                           name="Categories & Tags"
                            warning={categories.length === 0}
                            defaultOpen={categories.length === 0}
                         >
@@ -542,8 +546,33 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               nothingFound="Nothing found"
                               clearable
                               maxDropdownHeight={160}
-                              maxSelectedValues={5}
+                              maxSelectedValues={3}
                               valueComponent={WrappedArticleBadge}
+                              label="Categories (max 3)"
+                              required
+                              icon={<BiCategory />}
+                           />
+                           <div className="mt-4" />
+                           <MultiSelect
+                              data={tags}
+                              value={tags}
+                              placeholder="Create custom tags"
+                              searchable
+                              onChange={(v) => {
+                                 if (v.length === 0 || v.length < tags.length)
+                                    setTags(v);
+                              }}
+                              clearable
+                              maxDropdownHeight={160}
+                              maxSelectedValues={2}
+                              valueComponent={WrappedArticleBadge}
+                              label="Tags (max 2)"
+                              creatable
+                              getCreateLabel={(query) => `+ Create ${query}`}
+                              onCreate={(query) => {
+                                 setTags((current) => [...current, query]);
+                              }}
+                              icon={<AiFillTag />}
                            />
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure name="Cover">

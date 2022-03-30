@@ -70,6 +70,7 @@ CREATE TABLE "Article" (
     "description" TEXT NOT NULL,
     "published" BOOLEAN NOT NULL DEFAULT false,
     "categoryId" TEXT[],
+    "tags" TEXT[],
     "filter" TEXT[],
     "underReview" BOOLEAN NOT NULL DEFAULT false,
 

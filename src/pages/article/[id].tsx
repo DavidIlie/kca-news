@@ -272,9 +272,11 @@ const ArticleViewer: React.FC<Props> = ({
             >
                <div className="container mx-auto mt-10 max-w-4xl">
                   <div className="mb-2 flex w-full flex-wrap justify-start px-3">
-                     {article.categoryId.map((category, index) => (
-                        <ArticleBadge tag={category} key={index} />
-                     ))}
+                     {article.categoryId
+                        .concat(article.tags)
+                        .map((category, index) => (
+                           <ArticleBadge tag={category} key={index} />
+                        ))}
                   </div>
                   <div className="flex justify-between px-4 pb-2">
                      <h1 className="text-4xl font-semibold">{article.title}</h1>

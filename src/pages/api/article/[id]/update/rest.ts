@@ -35,6 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
          where: { id: article.id },
          data: {
             categoryId: body.categories,
+            tags: body.tags,
             published: session?.user?.isAdmin ? article.published : false,
             underReview: session?.user?.isAdmin
                ? article.underReview

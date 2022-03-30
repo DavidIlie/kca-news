@@ -23,4 +23,5 @@ export const updateArticleRestSchema = yup.object().shape({
       )
       .min(1)
       .required(),
+   tags: yup.array().of(yup.string().required()).optional(),
 });

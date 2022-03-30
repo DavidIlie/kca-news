@@ -92,6 +92,7 @@ model Article {
   description   String
   published     Boolean   @default(false)
   categoryId    String[]
+  tags          String[]
   filter        String[]
   underReview   Boolean   @default(false)
 }
