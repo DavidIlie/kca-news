@@ -276,7 +276,7 @@ const ArticleViewer: React.FC<Props> = ({
                         <ArticleBadge tag={category} key={index} />
                      ))}
                   </div>
-                  <div className="flex justify-between border-b-2 px-4 pb-2">
+                  <div className="flex justify-between px-4 pb-2">
                      <h1 className="text-4xl font-semibold">{article.title}</h1>
                      {article.published && (
                         <div className="grid grid-cols-2 divide-x-2 divide-gray-500">
@@ -319,6 +319,7 @@ const ArticleViewer: React.FC<Props> = ({
                         </div>
                      )}
                   </div>
+                  <div className="border-b-2" />
                   <ArticleWriterInfo
                      article={article}
                      user={data?.user}
@@ -340,7 +341,7 @@ const ArticleViewer: React.FC<Props> = ({
                   <p className="w-full max-w-5xl px-4 text-justify">
                      {article.description}
                   </p>
-                  <div className="mt-4 ml-4 border-t-2" />
+                  <div className="mt-4 border-t-2" />
                   <div className="px-4">
                      {/*
                         // @ts-ignore */}
