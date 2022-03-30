@@ -95,7 +95,7 @@ const OurTeam: React.FC = () => {
                         </h1>
                      </div>
                   </div>
-                  <div className="mt-24 mb-20 flex justify-evenly dark:bg-gray-900">
+                  <div className="mt-24 mb-20 flex justify-evenly dark:bg-dark-bg">
                      <div>
                         <h1 className="text-5xl font-semibold">
                            The Creative Team

@@ -1,62 +1,19 @@
-import React, { Fragment } from "react";
-import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
-import { Menu, Transition } from "@headlessui/react";
+import React from "react";
+import { Menu } from "@headlessui/react";
 
-import { Category } from "../../lib/categories";
-
-import NextLink from "../../ui/NextLink";
+import { Category, Locations } from "../../lib/categories";
 import DropdownElement from "../../ui/DropdownElement";
+import NextLink from "../../ui/NextLink";
 
 interface Props {
-   name: "News" | "Entertainment" | "Sport" | "Lifestyle";
-   categories: Category[];
+   location: Locations;
+   category: Category;
 }
 
-const NewsLink: React.FC<Props> = ({ name, categories }) => {
-   return (
-      <Menu as="div" className="relative inline-flex select-none">
-         <Menu.Button
-            as="div"
-            className="flex cursor-pointer items-center gap-1 rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-1 duration-150 hover:bg-gray-200 hover:text-gray-100 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg"
-         >
-            {({ open }) => (
-               <>
-                  {name}
-                  {open ? (
-                     <AiOutlineArrowUp className="-mr-1" />
-                  ) : (
-                     <AiOutlineArrowDown className="-mr-1" />
-                  )}
-               </>
-            )}
-         </Menu.Button>
-         <Transition
-            as={Fragment}
-            enter="transition ease-out duration-100"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition ease-in duration-75"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-95"
-         >
-            <Menu.Items className="absolute mt-12 w-36 rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-900 dark:bg-foot">
-               {categories.map((news, index) => (
-                  <Menu.Item
-                     as={NextLink}
-                     href={
-                        news.location.length > 1
-                           ? `/${news.id}?filter=${name.toLocaleLowerCase()}`
-                           : `/${news.location[0]}?category=${news.id}`
-                     }
-                     key={index}
-                  >
-                     <DropdownElement>{news.name}</DropdownElement>
-                  </Menu.Item>
-               ))}
-            </Menu.Items>
-         </Transition>
-      </Menu>
-   );
-};
+const NewsLink: React.FC<Props> = ({ category }) => (
+   <Menu.Item as={NextLink} href={`/${location}?category=${category.id}`}>
+      <DropdownElement>{category.name}</DropdownElement>
+   </Menu.Item>
+);
 
 export default NewsLink;

@@ -2,18 +2,27 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineArrowLeft } from "react-icons/ai";
 
 import { Button } from "../../ui/Button";
 import { Spinner } from "../../ui/Spinner";
 import UserDropdown from "./UserDropdown";
 
 import NewsLink from "./NewsLink";
-import { links } from "../../lib/categories";
+import {
+   getFormmatedLocation,
+   links,
+   Locations,
+   visibleLocations,
+   moreLocations,
+} from "../../lib/categories";
+import NewsDropdown from "./NewsDropdown";
+import DropdownElement from "../../ui/DropdownElement";
 
 const NavBar: React.FC = () => {
    const { status } = useSession();
 
+   const [openMoreMenu, setOpenMoreMenu] = useState<Locations | null>(null);
    const [searchQuery, setSearchQuery] = useState("");
    const { push, asPath } = useRouter();
 
@@ -39,35 +48,65 @@ const NavBar: React.FC = () => {
             </Link>
             <nav className="flex w-full flex-nowrap items-center justify-center gap-4 pb-2 text-base sm:w-auto sm:pb-0 md:mr-auto md:ml-4 md:border-l md:border-gray-400 md:py-1 md:pl-4 dark:md:border-gray-900">
                <Link href="/">
-                  <a className="cursor-pointer rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-1 duration-150 hover:bg-gray-200 hover:text-gray-100 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg">
+                  <a className="cursor-pointer rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-1 duration-150 hover:bg-gray-200 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg">
                      Home
                   </a>
                </Link>
-               <NewsLink
-                  name="News"
-                  categories={links.filter((s) => s.location.includes("news"))}
-               />
-               <NewsLink
-                  name="Entertainment"
-                  categories={links.filter((s) =>
-                     s.location.includes("entertainment")
-                  )}
-               />
-               <NewsLink
-                  name="Sport"
-                  categories={links.filter((s) => s.location.includes("sport"))}
-               />
-               <NewsLink
-                  name="Lifestyle"
-                  categories={links.filter((s) =>
-                     s.location.includes("lifestyle")
-                  )}
-               />
                <Link href="/about">
-                  <a className="cursor-pointer rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-1 duration-150 hover:bg-gray-200 hover:text-gray-100 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg">
+                  <a className="cursor-pointer rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-1 duration-150 hover:bg-gray-200 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg">
                      About
                   </a>
                </Link>
+               {visibleLocations.map((location, index) => (
+                  <NewsDropdown
+                     name={getFormmatedLocation(location)}
+                     key={index}
+                  >
+                     {links
+                        .filter((l) => l.location.includes(location))
+                        .map((category, index) => (
+                           <NewsLink
+                              category={category}
+                              location={location}
+                              key={index}
+                           />
+                        ))}
+                  </NewsDropdown>
+               ))}
+               <NewsDropdown name="More" special={openMoreMenu !== null}>
+                  {openMoreMenu ? (
+                     <>
+                        <div className="flex items-center gap-2 bg-gray-100 px-2 py-2 dark:bg-dark-bg">
+                           <AiOutlineArrowLeft
+                              onClick={() => setOpenMoreMenu(null)}
+                              className="cursor-pointer"
+                           />
+                           <p className="mx-auto text-black dark:text-white">
+                              {getFormmatedLocation(openMoreMenu)}
+                           </p>
+                        </div>
+                        {links
+                           .filter((l) => l.location.includes(openMoreMenu))
+                           .map((category, index) => (
+                              <NewsLink
+                                 category={category}
+                                 location={openMoreMenu}
+                                 key={index}
+                              />
+                           ))}
+                     </>
+                  ) : (
+                     moreLocations.map((location, index) => (
+                        <DropdownElement
+                           key={index}
+                           opening
+                           openingFunction={() => setOpenMoreMenu(location)}
+                        >
+                           {getFormmatedLocation(location)}
+                        </DropdownElement>
+                     ))
+                  )}
+               </NewsDropdown>
             </nav>
             <div className="mx-auto mt-4 flex items-center gap-4 xl:mt-0">
                <div className="relative mx-auto text-gray-600">
