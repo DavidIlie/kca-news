@@ -10,7 +10,7 @@ interface Props {
    user: User;
 }
 
-const ProfileViewer: React.FC<Props> = ({ user }) => {
+const ProfileViewerPage: React.FC<Props> = ({ user }) => {
    return (
       <>
          <DefaultSeo title={computeKCAName(user)} />
@@ -42,4 +42,4 @@ export const getServerSideProps: GetServerSideProps = async ({
    };
 };
 
-export default ProfileViewer;
+export default ProfileViewerPage;
