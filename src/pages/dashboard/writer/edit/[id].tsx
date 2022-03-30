@@ -361,7 +361,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                normalProps={{
                   className: `${
                      openSidebar ? "w-1/5" : "hidden"
-                  } relative border-l-2 border-gray-300 dark:border-blue-900 py-4 flex h-full flex-col flex-grow`,
+                  } relative border-l-2 borderColor py-4 flex h-full flex-col flex-grow`,
                }}
             >
                <Consumer>
@@ -371,7 +371,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            visible={loadingRest && !loadingContentUpdate}
                         />
                         {!mobile && (
-                           <div className="flex items-center justify-between gap-2 border-b-2 border-gray-300 px-4 pb-4 dark:border-blue-900">
+                           <div className="borderColor flex items-center justify-between gap-2 border-b-2 px-4 pb-4">
                               <h1 className="text-2xl font-semibold">
                                  Settings
                               </h1>

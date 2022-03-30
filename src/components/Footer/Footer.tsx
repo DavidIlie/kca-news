@@ -5,7 +5,7 @@ import { links } from "../../lib/categories";
 
 const Footer: React.FC = () => {
    return (
-      <footer className="border-t-2 border-gray-300 dark:border-blue-900 dark:bg-gray-900">
+      <footer className="borderColor border-t-2 dark:bg-dark-bg">
          <div className="container mx-auto flex flex-col flex-wrap pb-12 pt-6 md:flex-row md:flex-nowrap md:items-center lg:items-start">
             <div className="mx-auto w-64 flex-shrink-0 text-center sm:pl-14 md:mx-0 md:text-left">
                <a className="flex items-center justify-center font-medium text-gray-900 dark:text-gray-100 md:justify-start">
@@ -126,7 +126,7 @@ const Footer: React.FC = () => {
                </div>
             </div>
          </div>
-         <p className="mx-auto border-t-2 border-gray-300 bg-gray-100 py-4 px-5 text-center text-sm text-gray-800 dark:border-blue-900 dark:bg-gray-800 dark:text-gray-100 sm:text-left sm:text-base">
+         <p className="borderColor mx-auto border-t-2 bg-gray-100 py-4 px-5 text-center text-sm text-gray-800 dark:bg-foot dark:text-gray-100 sm:text-left sm:text-base">
             © {new Date().getFullYear()}{" "}
             <a href="https://davidilie.com" target="_blank" rel="noreferrer">
                David Ilie

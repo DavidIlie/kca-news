@@ -27,7 +27,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
    return (
       <MantineProvider theme={{ colorScheme: resolvedTheme }}>
          <NotificationsProvider>
-            <div className="flex h-screen flex-col bg-white dark:bg-gray-900">
+            <div className="flex h-screen flex-col bg-white dark:bg-dark-bg">
                <NavBar />
                {children}
                {!router.asPath.includes("/dashboard/writer/edit") && <Footer />}

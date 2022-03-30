@@ -34,7 +34,7 @@ const EditorSettingsDisclosure: React.FC<Props> = ({
    return (
       <Disclosure
          as="div"
-         className="border-b-2 border-gray-300 dark:border-blue-900"
+         className="borderColor border-b-2"
          defaultOpen={defaultOpenState}
       >
          <Disclosure.Button className="w-[99.5%] select-none p-0 py-4 ring-blue-500 duration-150 hover:bg-gray-100 focus:ring-1 dark:hover:bg-gray-800">

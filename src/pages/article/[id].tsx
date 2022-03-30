@@ -263,7 +263,7 @@ const ArticleViewer: React.FC<Props> = ({
                ],
             }}
          />
-         <div className="sm:pt-42 flex flex-grow px-4 dark:bg-gray-900 md:pt-36 lg:px-0 xl:pt-24">
+         <div className="sm:pt-42 flex flex-grow px-4 dark:bg-dark-bg md:pt-36 lg:px-0 xl:pt-24">
             <Slide
                triggerOnce
                className="mx-auto"
@@ -362,7 +362,7 @@ const ArticleViewer: React.FC<Props> = ({
                         <h1 className="text-4xl font-semibold">
                            What do you think?
                         </h1>
-                        <div className="my-4 w-full rounded border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
+                        <div className="my-4 w-full rounded border border-gray-200 bg-gray-50 p-6 dark:border-gray-800 dark:bg-foot">
                            <h5 className="text-lg font-semibold text-gray-900 dark:text-gray-100 md:text-xl">
                               Leave a comment
                            </h5>
@@ -435,7 +435,7 @@ const ArticleViewer: React.FC<Props> = ({
                                              placeholder="Your comment..."
                                              required
                                              name="message"
-                                             className="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 py-2 pl-4 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-900 dark:focus:ring-blue-900"
+                                             className="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 py-2 pl-4 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-800 dark:bg-dark-bg dark:text-gray-100 dark:focus:border-blue-900 dark:focus:ring-blue-900"
                                           />
                                           <Button
                                              className="mt-2 mb-2 w-full"

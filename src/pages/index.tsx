@@ -41,7 +41,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                <Slide cascade triggerOnce direction="left">
                   <div className="relative -mr-96 flex items-center gap-4">
                      <button
-                        className="cursor-pointer rounded-full border bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 dark:focus:ring-gray-900 dark:disabled:text-gray-500"
+                        className="cursor-pointer rounded-full border bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:disabled:text-gray-500"
                         disabled={index === 0}
                         onClick={() => setSelectedIndex(index - 1)}
                         title="Back"
@@ -60,7 +60,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                                  )}
                               </span>
                            </h1>
-                           <div className="h-26 absolute bottom-0 z-50 mb-1.5 w-[50%] rounded-b-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg text-white">
+                           <div className="h-26 absolute bottom-0 z-50 mb-[0.3rem] w-[50%] rounded-b-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg text-white">
                               <h1 className="line-clamp-3">
                                  <span className="text-2xl font-bold">
                                     BREAKING NEWS:
@@ -79,7 +79,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                         </a>
                      </Link>
                      <button
-                        className="cursor-pointer rounded-full border bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 dark:focus:ring-gray-900 dark:disabled:text-gray-500"
+                        className="cursor-pointer rounded-full border bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:disabled:text-gray-500"
                         disabled={index === featuredPosts.length - 1}
                         onClick={() => setSelectedIndex(index + 1)}
                         title="Next"

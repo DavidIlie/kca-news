@@ -9,7 +9,7 @@ import { Button } from "../../../ui/Button";
 
 const CreatePage: React.FC = () => {
    return (
-      <div className="flex min-h-screen flex-grow items-center justify-center">
+      <div className="mt-10 flex min-h-screen flex-grow items-center justify-center">
          <Slide triggerOnce direction="down">
             <div>
                <h1 className="mb-4 text-6xl font-bold text-red-500">

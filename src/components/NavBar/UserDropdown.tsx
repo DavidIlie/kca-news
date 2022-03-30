@@ -23,7 +23,7 @@ const UserDropdown: React.FC = () => {
             {({ open }) => (
                <img
                   src={data?.user?.image || "/no-pfp.jpg"}
-                  className={`flex w-[45%] rounded-full duration-150 hover:ring-2 ${
+                  className={`flex w-[45%] rounded-full duration-150 hover:ring-2 dark:ring-blue-900 ${
                      open && "ring-2"
                   }`}
                />
@@ -38,7 +38,7 @@ const UserDropdown: React.FC = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
          >
-            <Menu.Items className="absolute right-0 z-10 mt-12 w-36 rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-700 dark:bg-gray-800">
+            <Menu.Items className="absolute right-0 z-10 mt-12 w-36 rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
                <div className="border-1 rounded-t-md border-gray-300">
                   <Menu.Item as={NextLink} href="/profile">
                      <DropdownElement>

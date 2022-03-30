@@ -1,7 +1,12 @@
 module.exports = {
    content: ["./src/**/*.{js,ts,jsx,tsx}"],
    theme: {
-      extend: {},
+      extend: {
+         colors: {
+            "dark-bg": "#181a1b",
+            foot: "#242526",
+         },
+      },
    },
    plugins: [require("@tailwindcss/line-clamp")],
    darkMode: "class",

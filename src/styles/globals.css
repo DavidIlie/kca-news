@@ -61,7 +61,7 @@
 }
 
 .ProseMirror {
-   @apply dark:bg-gray-900;
+   @apply dark:bg-dark-bg;
 }
 
 .ProseMirror h1 {
@@ -86,4 +86,8 @@
 
 .ProseMirror h6 {
    @apply text-sm text-black dark:text-white;
+}
+
+.borderColor {
+   @apply border-gray-300 dark:border-gray-700;
 }

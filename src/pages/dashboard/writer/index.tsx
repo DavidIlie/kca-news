@@ -136,7 +136,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
    return (
       <>
          <DefaultSeo title="Writer Panel" />
-         <div className="flex flex-grow px-4 pt-10 dark:bg-gray-900 sm:pt-32">
+         <div className="flex flex-grow px-4 pt-10 dark:bg-dark-bg sm:pt-[7.8rem]">
             <div className="mx-auto">
                <DashboardStatistics
                   isAdmin={user.isAdmin}
@@ -147,7 +147,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                   <h1 className="mb-4 text-4xl font-semibold">
                      {user.isAdmin ? "Total" : "Your"} Articles
                   </h1>
-                  <div className="dasrk:border-blue-900 flex justify-between border-b-2 border-gray-300 pb-4">
+                  <div className="borderColor flex justify-between border-b-2 pb-4">
                      <div className="flex items-center gap-2">
                         <Link href="/dashboard/writer/create">
                            <a>
@@ -229,7 +229,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                      {articlesState.map((article, index) => (
                         <Disclosure
                            as="div"
-                           className={`rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-gray-800 ${
+                           className={`rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-4 dark:border-gray-800 dark:bg-foot ${
                               index !== articles.length - 1 && "mb-4"
                            }`}
                            key={article.id}

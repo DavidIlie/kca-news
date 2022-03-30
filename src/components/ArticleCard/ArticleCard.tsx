@@ -14,7 +14,7 @@ interface ArticleCardProps {
 const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
    return (
       <Link href={`/article/${article.id}`}>
-         <a className="hoverItem t-11 mb-4 flex cursor-pointer gap-4 rounded-xl border-2 border-gray-200 bg-gray-50 duration-200 dark:border-gray-700 dark:bg-gray-800 md:flex-nowrap md:px-3 md:py-2">
+         <a className="hoverItem t-11 mb-4 flex cursor-pointer gap-4 rounded-xl border-2 border-gray-200 bg-gray-50 duration-200 dark:border-gray-800 dark:bg-foot md:flex-nowrap md:px-3 md:py-2">
             <Image
                alt="Post picture"
                className="rounded shadow-xl"

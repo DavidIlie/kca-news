@@ -17,7 +17,7 @@ const NewsLink: React.FC<Props> = ({ name, categories }) => {
       <Menu as="div" className="relative inline-flex select-none">
          <Menu.Button
             as="div"
-            className="flex cursor-pointer items-center gap-1 rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-1 duration-150 hover:bg-gray-200 hover:text-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900"
+            className="flex cursor-pointer items-center gap-1 rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-1 duration-150 hover:bg-gray-200 hover:text-gray-100 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg"
          >
             {({ open }) => (
                <>
@@ -39,7 +39,7 @@ const NewsLink: React.FC<Props> = ({ name, categories }) => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
          >
-            <Menu.Items className="absolute mt-12 w-36 rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-700 dark:bg-gray-800">
+            <Menu.Items className="absolute mt-12 w-36 rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-900 dark:bg-foot">
                {categories.map((news, index) => (
                   <Menu.Item
                      as={NextLink}
