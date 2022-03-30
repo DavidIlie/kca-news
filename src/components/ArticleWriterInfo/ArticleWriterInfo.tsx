@@ -69,7 +69,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                               leaveFrom="opacity-100 translate-y-0"
                               leaveTo="opacity-0 translate-y-1"
                            >
-                              <Popover.Panel className="absolute z-10 w-[20rem] rounded-md border-2 border-gray-100 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
+                              <Popover.Panel className="absolute z-10 w-[20rem] rounded-md border-2 border-gray-100 bg-white shadow-md dark:border-gray-800 dark:bg-foot">
                                  {article.coWriters.map((co, index) => (
                                     <Link href={`/profile/${co.id}`}>
                                        <a

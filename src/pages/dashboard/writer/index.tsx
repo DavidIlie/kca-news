@@ -358,7 +358,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                              >
                                                 <a
                                                    key={index}
-                                                   className="font-semibold text-blue-600 duration-150 hover:text-blue-800"
+                                                   className="font-semibold text-blue-600 duration-150 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-600"
                                                 >
                                                    {writer.name}
                                                    {index !==
@@ -388,7 +388,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                              article.comments![0].user?.id
                                           }`}
                                        >
-                                          <a className="text-blue-600 duration-150 hover:text-blue-800">
+                                          <a className="text-blue-600 duration-150 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-600">
                                              {article.comments![0].user?.name}
                                           </a>
                                        </Link>
@@ -396,7 +396,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                        <Link
                                           href={`/article/${article.id}#comments`}
                                        >
-                                          <a className="text-blue-600 duration-150 hover:text-blue-800">
+                                          <a className="text-blue-600 duration-150 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-600">
                                              see rest
                                           </a>
                                        </Link>

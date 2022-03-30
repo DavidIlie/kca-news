@@ -467,7 +467,7 @@ const ArticleViewer: React.FC<Props> = ({
                         <div id="comments">
                            {commentsState.map((comment, index) => (
                               <div
-                                 className={`flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4 dark:border-gray-700 dark:bg-gray-800 ${
+                                 className={`flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4 dark:border-gray-800 dark:bg-foot ${
                                     index !== commentsState.length - 1 && "mb-4"
                                  }`}
                                  key={index}
