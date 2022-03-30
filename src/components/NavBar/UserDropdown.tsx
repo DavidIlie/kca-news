@@ -46,6 +46,20 @@ const UserDropdown: React.FC = () => {
                         Profile
                      </DropdownElement>
                   </Menu.Item>
+                  <DropdownElement
+                     onClick={() =>
+                        resolvedTheme === "dark"
+                           ? setTheme("light")
+                           : setTheme("dark")
+                     }
+                  >
+                     {resolvedTheme === "dark" ? (
+                        <MdLightMode className="mx-0.5 text-xl" />
+                     ) : (
+                        <MdDarkMode className="mx-0.5 text-xl" />
+                     )}
+                     {resolvedTheme === "dark" ? "Light Mode" : "Dark Mode"}
+                  </DropdownElement>
                   {isWriter && (
                      <Menu.Item as={NextLink} href="/dashboard/writer">
                         <DropdownElement>
@@ -62,20 +76,6 @@ const UserDropdown: React.FC = () => {
                         </DropdownElement>
                      </Menu.Item>
                   )}
-                  <DropdownElement
-                     onClick={() =>
-                        resolvedTheme === "dark"
-                           ? setTheme("light")
-                           : setTheme("dark")
-                     }
-                  >
-                     {resolvedTheme === "dark" ? (
-                        <MdLightMode className="mx-0.5 text-xl" />
-                     ) : (
-                        <MdDarkMode className="mx-0.5 text-xl" />
-                     )}
-                     {resolvedTheme === "dark" ? "Light Mode" : "Dark Mode"}
-                  </DropdownElement>
                </div>
                <Menu.Item
                   as="a"

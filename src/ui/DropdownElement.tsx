@@ -8,7 +8,7 @@ interface Props
 const DropdownElement: React.FC<Props> = ({ children, ...rest }) => {
    return (
       <div
-         className="group flex w-full cursor-pointer items-center gap-1 px-2 py-2 text-sm text-black duration-200 hover:bg-gray-200 dark:text-white dark:hover:bg-dark-bg"
+         className="group flex w-full cursor-pointer items-center gap-1 px-2 py-2 text-sm text-black duration-200 hover:bg-gray-200 dark:bg-opacity-10 dark:text-white dark:hover:bg-dark-bg"
          {...rest}
       >
          {children}
