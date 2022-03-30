@@ -136,7 +136,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
    return (
       <>
          <DefaultSeo title="Writer Panel" />
-         <div className="mb-20 flex flex-grow px-4 pt-10 sm:pt-32">
+         <div className="flex flex-grow px-4 pt-10 dark:bg-gray-900 sm:pt-32">
             <div className="mx-auto">
                <DashboardStatistics
                   isAdmin={user.isAdmin}
@@ -147,7 +147,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                   <h1 className="mb-4 text-4xl font-semibold">
                      {user.isAdmin ? "Total" : "Your"} Articles
                   </h1>
-                  <div className="flex justify-between border-b-2 border-gray-300 pb-4 dark:border-blue-900">
+                  <div className="dasrk:border-blue-900 flex justify-between border-b-2 border-gray-300 pb-4">
                      <div className="flex items-center gap-2">
                         <Link href="/dashboard/writer/create">
                            <a>
@@ -220,7 +220,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                         />
                      </div>
                   </div>
-                  <div className="my-4">
+                  <div className="my-4 mb-20 dark:bg-gray-900">
                      {articlesState.length === 0 && (
                         <h1 className="text-center text-4xl font-semibold">
                            No articles...
