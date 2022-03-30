@@ -136,7 +136,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
    return (
       <>
          <DefaultSeo title="Writer Panel" />
-         <div className="flex flex-grow px-4 pt-10 dark:bg-dark-bg sm:pt-[7.8rem]">
+         <div className="flex flex-grow px-4 pt-10 dark:bg-dark-bg sm:pt-32">
             <div className="mx-auto">
                <DashboardStatistics
                   isAdmin={user.isAdmin}
