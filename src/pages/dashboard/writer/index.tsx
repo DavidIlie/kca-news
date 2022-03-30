@@ -220,7 +220,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                         />
                      </div>
                   </div>
-                  <div className="my-4 mb-20 dark:bg-gray-900">
+                  <div className="my-4 mb-20 dark:bg-dark-bg">
                      {articlesState.length === 0 && (
                         <h1 className="text-center text-4xl font-semibold">
                            No articles...
@@ -230,7 +230,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                         <Disclosure
                            as="div"
                            className={`rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-4 dark:border-gray-800 dark:bg-foot ${
-                              index !== articles.length - 1 && "mb-4"
+                              index !== articles.length - 1 && "mb-4 "
                            }`}
                            key={article.id}
                         >
