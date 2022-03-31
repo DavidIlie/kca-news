@@ -6,7 +6,8 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import { Disclosure } from "@headlessui/react";
-import { Select, TextInput } from "@mantine/core";
+import { LoadingOverlay, Select, TextInput } from "@mantine/core";
+import { useNotifications } from "@mantine/notifications";
 
 import {
    AiOutlineArrowDown,
@@ -15,6 +16,7 @@ import {
    AiOutlineDislike,
    AiOutlineSearch,
    AiOutlineFilter,
+   AiOutlineClose,
 } from "react-icons/ai";
 
 import prisma from "../../../lib/prisma";
@@ -27,29 +29,35 @@ import ArticleBadge from "../../../components/ArticleBadge";
 import ArticleUnderReviewCard from "../../../components/ArticleUnderReviewCard";
 import DashboardStatistics from "../../../components/DashboardStatistics";
 
+interface Statistics {
+   totalArticles: number;
+   publishedArticles: number;
+   totalComments: number;
+   totalUpvotes: number;
+   totalDownvotes: number;
+}
+
 interface Props {
    user: User;
-   statistics: {
-      totalArticles: number;
-      publishedArticles: number;
-      totalComments: number;
-      totalUpvotes: number;
-      totalDownvotes: number;
-   };
+   statistics: Statistics;
    articles: Article[];
 }
 
 const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
    const [selected, setSelected] = useState<Article | null>(null);
 
+   const notifications = useNotifications();
    const { push } = useRouter();
 
+   const [statisticsState, setStatistics] = useState<Statistics>(statistics);
+   const [baseArticles, setBaseArticles] = useState<Article[]>(articles);
    const [filteredArticles, setFilteredArticles] =
-      useState<Article[]>(articles);
+      useState<Article[]>(baseArticles);
    const [articlesState, setArticles] = useState<Article[]>(filteredArticles);
    const [searchQuery, setSearchQuery] = useState<string>("");
    const [hasSearched, setHasSearched] = useState<boolean>(false);
    const [filter, setFilter] = useState<string | null>(null);
+   const [bigLoading, setBigLoading] = useState<boolean>(false);
 
    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
       const val = e.target.value;
@@ -75,7 +83,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
       switch (v) {
          case "newest":
             setArticles(
-               articles.sort(
+               baseArticles.sort(
                   (a, b) =>
                      new Date(b.createdAt).getTime() -
                      new Date(a.createdAt).getTime()
@@ -84,7 +92,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
             break;
          case "oldest":
             setArticles(
-               articles.sort(
+               baseArticles.sort(
                   (a, b) =>
                      new Date(a.createdAt).getTime() -
                      new Date(b.createdAt).getTime()
@@ -93,54 +101,106 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
             break;
          case "most-likes":
             setArticles(
-               articles.sort((a, b) => b.upvotes!.length - a.upvotes!.length)
+               baseArticles.sort(
+                  (a, b) => b.upvotes!.length - a.upvotes!.length
+               )
             );
             break;
          case "least-likes":
             setArticles(
-               articles.sort((a, b) => a.upvotes!.length - b.upvotes!.length)
+               baseArticles.sort(
+                  (a, b) => a.upvotes!.length - b.upvotes!.length
+               )
             );
             break;
          case "most-dislikes":
             setArticles(
-               articles.sort(
+               baseArticles.sort(
                   (a, b) => b.downvotes!.length - a.downvotes!.length
                )
             );
             break;
          case "least-dislikes":
             setArticles(
-               articles.sort(
+               baseArticles.sort(
                   (a, b) => a.downvotes!.length - b.downvotes!.length
                )
             );
             break;
          case "published":
-            setArticles(articles.filter((article) => article.published));
+            setArticles(baseArticles.filter((article) => article.published));
             break;
          case "not-published":
-            setArticles(articles.filter((article) => !article.published));
+            setArticles(baseArticles.filter((article) => !article.published));
             break;
          case "review":
-            setArticles(articles.filter((article) => article.underReview));
+            setArticles(baseArticles.filter((article) => article.underReview));
             break;
          case "not-review":
-            setArticles(articles.filter((article) => !article.underReview));
+            setArticles(baseArticles.filter((article) => !article.underReview));
             break;
          default:
-            setFilteredArticles(articles);
+            setFilteredArticles(baseArticles);
             break;
       }
+   };
+
+   const deleteArticle = async (id: string) => {
+      setBigLoading(true);
+
+      const r = await fetch(`/api/article/${id}/delete`, {
+         method: "DELETE",
+         credentials: "include",
+      });
+      const response = await r.json();
+
+      if (r.status === 200) {
+         setSelected(null);
+
+         const filtered = baseArticles.filter((article) => article.id !== id);
+
+         setBaseArticles(filtered);
+         setFilteredArticles(filtered);
+         setArticles(filtered);
+
+         const r = await fetch(`/api/writer/statistics`, {
+            credentials: "include",
+         });
+         const response = await r.json();
+
+         if (r.status === 200) {
+            setStatistics(response.statistics);
+         } else {
+            notifications.showNotification({
+               color: "red",
+               title: "Statistics - Error",
+               message: response.message || "Unknown Error",
+               icon: <AiOutlineClose />,
+               autoClose: 5000,
+            });
+         }
+      } else {
+         notifications.showNotification({
+            color: "red",
+            title: "Delete - Error",
+            message: response.message || "Unknown Error",
+            icon: <AiOutlineClose />,
+            autoClose: 5000,
+         });
+      }
+
+      setBigLoading(false);
    };
 
    return (
       <>
          <DefaultSeo title="Writer Panel" />
+         <LoadingOverlay visible={bigLoading} />
          <div className="flex flex-grow px-4 pt-10 dark:bg-dark-bg sm:pt-32">
             <div className="mx-auto">
                <DashboardStatistics
                   isAdmin={user.isAdmin}
-                  {...statistics}
+                  {...statisticsState}
                   className="mx-auto max-w-7xl lg:px-8"
                />
                <div className="container mt-4 max-w-7xl px-2 sm:px-8">
@@ -167,11 +227,11 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                         <Button
                            disabled={
                               selected === null ||
-                              (articles.length === 1 && user.isAdmin) ||
                               selected.underReview ||
                               selected.published
                            }
                            color="secondary"
+                           onClick={() => deleteArticle(selected!.id)}
                         >
                            Delete Article
                         </Button>
@@ -446,6 +506,9 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                           disabled={
                                              article.underReview ||
                                              article.published
+                                          }
+                                          onClick={() =>
+                                             deleteArticle(article.id)
                                           }
                                        >
                                           Delete

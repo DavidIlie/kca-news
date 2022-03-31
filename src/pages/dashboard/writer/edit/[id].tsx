@@ -92,6 +92,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       useState<boolean>(false);
    const [displayAlert, setDisplayAlert] = useState<boolean>(false);
    const [bigLoad, setBigLoad] = useState<boolean>(false);
+   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
 
    const [openChangeCoverModal, setOpenChangeCoverModal] =
       useState<boolean>(false);
@@ -227,6 +228,35 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
             shallow: true,
          });
       setOpenSidebar(false);
+   };
+
+   const handleDeleteArticle = async () => {
+      setLoadingContentUpdate(true);
+
+      const r = await fetch(`/api/article/${article.id}/delete`, {
+         method: "DELETE",
+         credentials: "include",
+      });
+      const response = await r.json();
+
+      if (r.status === 200) {
+         notifications.showNotification({
+            color: "teal",
+            title: "Delete",
+            message: "Article Deleted successfully!",
+            icon: <AiOutlineCheck />,
+            autoClose: 2000,
+         });
+         router.push("/dashboard/writer");
+      } else {
+         notifications.showNotification({
+            color: "red",
+            title: "Delete - Error",
+            message: response.message || "Unknown Error",
+            icon: <AiOutlineClose />,
+            autoClose: 5000,
+         });
+      }
    };
 
    return (
@@ -499,6 +529,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     ? "You can't delete an article when it is under review"
                                     : "Delete this article"
                               }
+                              onClick={() => setDeleteConfirmModal(true)}
                            >
                               Delete
                            </Button>
@@ -612,11 +643,19 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
             </CustomSidebar>
          </div>
          <ConfirmModal
-            isOpen={openConfirmModalUnderReview}
-            successFunction={handleSetUnderReview}
-            updateModalState={() =>
-               setOpenConfirmModalUnderReview(!openConfirmModalUnderReview)
-            }
+            isOpen={openConfirmModalUnderReview || deleteConfirmModal}
+            successFunction={() => {
+               if (openConfirmModalUnderReview) return handleSetUnderReview();
+               if (deleteConfirmModal) return handleDeleteArticle();
+            }}
+            updateModalState={() => {
+               if (openConfirmModalUnderReview)
+                  return setOpenConfirmModalUnderReview(
+                     !openConfirmModalUnderReview
+                  );
+               if (deleteConfirmModal)
+                  return setDeleteConfirmModal(!deleteConfirmModal);
+            }}
          />
          <ModalArticleCoverUploaderWrapper
             isOpen={openChangeCoverModal}

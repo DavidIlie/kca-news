@@ -21,7 +21,7 @@ const DropdownElement: React.FC<Props> = ({
       <div
          className={`flex w-full cursor-pointer items-center px-2 py-2 text-sm text-black duration-200 hover:bg-gray-200 dark:bg-opacity-10 dark:text-white dark:hover:bg-dark-bg ${className}`}
          {...rest}
-         onClick={openingFunction}
+         onClick={openingFunction || rest.onClick}
       >
          {children}
          {opening && (
