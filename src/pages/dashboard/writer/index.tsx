@@ -28,6 +28,7 @@ import Radio from "../../../ui/Radio";
 import ArticleBadge from "../../../components/ArticleBadge";
 import ArticleUnderReviewCard from "../../../components/ArticleUnderReviewCard";
 import DashboardStatistics from "../../../components/DashboardStatistics";
+import ConfirmModal from "../../../ui/ConfirmModal";
 
 interface Statistics {
    totalArticles: number;
@@ -57,7 +58,9 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
    const [searchQuery, setSearchQuery] = useState<string>("");
    const [hasSearched, setHasSearched] = useState<boolean>(false);
    const [filter, setFilter] = useState<string | null>(null);
+   const [openConfirmModal, setOpenConfirmModal] = useState<boolean>(false);
    const [bigLoading, setBigLoading] = useState<boolean>(false);
+   const [selectedId, setSelectedId] = useState<string>("");
 
    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
       const val = e.target.value;
@@ -145,8 +148,10 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
       }
    };
 
-   const deleteArticle = async (id: string) => {
+   const deleteArticle = async () => {
       setBigLoading(true);
+
+      const id = selected?.id || selectedId;
 
       const r = await fetch(`/api/article/${id}/delete`, {
          method: "DELETE",
@@ -189,6 +194,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
          });
       }
 
+      setSelectedId("");
       setBigLoading(false);
    };
 
@@ -231,7 +237,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                               selected.published
                            }
                            color="secondary"
-                           onClick={() => deleteArticle(selected!.id)}
+                           onClick={() => setOpenConfirmModal(true)}
                         >
                            Delete Article
                         </Button>
@@ -507,9 +513,10 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                              article.underReview ||
                                              article.published
                                           }
-                                          onClick={() =>
-                                             deleteArticle(article.id)
-                                          }
+                                          onClick={() => {
+                                             setSelectedId(article.id);
+                                             setOpenConfirmModal(true);
+                                          }}
                                        >
                                           Delete
                                        </Button>
@@ -523,6 +530,11 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                </div>
             </div>
          </div>
+         <ConfirmModal
+            isOpen={openConfirmModal}
+            successFunction={deleteArticle}
+            updateModalState={() => setOpenConfirmModal(!openConfirmModal)}
+         />
       </>
    );
 };
