@@ -8,7 +8,7 @@ const NotFoundPage: React.FC = () => {
    return (
       <>
          <DefaultSeo title="Not Found" />
-         <div className="mt-10 flex flex-grow items-center justify-center px-4">
+         <div className="my-24 flex flex-grow items-center justify-center px-4 pt-20">
             <div className="text-center">
                <h1 className="mb-4 text-4xl font-semibold">Not Found</h1>
                <Link href="/">

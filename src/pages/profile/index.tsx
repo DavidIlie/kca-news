@@ -15,7 +15,7 @@ const PersonalProfileViewer: React.FC<Props> = ({ user }) => {
    return (
       <>
          <DefaultSeo title="Profile" />
-         <div className="flex flex-grow items-center justify-center px-4 sm:pt-12 lg:px-0">
+         <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
             <ProfileViewer user={user} editable={true} />
          </div>
       </>
