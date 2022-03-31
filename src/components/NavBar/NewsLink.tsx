@@ -10,7 +10,7 @@ interface Props {
    category: Category;
 }
 
-const NewsLink: React.FC<Props> = ({ category }) => (
+const NewsLink: React.FC<Props> = ({ location, category }) => (
    <Menu.Item as={NextLink} href={`/${location}?category=${category.id}`}>
       <DropdownElement>{category.name}</DropdownElement>
    </Menu.Item>
