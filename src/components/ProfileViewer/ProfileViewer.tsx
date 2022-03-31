@@ -28,6 +28,7 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                   <img
                      src={user.image.split("=")[0] || user.image}
                      className="w-40 cursor-pointer rounded-full"
+                     referrerPolicy="no-referrer"
                   />
                </Tooltip>
                <div className="pb-4 text-center">

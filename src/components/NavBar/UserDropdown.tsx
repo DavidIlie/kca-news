@@ -26,6 +26,7 @@ const UserDropdown: React.FC = () => {
                   className={`flex w-[45%] rounded-full duration-150 hover:ring-2 dark:ring-blue-900 ${
                      open && "ring-2"
                   }`}
+                  referrerPolicy="no-referrer"
                />
             )}
          </Menu.Button>
