@@ -54,6 +54,7 @@ import ArticleWriterInfo from "../../../../components/ArticleWriterInfo";
 import ArticleCoverUploader, {
    ModalArticleCoverUploaderWrapper,
 } from "../../../../components/ArticleCoverUploader/ArticleCoverUploader";
+import sendPost from "../../../../lib/sendPost";
 
 interface Props {
    user: User;
@@ -373,6 +374,40 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      defaultValue={markdownValue}
                      className="z-0"
                      dark={resolvedTheme === "dark"}
+                     onImageUploadStart={() => setBigLoad(true)}
+                     onImageUploadStop={() => setBigLoad(false)}
+                     uploadImage={async (file) => {
+                        const formData = new FormData();
+                        formData.append("image", file);
+
+                        try {
+                           const { statusCode, response } = await sendPost(
+                              `/api/article/${article.id}/image`,
+                              formData,
+                              true
+                           );
+
+                           if (statusCode !== 200) {
+                              notifications.showNotification({
+                                 color: "red",
+                                 title: "Image - Error",
+                                 message: response.message || "Unknown Error",
+                                 icon: <AiOutlineClose />,
+                                 autoClose: 5000,
+                              });
+                           } else {
+                              return response.url;
+                           }
+                        } catch (error) {
+                           notifications.showNotification({
+                              color: "red",
+                              title: "Image - Error",
+                              message: "Error uploading",
+                              icon: <AiOutlineClose />,
+                              autoClose: 5000,
+                           });
+                        }
+                     }}
                   />
                   <div className="mt-7 border-t-2 pt-4">
                      <Button

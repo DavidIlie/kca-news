@@ -12,4 +12,5 @@ export type uploadedFile = {
 
 export type expressFiles = {
    cover?: fileUpload;
+   image?: fileUpload;
 };
