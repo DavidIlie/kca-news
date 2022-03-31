@@ -406,7 +406,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                  <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
                                     Description
                                  </h1>
-                                 <p className=" mb-2 text-justify">
+                                 <p className=" mb-2 text-justify line-clamp-5">
                                     {article.description}
                                  </p>
                                  <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">

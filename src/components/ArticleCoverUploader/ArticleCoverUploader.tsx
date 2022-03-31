@@ -137,10 +137,7 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
                      ref={inputRef as any}
                      type="file"
                      className="hidden"
-                     onChange={(e) => {
-                        console.log(e);
-                        setFiles(e as any);
-                     }}
+                     onChange={setFiles as any}
                      accept="image/*"
                      key={uploadCycle}
                   />
