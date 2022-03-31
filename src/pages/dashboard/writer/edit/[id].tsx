@@ -243,7 +243,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
             )}
             <ScrollArea
                ref={ref}
-               className={`mx-auto ${contentHeightSystem} px-4 pb-5 sm:pt-10 ${
+               className={`mx-auto ${contentHeightSystem} px-4 pb-5 sm:pt-[1.75rem] ${
                   openSidebar ? "w-4/5" : "w-full"
                }`}
             >
@@ -525,7 +525,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            />
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure
-                           name="Categories & Tags"
+                           name="Categories"
                            warning={categories.length === 0}
                            defaultOpen={categories.length === 0}
                         >
@@ -552,7 +552,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               required
                               icon={<BiCategory />}
                            />
-                           <div className="mt-4" />
+                        </EditorSettingsDisclosure>
+                        <EditorSettingsDisclosure name="Tags">
                            <MultiSelect
                               data={tags}
                               value={tags}
@@ -583,9 +584,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            />
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure name="Co-Writers">
-                           <h1>yo</h1>
-                        </EditorSettingsDisclosure>
-                        <EditorSettingsDisclosure name="Filter">
                            <h1>yo</h1>
                         </EditorSettingsDisclosure>
                         <div
