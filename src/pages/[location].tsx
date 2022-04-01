@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
@@ -20,6 +21,8 @@ interface Props {
 }
 
 const LocationArticleShowcase: React.FC<Props> = ({ articles, location }) => {
+   const router = useRouter();
+
    if (articles.length === 0) {
       return (
          <>
@@ -30,14 +33,24 @@ const LocationArticleShowcase: React.FC<Props> = ({ articles, location }) => {
                      <h1 className="text-6xl font-bold text-red-500">
                         Woah! No posts?
                      </h1>
-                     <p className="mb-4 mt-2 text-center text-lg">
+                     <p className="mb-3 mt-2 text-center text-lg">
                         Looks like this category needs some motivation...
                      </p>
-                     <Link href="/">
-                        <a>
-                           <Button className="mx-auto">Go Home</Button>
-                        </a>
-                     </Link>
+                     {router.query.category ? (
+                        <Link href={`/${location}`}>
+                           <a>
+                              <Button className="mx-auto">
+                                 Go to {getFormmatedLocation(location)}
+                              </Button>
+                           </a>
+                        </Link>
+                     ) : (
+                        <Link href={`/`}>
+                           <a>
+                              <Button className="mx-auto">Go Home</Button>
+                           </a>
+                        </Link>
+                     )}
                   </div>
                </Slide>
             </div>
