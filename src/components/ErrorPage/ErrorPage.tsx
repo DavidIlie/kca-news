@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import { v4 } from "uuid";
 
@@ -9,6 +10,8 @@ interface ErrorPageProps {
 }
 
 const ErrorPage: React.FC<ErrorPageProps> = ({ statusCode = 500 }) => {
+   const { reload } = useRouter();
+
    return (
       <>
          <NextSeo title="Crashed" />
@@ -21,9 +24,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ statusCode = 500 }) => {
                   <h1>Looks like an error just occurred.</h1>
                </div>
                <div className="mt-2 flex justify-center text-gray-800">
-                  <Button onClick={() => window.location.reload()}>
-                     Reload
-                  </Button>
+                  <Button onClick={() => reload()}>Reload</Button>
                </div>
                <p className="mt-2 text-sm italic">
                   Error {statusCode}, ID: {v4()}
