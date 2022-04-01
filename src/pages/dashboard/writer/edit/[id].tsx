@@ -676,12 +676,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               setMainLoading={setBigLoad}
                            />
                         </EditorSettingsDisclosure>
-                        <EditorSettingsDisclosure name="Co-Writer's">
-                           {coWriters.length === 0 && (
-                              <h1 className="mb-2 px-1">
-                                 There are currently no Co-Writer's.
-                              </h1>
-                           )}
+                        <EditorSettingsDisclosure name="Co Writers">
                            <MultiSelect
                               data={coWriterSearch.map((co) => ({
                                  label: computeKCAName(co),
@@ -779,13 +774,14 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  </div>
                                  <BsTrash
                                     className="cursor-pointer"
-                                    onClick={() =>
+                                    onClick={() => {
+                                       setCoWriterSearch([]);
                                        setCoWriters(
                                           coWriters.filter(
                                              (user) => user.id !== writer.id
                                           )
-                                       )
-                                    }
+                                       );
+                                    }}
                                  />
                               </div>
                            ))}
@@ -852,8 +848,8 @@ const CoWriterUser = forwardRef<HTMLDivElement, any>(
    ({ user, ...rest }: { user: User }, ref) => (
       <div
          ref={ref}
-         className="flex cursor-pointer select-none items-center gap-2 py-2 px-2 duration-150 hover:bg-gray-300 dark:hover:bg-dark-bg"
          {...rest}
+         className="flex cursor-pointer select-none items-center gap-2 py-2 px-2 duration-150 hover:bg-gray-300 dark:hover:bg-dark-bg"
       >
          <Image
             className="rounded-full"
