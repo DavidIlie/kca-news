@@ -7,6 +7,7 @@ import { VscChevronLeft, VscChevronRight } from "react-icons/vsc";
 import { Slide } from "react-awesome-reveal";
 import { formatDistance } from "date-fns";
 import { useHotkeys } from "@mantine/hooks";
+import { getSession } from "next-auth/react";
 
 import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
@@ -104,14 +105,31 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
    );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-   const featuredPosts = await prisma.article.findMany({
-      where: { published: true, underReview: false },
-      orderBy: {
-         createdAt: "desc",
-      },
-      take: 5,
-   });
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+   const session = await getSession({ req });
+
+   const featuredPosts = session?.user?.isAdmin
+      ? await prisma.article.findMany({
+           orderBy: {
+              createdAt: "desc",
+           },
+           take: 5,
+        })
+      : session?.user?.isWriter
+      ? await prisma.article.findMany({
+           where: { user: session?.user?.id },
+           orderBy: {
+              createdAt: "desc",
+           },
+           take: 5,
+        })
+      : await prisma.article.findMany({
+           where: { published: true, underReview: false },
+           orderBy: {
+              createdAt: "desc",
+           },
+           take: 5,
+        });
 
    return {
       props: {
