@@ -100,6 +100,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [bigLoad, setBigLoad] = useState<boolean>(false);
    const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
    const [coWriterSearchValue, setCoWriterSearchValue] = useState<any>();
+   const [loadingSearch, setLoadingSearchWriter] = useState<boolean>(false);
 
    const [openChangeCoverModal, setOpenChangeCoverModal] =
       useState<boolean>(false);
@@ -114,7 +115,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const canSaveRest =
       (JSON.stringify(categories) !== JSON.stringify(article.categoryId) &&
          categories.length !== 0) ||
-      JSON.stringify(tags) !== JSON.stringify(article.tags);
+      JSON.stringify(tags) !== JSON.stringify(article.tags) ||
+      JSON.stringify(coWriters) !== JSON.stringify(article.coWriters);
 
    usePreventUserFromLosingData(
       (canSave && canSaveRest) || canSave || canSaveRest
@@ -191,6 +193,27 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
    const handleUpdateRest = async () => {
       setLoadingRest(true);
+
+      if (JSON.stringify(coWriters) !== JSON.stringify(article.coWriters)) {
+         const r = await fetch(`/api/article/${article.id}/cowriter/update`, {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+               coWriters: coWriters.map((writer) => writer.id),
+            }),
+         });
+
+         if (r.status !== 200) {
+            const response = await r.json();
+            notifications.showNotification({
+               color: "red",
+               title: "Co Writer - Error",
+               message: response.message || "Unknown Error",
+               icon: <AiOutlineClose />,
+               autoClose: 5000,
+            });
+         }
+      }
 
       const r = await fetch(`/api/article/${article.id}/update/rest`, {
          method: "POST",
@@ -705,7 +728,13 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  }
                               }}
                               searchable
-                              nothingFound="No Writers Found"
+                              nothingFound={
+                                 loadingSearch
+                                    ? "Loading..."
+                                    : coWriterSearch.length === 0
+                                    ? "Write something..."
+                                    : "No writer found"
+                              }
                               icon={<AiOutlineUser />}
                               maxSelectedValues={1}
                               value={coWriterSearchValue}
@@ -713,6 +742,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               placeholder="Select a Co Writer"
                               onSearchChange={async (v) => {
                                  if (coWriterSearch.length > 0) return;
+
+                                 setLoadingSearchWriter(true);
 
                                  const r = await fetch(
                                     `/api/article/${
@@ -744,6 +775,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                        autoClose: 5000,
                                     });
                                  }
+
+                                 setLoadingSearchWriter(false);
                               }}
                               classNames={{
                                  filledVariant:

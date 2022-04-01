@@ -21,9 +21,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               where: {
                  id: id as string,
               },
+              include: {
+                 coWriters: true,
+              },
            })
          : await prisma.article.findFirst({
               where: { id: id as string, user: session?.user?.id },
+              include: {
+                 coWriters: true,
+              },
            });
 
       if (!article)
@@ -45,14 +51,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             .status(400)
             .json({ message: `invalid co writers: ${notValidIds.join(", ")}` });
 
-      const createdArticle = await prisma.article.update({
+      const finalCoWriterObject = body.coWriters.map((writer) => ({
+         id: writer,
+      }));
+
+      await prisma.article.update({
          where: { id: article.id },
          data: {
-            coWriters: body.coWriters as any,
+            coWriters: {
+               set: [],
+            },
          },
       });
 
-      return res.json({ article: createdArticle });
+      if (body.coWriters.length > 0) {
+         await prisma.article.update({
+            where: { id: article.id },
+            data: {
+               coWriters: {
+                  connect: finalCoWriterObject,
+               },
+            },
+         });
+      }
+
+      return res.json({ message: "ok" });
    } catch (error) {
       return res
          .status((error as any).status === 400 ? 400 : 500 || 500)

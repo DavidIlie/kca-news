@@ -39,6 +39,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                },
             },
          ],
+         AND: {
+            OR: [{ isWriter: true }, { isAdmin: true }],
+         },
       },
    });
 
