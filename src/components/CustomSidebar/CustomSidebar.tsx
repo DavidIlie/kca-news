@@ -26,7 +26,7 @@ const CustomSidebar: React.FC<CustomSidebarProps> = ({
             position="right"
             overlayOpacity={0.25}
             classNames={{
-               header: "px-4 border-b-2 py-4 -mb-0.5",
+               header: "px-4 border-b-2 borderColor py-4 -mb-0.5",
                title: "font-semibold text-2xl",
             }}
          >

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { DefaultSeo } from "next-seo";
@@ -99,9 +99,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [displayAlert, setDisplayAlert] = useState<boolean>(false);
    const [bigLoad, setBigLoad] = useState<boolean>(false);
    const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
-   const [lastSearchTimestamp, setLastSearchTimestamp] = useState<Date | null>(
-      null
-   );
+   const [coWriterSearchValue, setCoWriterSearchValue] = useState<any>();
 
    const [openChangeCoverModal, setOpenChangeCoverModal] =
       useState<boolean>(false);
@@ -678,48 +676,78 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               setMainLoading={setBigLoad}
                            />
                         </EditorSettingsDisclosure>
-                        <EditorSettingsDisclosure name="Co-Writers">
+                        <EditorSettingsDisclosure name="Co-Writer's">
                            {coWriters.length === 0 && (
                               <h1 className="mb-2 px-1">
-                                 There are currently no Co-Writers.
+                                 There are currently no Co-Writer's.
                               </h1>
                            )}
                            <MultiSelect
                               data={coWriterSearch.map((co) => ({
-                                 label: co.id,
-                                 value: computeKCAName(co),
+                                 label: computeKCAName(co),
+                                 value: co.id,
+                                 user: co,
                               }))}
                               onChange={(e) => {
-                                 console.log(e);
+                                 if (e.length === 0) setCoWriterSearchValue([]);
+                                 if (e.length > 1) setCoWriterSearchValue([]);
+
+                                 setCoWriterSearchValue(e);
+
+                                 const found = e[0];
+                                 const user = coWriterSearch.filter(
+                                    (co) => co.id === found
+                                 )[0] as any as User;
+
+                                 if (user) {
+                                    setCoWriters([...coWriters, user]);
+                                    setCoWriterSearchValue([]);
+                                    setCoWriterSearch(
+                                       coWriterSearch.filter(
+                                          (u) => u.id !== user.id
+                                       )
+                                    );
+                                 }
                               }}
                               searchable
                               nothingFound="No Writers Found"
                               icon={<AiOutlineUser />}
                               maxSelectedValues={1}
+                              value={coWriterSearchValue}
+                              itemComponent={CoWriterUser}
                               onSearchChange={async (v) => {
-                                 if (v === "") return;
-
-                                 const isEmail = v
-                                    .toLowerCase()
-                                    .match(
-                                       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                                    );
+                                 if (coWriterSearch.length > 0) return;
 
                                  const r = await fetch(
                                     `/api/article/${
                                        article.id
-                                    }/cowriter/search${
-                                       isEmail
-                                          ? `?email=${v}`
-                                          : `?query=${encodeURIComponent(v)}`
-                                    }`,
+                                    }/cowriter/search?query=${encodeURIComponent(
+                                       v
+                                    )}`,
                                     {
                                        method: "POST",
                                        credentials: "include",
                                     }
                                  );
                                  const response = await r.json();
-                                 console.log(r.status, response);
+
+                                 if (r.status === 200) {
+                                    const users = response.users as User[];
+                                    setCoWriterSearch(
+                                       users.filter((u) =>
+                                          coWriters.map((co) => u.id !== co.id)
+                                       )
+                                    );
+                                 } else {
+                                    notifications.showNotification({
+                                       color: "red",
+                                       title: "Search - Error",
+                                       message:
+                                          response.message || "Unknown Error",
+                                       icon: <AiOutlineClose />,
+                                       autoClose: 5000,
+                                    });
+                                 }
                               }}
                               classNames={{
                                  filledVariant:
@@ -728,12 +756,15 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                               }}
                            />
+                           {coWriters.length > 0 && <div className="mt-4" />}
                            {coWriters.map((writer, index) => (
                               <div
-                                 className="mr-4 ml-2 flex items-center justify-between"
+                                 className={`mr-4 ml-2 flex items-center justify-between ${
+                                    index !== coWriters.length - 1 && "mb-4"
+                                 }`}
                                  key={index}
                               >
-                                 <a className="flex select-none items-center gap-2">
+                                 <div className="flex select-none items-center gap-2">
                                     <Image
                                        className="rounded-full"
                                        src={writer.image}
@@ -745,8 +776,17 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                        }'s profile image`}
                                     />
                                     <span>{computeKCAName(writer)}</span>
-                                 </a>
-                                 <BsTrash className="cursor-pointer" />
+                                 </div>
+                                 <BsTrash
+                                    className="cursor-pointer"
+                                    onClick={() =>
+                                       setCoWriters(
+                                          coWriters.filter(
+                                             (user) => user.id !== writer.id
+                                          )
+                                       )
+                                    }
+                                 />
                               </div>
                            ))}
                         </EditorSettingsDisclosure>
@@ -806,6 +846,26 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
 const WrappedArticleBadge = ({ value }: { value: string }) => (
    <ArticleBadge tag={value} className="mb-1 mt-1" />
+);
+
+const CoWriterUser = forwardRef<HTMLDivElement, any>(
+   ({ user, ...rest }: { user: User }, ref) => (
+      <div
+         ref={ref}
+         className="flex cursor-pointer select-none items-center gap-2 py-2 px-2 duration-150 hover:bg-gray-300 dark:hover:bg-dark-bg"
+         {...rest}
+      >
+         <Image
+            className="rounded-full"
+            src={user.image}
+            width="25px"
+            height="25px"
+            blurDataURL={shimmer(1920, 1080)}
+            alt={`${user.name.split(" ")[0]}'s profile image`}
+         />
+         <span>{computeKCAName(user)}</span>
+      </div>
+   )
 );
 
 export const getServerSideProps: GetServerSideProps = async ({
