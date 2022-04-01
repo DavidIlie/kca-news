@@ -32,6 +32,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { BiCategory } from "react-icons/bi";
+import { BsTrash } from "react-icons/bs";
 
 const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
 
@@ -55,6 +56,7 @@ import ArticleCoverUploader, {
    ModalArticleCoverUploaderWrapper,
 } from "../../../../components/ArticleCoverUploader/ArticleCoverUploader";
 import sendPost from "../../../../lib/sendPost";
+import { computeKCAName } from "../../../../lib/computeKCAName";
 
 interface Props {
    user: User;
@@ -86,6 +88,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [title, setTitle] = useState<string>(article.title);
    const [description, setDescription] = useState<string>(article.description);
    const [markdownValue, changeMarkdownValue] = useState<string>(article.mdx);
+   const [coWriters, setCoWriters] = useState<User[]>(article.coWriters);
    const [loadingContentUpdate, setLoadingContentUpdate] =
       useState<boolean>(false);
    const [loadingRest, setLoadingRest] = useState<boolean>(false);
@@ -109,6 +112,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       (JSON.stringify(categories) !== JSON.stringify(article.categoryId) &&
          categories.length !== 0) ||
       JSON.stringify(tags) !== JSON.stringify(article.tags);
+
    usePreventUserFromLosingData(
       (canSave && canSaveRest) || canSave || canSaveRest
    );
@@ -670,7 +674,32 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            />
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure name="Co-Writers">
-                           <h1>yo</h1>
+                           {coWriters.length === 0 && (
+                              <h1 className="mb-2 px-1">
+                                 There are currently no Co-Writers.
+                              </h1>
+                           )}
+                           {coWriters.map((writer, index) => (
+                              <div
+                                 className="mr-4 ml-2 flex items-center justify-between"
+                                 key={index}
+                              >
+                                 <a className="flex select-none items-center gap-2">
+                                    <Image
+                                       className="rounded-full"
+                                       src={writer.image}
+                                       width="25px"
+                                       height="25px"
+                                       blurDataURL={shimmer(1920, 1080)}
+                                       alt={`${
+                                          writer.name.split(" ")[0]
+                                       }'s profile image`}
+                                    />
+                                    <span>{computeKCAName(writer)}</span>
+                                 </a>
+                                 <BsTrash className="cursor-pointer" />
+                              </div>
+                           ))}
                         </EditorSettingsDisclosure>
                         <div
                            className={viewportHeight > 550 ? "flex-grow" : ""}
@@ -681,7 +710,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  restEmptyHeight > 100
                                     ? "fixed bottom-0 w-[20%]"
                                     : "w-full"
-                              } px-2 py-4`}
+                              } select-none px-2 py-4`}
                            >
                               <Button
                                  className="w-full"

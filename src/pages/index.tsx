@@ -36,7 +36,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
    return (
       <>
          <NextSeo title="Home" />
-         <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+         <div className="flex min-h-screen items-center justify-center px-4 sm:pt-20 lg:px-0">
             <div className="-ml-32 flex w-full justify-center gap-24">
                <Slide cascade triggerOnce direction="left">
                   <div className="relative -mr-96 flex items-center gap-4">
@@ -61,7 +61,10 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                               </span>
                            </h1>
                            <div className="h-26 absolute bottom-0 z-50 mb-[0.3rem] w-[50%] rounded-b-md bg-gray-900 bg-opacity-70 py-2 px-4 text-lg text-white">
-                              <h1 className="line-clamp-3">
+                              <h1
+                                 className="line-clamp-3"
+                                 title={featuredPosts[index].description}
+                              >
                                  <span className="text-2xl font-bold">
                                     BREAKING NEWS:
                                  </span>{" "}

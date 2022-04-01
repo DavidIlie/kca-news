@@ -102,9 +102,10 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
          <h1 className="ml-1 flex items-center text-gray-800 dark:text-gray-100">
             {" / "}
             <div className="ml-2">
+               {" "}
                {format(
                   parseISO(new Date(article.createdAt).toISOString()),
-                  "MMMM dd, yyyy"
+                  "MMMM do, yyyy"
                )}
             </div>
          </h1>

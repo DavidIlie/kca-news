@@ -25,3 +25,7 @@ export const updateArticleRestSchema = yup.object().shape({
       .required(),
    tags: yup.array().of(yup.string().required()).optional(),
 });
+
+export const coWriterSchema = yup.object().shape({
+   coWriters: yup.array().of(yup.string().required()).required(),
+});
