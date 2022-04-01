@@ -710,6 +710,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               maxSelectedValues={1}
                               value={coWriterSearchValue}
                               itemComponent={CoWriterUser}
+                              placeholder="Select a Co Writer"
                               onSearchChange={async (v) => {
                                  if (coWriterSearch.length > 0) return;
 
