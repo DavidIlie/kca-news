@@ -465,6 +465,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               onChange={(e) => setTitle(e.currentTarget.value)}
                               value={title}
                               required
+                              classNames={{
+                                 filledVariant:
+                                    "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                              }}
                            />
                            <div className="mt-2 flex justify-between text-left">
                               <h1 className="font-semibold">Status:</h1>
@@ -588,6 +592,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               value={description}
                               minRows={4}
                               maxRows={8}
+                              classNames={{
+                                 filledVariant:
+                                    "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                              }}
                            />
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure
@@ -617,6 +625,12 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               label="Categories (max 3)"
                               required
                               icon={<BiCategory />}
+                              classNames={{
+                                 filledVariant:
+                                    "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                                 dropdown:
+                                    "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                              }}
                            />
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure name="Tags">
@@ -640,6 +654,12 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  setTags((current) => [...current, query]);
                               }}
                               icon={<AiFillTag />}
+                              classNames={{
+                                 filledVariant:
+                                    "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                                 dropdown:
+                                    "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                              }}
                            />
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure name="Cover">

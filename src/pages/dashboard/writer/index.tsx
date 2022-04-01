@@ -249,6 +249,10 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            value={searchQuery}
                            onChange={handleSearch}
                            error={articlesState.length === 0 && hasSearched}
+                           classNames={{
+                              filledVariant:
+                                 "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                           }}
                         />
                         <Select
                            placeholder="Filter"
@@ -283,6 +287,12 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            ]}
                            value={filter}
                            onChange={handleFilter}
+                           classNames={{
+                              filledVariant:
+                                 "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                              dropdown:
+                                 "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                           }}
                         />
                      </div>
                   </div>
