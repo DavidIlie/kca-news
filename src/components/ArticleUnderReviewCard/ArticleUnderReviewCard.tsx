@@ -21,7 +21,7 @@ const ArticleUnderReviewCard: React.FC = () => {
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 translate-y-1"
          >
-            <Popover.Panel className="absolute right-0 z-10 -mr-12 w-96 rounded-md border-2 border-gray-200 bg-white p-4 shadow-md dark:border-gray-700 dark:bg-gray-800">
+            <Popover.Panel className="absolute right-0 z-10 -mr-12 w-96 rounded-md border-2 border-gray-200 bg-white p-4 shadow-md dark:border-gray-800 dark:bg-foot">
                This can be for any number of reasons: your article is pending to
                be published, your article has been edited, your article has been
                taken down for moderation, etc. To see more information{" "}
