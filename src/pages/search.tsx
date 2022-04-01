@@ -4,6 +4,7 @@ import { DefaultSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 import { useNotifications } from "@mantine/notifications";
+import { LoadingOverlay } from "@mantine/core";
 
 import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
@@ -80,7 +81,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
                   />
                </div>
                <div className="mt-4">
-                  {loading && <Spinner className="mx-auto my-12 h-16 w-16" />}
+                  <LoadingOverlay visible={loading} />
                   {results.map((article, index) => (
                      <ArticleCard article={article} key={index} />
                   ))}
