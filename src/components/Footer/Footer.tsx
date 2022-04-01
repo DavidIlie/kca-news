@@ -37,9 +37,11 @@ const Footer: React.FC = () => {
                   .concat(moreLocations)
                   .map((location, index) => (
                      <div key={index} className="px-8">
-                        <h2 className="mb-3 text-sm font-medium tracking-widest text-gray-900 dark:text-gray-100">
-                           {getFormmatedLocation(location).toUpperCase()}
-                        </h2>
+                        <Link href={`/${location}`}>
+                           <a className="mb-3 text-sm font-medium tracking-widest text-gray-900 duration-150 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-500">
+                              {getFormmatedLocation(location).toUpperCase()}
+                           </a>
+                        </Link>
                         <nav className="mb-10 list-none">
                            {links
                               .filter((l) => l.location.includes(location))

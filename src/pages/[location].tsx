@@ -14,6 +14,8 @@ import {
    Locations,
 } from "../lib/categories";
 import { Button } from "../ui/Button";
+import ArticleCard from "../components/ArticleCard";
+import FeaturedArticleCard from "../components/ArticleCard/FeaturedArticleCard";
 
 interface Props {
    location: Locations;
@@ -61,7 +63,47 @@ const LocationArticleShowcase: React.FC<Props> = ({ articles, location }) => {
    return (
       <>
          <NextSeo title={getFormmatedLocation(location)} />
-         <div className="mb-20 flex flex-grow px-4 sm:pt-32 lg:px-0"></div>
+         <div className="mb-20 flex flex-grow px-4 sm:pt-32 lg:px-0">
+            <div className="container mx-auto max-w-5xl">
+               <div className="mb-12">
+                  <h1 className="border-b-2 pb-4 text-4xl font-semibold">
+                     {getFormmatedLocation(location)}{" "}
+                     {router.query.category && (
+                        <span className="text-gray-800 dark:text-gray-200">
+                           {" "}
+                           -{" "}
+                           {(router.query.category as any as string)
+                              .split("-")
+                              .map(
+                                 (s) => s.charAt(0).toUpperCase() + s.slice(1)
+                              )
+                              .join(" ")}
+                        </span>
+                     )}
+                  </h1>
+               </div>
+               <div className="flex items-center gap-6">
+                  <FeaturedArticleCard
+                     article={articles[0]}
+                     latest={true}
+                     solo={articles.length == 2}
+                  />
+                  {articles.length > 2 && (
+                     <div className="w-1/2">
+                        <FeaturedArticleCard article={articles[2]} />
+                        <FeaturedArticleCard article={articles[1]} />
+                     </div>
+                  )}
+               </div>
+               {articles
+                  .filter(
+                     (_a, index) => index > (articles.length === 2 ? 2 : 1)
+                  )
+                  .map((article, index) => (
+                     <ArticleCard article={article} key={index} />
+                  ))}
+            </div>
+         </div>
       </>
    );
 };
@@ -83,6 +125,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       upvotes: true,
       downvotes: true,
       comments: true,
+      writer: true,
    };
 
    const customWhere = category

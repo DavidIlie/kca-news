@@ -6,6 +6,10 @@
    transform: translateY(-4px);
 }
 
+.hoverItemSpecial:hover {
+   transform: translateY(-6px);
+}
+
 .blog-content
    *:not(svg, h1, h2, h3, h4, h5, h6, a, pre, .code-title, .token-line, .token.plain, .blog-image) {
    margin-top: 1em !important;

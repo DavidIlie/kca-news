@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
 import { AiOutlineSearch, AiOutlineArrowLeft } from "react-icons/ai";
+import { Menu } from "@headlessui/react";
 
 import { Button } from "../../ui/Button";
 import { Spinner } from "../../ui/Spinner";
@@ -18,6 +19,7 @@ import {
 } from "../../lib/categories";
 import NewsDropdown from "./NewsDropdown";
 import DropdownElement from "../../ui/DropdownElement";
+import NextLink from "../../ui/NextLink";
 
 const NavBar: React.FC = () => {
    const { status } = useSession();
@@ -62,6 +64,9 @@ const NavBar: React.FC = () => {
                      name={getFormmatedLocation(location)}
                      key={index}
                   >
+                     <Menu.Item as={NextLink} href={`/${location}`}>
+                        <DropdownElement>Main Home</DropdownElement>
+                     </Menu.Item>
                      {links
                         .filter((l) => l.location.includes(location))
                         .map((category, index) => (
@@ -85,6 +90,9 @@ const NavBar: React.FC = () => {
                               {getFormmatedLocation(openMoreMenu)}
                            </p>
                         </div>
+                        <Menu.Item as={NextLink} href={`/${location}`}>
+                           <DropdownElement>Main Home</DropdownElement>
+                        </Menu.Item>
                         {links
                            .filter((l) => l.location.includes(openMoreMenu))
                            .map((category, index) => (
