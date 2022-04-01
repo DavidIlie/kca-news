@@ -91,6 +91,7 @@ model Article {
   cover         String
   description   String
   published     Boolean   @default(false)
+  location      String?
   categoryId    String[]
   tags          String[]
   filter        String[]

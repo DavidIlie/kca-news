@@ -28,6 +28,7 @@ import {
    Textarea,
    Alert,
    ScrollArea,
+   Select,
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -43,7 +44,13 @@ import { User } from "../../../../types/User";
 import { Button } from "../../../../ui/Button";
 import EditorSettingsDisclosure from "../../../../components/EditorSettingsDisclosure";
 import ArticleBadge from "../../../../components/ArticleBadge";
-import { links } from "../../../../lib/categories";
+import {
+   getFormmatedLocation,
+   links,
+   Locations,
+   moreLocations,
+   visibleLocations,
+} from "../../../../lib/categories";
 import Radio from "../../../../ui/Radio";
 import ArticleUnderReviewCard from "../../../../components/ArticleUnderReviewCard";
 import ConfirmModal from "../../../../ui/ConfirmModal";
@@ -90,6 +97,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [description, setDescription] = useState<string>(article.description);
    const [markdownValue, changeMarkdownValue] = useState<string>(article.mdx);
    const [coWriters, setCoWriters] = useState<User[]>(article.coWriters);
+   const [location, setLocation] = useState<Locations | null>(article.location);
    const [coWriterSearch, setCoWriterSearch] = useState<User[]>([]);
    const [loadingContentUpdate, setLoadingContentUpdate] =
       useState<boolean>(false);
@@ -113,6 +121,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       (article.mdx !== markdownValue && markdownValue.length > 2);
 
    const canSaveRest =
+      (location !== null && location !== article.location) ||
       (JSON.stringify(categories) !== JSON.stringify(article.categoryId) &&
          categories.length !== 0) ||
       JSON.stringify(tags) !== JSON.stringify(article.tags) ||
@@ -219,6 +228,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
          method: "POST",
          credentials: "include",
          body: JSON.stringify({
+            location,
             categories,
             tags,
          }),
@@ -289,6 +299,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
          });
       }
    };
+
+   const allLocations = visibleLocations.concat(moreLocations);
 
    return (
       <>
@@ -630,30 +642,37 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure
                            name="Categories"
-                           warning={categories.length === 0}
-                           defaultOpen={categories.length === 0}
+                           warning={
+                              location === null ||
+                              (categories.length === 0 && location !== null)
+                           }
+                           defaultOpen={
+                              location === null ||
+                              (categories.length === 0 && location !== null)
+                           }
                         >
-                           {categories.length === 0 && (
+                           {location === null && (
                               <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
-                                 At least one category is needed to publish.
+                                 You need a category in order to publish
                               </h1>
                            )}
-                           <MultiSelect
-                              data={links.map((l) => ({
-                                 value: l.id,
-                                 label: l.name.toLowerCase(),
+                           {categories.length === 0 && location !== null && (
+                              <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
+                                 At least one sub category is needed to publish.
+                              </h1>
+                           )}
+                           <Select
+                              data={allLocations.map((location) => ({
+                                 value: location,
+                                 label: getFormmatedLocation(location),
                               }))}
-                              placeholder="Pick all the appropiate categories"
-                              onChange={setCategories}
-                              value={categories}
-                              searchable
-                              nothingFound="Nothing found"
-                              clearable
-                              maxDropdownHeight={160}
-                              maxSelectedValues={3}
-                              valueComponent={WrappedArticleBadge}
-                              label="Categories (max 3)"
+                              value={location}
+                              onChange={(e) => setLocation(e as any)}
+                              placeholder="Pick all the appropiate category"
+                              label="Category"
                               required
+                              clearable
+                              nothingFound="Nothing found"
                               icon={<BiCategory />}
                               classNames={{
                                  filledVariant:
@@ -661,7 +680,38 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  dropdown:
                                     "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                               }}
+                              className={location !== null ? "mb-2" : ""}
                            />
+                           {location !== null && (
+                              <MultiSelect
+                                 data={links
+                                    .filter((s) =>
+                                       s.location.includes(location)
+                                    )
+                                    .map((l) => ({
+                                       value: l.id,
+                                       label: l.name.toLowerCase(),
+                                    }))}
+                                 placeholder="Pick all the appropiate sub categories"
+                                 onChange={setCategories}
+                                 value={categories}
+                                 searchable
+                                 nothingFound="Nothing found"
+                                 clearable
+                                 maxDropdownHeight={160}
+                                 maxSelectedValues={3}
+                                 valueComponent={WrappedArticleBadge}
+                                 label="Sub Categories (max 3)"
+                                 required
+                                 icon={<BiCategory />}
+                                 classNames={{
+                                    filledVariant:
+                                       "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                                    dropdown:
+                                       "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                                 }}
+                              />
+                           )}
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure name="Tags">
                            <MultiSelect

@@ -1,7 +1,7 @@
 import { User } from "./User";
-
 import { Comment } from "./Comment";
 import { Downvote, Upvote } from "@prisma/client";
+import { Location } from "../lib/categories";
 
 export interface Article {
    id: string;
@@ -23,4 +23,5 @@ export interface Article {
    upvotes?: Upvote[];
    downvotes?: Downvote[];
    tags: string[];
+   location?: Locations;
 }

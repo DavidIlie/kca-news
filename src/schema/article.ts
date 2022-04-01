@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-import { links } from "../lib/categories";
+import { links, moreLocations, visibleLocations } from "../lib/categories";
 
 export const updateArticleSchema = yup.object().shape({
    title: yup.string().min(4).max(200).required(),
@@ -8,7 +8,17 @@ export const updateArticleSchema = yup.object().shape({
    content: yup.string().required(),
 });
 
+const fullLocations = visibleLocations.concat(moreLocations);
+
 export const updateArticleRestSchema = yup.object().shape({
+   location: yup
+      .string()
+      .test((val) => {
+         console.log("here");
+         if (!fullLocations.includes(val as any)) return false;
+         return true;
+      })
+      .required(),
    categories: yup
       .array()
       .of(

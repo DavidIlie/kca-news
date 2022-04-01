@@ -69,6 +69,7 @@ CREATE TABLE "Article" (
     "cover" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "published" BOOLEAN NOT NULL DEFAULT false,
+    "location" TEXT,
     "categoryId" TEXT[],
     "tags" TEXT[],
     "filter" TEXT[],
