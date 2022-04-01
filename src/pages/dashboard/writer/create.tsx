@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NextSeo } from "next-seo";
 import { GetServerSideProps } from "next";
 import React from "react";
 import { Slide } from "react-awesome-reveal";
@@ -9,20 +10,23 @@ import { Button } from "../../../ui/Button";
 
 const CreatePage: React.FC = () => {
    return (
-      <div className="mt-10 flex min-h-screen flex-grow items-center justify-center">
-         <Slide triggerOnce direction="down">
-            <div>
-               <h1 className="mb-4 text-6xl font-bold text-red-500">
-                  Error creating article.
-               </h1>
-               <Link href="/">
-                  <a>
-                     <Button className="mx-auto">Go Home</Button>
-                  </a>
-               </Link>
-            </div>
-         </Slide>
-      </div>
+      <>
+         <NextSeo title="Error" />
+         <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+            <Slide triggerOnce direction="down">
+               <div>
+                  <h1 className="mb-4 text-6xl font-bold text-red-500">
+                     Error creating article.
+                  </h1>
+                  <Link href="/">
+                     <a>
+                        <Button className="mx-auto">Go Home</Button>
+                     </a>
+                  </Link>
+               </div>
+            </Slide>
+         </div>
+      </>
    );
 };
 

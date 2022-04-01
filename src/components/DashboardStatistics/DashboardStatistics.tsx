@@ -43,13 +43,9 @@ const DashboardStatistics: React.FC<Props> = ({
             value={totalComments}
             icon={FaCommentDots}
          />
+         <StatisticCard title="Likes" value={totalUpvotes} icon={AiFillLike} />
          <StatisticCard
-            title="Total Likes"
-            value={totalUpvotes}
-            icon={AiFillLike}
-         />
-         <StatisticCard
-            title="Total Dislikes"
+            title="Dislikes"
             value={totalDownvotes}
             icon={AiFillDislike}
          />

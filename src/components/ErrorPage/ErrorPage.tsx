@@ -12,7 +12,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ statusCode = 500 }) => {
    return (
       <>
          <NextSeo title="Crashed" />
-         <div className="mx-auto my-24 flex w-full flex-grow items-center justify-center pt-20 text-center">
+         <div className="my-24 flex flex-grow items-center justify-center px-4 text-center sm:pt-20 lg:px-0">
             <div className="flex-col">
                <div className="text-4xl font-semibold">
                   Well, this is awkward.
