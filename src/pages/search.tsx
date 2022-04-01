@@ -8,7 +8,6 @@ import { LoadingOverlay } from "@mantine/core";
 
 import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
-import { Spinner } from "../ui/Spinner";
 import ArticleCard from "../components/ArticleCard";
 
 interface Props {
