@@ -707,8 +707,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  user: co,
                               }))}
                               onChange={(e) => {
-                                 if (e.length === 0) setCoWriterSearchValue([]);
-                                 if (e.length > 1) setCoWriterSearchValue([]);
+                                 if (e.length === 0)
+                                    return setCoWriterSearchValue([]);
+                                 if (e.length > 1)
+                                    return setCoWriterSearchValue([]);
 
                                  setCoWriterSearchValue(e);
 
@@ -717,13 +719,17 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     (co) => co.id === found
                                  )[0] as any as User;
 
+                                 if (
+                                    coWriters.filter((w) => w.id === user.id)
+                                       .length > 0
+                                 )
+                                    return setCoWriterSearchValue([]);
+
                                  if (user) {
                                     setCoWriters([...coWriters, user]);
                                     setCoWriterSearchValue([]);
                                     setCoWriterSearch(
-                                       coWriterSearch.filter(
-                                          (u) => u.id !== user.id
-                                       )
+                                       coWriters.filter((u) => u.id === user.id)
                                     );
                                  }
                               }}
@@ -760,10 +766,18 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
                                  if (r.status === 200) {
                                     const users = response.users as User[];
+
+                                    let final = [] as User[];
+
+                                    users.forEach((user) => {
+                                       coWriters.forEach((writer) => {
+                                          if (user.id !== writer.id)
+                                             final.push(user);
+                                       });
+                                    });
+
                                     setCoWriterSearch(
-                                       users.filter((u) =>
-                                          coWriters.map((co) => u.id !== co.id)
-                                       )
+                                       coWriters.length === 0 ? users : final
                                     );
                                  } else {
                                     notifications.showNotification({
