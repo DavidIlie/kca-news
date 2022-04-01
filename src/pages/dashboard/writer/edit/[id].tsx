@@ -10,6 +10,7 @@ import {
    AiOutlineClose,
    AiOutlineCloseCircle,
    AiOutlineMenu,
+   AiOutlineUser,
 } from "react-icons/ai";
 import { RiRestartLine } from "react-icons/ri";
 import ContentEditable from "react-contenteditable";
@@ -89,6 +90,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [description, setDescription] = useState<string>(article.description);
    const [markdownValue, changeMarkdownValue] = useState<string>(article.mdx);
    const [coWriters, setCoWriters] = useState<User[]>(article.coWriters);
+   const [coWriterSearch, setCoWriterSearch] = useState<User[]>([]);
    const [loadingContentUpdate, setLoadingContentUpdate] =
       useState<boolean>(false);
    const [loadingRest, setLoadingRest] = useState<boolean>(false);
@@ -97,6 +99,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [displayAlert, setDisplayAlert] = useState<boolean>(false);
    const [bigLoad, setBigLoad] = useState<boolean>(false);
    const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
+   const [lastSearchTimestamp, setLastSearchTimestamp] = useState<Date | null>(
+      null
+   );
 
    const [openChangeCoverModal, setOpenChangeCoverModal] =
       useState<boolean>(false);
@@ -679,6 +684,50 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  There are currently no Co-Writers.
                               </h1>
                            )}
+                           <MultiSelect
+                              data={coWriterSearch.map((co) => ({
+                                 label: co.id,
+                                 value: computeKCAName(co),
+                              }))}
+                              onChange={(e) => {
+                                 console.log(e);
+                              }}
+                              searchable
+                              nothingFound="No Writers Found"
+                              icon={<AiOutlineUser />}
+                              maxSelectedValues={1}
+                              onSearchChange={async (v) => {
+                                 if (v === "") return;
+
+                                 const isEmail = v
+                                    .toLowerCase()
+                                    .match(
+                                       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                                    );
+
+                                 const r = await fetch(
+                                    `/api/article/${
+                                       article.id
+                                    }/cowriter/search${
+                                       isEmail
+                                          ? `?email=${v}`
+                                          : `?query=${encodeURIComponent(v)}`
+                                    }`,
+                                    {
+                                       method: "POST",
+                                       credentials: "include",
+                                    }
+                                 );
+                                 const response = await r.json();
+                                 console.log(r.status, response);
+                              }}
+                              classNames={{
+                                 filledVariant:
+                                    "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                                 dropdown:
+                                    "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                              }}
+                           />
                            {coWriters.map((writer, index) => (
                               <div
                                  className="mr-4 ml-2 flex items-center justify-between"

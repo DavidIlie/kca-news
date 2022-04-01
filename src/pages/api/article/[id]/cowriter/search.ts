@@ -9,7 +9,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    if (!session || (session?.user?.isAdmin ? false : !session?.user?.isWriter))
       return res.status(401).json({ message: "not authorized" });
 
-   const { id, userId } = req.query;
+   const { id, email, query } = req.query;
 
    const article = session?.user?.isAdmin
       ? await prisma.article.findFirst({
@@ -23,16 +23,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
    if (!article) return res.status(404).json({ message: "article not found" });
 
-   const searchUser = await prisma.user.findFirst({
+   const searchUsers = await prisma.user.findMany({
       where: {
-         id: userId as string,
          OR: [{ isWriter: true }, { isAdmin: true }],
       },
    });
 
-   if (!searchUser) return res.status(400).json({ message: "user not found" });
+   console.log(email, query);
 
-   return res.json({ user: searchUser });
+   return res.json({ users: searchUsers });
 };
 
 export default handler;
