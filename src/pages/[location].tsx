@@ -8,10 +8,9 @@ import Link from "next/link";
 import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
 import {
+   fullLocations,
    getFormmatedLocation,
    Locations,
-   moreLocations,
-   visibleLocations,
 } from "../lib/categories";
 import { Button } from "../ui/Button";
 
@@ -60,9 +59,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
    const { location, category } = query;
 
-   const allLocations = visibleLocations.concat(moreLocations);
-
-   if (!allLocations.includes(location as any))
+   if (!fullLocations.includes(location as any))
       return {
          notFound: true,
       };

@@ -45,11 +45,10 @@ import { Button } from "../../../../ui/Button";
 import EditorSettingsDisclosure from "../../../../components/EditorSettingsDisclosure";
 import ArticleBadge from "../../../../components/ArticleBadge";
 import {
+   fullLocations,
    getFormmatedLocation,
    links,
    Locations,
-   moreLocations,
-   visibleLocations,
 } from "../../../../lib/categories";
 import Radio from "../../../../ui/Radio";
 import ArticleUnderReviewCard from "../../../../components/ArticleUnderReviewCard";
@@ -299,8 +298,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
          });
       }
    };
-
-   const allLocations = visibleLocations.concat(moreLocations);
 
    return (
       <>
@@ -662,7 +659,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               </h1>
                            )}
                            <Select
-                              data={allLocations.map((location) => ({
+                              data={fullLocations.map((location) => ({
                                  value: location,
                                  label: getFormmatedLocation(location),
                               }))}

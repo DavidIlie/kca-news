@@ -16,6 +16,8 @@ export const moreLocations: Locations[] = [
    "entertainment",
 ];
 
+export const fullLocations = visibleLocations.concat(moreLocations);
+
 export const getFormmatedLocation = (l: Locations) => {
    return l.includes("-")
       ? l
