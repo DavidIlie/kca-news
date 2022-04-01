@@ -23,8 +23,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
    if (!article) return res.status(404).json({ message: "article not found" });
 
-   console.log(query);
-
    const searchUsers = await prisma.user.findMany({
       where: {
          OR: [
