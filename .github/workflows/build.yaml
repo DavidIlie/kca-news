@@ -7,7 +7,7 @@ on:
 
 jobs:
    app:
-      name: "Build Server"
+      name: "Build App"
       runs-on: ubuntu-latest
       steps:
          - name: "Build:checkout"
