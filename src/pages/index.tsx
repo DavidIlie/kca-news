@@ -38,7 +38,7 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
       <>
          <NextSeo title="Home" />
          <div className="flex min-h-screen items-center justify-center px-4 sm:pt-20 lg:px-0">
-            <div className="-ml-32 flex w-full justify-center gap-24">
+            <div className="-ml-32 flex w-full justify-center gap-6">
                <Slide cascade triggerOnce direction="left">
                   <div className="relative -mr-96 flex items-center gap-4">
                      <button
@@ -97,6 +97,26 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                      <h1 className="text-4xl font-medium text-black dark:text-gray-200">
                         Latest Posts:
                      </h1>
+                     <div className="mb-6" />
+                     {featuredPosts.map((article, index) => (
+                        <div className="hoverItem duration-150">
+                           <Link href={`/article/${article.id}`}>
+                              <a
+                                 className="w-full cursor-pointer rounded-md border-2 border-gray-200 bg-white px-16 text-xl dark:border-gray-800 dark:bg-foot"
+                                 key={index}
+                              >
+                                 {article.title} -{" "}
+                                 <span className="font-normal italic text-gray-300">
+                                    {formatDistance(
+                                       new Date(featuredPosts[index].createdAt),
+                                       new Date(),
+                                       { addSuffix: true }
+                                    )}
+                                 </span>
+                              </a>
+                           </Link>
+                        </div>
+                     ))}
                   </div>
                </Slide>
             </div>
