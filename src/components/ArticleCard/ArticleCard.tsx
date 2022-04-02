@@ -36,7 +36,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                <p className="text-gray-800 line-clamp-6 dark:text-gray-100">
                   {article.description}
                </p>
-               <div className="absolute bottom-0 flex items-center">
+               <div className="bottom-0 flex items-center sm:absolute">
                   <span className="flex items-center justify-center rounded-md py-2 text-xs leading-none">
                      <Image
                         className="rounded-full"
