@@ -108,6 +108,7 @@ const ProfileEditor: React.FC<Props> = ({
                                  dropdown:
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
                               }}
+                              required
                               error={errors.nameIndex}
                            />
                            <Field
