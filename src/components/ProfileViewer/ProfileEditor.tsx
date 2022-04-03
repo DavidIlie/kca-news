@@ -1,49 +1,85 @@
 import React from "react";
 import { useSession } from "next-auth/react";
-import { Select, TextInput } from "@mantine/core";
+import { Select, TextInput, Tooltip } from "@mantine/core";
 import { Formik, Field, Form } from "formik";
+import { useNotifications } from "@mantine/notifications";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+import { AiOutlineClose } from "react-icons/ai";
 
 import Modal from "../../ui/Modal";
 import { User } from "../../types/User";
 import { computeKCAName } from "../../lib/computeKCAName";
+import Radio from "../../ui/Radio";
+import { Button } from "../../ui/Button";
+import { updateProfileSchema } from "../../schema/user";
 
 interface Props {
    isOpen: boolean;
-   handleOpen: () => void;
+   handleChangeState: () => void;
    user: User;
+   updateUser: React.Dispatch<React.SetStateAction<User>>;
 }
 
-const ProfileEditor: React.FC<Props> = ({ isOpen, handleOpen, user }) => {
+const ProfileEditor: React.FC<Props> = ({
+   isOpen,
+   handleChangeState,
+   user,
+   updateUser,
+}) => {
    const { data } = useSession();
+   const notifications = useNotifications();
 
    return (
       <Modal
          isOpen={isOpen}
-         updateModalState={handleOpen}
+         updateModalState={handleChangeState}
          title={`Edit ${
             data?.user?.id === user.id ? "my profile" : computeKCAName(user)
          }`}
-         width="lg"
+         width="xl"
          noAutoClose
       >
          <div className="mt-4 px-0.5">
-            <p>
+            <p className="text-gray-800 dark:text-gray-300">
                Below you can see the options that are available to be modified.
             </p>
-
             <div className="mt-4">
                <Formik
                   validateOnChange={false}
                   validateOnBlur={false}
+                  validationSchema={updateProfileSchema}
                   initialValues={{
                      nameIndex: user.nameIndex,
                      extraName: user.extraName || "",
                      showYear: user.showYear,
+                     description: user.description || "",
                      nickname: user.nickname || "",
                      status: user.status || "",
                   }}
-                  onSubmit={async (data, { setSubmitting, resetForm }) => {
-                     console.log("yo");
+                  onSubmit={async (data, { setSubmitting }) => {
+                     setSubmitting(true);
+
+                     const r = await fetch(`/api/profile/${user.id}`, {
+                        method: "POST",
+                        credentials: "include",
+                        body: JSON.stringify(data),
+                     });
+                     const response = await r.json();
+
+                     if (r.status === 200) {
+                        updateUser(response.user);
+                        handleChangeState();
+                     } else {
+                        notifications.showNotification({
+                           color: "red",
+                           title: "Edit - Error",
+                           message: response.message || "Unknown Error",
+                           icon: <AiOutlineClose />,
+                           autoClose: 5000,
+                        });
+                     }
+
+                     setSubmitting(false);
                   }}
                >
                   {({ errors, isSubmitting, values, setFieldValue }) => (
@@ -51,28 +87,28 @@ const ProfileEditor: React.FC<Props> = ({ isOpen, handleOpen, user }) => {
                         <h1 className="borderColor border-b-2 pb-2 text-xl font-semibold">
                            Name Settings
                         </h1>
-                        <div className="-ml-3 mt-2 flex justify-evenly">
+                        <div className="mt-2 flex justify-evenly gap-2">
                            <Field
                               as={Select}
                               label="Preferred Name"
                               data={user.names.map((name, index) => ({
-                                 value: index,
+                                 value: index.toString(),
                                  label: name,
                               }))}
-                              //BUG
-                              value=""
-                              onChange={(v: number) =>
-                                 setFieldValue("nameIndex", v)
+                              value={values.nameIndex.toString()}
+                              onChange={(v: string) =>
+                                 setFieldValue("nameIndex", parseInt(v))
                               }
                               name="nameIndex"
                               className="w-1/2"
-                              description="Change if wrong by default."
+                              description="Change to your preffered name."
                               classNames={{
                                  filledVariant:
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
                                  dropdown:
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
                               }}
+                              error={errors.nameIndex}
                            />
                            <Field
                               as={TextInput}
@@ -88,7 +124,80 @@ const ProfileEditor: React.FC<Props> = ({ isOpen, handleOpen, user }) => {
                                  filledVariant:
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
                               }}
+                              className="w-1/2"
+                              error={errors.extraName}
                            />
+                        </div>
+                        <div className="mx-1 mt-4 mb-3 flex items-center gap-2">
+                           <Field
+                              name="showYear"
+                              label="Show Year Group"
+                              as={Radio}
+                              checked={values.showYear}
+                           />
+                           <Tooltip
+                              label={`Displayed next to your name, such as ${
+                                 user.names[values.nameIndex]
+                              } ${user.year}`}
+                           >
+                              <IoMdInformationCircleOutline className="mt-0.5" />
+                           </Tooltip>
+                        </div>
+                        <h1 className="borderColor mb-2 border-b-2 pb-2 text-xl font-semibold">
+                           Misc Settings
+                        </h1>
+                        <div className="mx-1">
+                           <Field
+                              as={TextInput}
+                              placeholder="Enter description..."
+                              name="description"
+                              label="Description"
+                              description="Who are you?"
+                              classNames={{
+                                 filledVariant:
+                                    "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
+                              }}
+                              error={errors.description}
+                           />
+                           <div className="mt-2" />
+                           <div className="mx-0.5 mt-4 mb-3 flex items-center gap-2">
+                              <Field
+                                 as={TextInput}
+                                 placeholder="Enter nickname..."
+                                 name="nickname"
+                                 label="Nickname"
+                                 description="A informal way to address yourself."
+                                 classNames={{
+                                    filledVariant:
+                                       "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
+                                 }}
+                                 error={errors.nickname}
+                                 className="w-1/2"
+                              />
+                              <div className="mt-2" />
+                              <Field
+                                 as={TextInput}
+                                 placeholder="Enter status..."
+                                 name="status"
+                                 label="Status"
+                                 description="What's on your mind?"
+                                 classNames={{
+                                    filledVariant:
+                                       "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
+                                 }}
+                                 error={errors.status}
+                                 className="w-1/2"
+                              />
+                           </div>
+                        </div>
+                        <div className="mx-1.5 mt-4">
+                           <Button
+                              className="w-full"
+                              loading={isSubmitting}
+                              disabled={isSubmitting}
+                           >
+                              Update
+                           </Button>
                         </div>
                      </Form>
                   )}

@@ -27,6 +27,8 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
    const [openEditorModal, setOpenEditorModal] = useState<boolean>(false);
    const toggleModal = () => setOpenEditorModal(!openEditorModal);
 
+   const [userState, setUserState] = useState<User>(user);
+
    return (
       <>
          <div className="container max-w-5xl rounded-md border-2 border-gray-200 bg-white dark:border-gray-800 dark:bg-foot sm:flex">
@@ -38,27 +40,31 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                      className="mb-2 flex w-full justify-center"
                   >
                      <img
-                        src={user.image.split("=")[0] || user.image}
+                        src={userState.image.split("=")[0] || userState.image}
                         className="w-40 cursor-pointer rounded-full"
                         referrerPolicy="no-referrer"
                      />
                   </Tooltip>
                   <div className="pb-4 text-center">
                      <h1 className="font-semibold sm:text-lg">
-                        {computeKCAName(user)}
+                        {computeKCAName(userState)}
                      </h1>
                      <p className="text-sm sm:text-base">
                         Joined{" "}
-                        {formatDistance(new Date(user.joinedAt), Date.now(), {
-                           addSuffix: true,
-                        })}
+                        {formatDistance(
+                           new Date(userState.joinedAt),
+                           Date.now(),
+                           {
+                              addSuffix: true,
+                           }
+                        )}
                      </p>
                      <div className="mt-2 flex justify-center">
                         <ProfileTags
-                           tags={user.tags}
-                           isAdmin={user.isAdmin}
-                           isWriter={user.isWriter}
-                           isReviewer={user.isReviewer}
+                           tags={userState.tags}
+                           isAdmin={userState.isAdmin}
+                           isWriter={userState.isWriter}
+                           isReviewer={userState.isReviewer}
                         />
                      </div>
                   </div>
@@ -67,19 +73,25 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                   <div className="mb-2">
                      <h1 className="text-lg font-semibold">Description</h1>
                      <h1 className="mt-1 text-sm text-gray-700 dark:text-gray-200">
-                        {user.description || "No description..."}
+                        {userState.description || "No description..."}
                      </h1>
                   </div>
                   <div className="mb-2">
                      <h1 className="text-lg font-semibold">Year Group</h1>
-                     <h1 className="text-gray-700 dark:text-gray-200">
-                        {user.showYear ? user.year : "Redacted"}
+                     <h1
+                        className={
+                           userState.showYear
+                              ? "text-gray-700 dark:text-gray-200"
+                              : "font-semibold text-red-500"
+                        }
+                     >
+                        {userState.showYear ? userState.year : "Classified"}
                      </h1>
                   </div>
                   <div className="mb-4">
                      <h1 className="text-lg font-semibold">Status</h1>
                      <h1 className="text-gray-700 dark:text-gray-200">
-                        {user.status || "No status..."}
+                        {userState.status || "No status..."}
                      </h1>
                   </div>
                   <Button
@@ -197,8 +209,9 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
          {(data?.user?.isAdmin || editable) && (
             <ProfileEditor
                isOpen={openEditorModal}
-               handleOpen={toggleModal}
-               user={user}
+               handleChangeState={toggleModal}
+               user={userState}
+               updateUser={setUserState}
             />
          )}
       </>
