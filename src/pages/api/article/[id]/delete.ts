@@ -24,6 +24,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
    try {
+      const objects = await getObjectsByMetadata("news-covers", {
+         "X-Amz-Meta-Article": article.id,
+      });
+
+      let names = [] as Array<string>;
+      objects.forEach((object) => names.push(object.name));
+      await minioClient.removeObjects("news-covers", names);
+   } catch (error) {
+      return res.status(503).json({ message: "failed to remove cover image" });
+   }
+
+   try {
       const objects = await getObjectsByMetadata("article-image", {
          "X-Amz-Meta-Article": article.id,
       });
