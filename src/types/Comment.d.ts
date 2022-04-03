@@ -1,4 +1,5 @@
 import type { User } from "./User";
+import { Article } from "./Article";
 
 export interface Comment {
    id: string;
@@ -9,4 +10,5 @@ export interface Comment {
    name: string;
    pfp: string;
    user?: User;
+   article?: Article;
 }

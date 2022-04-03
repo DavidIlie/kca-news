@@ -30,12 +30,32 @@ export const getServerSideProps: GetServerSideProps = async ({
    const session = await getSession({ req });
    const { id } = query;
 
-   const user = await prisma.user.findFirst({
+   const user = await prisma.user.findUnique({
       where: { id: id as string },
       include: {
-         comments: true,
+         comments: {
+            include: {
+               user: true,
+               article: true,
+            },
+            orderBy: {
+               createdAt: "desc",
+            },
+            take: 1,
+         },
          upvotes: true,
          downvotes: true,
+         articles: {
+            include: {
+               writer: true,
+            },
+            orderBy: {
+               upvotes: {
+                  _count: "desc",
+               },
+            },
+            take: 3,
+         },
       },
    });
 

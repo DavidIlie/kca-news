@@ -36,9 +36,29 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const user = await prisma.user.findUnique({
       where: { id: session.user!.id },
       include: {
-         comments: true,
+         comments: {
+            include: {
+               user: true,
+               article: true,
+            },
+            orderBy: {
+               createdAt: "desc",
+            },
+            take: 1,
+         },
          upvotes: true,
          downvotes: true,
+         articles: {
+            include: {
+               writer: true,
+            },
+            orderBy: {
+               upvotes: {
+                  _count: "desc",
+               },
+            },
+            take: 3,
+         },
       },
    });
 
