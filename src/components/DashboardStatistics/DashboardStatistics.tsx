@@ -33,11 +33,13 @@ const DashboardStatistics: React.FC<Props> = ({
             value={totalArticles}
             icon={MdArticle}
          />
-         <StatisticCard
-            title="Published"
-            value={publishedArticles}
-            icon={MdPublish}
-         />
+         <div className="hidden sm:block">
+            <StatisticCard
+               title="Published"
+               value={publishedArticles}
+               icon={MdPublish}
+            />
+         </div>
          <StatisticCard
             title="Comments"
             value={totalComments}

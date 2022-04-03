@@ -175,7 +175,18 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                      } grid-cols-${parsedLocation.articles.length} gap-4`}
                   >
                      {parsedLocation.articles.length === 1 ? (
-                        <ArticleCard article={parsedLocation.articles[0]} />
+                        <>
+                           <div className="hidden sm:block">
+                              <ArticleCard
+                                 article={parsedLocation.articles[0]}
+                              />
+                           </div>
+                           <div className="block sm:hidden">
+                              <FeaturedArticleCard
+                                 article={parsedLocation.articles[0]}
+                              />
+                           </div>
+                        </>
                      ) : (
                         parsedLocation.articles.map((article, index) => (
                            <FeaturedArticleCard

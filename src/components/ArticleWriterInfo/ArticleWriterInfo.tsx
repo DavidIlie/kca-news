@@ -101,36 +101,38 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                )}
             </span>
          </span>
-         <h1 className="ml-1 flex items-center text-gray-800 dark:text-gray-100">
-            {" / "}
-            <div className="ml-2">
-               {" "}
-               {format(
-                  parseISO(new Date(article.createdAt).toISOString()),
-                  "MMMM do, yyyy"
-               )}
-            </div>
-         </h1>
-         {(user?.isAdmin || article.writer?.id === user?.id) && showEdit && (
-            <h1 className="ml-2 flex items-center text-blue-500 dark:text-blue-300">
-               {" / "}
+         <div className="sm:flex">
+            <h1 className="ml-1 flex items-center text-gray-800 dark:text-gray-100">
+               <div className="hidden sm:block">{" / "}</div>
                <div className="ml-2">
-                  <Link href={`/dashboard/writer/edit/${article.id}`}>
-                     <a>Edit Article</a>
-                  </Link>
+                  {" "}
+                  {format(
+                     parseISO(new Date(article.createdAt).toISOString()),
+                     "MMMM do, yyyy"
+                  )}
                </div>
             </h1>
-         )}
-         {asPath.includes("/dashboard/writer/edit") && (
-            <h1 className="ml-2 flex items-center text-blue-500 dark:text-blue-300">
-               {" / "}
-               <div className="ml-2">
-                  <Link href={`/article/${article.id}`}>
-                     <a>See Article</a>
-                  </Link>
-               </div>
-            </h1>
-         )}
+            {(user?.isAdmin || article.writer?.id === user?.id) && showEdit && (
+               <h1 className="ml-1 flex items-center text-blue-500 dark:text-blue-300 sm:ml-2">
+                  <div className="hidden sm:block">{" / "}</div>
+                  <div className="ml-2">
+                     <Link href={`/dashboard/writer/edit/${article.id}`}>
+                        <a>Edit Article</a>
+                     </Link>
+                  </div>
+               </h1>
+            )}
+            {asPath.includes("/dashboard/writer/edit") && (
+               <h1 className="ml-1 flex items-center text-blue-500 dark:text-blue-300 sm:ml-2">
+                  <div className="hidden sm:block">{" / "}</div>
+                  <div className="ml-2">
+                     <Link href={`/article/${article.id}`}>
+                        <a>See Article</a>
+                     </Link>
+                  </div>
+               </h1>
+            )}
+         </div>
       </div>
    );
 };

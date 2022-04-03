@@ -217,7 +217,12 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                      <div className="mb-4 flex items-center gap-2 sm:mb-0">
                         <Link href="/dashboard/writer/create">
                            <a className="w-1/3 sm:w-auto">
-                              <Button className="w-full">Create Article</Button>
+                              <Button className="w-full">
+                                 Create
+                                 <span className="hidden sm:ml-1 sm:block">
+                                    Article
+                                 </span>
+                              </Button>
                            </a>
                         </Link>
                         <Button
@@ -229,7 +234,11 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            }
                            className="w-1/3 sm:w-auto"
                         >
-                           Edit Article
+                           Edit{" "}
+                           <span className="hidden sm:ml-1 sm:block">
+                              {" "}
+                              Article
+                           </span>
                         </Button>
                         <Button
                            disabled={
@@ -241,7 +250,11 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            onClick={() => setOpenConfirmModal(true)}
                            className="w-1/3 sm:w-auto"
                         >
-                           Delete Article
+                           Delete
+                           <span className="hidden sm:ml-1 sm:block">
+                              {" "}
+                              Article
+                           </span>
                         </Button>
                      </div>
                      <div className="flex items-center gap-2">
@@ -353,10 +366,9 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                              (published)
                                           </span>
                                        )}{" "}
-                                    {" - "}
                                     <Link href={`/article/${article.id}`}>
-                                       <a className="font-semibold text-blue-600 duration-150 hover:text-blue-800 hover:underline dark:text-blue-400 dark:hover:text-blue-600">
-                                          See article
+                                       <a className="hidden font-semibold text-blue-600 duration-150 hover:text-blue-800 hover:underline dark:text-blue-400 dark:hover:text-blue-600 sm:inline-flex">
+                                          {" - "} See article
                                        </a>
                                     </Link>
                                  </h1>
@@ -486,40 +498,41 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                     <Link
                                        href={`/dashboard/writer/edit/${article.id}`}
                                     >
-                                       <a className="w-1/3">
+                                       <a className="w-1/2 sm:w-1/3">
                                           <Button className="w-full">
                                              Edit
                                           </Button>
                                        </a>
                                     </Link>
-                                    {user.isAdmin || !article.underReview ? (
-                                       <Link
-                                          href={`/dashboard/writer/edit/${article.id}?menu=true&visibility=true`}
-                                       >
-                                          <a className="w-1/3">
-                                             <Button
-                                                className="w-full"
-                                                color="sky"
-                                                disabled={
-                                                   !user.isAdmin &&
-                                                   article.underReview
-                                                }
-                                             >
-                                                Edit Status
-                                             </Button>
-                                          </a>
-                                       </Link>
-                                    ) : (
-                                       <Button
-                                          className="w-1/3"
-                                          color="sky"
-                                          disabled={article.underReview}
-                                       >
-                                          Edit Status
-                                       </Button>
-                                    )}
-
-                                    <div className="w-1/3">
+                                    <div className="hidden sm:block">
+                                       {user.isAdmin || !article.underReview ? (
+                                          <Link
+                                             href={`/dashboard/writer/edit/${article.id}?menu=true&visibility=true`}
+                                          >
+                                             <a className="w-1/3">
+                                                <Button
+                                                   className="w-1/3"
+                                                   color="sky"
+                                                   disabled={
+                                                      !user.isAdmin &&
+                                                      article.underReview
+                                                   }
+                                                >
+                                                   Edit Visibility
+                                                </Button>
+                                             </a>
+                                          </Link>
+                                       ) : (
+                                          <Button
+                                             className="w-1/3"
+                                             color="sky"
+                                             disabled={article.underReview}
+                                          >
+                                             Edit Visibility
+                                          </Button>
+                                       )}
+                                    </div>
+                                    <div className="w-1/2 sm:w-1/3">
                                        <Button
                                           className="w-full"
                                           color="secondary"

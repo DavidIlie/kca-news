@@ -10,6 +10,7 @@ import { getSession } from "next-auth/react";
 import { Article } from "../types/Article";
 import ArticleCard from "../components/ArticleCard";
 import { searchArticles } from "../lib/searchArticles";
+import FeaturedArticleCard from "../components/ArticleCard/FeaturedArticleCard";
 
 interface Props {
    initialResponse: Article[];
@@ -58,7 +59,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
    return (
       <>
          <DefaultSeo title={previousSearchQuery} />
-         <div className="mb-20 flex flex-grow px-4 sm:pt-32 lg:px-0">
+         <div className="mb-20 mt-10 flex flex-grow px-4 sm:mt-0 sm:pt-32 lg:px-0">
             <div className="container mx-auto max-w-5xl">
                <h1 className="mb-4 text-4xl font-semibold">
                   Search results for: {previousSearchQuery}
@@ -83,7 +84,14 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
                <div className="mt-4">
                   <LoadingOverlay visible={loading} />
                   {results.map((article, index) => (
-                     <ArticleCard article={article} key={index} />
+                     <>
+                        <div className="hidden sm:block">
+                           <ArticleCard article={article} />
+                        </div>
+                        <div className="block sm:hidden">
+                           <FeaturedArticleCard article={article} />
+                        </div>
+                     </>
                   ))}
                   {results.length === 0 && (
                      <h1 className="text-center text-xl font-semibold">
