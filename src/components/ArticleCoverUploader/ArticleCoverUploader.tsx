@@ -165,7 +165,7 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
          </div>
          <div className={`mt-3 ${modal && "flex"} justify-end gap-2`}>
             {article.cover !==
-               "https://cdn.davidilie.com/kca-news/kings-alicante-1.jpg" && (
+               "https://cdn.davidilie.com/kca-news/default-cover.jpg" && (
                <button
                   type="button"
                   className={`${

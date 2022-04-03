@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
@@ -22,6 +23,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
    showEdit = false,
    className,
 }) => {
+   const { asPath } = useRouter();
    return (
       <div className={`${className} flex items-center`}>
          <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
@@ -115,6 +117,16 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                <div className="ml-2">
                   <Link href={`/dashboard/writer/edit/${article.id}`}>
                      <a>Edit Article</a>
+                  </Link>
+               </div>
+            </h1>
+         )}
+         {asPath.includes("/dashboard/writer/edit") && (
+            <h1 className="ml-2 flex items-center text-blue-500 dark:text-blue-300">
+               {" / "}
+               <div className="ml-2">
+                  <Link href={`/article/${article.id}`}>
+                     <a>See Article</a>
                   </Link>
                </div>
             </h1>

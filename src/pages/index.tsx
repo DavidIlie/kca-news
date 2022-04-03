@@ -156,12 +156,12 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                </Slide>
             </div>
          </div>
-         <div className="container mx-auto max-w-7xl py-12">
+         <div className="container mx-auto max-w-7xl py-12 px-4">
             {individualArticles.map((parsedLocation, index) => (
                <div
                   className={index !== featuredPosts.length - 1 ? "mb-12" : ""}
                >
-                  <h1 className="border-b-2 pb-4 text-4xl font-semibold">
+                  <h1 className="border-b-2 pb-4 text-2xl font-semibold sm:text-4xl">
                      {getFormmatedLocation(parsedLocation.location)} -{" "}
                      <Link href={`/${parsedLocation.location}`}>
                         <a className="cursor-pointer font-normal text-blue-500 duration-150 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-600">
@@ -189,10 +189,10 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                   </div>
                   {parsedLocation.articles.length === 0 && (
                      <div className="text-center">
-                        <h1 className="text-4xl font-semibold text-red-500">
+                        <h1 className="text-2xl font-semibold text-red-500 sm:text-4xl">
                            Woah! No posts?
                         </h1>
-                        <p className="mb-3 mt-2 text-base">
+                        <p className="mb-3 mt-2 text-sm sm:text-base">
                            Looks like this category needs some motivation...
                         </p>
                      </div>

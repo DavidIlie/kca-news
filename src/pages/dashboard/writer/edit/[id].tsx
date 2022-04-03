@@ -303,15 +303,15 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    return (
       <>
          <DefaultSeo title={title} />
+         {!openSidebar && (
+            <AiOutlineMenu
+               className="fixed right-0 top-0 z-[200] mt-[50%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 sm:mt-24"
+               title="Open Settings"
+               onClick={() => setOpenSidebar(true)}
+            />
+         )}
          <div className="mt-4 flex flex-grow sm:mt-[5.4rem]">
             <LoadingOverlay visible={loadingContentUpdate || bigLoad} />
-            {!openSidebar && (
-               <AiOutlineMenu
-                  className="absolute right-0 top-0 z-50 mt-[75%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 sm:mt-24"
-                  title="Open Settings"
-                  onClick={() => setOpenSidebar(true)}
-               />
-            )}
             <ScrollArea
                ref={ref}
                className={`mx-auto ${contentHeightSystem} px-4 pb-5 sm:pt-[1.75rem] ${
@@ -355,12 +355,14 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         )}
                      </div>
                      {title !== article.title && (
-                        <RiRestartLine
-                           className="absolute -ml-10 mt-[0.9rem] cursor-pointer text-2xl"
-                           onClick={() => {
-                              setTitle(article.title);
-                           }}
-                        />
+                        <div className="relative hidden sm:block">
+                           <RiRestartLine
+                              className="absolute -ml-10 mt-[0.9rem] cursor-pointer text-2xl"
+                              onClick={() => {
+                                 setTitle(article.title);
+                              }}
+                           />
+                        </div>
                      )}
                      <ContentEditable
                         tagName="h1"
@@ -388,12 +390,14 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      />
                   </div>
                   {description !== article.description && (
-                     <RiRestartLine
-                        className="absolute -ml-10 mt-5 cursor-pointer text-2xl"
-                        onClick={() => {
-                           setDescription(article.description);
-                        }}
-                     />
+                     <div className="relative hidden sm:block">
+                        <RiRestartLine
+                           className="absolute -ml-10 mt-5 cursor-pointer text-2xl"
+                           onClick={() => {
+                              setDescription(article.description);
+                           }}
+                        />
+                     </div>
                   )}
                   <ContentEditable
                      tagName="p"

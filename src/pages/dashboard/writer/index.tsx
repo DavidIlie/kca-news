@@ -213,11 +213,11 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                   <h1 className="mb-4 text-4xl font-semibold">
                      {user.isAdmin ? "Total" : "Your"} Articles
                   </h1>
-                  <div className="borderColor flex justify-between border-b-2 pb-4">
-                     <div className="flex items-center gap-2">
+                  <div className="borderColor justify-between border-b-2 pb-4 sm:flex">
+                     <div className="mb-4 flex items-center gap-2 sm:mb-0">
                         <Link href="/dashboard/writer/create">
-                           <a>
-                              <Button>Create Article</Button>
+                           <a className="w-1/3 sm:w-auto">
+                              <Button className="w-full">Create Article</Button>
                            </a>
                         </Link>
                         <Button
@@ -227,6 +227,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                               selected !== null &&
                               push(`/dashboard/writer/edit/${selected.id}`)
                            }
+                           className="w-1/3 sm:w-auto"
                         >
                            Edit Article
                         </Button>
@@ -238,6 +239,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            }
                            color="secondary"
                            onClick={() => setOpenConfirmModal(true)}
+                           className="w-1/3 sm:w-auto"
                         >
                            Delete Article
                         </Button>
@@ -385,7 +387,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                           not published
                                        </h1>
                                     )}
-                                    <div>
+                                    <div className="hidden sm:block">
                                        {article.categoryId.map((tag, i) => (
                                           <ArticleBadge tag={tag} key={i} />
                                        ))}
@@ -402,16 +404,18 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                               </div>
                            </div>
                            <Disclosure.Panel className="relative mt-4 flex justify-evenly gap-4 border-t-2 border-blue-500 pt-4">
-                              <Image
-                                 alt="Post picture"
-                                 className="rounded shadow-xl"
-                                 src={article.cover}
-                                 width={1000 / 2}
-                                 height={700 / 2}
-                                 blurDataURL={shimmer(1905 / 2, 957 / 2)}
-                                 placeholder="blur"
-                                 objectFit="cover"
-                              />
+                              <div className="hidden sm:block">
+                                 <Image
+                                    alt="Post picture"
+                                    className="rounded shadow-xl"
+                                    src={article.cover}
+                                    width={1000 / 2}
+                                    height={700 / 2}
+                                    blurDataURL={shimmer(1905 / 2, 957 / 2)}
+                                    placeholder="blur"
+                                    objectFit="cover"
+                                 />
+                              </div>
                               <div className="relative w-full max-w-lg">
                                  <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
                                     Description
@@ -478,7 +482,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                        </Link>
                                     </>
                                  )}
-                                 <div className="absolute bottom-0 mb-0.5 flex w-full items-center gap-2">
+                                 <div className="bottom-0 mb-0.5 mt-4 flex w-full items-center gap-2 sm:absolute sm:mt-0">
                                     <Link
                                        href={`/dashboard/writer/edit/${article.id}`}
                                     >
@@ -501,7 +505,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                                    article.underReview
                                                 }
                                              >
-                                                Change Visibility
+                                                Edit Status
                                              </Button>
                                           </a>
                                        </Link>
@@ -511,7 +515,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                           color="sky"
                                           disabled={article.underReview}
                                        >
-                                          Change Visibility
+                                          Edit Status
                                        </Button>
                                     )}
 
