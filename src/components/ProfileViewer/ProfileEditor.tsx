@@ -43,7 +43,7 @@ const ProfileEditor: React.FC<Props> = ({
             <p className="text-gray-800 dark:text-gray-300">
                Below you can see the options that are available to be modified.
             </p>
-            <div className="mt-4">
+            <div className="mt-2">
                <Formik
                   validateOnChange={false}
                   validateOnBlur={false}
