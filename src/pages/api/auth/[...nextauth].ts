@@ -16,8 +16,10 @@ export default NextAuth({
    callbacks: {
       async signIn({ user }) {
          if (
-            user.email?.includes("kcpupils.org") ||
-            user.email?.includes("kings.education")
+            user.email?.endsWith("@kcpupils.org") ||
+            user.email?.endsWith("@kings.education") ||
+            user.email?.endsWith("@kingsgroup.org") ||
+            user.email?.endsWith("@davidilie.com")
          )
             return true;
          return false;
