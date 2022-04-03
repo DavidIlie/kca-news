@@ -26,7 +26,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                placeholder="blur"
                objectFit="cover"
             />
-            <div className="relative py-1 md:max-w-md md:px-0">
+            <div className="relative py-1 md:max-w-xl md:px-0">
                {article.categoryId.concat(article.tags).map((tag, i) => (
                   <ArticleBadge tag={tag} key={i} />
                ))}
@@ -45,8 +45,8 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                               ? "/no-pfp.jpg"
                               : article.writer!.image
                         }
-                        width="30px"
-                        height="30px"
+                        width="40px"
+                        height="40px"
                         blurDataURL={shimmer(1920, 1080)}
                         alt={`${
                            article.anonymous
@@ -55,7 +55,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                         }'s profile image`}
                      />
                      <div className="ml-2">
-                        <span className="text-sm text-gray-700 dark:text-gray-200">
+                        <span className="text-base text-gray-700 dark:text-gray-200">
                            {article.anonymous
                               ? "KCA News Team"
                               : computeKCAName(article.writer!)}

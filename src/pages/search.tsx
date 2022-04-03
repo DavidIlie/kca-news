@@ -5,10 +5,11 @@ import { useRouter } from "next/router";
 import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 import { useNotifications } from "@mantine/notifications";
 import { LoadingOverlay } from "@mantine/core";
+import { getSession } from "next-auth/react";
 
-import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
 import ArticleCard from "../components/ArticleCard";
+import { searchArticles } from "../lib/searchArticles";
 
 interface Props {
    initialResponse: Article[];
@@ -48,7 +49,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
          });
       } else {
          setPreviousSearchQuery(searchQuery);
-         setResults(response);
+         setResults(response.articles);
       }
 
       return setLoading(false);
@@ -96,7 +97,10 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
    );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+   query,
+   req,
+}) => {
    const { q } = query;
 
    if (!q)
@@ -107,28 +111,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
          },
       };
 
-   const initialResponse = await prisma.article.findMany({
-      where: {
-         published: true,
-         title: {
-            contains: q as string,
-            mode: "insensitive",
-         },
-         underReview: false,
-      },
-      include: {
-         writer: true,
-      },
-      orderBy: [
-         {
-            createdAt: "desc",
-         },
-      ],
-   });
+   const session = await getSession({ req });
 
    return {
       props: {
-         initialResponse: JSON.parse(JSON.stringify(initialResponse)),
+         initialResponse: await searchArticles(q, session?.user),
       },
    };
 };

@@ -1,31 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "next-auth/react";
 
-import prisma from "../../../lib/prisma";
+import { searchArticles } from "../../../lib/searchArticles";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    try {
       const { q } = req.query;
-
-      const articles = await prisma.article.findMany({
-         where: {
-            published: true,
-            title: {
-               contains: q as string,
-               mode: "insensitive",
-            },
-            underReview: false,
-         },
-         include: {
-            writer: true,
-         },
-         orderBy: [
-            {
-               createdAt: "desc",
-            },
-         ],
-      });
-
-      return res.json(articles);
+      const session = await getSession({ req });
+      return res.json({ articles: await searchArticles(q, session?.user) });
    } catch (error: any) {
       res.status(500).json({ message: error.message });
    }

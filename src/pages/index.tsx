@@ -20,6 +20,7 @@ import {
    Locations,
 } from "../lib/categories";
 import { Button } from "../ui/Button";
+import ArticleCard from "../components/ArticleCard";
 
 interface IndividualArticleType {
    location: Locations;
@@ -136,11 +137,11 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                         >
                            <Link href={`/article/${article.id}`}>
                               <a
-                                 className="container max-w-md cursor-pointer truncate rounded-md border-2 border-gray-200 bg-white px-16 text-xl dark:border-gray-800 dark:bg-foot"
+                                 className="container max-w-md cursor-pointer truncate rounded-md border-2 border-gray-200 bg-gray-50 px-16 text-xl dark:border-gray-800 dark:bg-foot"
                                  key={index}
                               >
                                  {article.title} -{" "}
-                                 <span className="text-base font-normal italic text-gray-300">
+                                 <span className="text-base font-normal italic text-gray-700 dark:text-gray-300">
                                     {formatDistance(
                                        new Date(featuredPosts[index].createdAt),
                                        new Date(),
@@ -169,16 +170,22 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                      </Link>
                   </h1>
                   <div
-                     className={`mt-6 grid grid-cols-${parsedLocation.articles.length} gap-4`}
+                     className={`mt-6 ${
+                        parsedLocation.articles.length !== 1 && "grid"
+                     } grid-cols-${parsedLocation.articles.length} gap-4`}
                   >
-                     {parsedLocation.articles.map((article, index) => (
-                        <FeaturedArticleCard
-                           article={article}
-                           key={index}
-                           solo={parsedLocation.articles.length < 3}
-                           latest={parsedLocation.articles.length < 3}
-                        />
-                     ))}
+                     {parsedLocation.articles.length === 1 ? (
+                        <ArticleCard article={parsedLocation.articles[0]} />
+                     ) : (
+                        parsedLocation.articles.map((article, index) => (
+                           <FeaturedArticleCard
+                              article={article}
+                              key={index}
+                              solo={parsedLocation.articles.length < 3}
+                              latest={parsedLocation.articles.length < 3}
+                           />
+                        ))
+                     )}
                   </div>
                   {parsedLocation.articles.length === 0 && (
                      <div className="text-center">

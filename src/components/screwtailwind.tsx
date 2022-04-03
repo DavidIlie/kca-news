@@ -444,6 +444,11 @@ export default function tailwindbad() {
          <div className="text-rose-800" />
          <div className="bg-rose-900" />
          <div className="text-rose-900" />
+         <div className="grid-cols-1" />
+         <div className="grid-cols-2" />
+         <div className="grid-cols-2" />
+         <div className="grid-cols-4" />
+
       </>
    );
 }
