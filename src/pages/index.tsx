@@ -99,14 +99,18 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                      </h1>
                      <div className="mb-6" />
                      {featuredPosts.map((article, index) => (
-                        <div className="hoverItem duration-150">
+                        <div
+                           className={`hoverItem duration-150 ${
+                              index !== featuredPosts.length - 1 && "mb-4"
+                           }`}
+                        >
                            <Link href={`/article/${article.id}`}>
                               <a
-                                 className="w-full cursor-pointer rounded-md border-2 border-gray-200 bg-white px-16 text-xl dark:border-gray-800 dark:bg-foot"
+                                 className="container max-w-md cursor-pointer truncate rounded-md border-2 border-gray-200 bg-white px-16 text-xl dark:border-gray-800 dark:bg-foot"
                                  key={index}
                               >
                                  {article.title} -{" "}
-                                 <span className="font-normal italic text-gray-300">
+                                 <span className="text-base font-normal italic text-gray-300">
                                     {formatDistance(
                                        new Date(featuredPosts[index].createdAt),
                                        new Date(),

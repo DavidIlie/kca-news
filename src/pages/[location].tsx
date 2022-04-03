@@ -64,7 +64,7 @@ const LocationArticleShowcase: React.FC<Props> = ({ articles, location }) => {
       <>
          <NextSeo title={getFormmatedLocation(location)} />
          <div className="mb-20 flex flex-grow px-4 sm:pt-32 lg:px-0">
-            <div className="container mx-auto max-w-6xl">
+            <div className="container mx-auto max-w-5xl">
                <div className="mb-16">
                   <h1 className="border-b-2 pb-4 text-4xl font-semibold">
                      {getFormmatedLocation(location)}{" "}
@@ -95,7 +95,9 @@ const LocationArticleShowcase: React.FC<Props> = ({ articles, location }) => {
                   )}
                </div>
                {articles
-                  .filter((_a, index) => (articles.length > 2 ? index > 1 : 0))
+                  .filter((_a, index) =>
+                     articles.length > 2 ? index > 1 : index < 1
+                  )
                   .reverse()
                   .map((article, index) => (
                      <ArticleCard article={article} key={index} />
