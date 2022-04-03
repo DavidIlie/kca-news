@@ -56,7 +56,6 @@ import ConfirmModal from "../../../../ui/ConfirmModal";
 import { shimmer } from "../../../../lib/shimmer";
 import { Consumer } from "../../../../components/CustomSidebar/CustomSidebar";
 import CustomSidebar from "../../../../components/CustomSidebar";
-import { usePreventUserFromLosingData } from "../../../../lib/usePreventUserFromLosingData";
 import useDetermineCustomQueryEditor from "../../../../hooks/useDetermineCustomQueryEditor";
 import ArticleWriterInfo from "../../../../components/ArticleWriterInfo";
 import ArticleCoverUploader, {
@@ -64,6 +63,7 @@ import ArticleCoverUploader, {
 } from "../../../../components/ArticleCoverUploader/ArticleCoverUploader";
 import sendPost from "../../../../lib/sendPost";
 import { computeKCAName } from "../../../../lib/computeKCAName";
+import { useBeforeUnload } from "react-use";
 
 interface Props {
    user: User;
@@ -126,8 +126,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       JSON.stringify(tags) !== JSON.stringify(article.tags) ||
       JSON.stringify(coWriters) !== JSON.stringify(article.coWriters);
 
-   usePreventUserFromLosingData(
-      (canSave && canSaveRest) || canSave || canSaveRest
+   useBeforeUnload(
+      canSave || canSaveRest,
+      "Are you sure want to leave this page?"
    );
 
    const canBeAttemptedSave = !canSave ? !canSaveRest : false;
