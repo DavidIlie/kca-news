@@ -47,13 +47,13 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
 
    if (featuredPosts.length === 0) {
       return (
-         <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+         <div className="my-24 flex flex-grow items-center justify-center px-4 py-24 lg:px-0">
             <Slide triggerOnce direction="down">
                <div>
-                  <h1 className="text-6xl font-semibold text-red-500">
+                  <h1 className="text-center text-4xl font-semibold text-red-500 sm:text-6xl">
                      How did i get here?
                   </h1>
-                  <p className="mb-3 mt-4 text-center text-lg">
+                  <p className="mb-3 mt-4 text-center text-base sm:text-lg">
                      Looks like there are no articles, embarrising... 🙄
                   </p>
                   <div className="mt-2 flex justify-center text-gray-800">
