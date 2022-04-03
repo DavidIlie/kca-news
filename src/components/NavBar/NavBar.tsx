@@ -128,7 +128,7 @@ const NavBar: React.FC = () => {
                   )}
                </NewsDropdown>
             </nav>
-            <div className="mx-auto mt-4 flex items-center gap-4 xl:mt-0">
+            <div className="mx-auto mt-1 flex items-center gap-4 xl:mt-0">
                <div className="relative mx-auto text-gray-600">
                   <input
                      className="h-10 rounded-lg border-2 border-gray-300 bg-white px-5 pr-16 text-sm text-gray-900 focus:outline-none dark:border-gray-800 dark:bg-foot dark:text-gray-100"
