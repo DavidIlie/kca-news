@@ -263,7 +263,7 @@ const ArticleViewer: React.FC<Props> = ({
                ],
             }}
          />
-         <div className="sm:pt-42 flex flex-grow px-4 dark:bg-dark-bg md:pt-36 lg:px-0 xl:pt-24">
+         <div className="sm:pt-42 flex flex-grow dark:bg-dark-bg md:pt-36 lg:px-0 xl:pt-24">
             <Slide
                triggerOnce
                className="mx-auto"

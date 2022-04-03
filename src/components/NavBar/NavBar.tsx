@@ -90,47 +90,6 @@ const NavBar: React.FC = () => {
                         ))}
                   </NewsDropdown>
                ))}
-               <div className="hidden sm:block">
-                  <NewsDropdown name="More" special={openMoreMenu !== null}>
-                     {openMoreMenu ? (
-                        <>
-                           <div className="flex items-center gap-2 bg-gray-100 px-2 py-2 dark:bg-dark-bg">
-                              <AiOutlineArrowLeft
-                                 onClick={() => setOpenMoreMenu(null)}
-                                 className="cursor-pointer"
-                              />
-                              <p className="mx-auto text-black dark:text-white">
-                                 {getFormmatedLocation(openMoreMenu)}
-                              </p>
-                           </div>
-                           <Menu.Item as={NextLink} href={`/${location}`}>
-                              <DropdownElement>Main Home</DropdownElement>
-                           </Menu.Item>
-                           {links
-                              .filter((l) => l.location.includes(openMoreMenu))
-                              .map((category, index) => (
-                                 <NewsLink
-                                    category={category}
-                                    location={openMoreMenu}
-                                    key={index}
-                                 />
-                              ))}
-                        </>
-                     ) : (
-                        moreLocations.map((location, index) => (
-                           <DropdownElement
-                              key={index}
-                              opening
-                              openingFunction={() => setOpenMoreMenu(location)}
-                           >
-                              {getFormmatedLocation(location)}
-                           </DropdownElement>
-                        ))
-                     )}
-                  </NewsDropdown>
-               </div>
-            </nav>
-            <div className="mb-1 block sm:mb-0 sm:hidden">
                <NewsDropdown name="More" special={openMoreMenu !== null}>
                   {openMoreMenu ? (
                      <>
@@ -168,11 +127,11 @@ const NavBar: React.FC = () => {
                      ))
                   )}
                </NewsDropdown>
-            </div>
+            </nav>
             <div className="mx-auto mt-1 flex items-center gap-4 xl:mt-0">
                <div className="relative mx-auto text-gray-600">
                   <input
-                     className="h-10 rounded-lg border-2 border-gray-300 bg-white px-5 pr-16 text-sm text-gray-900 focus:outline-none dark:border-gray-800 dark:bg-foot dark:text-gray-100"
+                     className="ml-12 h-10 rounded-lg border-2 border-gray-300 bg-white px-5 pr-16 text-sm text-gray-900 focus:outline-none dark:border-gray-800 dark:bg-foot dark:text-gray-100 sm:ml-0"
                      type="search"
                      name="search"
                      placeholder="Search"

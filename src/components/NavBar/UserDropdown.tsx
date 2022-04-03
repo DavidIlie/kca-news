@@ -18,12 +18,12 @@ const UserDropdown: React.FC = () => {
    const isReviewer = data?.user?.isAdmin ? true : data?.user?.isReviewer;
 
    return (
-      <Menu as="div" className="relative -mr-14 inline-flex">
-         <Menu.Button>
+      <Menu as="div" className="relative m-0 inline-flex">
+         <Menu.Button className="w-1/2">
             {({ open }) => (
                <img
                   src={data?.user?.image || "/no-pfp.jpg"}
-                  className={`flex w-[45%] rounded-full duration-150 hover:ring-2 dark:ring-blue-900 ${
+                  className={`flex rounded-full duration-150 hover:ring-2 dark:ring-blue-900 ${
                      open && "ring-2"
                   }`}
                   referrerPolicy="no-referrer"

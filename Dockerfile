@@ -1,14 +1,35 @@
-FROM node:16.13.0-slim as build
+FROM node:16.13.0-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-RUN mkdir -p /usr/src/app
-ENV PORT 3000
-WORKDIR /usr/src/app
-COPY package.json /usr/src/app
-COPY yarn.lock /usr/src/app
-RUN apt-get -qy update && apt-get -qy install openssl
-RUN yarn
-COPY . /usr/src/app
-RUN yarn prisma generate --schema=/usr/src/app/prisma/schema.prisma
+FROM node:16.13.0-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+RUN yarn prisma generate
 RUN yarn build
+
+
+FROM node:16.13.0-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
 EXPOSE 3000
-ENTRYPOINT ["yarn", "start"]
+
+ENV PORT 3000
+
+CMD ["node", "server.js"]

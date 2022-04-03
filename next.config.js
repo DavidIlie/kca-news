@@ -10,4 +10,7 @@ module.exports = {
          "cdn.davidilie.com",
       ],
    },
+   experimental: {
+      outputStandalone: true,
+   },
 };
