@@ -66,7 +66,7 @@ CREATE TABLE "Article" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "mdx" TEXT NOT NULL,
     "review" BOOLEAN NOT NULL DEFAULT false,
-    "cover" TEXT NOT NULL,
+    "cover" TEXT NOT NULL DEFAULT E'https://cdn.davidilie.com/kca-news/default-cover.jpg',
     "description" TEXT NOT NULL,
     "published" BOOLEAN NOT NULL DEFAULT false,
     "location" TEXT,
