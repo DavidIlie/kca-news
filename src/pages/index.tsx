@@ -82,7 +82,7 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                      </button>
                      <Link href={`/article/${featuredPosts[index].id}`}>
                         <a className="w-[50%]">
-                           <h1 className="absolute top-0 left-0 z-50 ml-[5rem] w-[50%] rounded-t-md bg-gray-600 bg-opacity-70 py-2 px-4 text-lg font-medium text-white dark:bg-gray-900">
+                           <h1 className="absolute top-0 left-0 z-50 ml-[5rem] w-[50%] rounded-t-md bg-gray-600 bg-opacity-70 py-2 px-4 text-lg font-medium text-white dark:bg-gray-900 dark:bg-opacity-70">
                               {featuredPosts[index].title} -{" "}
                               <span className="font-normal italic text-gray-300">
                                  {formatDistance(
@@ -92,7 +92,7 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                                  )}
                               </span>
                            </h1>
-                           <div className="h-26 absolute bottom-0 z-50 mb-[0.3rem] w-[50%] rounded-b-md bg-gray-600 bg-opacity-70 py-2 px-4 text-lg text-white dark:bg-gray-900">
+                           <div className="h-26 absolute bottom-0 z-50 mb-[0.3rem] w-[50%] rounded-b-md bg-gray-600 bg-opacity-70 py-2 px-4 text-lg text-white dark:bg-gray-900 dark:bg-opacity-70">
                               <h1
                                  className="line-clamp-3"
                                  title={featuredPosts[index].description}
