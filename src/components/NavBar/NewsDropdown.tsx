@@ -36,7 +36,7 @@ const NewsLink: React.FC<Props> = ({ name, children, special = false }) => {
             leaveTo="transform opacity-0 scale-95"
          >
             <Menu.Items
-               className={`absolute mt-12 ${name === "More" && "-ml-12"} ${
+               className={`absolute mt-12 ${
                   special ? "w-64" : "w-32"
                } z-[200] rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-900 dark:bg-foot`}
             >

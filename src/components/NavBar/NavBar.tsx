@@ -128,6 +128,45 @@ const NavBar: React.FC = () => {
                   )}
                </NewsDropdown>
             </nav>
+            <div className="mb-1 block sm:mb-0 sm:hidden">
+               <NewsDropdown name="More" special={openMoreMenu !== null}>
+                  {openMoreMenu ? (
+                     <>
+                        <div className="flex items-center gap-2 bg-gray-100 px-2 py-2 dark:bg-dark-bg">
+                           <AiOutlineArrowLeft
+                              onClick={() => setOpenMoreMenu(null)}
+                              className="cursor-pointer"
+                           />
+                           <p className="mx-auto text-black dark:text-white">
+                              {getFormmatedLocation(openMoreMenu)}
+                           </p>
+                        </div>
+                        <Menu.Item as={NextLink} href={`/${location}`}>
+                           <DropdownElement>Main Home</DropdownElement>
+                        </Menu.Item>
+                        {links
+                           .filter((l) => l.location.includes(openMoreMenu))
+                           .map((category, index) => (
+                              <NewsLink
+                                 category={category}
+                                 location={openMoreMenu}
+                                 key={index}
+                              />
+                           ))}
+                     </>
+                  ) : (
+                     moreLocations.map((location, index) => (
+                        <DropdownElement
+                           key={index}
+                           opening
+                           openingFunction={() => setOpenMoreMenu(location)}
+                        >
+                           {getFormmatedLocation(location)}
+                        </DropdownElement>
+                     ))
+                  )}
+               </NewsDropdown>
+            </div>
             <div className="mx-auto mt-1 flex items-center gap-4 xl:mt-0">
                <div className="relative mx-auto text-gray-600">
                   <input
