@@ -6,7 +6,6 @@ import { getSession } from "next-auth/react";
 import { Slide } from "react-awesome-reveal";
 import Link from "next/link";
 
-import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
 import {
    fullLocations,
