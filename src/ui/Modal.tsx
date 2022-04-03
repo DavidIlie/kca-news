@@ -55,21 +55,19 @@ const Modal: React.FC<ModalProps> = ({
                   <div
                      className={`my-8 inline-block w-full max-w-${width} transform overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-6 text-left align-middle shadow-xl transition-all dark:border-gray-800 dark:bg-foot`}
                   >
-                     <div className="grid divide-y divide-gray-300 dark:divide-gray-500">
-                        <div className="mb-1 flex items-center justify-between">
-                           <Dialog.Title
-                              as="h3"
-                              className="mb-2 text-xl font-medium leading-6 text-gray-900 dark:text-gray-100"
-                           >
-                              {title}
-                           </Dialog.Title>
-                           <AiOutlineCloseCircle
-                              className="cursor-pointer text-[1.75rem] text-black dark:text-white"
-                              onClick={updateModalState}
-                           />
-                        </div>
-                        <div>{children}</div>
+                     <div className="borderColor mb-1 flex items-center justify-between border-b-2 pb-1">
+                        <Dialog.Title
+                           as="h3"
+                           className="mb-2 w-full text-xl font-medium leading-6 text-gray-900 dark:text-gray-100"
+                        >
+                           {title}
+                        </Dialog.Title>
+                        <AiOutlineCloseCircle
+                           className="cursor-pointer text-[1.75rem] text-black dark:text-white"
+                           onClick={updateModalState}
+                        />
                      </div>
+                     <div>{children}</div>
                   </div>
                </Transition.Child>
             </div>
