@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
@@ -9,17 +10,30 @@ import { formatDistance } from "date-fns";
 import { useHotkeys } from "@mantine/hooks";
 import { getSession } from "next-auth/react";
 
-import prisma from "../lib/prisma";
 import { Article } from "../types/Article";
 import { shimmer } from "../lib/shimmer";
-import ErrorPage from "../components/ErrorPage";
+import FeaturedArticleCard from "../components/ArticleCard/FeaturedArticleCard";
+import { getArticles } from "../lib/getArticles";
+import {
+   fullLocations,
+   getFormmatedLocation,
+   Locations,
+} from "../lib/categories";
+import { Button } from "../ui/Button";
+
+interface IndividualArticleType {
+   location: Locations;
+   articles: Article[];
+}
 
 interface Props {
    featuredPosts: Article[];
+   individualArticles: IndividualArticleType[];
 }
 
-const Home: React.FC<Props> = ({ featuredPosts }) => {
+const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
    const [index, setSelectedIndex] = useState<number>(0);
+   const { reload } = useRouter();
 
    useHotkeys([
       ["ArrowLeft", () => index !== 0 && setSelectedIndex(index - 1)],
@@ -31,7 +45,23 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
    ]);
 
    if (featuredPosts.length === 0) {
-      return <ErrorPage />;
+      return (
+         <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+            <Slide triggerOnce direction="down">
+               <div>
+                  <h1 className="text-6xl font-semibold text-red-500">
+                     How did i get here?
+                  </h1>
+                  <p className="mb-3 mt-4 text-center text-lg">
+                     Looks like there are no posts, embarrising... 🙄
+                  </p>
+                  <div className="mt-2 flex justify-center text-gray-800">
+                     <Button onClick={() => reload()}>Reload</Button>
+                  </div>
+               </div>
+            </Slide>
+         </div>
+      );
    }
 
    return (
@@ -125,6 +155,44 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
                </Slide>
             </div>
          </div>
+         <div className="container mx-auto max-w-7xl py-12">
+            {individualArticles.map((parsedLocation, index) => (
+               <div
+                  className={index !== featuredPosts.length - 1 ? "mb-12" : ""}
+               >
+                  <h1 className="border-b-2 pb-4 text-4xl font-semibold">
+                     {getFormmatedLocation(parsedLocation.location)} -{" "}
+                     <Link href={`/${parsedLocation.location}`}>
+                        <a className="cursor-pointer font-normal text-blue-500 duration-150 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-600">
+                           See More
+                        </a>
+                     </Link>
+                  </h1>
+                  <div
+                     className={`mt-6 grid grid-cols-${parsedLocation.articles.length} gap-4`}
+                  >
+                     {parsedLocation.articles.map((article, index) => (
+                        <FeaturedArticleCard
+                           article={article}
+                           key={index}
+                           solo={parsedLocation.articles.length < 3}
+                           latest={parsedLocation.articles.length < 3}
+                        />
+                     ))}
+                  </div>
+                  {parsedLocation.articles.length === 0 && (
+                     <div className="text-center">
+                        <h1 className="text-4xl font-semibold text-red-500">
+                           Woah! No posts?
+                        </h1>
+                        <p className="mb-3 mt-2 text-base">
+                           Looks like this category needs some motivation...
+                        </p>
+                     </div>
+                  )}
+               </div>
+            ))}
+         </div>
       </>
    );
 };
@@ -132,32 +200,25 @@ const Home: React.FC<Props> = ({ featuredPosts }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const session = await getSession({ req });
 
-   const featuredPosts = session?.user?.isAdmin
-      ? await prisma.article.findMany({
-           orderBy: {
-              createdAt: "desc",
-           },
-           take: 5,
-        })
-      : session?.user?.isWriter
-      ? await prisma.article.findMany({
-           where: { user: session?.user?.id },
-           orderBy: {
-              createdAt: "desc",
-           },
-           take: 5,
-        })
-      : await prisma.article.findMany({
-           where: { published: true, underReview: false },
-           orderBy: {
-              createdAt: "desc",
-           },
-           take: 5,
-        });
+   const featuredPosts = await getArticles(session?.user, null, null, {
+      take: 5,
+   });
+
+   const individualArticles: IndividualArticleType[] = await Promise.all(
+      fullLocations.map(
+         async (location): Promise<IndividualArticleType> => ({
+            location,
+            articles: await getArticles(session?.user, { location }, null, {
+               take: 4,
+            }),
+         })
+      )
+   );
 
    return {
       props: {
-         featuredPosts: JSON.parse(JSON.stringify(featuredPosts)),
+         featuredPosts,
+         individualArticles,
       },
    };
 };

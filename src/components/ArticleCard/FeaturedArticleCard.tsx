@@ -22,7 +22,7 @@ const FeaturedArticleCard: React.FC<Props> = ({
    return (
       <Link href={`/article/${article.id}`}>
          <a className={`${latest && "hoverItem"} relative duration-200`}>
-            {latest && (
+            {latest && !solo && (
                <h1
                   className="absolute -top-[2.1rem] left-[0.13rem] z-10 rounded-t bg-blue-200 py-1 px-4 text-lg font-semibold text-blue-900 dark:bg-blue-400 dark:bg-opacity-50 dark:text-blue-100"
                   style={{
@@ -35,19 +35,19 @@ const FeaturedArticleCard: React.FC<Props> = ({
             )}
             <div
                className={`mb-6 rounded-lg ${
-                  latest ? "rounded-tl-none" : "hoverItem"
+                  latest && !solo ? "rounded-tl-none" : "hoverItem"
                } border-2 border-gray-100 bg-gray-50 shadow-md duration-200 dark:border-gray-800 dark:bg-foot`}
             >
                <div className="md:flex-shrink-0">
                   <Image
                      src={article.cover}
                      alt="Post picture"
-                     width={latest ? (solo ? "1200px" : "1200px") : "500px"}
-                     height={latest ? (solo ? "400px" : "400px") : "350px"}
+                     width={latest ? (solo ? "1400px" : "1200px") : "500px"}
+                     height={latest ? (solo ? "200px" : "400px") : "350px"}
                      blurDataURL={shimmer(1920, 1080)}
                      placeholder="blur"
                      className={`rounded-lg rounded-b-none ${
-                        latest && "rounded-tl-none"
+                        latest && !solo && "rounded-tl-none"
                      }  object-cover`}
                   />
                </div>

@@ -16,6 +16,7 @@ import {
 import { Button } from "../ui/Button";
 import ArticleCard from "../components/ArticleCard";
 import FeaturedArticleCard from "../components/ArticleCard/FeaturedArticleCard";
+import { getArticles } from "../lib/getArticles";
 
 interface Props {
    location: Locations;
@@ -32,7 +33,7 @@ const LocationArticleShowcase: React.FC<Props> = ({ articles, location }) => {
             <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
                <Slide triggerOnce direction="down">
                   <div>
-                     <h1 className="text-6xl font-bold text-red-500">
+                     <h1 className="text-6xl font-semibold text-red-500">
                         Woah! No posts?
                      </h1>
                      <p className="mb-3 mt-2 text-center text-lg">
@@ -121,63 +122,29 @@ export const getServerSideProps: GetServerSideProps = async ({
 
    const session = await getSession({ req });
 
-   const includeData = {
-      upvotes: true,
-      downvotes: true,
-      comments: true,
-      writer: true,
-   };
-
-   const customWhere = category
-      ? {
-           location: location as string,
-           OR: [
-              {
-                 categoryId: {
-                    hasSome: (category as string) || "",
+   const articles = await getArticles(
+      session?.user,
+      category
+         ? {
+              location: location as string,
+              OR: [
+                 {
+                    categoryId: {
+                       hasSome: (category as string) || "",
+                    },
                  },
-              },
-           ],
-        }
-      : {
-           location: location as string,
-        };
-
-   const articles = session?.user?.isAdmin
-      ? await prisma.article.findMany({
-           where: customWhere as any,
-           orderBy: {
-              createdAt: "desc",
+              ],
+           }
+         : {
+              location: location as string,
            },
-           include: includeData as any,
-        })
-      : session?.user?.isWriter
-      ? await prisma.article.findMany({
-           where: {
-              ...customWhere,
-              user: session?.user!.id,
-           },
-           orderBy: {
-              createdAt: "desc",
-           },
-           include: includeData as any,
-        })
-      : await prisma.article.findMany({
-           where: {
-              ...customWhere,
-              published: true,
-              underReview: false,
-           },
-           orderBy: {
-              createdAt: "desc",
-           },
-           include: includeData as any,
-        });
+      { upvotes: true, downvotes: true, comments: true, writer: true }
+   );
 
    return {
       props: {
          location,
-         articles: JSON.parse(JSON.stringify(articles)),
+         articles,
       },
    };
 };
