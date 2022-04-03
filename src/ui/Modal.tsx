@@ -10,7 +10,7 @@ export interface ModalProps extends Partial<typeof Dialog> {
    children: JSX.Element;
    className?: string;
    noAutoClose?: boolean;
-   width?: "sm" | "md" | "lg" | "xl" | "2xl";
+   width?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({

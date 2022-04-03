@@ -36,7 +36,7 @@ const ProfileEditor: React.FC<Props> = ({
          title={`Edit ${
             data?.user?.id === user.id ? "my profile" : computeKCAName(user)
          }`}
-         width="xl"
+         width="[36rem]"
          noAutoClose
       >
          <div className="mt-4 px-0.5">
