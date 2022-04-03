@@ -53,7 +53,7 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                      How did i get here?
                   </h1>
                   <p className="mb-3 mt-4 text-center text-lg">
-                     Looks like there are no posts, embarrising... 🙄
+                     Looks like there are no articles, embarrising... 🙄
                   </p>
                   <div className="mt-2 flex justify-center text-gray-800">
                      <Button onClick={() => reload()}>Reload</Button>
