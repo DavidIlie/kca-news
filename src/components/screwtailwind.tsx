@@ -448,7 +448,8 @@ export default function tailwindbad() {
          <div className="grid-cols-2" />
          <div className="grid-cols-2" />
          <div className="grid-cols-4" />
-
+         <div className="max-w-xl" />
+         <div className="max-w-2xl" />
       </>
    );
 }

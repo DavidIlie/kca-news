@@ -36,7 +36,7 @@ const ProfileEditor: React.FC<Props> = ({
          title={`Edit ${
             data?.user?.id === user.id ? "my profile" : computeKCAName(user)
          }`}
-         width="[36rem]"
+         width="2xl"
          noAutoClose
       >
          <div className="mt-4 px-0.5">
@@ -107,6 +107,7 @@ const ProfileEditor: React.FC<Props> = ({
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
                                  dropdown:
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
+                                 selected: "dark:bg-foot",
                               }}
                               required
                               error={errors.nameIndex}
@@ -161,7 +162,7 @@ const ProfileEditor: React.FC<Props> = ({
                               error={errors.description}
                            />
                            <div className="mt-2" />
-                           <div className="mx-0.5 mt-4 mb-3 flex items-center gap-2">
+                           <div className="mt-4 mb-3 flex items-center gap-2">
                               <Field
                                  as={TextInput}
                                  placeholder="Enter nickname..."
