@@ -102,7 +102,7 @@ const NavBar: React.FC = () => {
                               {getFormmatedLocation(openMoreMenu)}
                            </p>
                         </div>
-                        <Menu.Item as={NextLink} href={`/${location}`}>
+                        <Menu.Item as={NextLink} href={`/${openMoreMenu}`}>
                            <DropdownElement>Main Home</DropdownElement>
                         </Menu.Item>
                         {links
