@@ -132,7 +132,7 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                      {featuredPosts.map((article, index) => (
                         <div
                            className={`hoverItem duration-150 ${
-                              index !== featuredPosts.length - 1 && "mb-4"
+                              index !== featuredPosts.length - 1 && "mb-6"
                            }`}
                         >
                            <Link href={`/article/${article.id}`}>

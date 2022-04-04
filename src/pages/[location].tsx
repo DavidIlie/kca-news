@@ -82,21 +82,17 @@ const LocationArticleShowcase: React.FC<Props> = ({ articles, location }) => {
                      )}
                   </h1>
                </div>
-               <div className="flex items-center gap-6">
-                  <FeaturedArticleCard
-                     article={articles[0]}
-                     latest={true}
-                     solo={articles.length == 2}
-                  />
-                  {articles.length > 2 && (
-                     <div className="w-1/2">
+               <div className="flex items-center gap-4">
+                  <FeaturedArticleCard article={articles[0]} latest={true} />
+                  {articles.length > 1 && (
+                     <div className="w-[56%]">
                         <FeaturedArticleCard article={articles[1]} />
                      </div>
                   )}
                </div>
                {articles
                   .filter((_a, index) =>
-                     articles.length > 2 ? index > 1 : index < 1
+                     articles.length > 2 ? index > 1 : index < 0
                   )
                   .reverse()
                   .map((article, index) => (
