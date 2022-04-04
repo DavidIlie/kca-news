@@ -41,12 +41,6 @@ const UserDropdown: React.FC = () => {
          >
             <Menu.Items className="absolute right-0 z-10 mt-12 w-36 rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
                <div className="border-1 rounded-t-md border-gray-300">
-                  <Menu.Item as={NextLink} href="/profile">
-                     <DropdownElement>
-                        <BiUserCircle className="mx-0.5 text-xl" />
-                        Profile
-                     </DropdownElement>
-                  </Menu.Item>
                   <DropdownElement
                      onClick={() =>
                         resolvedTheme === "dark"
@@ -62,6 +56,12 @@ const UserDropdown: React.FC = () => {
                      )}
                      {resolvedTheme === "dark" ? "Light Mode" : "Dark Mode"}
                   </DropdownElement>
+                  <Menu.Item as={NextLink} href="/profile">
+                     <DropdownElement>
+                        <BiUserCircle className="mx-0.5 text-xl" />
+                        Profile
+                     </DropdownElement>
+                  </Menu.Item>
                   {isWriter && (
                      <Menu.Item as={NextLink} href="/dashboard/writer">
                         <DropdownElement>
