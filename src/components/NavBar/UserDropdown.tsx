@@ -41,21 +41,6 @@ const UserDropdown: React.FC = () => {
          >
             <Menu.Items className="absolute right-0 z-10 mt-12 w-36 rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
                <div className="border-1 rounded-t-md border-gray-300">
-                  <DropdownElement
-                     onClick={() =>
-                        resolvedTheme === "dark"
-                           ? setTheme("light")
-                           : setTheme("dark")
-                     }
-                     title="ctrl+shift+e"
-                  >
-                     {resolvedTheme === "dark" ? (
-                        <MdLightMode className="mx-0.5 text-xl" />
-                     ) : (
-                        <MdDarkMode className="mx-0.5 text-xl" />
-                     )}
-                     {resolvedTheme === "dark" ? "Light Mode" : "Dark Mode"}
-                  </DropdownElement>
                   <Menu.Item as={NextLink} href="/profile">
                      <DropdownElement>
                         <BiUserCircle className="mx-0.5 text-xl" />
@@ -78,6 +63,21 @@ const UserDropdown: React.FC = () => {
                         </DropdownElement>
                      </Menu.Item>
                   )}
+                  <DropdownElement
+                     onClick={() =>
+                        resolvedTheme === "dark"
+                           ? setTheme("light")
+                           : setTheme("dark")
+                     }
+                     title="ctrl+shift+e"
+                  >
+                     {resolvedTheme === "dark" ? (
+                        <MdLightMode className="mx-0.5 text-xl" />
+                     ) : (
+                        <MdDarkMode className="mx-0.5 text-xl" />
+                     )}
+                     {resolvedTheme === "dark" ? "Light Mode" : "Dark Mode"}
+                  </DropdownElement>
                </div>
                <Menu.Item
                   as="a"
