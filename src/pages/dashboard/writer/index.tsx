@@ -29,6 +29,7 @@ import ArticleBadge from "../../../components/ArticleBadge";
 import ArticleUnderReviewCard from "../../../components/ArticleUnderReviewCard";
 import DashboardStatistics from "../../../components/DashboardStatistics";
 import ConfirmModal from "../../../ui/ConfirmModal";
+import { useMediaQuery } from "@mantine/hooks";
 
 interface Statistics {
    totalArticles: number;
@@ -49,6 +50,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
 
    const notifications = useNotifications();
    const { push } = useRouter();
+   const desktop = useMediaQuery("(min-width: 1240px)");
 
    const [statisticsState, setStatistics] = useState<Statistics>(statistics);
    const [baseArticles, setBaseArticles] = useState<Article[]>(articles);
@@ -504,14 +506,14 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                           </Button>
                                        </a>
                                     </Link>
-                                    <div className="hidden sm:block">
-                                       {user.isAdmin || !article.underReview ? (
+                                    {desktop &&
+                                       (user.isAdmin || !article.underReview ? (
                                           <Link
                                              href={`/dashboard/writer/edit/${article.id}?menu=true&visibility=true`}
                                           >
                                              <a className="w-1/3">
                                                 <Button
-                                                   className="w-1/3"
+                                                   className="w-full"
                                                    color="sky"
                                                    disabled={
                                                       !user.isAdmin &&
@@ -530,8 +532,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                           >
                                              Edit Visibility
                                           </Button>
-                                       )}
-                                    </div>
+                                       ))}
                                     <div className="w-1/2 sm:w-1/3">
                                        <Button
                                           className="w-full"
