@@ -40,7 +40,6 @@ import { computeKCAName } from "../../lib/computeKCAName";
 
 interface Props {
    article: Article;
-   writer: User;
    notFound?: boolean;
    upvotes: {
       count: number;
@@ -55,7 +54,6 @@ interface Props {
 
 const ArticleViewer: React.FC<Props> = ({
    article,
-   writer,
    notFound,
    upvotes,
    downvotes,
@@ -593,9 +591,6 @@ export const getServerSideProps: GetServerSideProps = async ({
    return {
       props: {
          article: JSON.parse(JSON.stringify(article)),
-         writer: article.anonymous
-            ? false
-            : JSON.parse(JSON.stringify(article.writer)),
          upvotes: {
             count: article.upvotes.length,
             self: hasSelfUpvoted,
