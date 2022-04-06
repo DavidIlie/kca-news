@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
+import { v4 } from "uuid";
 
 import prisma from "../../../../../lib/prisma";
 
@@ -30,6 +31,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       where: { id: article.id },
       data: {
          published: !article.published,
+         shared: false,
+         sharedId: v4(),
       },
       include: {
          writer: true,
