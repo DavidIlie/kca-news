@@ -2,10 +2,9 @@ import React from "react";
 import Link from "next/link";
 
 import {
+   fullLocations,
    getFormmatedLocation,
    links,
-   moreLocations,
-   visibleLocations,
 } from "../../lib/categories";
 
 const Footer: React.FC = () => {
@@ -35,32 +34,30 @@ const Footer: React.FC = () => {
                </p>
             </div>
             <div className="-mb-10 mt-10 grid grid-cols-2 text-center sm:flex sm:flex-grow sm:flex-wrap md:mt-0 md:text-left">
-               {visibleLocations
-                  .concat(moreLocations)
-                  .map((location, index) => (
-                     <div key={index} className="px-8">
-                        <Link href={`/${location}`}>
-                           <a className="mb-3 text-base font-medium tracking-widest text-gray-900 duration-150 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-500">
-                              {getFormmatedLocation(location).toUpperCase()}
-                           </a>
-                        </Link>
-                        <ul className="mb-10 list-none">
-                           {links
-                              .filter((l) => l.location.includes(location))
-                              .map((category, index) => (
-                                 <li key={index}>
-                                    <Link
-                                       href={`/${location}?category=${category.id}`}
-                                    >
-                                       <a className="text-gray-600 duration-150 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-500">
-                                          {category.name}
-                                       </a>
-                                    </Link>
-                                 </li>
-                              ))}
-                        </ul>
-                     </div>
-                  ))}
+               {fullLocations.map((location, index) => (
+                  <div key={index} className="px-8">
+                     <Link href={`/${location}`}>
+                        <a className="mb-3 text-base font-medium tracking-widest text-gray-900 duration-150 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-500">
+                           {getFormmatedLocation(location).toUpperCase()}
+                        </a>
+                     </Link>
+                     <ul className="mb-10 list-none">
+                        {links
+                           .filter((l) => l.location.includes(location))
+                           .map((category, index) => (
+                              <li key={index}>
+                                 <Link
+                                    href={`/${location}?category=${category.id}`}
+                                 >
+                                    <a className="text-gray-600 duration-150 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-500">
+                                       {category.name}
+                                    </a>
+                                 </Link>
+                              </li>
+                           ))}
+                     </ul>
+                  </div>
+               ))}
             </div>
          </div>
          <p className="borderColor mx-auto border-t-2 bg-gray-100 py-4 px-5 text-center text-sm text-gray-800 dark:bg-foot dark:text-gray-100 sm:text-left sm:text-base">
