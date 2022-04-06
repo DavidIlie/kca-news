@@ -31,7 +31,7 @@ const NavBar: React.FC = () => {
    return (
       <nav className="borderColor z-[100] w-full border-b-2 bg-white text-gray-600 dark:bg-dark-bg dark:text-gray-100 sm:fixed 2xl:px-12">
          <div className="container mx-auto flex flex-col flex-wrap items-center p-5 md:flex-row">
-            <Link href="/">
+            <Link href={process.env.NEXT_PUBLIC_APP_URL}>
                <a className="mb-4 flex items-center font-medium text-gray-900 dark:text-gray-100 md:mb-0">
                   <svg
                      xmlns="http://www.w3.org/2000/svg"
