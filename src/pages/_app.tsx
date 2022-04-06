@@ -1,4 +1,5 @@
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import { DefaultSeo } from "next-seo";
 import NextNprogress from "nextjs-progressbar";
 import { SessionProvider } from "next-auth/react";
@@ -36,6 +37,12 @@ const KingsNews = ({
             }}
             description="KCA News is a website run by the students for other students or teachers to visit in King's College Alicante. KCA News has many articles written for many categories and topics occuring throughout the world. Make the school cool."
          />
+         <Head>
+            <meta
+               name="viewport"
+               content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+            />
+         </Head>
          <NextNprogress
             color="#156896"
             startPosition={0.3}
