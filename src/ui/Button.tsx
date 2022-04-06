@@ -14,6 +14,7 @@ const colorClassnames = {
       "rounded py-1.5 px-3 border-2 border-blue-500 hover:bg-blue-600 hover:text-white transition duration-150 ease-in-out text-black",
    cyan: "rounded py-2 px-4 bg-cyan-500 transition duration-150 ease-in-out hover:bg-cyan-600 disabled:bg-cyan-200 text-white dark:bg-cyan-800 dark:hover:bg-cyan-900 dark:disabled:bg-foot dark:disabled:border dark:border-gray-500 border dark:border-cyan-800 dark:hover:border-cyan-900 border-cyan-500 disabled:border-cyan-200",
    sky: "rounded py-2 px-4 bg-sky-500 transition duration-150 ease-in-out hover:bg-sky-600 disabled:bg-sky-200 text-white text-white dark:bg-sky-800 dark:hover:bg-sky-900 dark:disabled:bg-foot dark:disabled:border dark:border-sky-500 border dark:border-sky-800 dark:hover:border-sky-900 border-sky-500 disabled:border-sky-200",
+   green: "rounded py-2 px-4 bg-green-500 transition duration-150 ease-in-out hover:bg-green-600 disabled:bg-green-200 text-white text-white dark:bg-green-800 dark:hover:bg-green-900 dark:disabled:bg-foot dark:disabled:border dark:border-green-500 border dark:border-green-800 dark:hover:border-green-900 border-green-500 disabled:border-green-200",
 };
 
 export type ButtonProps = DetailedHTMLProps<

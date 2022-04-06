@@ -228,7 +228,7 @@ const ArticleViewer: React.FC<Props> = ({
          <NextSeo
             title={article.title}
             description={description}
-            canonical={`https://davidilie.com/${router.asPath}`}
+            canonical={`${process.env.NEXT_PUBLIC_APP_URL}/${router.asPath}`}
             twitter={{
                cardType: "summary_large_image",
                site: "@KCAlicante",
@@ -241,18 +241,19 @@ const ArticleViewer: React.FC<Props> = ({
                   authors:
                      article.coWriters.length !== 0
                         ? [
-                             `https://davidilie.com/profile/${article.writer?.id}`,
+                             `${process.env.NEXT_PUBLIC_APP_URL}/profile/${article.writer?.id}`,
                              ...article.coWriters?.map(
-                                (co) => `https://davidilie.com/profile/${co.id}`
+                                (co) =>
+                                   `${process.env.NEXT_PUBLIC_APP_URL}/profile/${co.id}`
                              ),
                           ]
                         : [
-                             `https://davidilie.com/profile/${article.writer?.id}`,
+                             `${process.env.NEXT_PUBLIC_APP_URL}/profile/${article.writer?.id}`,
                           ],
                   tags: article.categoryId,
                },
                description: description,
-               url: `https://davidilie.com/${router.asPath}`,
+               url: `${process.env.NEXT_PUBLIC_APP_URL}/${router.asPath}`,
                type: "article",
                images: [
                   {

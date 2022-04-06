@@ -45,8 +45,9 @@ CREATE TABLE "User" (
     "tags" TEXT[],
     "canComment" BOOLEAN NOT NULL DEFAULT true,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
-    "isWriter" BOOLEAN NOT NULL DEFAULT false,
     "isReviewer" BOOLEAN NOT NULL DEFAULT false,
+    "isWriter" BOOLEAN NOT NULL DEFAULT false,
+    "department" TEXT[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -75,16 +76,11 @@ CREATE TABLE "Article" (
     "tags" TEXT[],
     "filter" TEXT[],
     "underReview" BOOLEAN NOT NULL DEFAULT false,
+    "shared" BOOLEAN NOT NULL DEFAULT false,
+    "sharedToTeam" BOOLEAN NOT NULL DEFAULT false,
+    "sharedId" TEXT NOT NULL,
 
     CONSTRAINT "Article_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ArticleShare" (
-    "id" TEXT NOT NULL,
-    "articleId" TEXT NOT NULL,
-
-    CONSTRAINT "ArticleShare_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -152,9 +148,6 @@ ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Article" ADD CONSTRAINT "Article_user_fkey" FOREIGN KEY ("user") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ArticleShare" ADD CONSTRAINT "ArticleShare_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

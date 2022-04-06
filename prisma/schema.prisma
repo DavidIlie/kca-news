@@ -42,31 +42,26 @@ model User {
   image         String?
   sessions      Session[]
   accounts      Account[]
-
   nameIndex     Int
   names         String[]
   extraName     String?
   year          String
   showYear      Boolean @default(true)
-
   joinedAt      DateTime  @default(now())
-
   comments      Comment[]
   upvotes       Upvote[]
   downvotes     Downvote[]
   articles      Article[] @relation("writer")
   coArticles    Article[] @relation("coWriter")
-
   description   String?
   status        String?
   nickname      String?
   tags          String[]
-
   canComment    Boolean @default(true)
-
   isAdmin       Boolean @default(false)
-  isWriter      Boolean @default(false)
   isReviewer    Boolean @default(false)
+  isWriter      Boolean @default(false)
+  department    String[]
 }
 
 model VerificationToken {
@@ -98,13 +93,9 @@ model Article {
   tags          String[]
   filter        String[]
   underReview   Boolean   @default(false)
-  shares        ArticleShare[]
-}
-
-model ArticleShare {
-  id            String    @id @default(uuid())
-  articleId     String
-  article       Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  shared        Boolean   @default(false)
+  sharedToTeam  Boolean   @default(false)
+  sharedId      String    @default(uuid())
 }
 
 model Comment {

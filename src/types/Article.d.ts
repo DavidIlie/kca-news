@@ -24,4 +24,7 @@ export interface Article {
    downvotes?: Downvote[];
    tags: string[];
    location?: Locations;
+   shared: boolean;
+   sharedToTeam: boolean;
+   sharedId: string;
 }

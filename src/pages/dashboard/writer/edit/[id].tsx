@@ -19,6 +19,7 @@ import {
    useLocalStorage,
    useElementSize,
    useViewportSize,
+   useClipboard,
 } from "@mantine/hooks";
 import {
    MultiSelect,
@@ -88,6 +89,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const { height: viewportHeight } = useViewportSize();
    const { ref: restEmptyRef, height: restEmptyHeight } = useElementSize();
    const { ref, height } = useElementSize();
+   const clipboard = useClipboard({ timeout: 500 });
 
    const [article, setArticle] = useState<Article>(articleServer);
    const [categories, setCategories] = useState<string[]>(article.categoryId);
@@ -886,6 +888,47 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               </div>
                            ))}
                         </EditorSettingsDisclosure>
+                        {!article.published && (
+                           <EditorSettingsDisclosure name="Sharing">
+                              <Radio
+                                 label="Share this article"
+                                 checked={article.shared}
+                                 labelSize="md"
+                                 onChange={() => {
+                                    console.log("nearly there");
+                                 }}
+                              />
+                              <div className="mt-2" />
+                              <Tooltip
+                                 label="Only give access to reviewers, writers, or administrators"
+                                 disabled={!article.shared}
+                              >
+                                 <Radio
+                                    label="Only to team members"
+                                    checked={article.sharedToTeam}
+                                    labelSize="md"
+                                    disabled={!article.shared}
+                                    labelDisabled={!article.shared}
+                                    onChange={() => {
+                                       console.log("nearly there");
+                                    }}
+                                 />
+                              </Tooltip>
+                              <div className="mt-2" />
+                              <Button
+                                 className="w-full"
+                                 disabled={!article.shared}
+                                 onClick={() =>
+                                    clipboard.copy(
+                                       `${process.env.NEXT_PUBLIC_APP_URL}/article/${article.id}?share=${article.sharedId}`
+                                    )
+                                 }
+                                 color={clipboard.copied ? "green" : "primary"}
+                              >
+                                 {clipboard.copied ? "Copied!" : "Copy Link"}
+                              </Button>
+                           </EditorSettingsDisclosure>
+                        )}
                         <div
                            className={viewportHeight > 550 ? "flex-grow" : ""}
                            ref={restEmptyRef}
