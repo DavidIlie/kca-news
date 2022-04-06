@@ -29,6 +29,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
       if (commentCheck) return res.status(409).json({ message: "conflict" });
 
+      if (!session?.user?.canComment)
+         return res.status(401).json({ message: "no permisison to comment" });
+
       const commentCreation = await prisma.comment.create({
          data: {
             userId: session!.user!.id,

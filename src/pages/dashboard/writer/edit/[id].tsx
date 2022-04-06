@@ -302,7 +302,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
    return (
       <>
-         <DefaultSeo title={title} />
+         <DefaultSeo title={article.title} />
          {!openSidebar && (
             <AiOutlineMenu
                className="fixed right-0 top-0 z-[200] mt-[50%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 sm:mt-24"

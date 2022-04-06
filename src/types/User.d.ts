@@ -25,4 +25,5 @@ export interface User {
    upvotes?: Upvote[];
    downvotes?: Downvote[];
    articles?: Article[];
+   canComment: boolean;
 }

@@ -148,49 +148,47 @@ const ProfileEditor: React.FC<Props> = ({
                         <h1 className="borderColor mb-2 border-b-2 pb-2 text-xl font-semibold">
                            Misc Settings
                         </h1>
-                        <div className="mx-1">
+                        <Field
+                           as={TextInput}
+                           placeholder="Enter description..."
+                           name="description"
+                           label="Description"
+                           description="Who are you?"
+                           classNames={{
+                              filledVariant:
+                                 "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
+                           }}
+                           error={errors.description}
+                        />
+                        <div className="mt-2" />
+                        <div className="mt-4 mb-3 flex items-center gap-2">
                            <Field
                               as={TextInput}
-                              placeholder="Enter description..."
-                              name="description"
-                              label="Description"
-                              description="Who are you?"
+                              placeholder="Enter nickname..."
+                              name="nickname"
+                              label="Nickname"
+                              description="A informal way to address yourself."
                               classNames={{
                                  filledVariant:
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
                               }}
-                              error={errors.description}
+                              error={errors.nickname}
+                              className="w-1/2"
                            />
                            <div className="mt-2" />
-                           <div className="mt-4 mb-3 flex items-center gap-2">
-                              <Field
-                                 as={TextInput}
-                                 placeholder="Enter nickname..."
-                                 name="nickname"
-                                 label="Nickname"
-                                 description="A informal way to address yourself."
-                                 classNames={{
-                                    filledVariant:
-                                       "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
-                                 }}
-                                 error={errors.nickname}
-                                 className="w-1/2"
-                              />
-                              <div className="mt-2" />
-                              <Field
-                                 as={TextInput}
-                                 placeholder="Enter status..."
-                                 name="status"
-                                 label="Status"
-                                 description="What's on your mind?"
-                                 classNames={{
-                                    filledVariant:
-                                       "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
-                                 }}
-                                 error={errors.status}
-                                 className="w-1/2"
-                              />
-                           </div>
+                           <Field
+                              as={TextInput}
+                              placeholder="Enter status..."
+                              name="status"
+                              label="Status"
+                              description="What's on your mind?"
+                              classNames={{
+                                 filledVariant:
+                                    "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
+                              }}
+                              error={errors.status}
+                              className="w-1/2"
+                           />
                         </div>
                         <div className="mx-1.5 mt-4">
                            <Button

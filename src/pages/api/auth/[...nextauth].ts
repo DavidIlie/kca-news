@@ -37,6 +37,7 @@ export default NextAuth({
             session.user.nameIndex = user.nameIndex as number;
             session.user.names = user.names as string[];
             session.user.showYear = user.showYear as boolean;
+            session.user.canComment = user.canComment as boolean;
          }
          return session;
       },

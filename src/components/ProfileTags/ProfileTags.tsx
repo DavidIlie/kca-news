@@ -11,15 +11,13 @@ import {
 } from "react-icons/ai";
 import { MdPreview } from "react-icons/md";
 import { RiAdminLine } from "react-icons/ri";
+import { BiCommentX } from "react-icons/bi";
 
-import { Tag } from "../../types/Tag";
 import { BsPen } from "react-icons/bs";
+import { User } from "../../types/User";
 
 interface ProfileTagsProps {
-   tags: Tag[];
-   isAdmin: boolean;
-   isWriter: boolean;
-   isReviewer: boolean;
+   user: User;
 }
 
 interface BaseTagProps {
@@ -35,15 +33,10 @@ const BaseTag: React.FC<BaseTagProps> = ({ label, Icon }) => {
    );
 };
 
-const ProfileTags: React.FC<ProfileTagsProps> = ({
-   tags,
-   isAdmin,
-   isWriter,
-   isReviewer,
-}) => {
+const ProfileTags: React.FC<ProfileTagsProps> = ({ user }) => {
    return (
       <div className="flex items-center gap-2">
-         {tags.map((tag, index) => {
+         {user.tags.map((tag, index) => {
             switch (tag) {
                case "developer":
                   return (
@@ -87,9 +80,15 @@ const ProfileTags: React.FC<ProfileTagsProps> = ({
                   );
             }
          })}
-         {isAdmin && <BaseTag label="Administrator" Icon={RiAdminLine} />}
-         {isWriter && <BaseTag label="Writer" Icon={BsPen} />}
-         {isReviewer && <BaseTag label="Reviewer" Icon={MdPreview} />}
+         {user.isAdmin && <BaseTag label="Administrator" Icon={RiAdminLine} />}
+         {user.isWriter && <BaseTag label="Writer" Icon={BsPen} />}
+         {user.isReviewer && <BaseTag label="Reviewer" Icon={MdPreview} />}
+         {!user.canComment && (
+            <BaseTag
+               label="Muted from commenting, what a guy!"
+               Icon={BiCommentX}
+            />
+         )}
       </div>
    );
 };

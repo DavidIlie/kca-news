@@ -356,7 +356,7 @@ const ArticleViewer: React.FC<Props> = ({
                         !article.published && "mb-20"
                      }`}
                   />
-                  {article.published && (
+                  {article.published && data?.user?.canComment && (
                      <div className="px-4 pb-10">
                         <h1 className="text-4xl font-semibold">
                            What do you think?

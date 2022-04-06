@@ -60,12 +60,7 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                         )}
                      </p>
                      <div className="mt-2 flex justify-center">
-                        <ProfileTags
-                           tags={userState.tags}
-                           isAdmin={userState.isAdmin}
-                           isWriter={userState.isWriter}
-                           isReviewer={userState.isReviewer}
-                        />
+                        <ProfileTags user={userState} />
                      </div>
                   </div>
                </div>
