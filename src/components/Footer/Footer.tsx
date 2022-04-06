@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
       <footer className="borderColor border-t-2 dark:bg-dark-bg">
          <div className="container mx-auto flex flex-col flex-wrap pb-12 pt-6 md:flex-row md:flex-nowrap md:items-center lg:items-start">
             <div className="mx-auto w-64 flex-shrink-0 text-center sm:pl-14 md:mx-0 md:text-left">
-               <Link href={process.env.NEXT_PUBLIC_APP_URL}>
+               <Link href="/">
                   <a className="flex items-center justify-center font-medium text-gray-900 dark:text-gray-100 md:justify-start">
                      <svg
                         xmlns="http://www.w3.org/2000/svg"
