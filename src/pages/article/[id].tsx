@@ -546,7 +546,7 @@ export const getServerSideProps: GetServerSideProps = async ({
    query,
    req,
 }) => {
-   const { id } = query;
+   const { id, share } = query;
 
    const session = await getSession({ req });
 
@@ -554,8 +554,17 @@ export const getServerSideProps: GetServerSideProps = async ({
       where: session?.user?.isAdmin
          ? { id: id as string }
          : session?.user?.isWriter
-         ? { id: id as string, user: session?.user?.id }
-         : { id: id as string, published: true, underReview: false },
+         ? {
+              id: id as string,
+              OR: [{ sharedId: share as string }, { user: session?.user?.id }],
+           }
+         : {
+              id: id as string,
+              OR: [
+                 { sharedToTeam: false, sharedId: share as string },
+                 { published: true, underReview: false },
+              ],
+           },
       include: {
          coWriters: true,
          comments: {
