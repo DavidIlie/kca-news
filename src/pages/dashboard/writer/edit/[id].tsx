@@ -90,6 +90,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const { ref: restEmptyRef, height: restEmptyHeight } = useElementSize();
    const { ref, height } = useElementSize();
    const clipboard = useClipboard({ timeout: 500 });
+   const secondClipboard = useClipboard({ timeout: 500 });
 
    const [article, setArticle] = useState<Article>(articleServer);
    const [categories, setCategories] = useState<string[]>(article.categoryId);
@@ -894,13 +895,35 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  label="Share this article"
                                  checked={article.shared}
                                  labelSize="md"
-                                 onChange={() => {
-                                    console.log("nearly there");
+                                 onChange={async () => {
+                                    setBigLoad(true);
+
+                                    const r = await fetch(
+                                       `/api/article/${article.id}/share`,
+                                       { credentials: "include" }
+                                    );
+                                    const response = await r.json();
+
+                                    if (r.status === 200) {
+                                       setArticle(response.article);
+                                    } else {
+                                       notifications.showNotification({
+                                          color: "red",
+                                          title: "Share - Error",
+                                          message:
+                                             response.message ||
+                                             "Unknown Error",
+                                          icon: <AiOutlineClose />,
+                                          autoClose: 5000,
+                                       });
+                                    }
+
+                                    setBigLoad(false);
                                  }}
                               />
                               <div className="mt-2" />
                               <Tooltip
-                                 label="Only give access to reviewers, writers, or administrators"
+                                 label="Only give access to reviewers, writers or administrators"
                                  disabled={!article.shared}
                               >
                                  <Radio
@@ -909,24 +932,95 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     labelSize="md"
                                     disabled={!article.shared}
                                     labelDisabled={!article.shared}
-                                    onChange={() => {
-                                       console.log("nearly there");
+                                    onChange={async () => {
+                                       setBigLoad(true);
+
+                                       const r = await fetch(
+                                          `/api/article/${article.id}/share/team`,
+                                          { credentials: "include" }
+                                       );
+                                       const response = await r.json();
+
+                                       if (r.status === 200) {
+                                          setArticle(response.article);
+                                       } else {
+                                          notifications.showNotification({
+                                             color: "red",
+                                             title: "Share - Error",
+                                             message:
+                                                response.message ||
+                                                "Unknown Error",
+                                             icon: <AiOutlineClose />,
+                                             autoClose: 5000,
+                                          });
+                                       }
+
+                                       setBigLoad(false);
                                     }}
                                  />
                               </Tooltip>
-                              <div className="mt-2" />
-                              <Button
-                                 className="w-full"
-                                 disabled={!article.shared}
-                                 onClick={() =>
-                                    clipboard.copy(
-                                       `${process.env.NEXT_PUBLIC_APP_URL}/article/${article.id}?share=${article.sharedId}`
-                                    )
-                                 }
-                                 color={clipboard.copied ? "green" : "primary"}
-                              >
-                                 {clipboard.copied ? "Copied!" : "Copy Link"}
-                              </Button>
+                              <div className="mt-3" />
+
+                              {article.shared && (
+                                 <>
+                                    <Button
+                                       className="w-full"
+                                       onClick={() =>
+                                          clipboard.copy(
+                                             `${process.env.NEXT_PUBLIC_APP_URL}/article/${article.id}?share=${article.sharedId}`
+                                          )
+                                       }
+                                       color={
+                                          clipboard.copied ? "green" : "primary"
+                                       }
+                                    >
+                                       {clipboard.copied
+                                          ? "Copied!"
+                                          : "Copy Link"}
+                                    </Button>
+                                    <Button
+                                       className="mt-2 w-full"
+                                       color="secondary"
+                                       onClick={async () => {
+                                          setBigLoad(true);
+
+                                          const r = await fetch(
+                                             `/api/article/${article.id}/share/gen`,
+                                             { credentials: "include" }
+                                          );
+                                          const response = await r.json();
+
+                                          if (r.status === 200) {
+                                             setArticle(response.article);
+                                             secondClipboard.copy(
+                                                `${process.env.NEXT_PUBLIC_APP_URL}/article/${article.id}?share=${article.sharedId}`
+                                             );
+                                             notifications.showNotification({
+                                                color: "teal",
+                                                title: "Share",
+                                                message: "Copied new link!",
+                                                icon: <AiOutlineCheck />,
+                                                autoClose: 2000,
+                                             });
+                                          } else {
+                                             notifications.showNotification({
+                                                color: "red",
+                                                title: "Share - Error",
+                                                message:
+                                                   response.message ||
+                                                   "Unknown Error",
+                                                icon: <AiOutlineClose />,
+                                                autoClose: 5000,
+                                             });
+                                          }
+
+                                          setBigLoad(false);
+                                       }}
+                                    >
+                                       Reset Link
+                                    </Button>
+                                 </>
+                              )}
                            </EditorSettingsDisclosure>
                         )}
                         <div

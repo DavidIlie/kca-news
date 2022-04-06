@@ -32,10 +32,12 @@ const Radio: React.FC<RadioProps> = ({
                   {...rest}
                />
                <span
-                  className={`ml-2 text-${labelSize} font-semibold ${
+                  className={`ml-2 text-${labelSize} ${
+                     !labelDisabled && "font-semibold"
+                  } ${
                      resolvedTheme === "dark"
                         ? `text-gray-${labelDisabled ? "800" : "300"}`
-                        : `text-gray-${labelDisabled ? "100" : "700"}`
+                        : `text-gray-${labelDisabled ? "300" : "700"}`
                   }`}
                >
                   {label}
