@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
                               {getFormmatedLocation(location).toUpperCase()}
                            </a>
                         </Link>
-                        <nav className="mb-10 list-none">
+                        <ul className="mb-10 list-none">
                            {links
                               .filter((l) => l.location.includes(location))
                               .map((category, index) => (
@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
                                     </Link>
                                  </li>
                               ))}
-                        </nav>
+                        </ul>
                      </div>
                   ))}
             </div>

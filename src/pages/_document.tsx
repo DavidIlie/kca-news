@@ -7,7 +7,7 @@ export default class _Document extends NextDocument {
    static getInitialProps = getInitialProps;
    render() {
       return (
-         <Html>
+         <Html lang="en">
             <Head />
             <body className="dark:bg-dark-bg">
                <Main />
