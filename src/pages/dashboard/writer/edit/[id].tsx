@@ -89,8 +89,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const { height: viewportHeight } = useViewportSize();
    const { ref: restEmptyRef, height: restEmptyHeight } = useElementSize();
    const { ref, height } = useElementSize();
-   const clipboard = useClipboard({ timeout: 500 });
-   const secondClipboard = useClipboard({ timeout: 500 });
+   const clipboard = useClipboard({ timeout: 2000 });
+   const secondClipboard = useClipboard({ timeout: 2000 });
 
    const [article, setArticle] = useState<Article>(articleServer);
    const [categories, setCategories] = useState<string[]>(article.categoryId);
@@ -308,7 +308,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
          <DefaultSeo title={article.title} />
          {!openSidebar && (
             <AiOutlineMenu
-               className="fixed right-0 top-0 z-[200] mt-[50%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 sm:mt-24"
+               className="fixed right-0 top-0 z-[200] mt-[55%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 sm:mt-[6%]"
                title="Open Settings"
                onClick={() => setOpenSidebar(true)}
             />
