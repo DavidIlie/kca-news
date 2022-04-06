@@ -16,7 +16,7 @@ const ProfileViewerPage: React.FC<Props> = ({ user }) => {
    return (
       <>
          <DefaultSeo title={computeKCAName(user)} />
-         <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+         <div className="my-12 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
             <ProfileViewer user={user} />
          </div>
       </>
