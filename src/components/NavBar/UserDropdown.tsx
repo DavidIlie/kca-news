@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { BiUserCircle } from "react-icons/bi";
 import { BsPen } from "react-icons/bs";
 import { MdPreview, MdDarkMode, MdLightMode } from "react-icons/md";
+import { RiAdminLine } from "react-icons/ri";
 import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 
@@ -60,6 +61,14 @@ const UserDropdown: React.FC = () => {
                         <DropdownElement>
                            <MdPreview className="mx-0.5 text-xl" />
                            Reviewer Panel
+                        </DropdownElement>
+                     </Menu.Item>
+                  )}
+                  {data?.user?.isAdmin && (
+                     <Menu.Item as={NextLink} href="/dashboard/admin">
+                        <DropdownElement>
+                           <RiAdminLine className="mx-0.5 text-xl" />
+                           Admin Panel
                         </DropdownElement>
                      </Menu.Item>
                   )}
