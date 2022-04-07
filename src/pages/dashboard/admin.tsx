@@ -7,24 +7,43 @@ import { Tab } from "@headlessui/react";
 import prisma from "../../lib/prisma";
 import DashboardStatistics from "../../components/DashboardStatistics";
 import { Statistics } from "./writer";
+import { Article } from "../../types/Article";
+import { LoadingOverlay } from "@mantine/core";
+import { User } from "../../types/User";
+import { Comment } from "../../types/Comment";
 
 interface Props {
    statistics: Statistics;
+   articles: Article[];
+   users: User[];
+   comments: Comment[];
 }
 
 function classNames(...classes: any) {
    return classes.filter(Boolean).join(" ");
 }
 
-const AdminPage: React.FC<Props> = ({ statistics }) => {
+const AdminPage: React.FC<Props> = ({
+   statistics,
+   articles,
+   users,
+   comments,
+}) => {
+   const [bigLoading, setBigLoading] = useState<boolean>(false);
+
    const [statisticsState, setStatisticsState] =
       useState<Statistics>(statistics);
+
+   const [articlesState, setArticlesState] = useState<Article[]>(articles);
+   const [usersState, setUsersState] = useState<User[]>(users);
+   const [commentsState, setCommentsState] = useState<Comment[]>(comments);
 
    const options = ["Articles", "Users", "Comments"];
 
    return (
       <>
          <NextSeo title="Admin" />
+         <LoadingOverlay visible={bigLoading} />
          <div className="flex flex-grow px-4 pt-10 dark:bg-dark-bg sm:pt-32">
             <div className="mx-auto">
                <DashboardStatistics
@@ -51,6 +70,11 @@ const AdminPage: React.FC<Props> = ({ statistics }) => {
                         </Tab>
                      ))}
                   </Tab.List>
+                  <Tab.Panels>
+                     <Tab.Panel>Content 1</Tab.Panel>
+                     <Tab.Panel>Content 2</Tab.Panel>
+                     <Tab.Panel>Content 3</Tab.Panel>
+                  </Tab.Panels>
                </Tab.Group>
             </div>
          </div>
@@ -77,6 +101,35 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const totalUpvotes = await prisma.upvote.count();
    const totalDownvotes = await prisma.downvote.count();
 
+   const articles = await prisma.article.findMany({
+      include: {
+         coWriters: true,
+         comments: {
+            take: 1,
+            orderBy: {
+               createdAt: "desc",
+            },
+            include: {
+               user: true,
+            },
+         },
+         writer: true,
+         upvotes: true,
+         downvotes: true,
+      },
+      orderBy: {
+         createdAt: "desc",
+      },
+   });
+
+   const users = prisma.user.findMany({
+      where: { NOT: { id: session?.user?.id } },
+   });
+
+   const comments = await prisma.comment.findMany({
+      orderBy: { createdAt: "desc" },
+   });
+
    return {
       props: {
          statistics: {
@@ -86,6 +139,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             totalUpvotes,
             totalDownvotes,
          },
+         articles: JSON.parse(JSON.stringify(articles)),
+         users: JSON.parse(JSON.stringify(users)),
+         comments: JSON.parse(JSON.stringify(comments)),
       },
    };
 };
