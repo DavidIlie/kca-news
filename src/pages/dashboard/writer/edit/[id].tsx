@@ -36,6 +36,7 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { BiCategory } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
+import { useBeforeUnload } from "react-use";
 
 const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
 
@@ -64,7 +65,6 @@ import ArticleCoverUploader, {
 } from "../../../../components/ArticleCoverUploader/ArticleCoverUploader";
 import sendPost from "../../../../lib/sendPost";
 import { computeKCAName } from "../../../../lib/computeKCAName";
-import { useBeforeUnload } from "react-use";
 
 interface Props {
    user: User;
