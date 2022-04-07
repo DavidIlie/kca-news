@@ -31,7 +31,7 @@ import DashboardStatistics from "../../../components/DashboardStatistics";
 import ConfirmModal from "../../../ui/ConfirmModal";
 import { useMediaQuery } from "@mantine/hooks";
 
-interface Statistics {
+export interface Statistics {
    totalArticles: number;
    publishedArticles: number;
    totalComments: number;
