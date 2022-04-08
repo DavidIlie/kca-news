@@ -5,7 +5,9 @@
       "build": "next build",
       "start": "next start",
       "prisma:studio": "prisma studio",
-      "prisma:migrate-dev": "prisma migrate dev"
+      "prisma:migrate-dev": "prisma migrate dev",
+      "prod:prisma:studio": "DATABASE_URL=postgresql://postgres:pizza@192.168.1.160:5432/kca-news prisma studio",
+      "prod:prisma:migrate": "DATABASE_URL=postgresql://postgres:pizza@192.168.1.160:5432/kca-news prisma migrate deploy"
    },
    "dependencies": {
       "@headlessui/react": "^1.5.0",
