@@ -79,18 +79,20 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                         {userState.description || "No description..."}
                      </h1>
                   </div>
-                  <div className="mb-2">
-                     <h1 className="text-lg font-semibold">Year Group</h1>
-                     <h1
-                        className={
-                           userState.showYear
-                              ? "text-gray-700 dark:text-gray-200"
-                              : "font-semibold text-red-500"
-                        }
-                     >
-                        {userState.showYear ? userState.year : "Classified"}
-                     </h1>
-                  </div>
+                  {user.email.endsWith("kcpupils.org") && (
+                     <div className="mb-2">
+                        <h1 className="text-lg font-semibold">Year Group</h1>
+                        <h1
+                           className={
+                              userState.showYear
+                                 ? "text-gray-700 dark:text-gray-200"
+                                 : "font-semibold text-red-500"
+                           }
+                        >
+                           {userState.showYear ? userState.year : "Classified"}
+                        </h1>
+                     </div>
+                  )}
                   <div className="mb-4">
                      <h1 className="text-lg font-semibold">Status</h1>
                      <h1 className="text-gray-700 dark:text-gray-200">

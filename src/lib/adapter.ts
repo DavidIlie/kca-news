@@ -9,11 +9,18 @@ export function PrismaAdapter(p: PrismaClient): Adapter {
          const fullName = name.split("Year")[0];
          const year = name.split(fullName)[1];
 
+         const email = data.email as string;
+
          let names = fullName.split(" ");
-         names.pop();
+         if (email.endsWith("kcpupils.org")) {
+            names.pop();
+            data.year = year;
+         } else {
+            data.year = "";
+            data.showYear = false;
+         }
 
          data.nameIndex = 0;
-         data.year = year;
          data.names = names;
 
          return p.user.create({ data: data as any });

@@ -130,21 +130,25 @@ const ProfileEditor: React.FC<Props> = ({
                               error={errors.extraName}
                            />
                         </div>
-                        <div className="mx-1 mt-4 mb-3 flex items-center gap-2">
-                           <Field
-                              name="showYear"
-                              label="Show Year Group"
-                              as={Radio}
-                              checked={values.showYear}
-                           />
-                           <Tooltip
-                              label={`Displayed next to your name, such as ${
-                                 user.names[values.nameIndex]
-                              } ${user.year}`}
-                           >
-                              <IoMdInformationCircleOutline className="mt-0.5" />
-                           </Tooltip>
-                        </div>
+                        {user.email.endsWith("kcpupils.org") ? (
+                           <div className="mx-1 mt-4 mb-3 flex items-center gap-2">
+                              <Field
+                                 name="showYear"
+                                 label="Show Year Group"
+                                 as={Radio}
+                                 checked={values.showYear}
+                              />
+                              <Tooltip
+                                 label={`Displayed next to your name, such as ${
+                                    user.names[values.nameIndex]
+                                 } ${user.year}`}
+                              >
+                                 <IoMdInformationCircleOutline className="mt-0.5" />
+                              </Tooltip>
+                           </div>
+                        ) : (
+                           <div className="mt-3" />
+                        )}
                         <h1 className="borderColor mb-2 border-b-2 pb-2 text-xl font-semibold">
                            Misc Settings
                         </h1>
