@@ -26,4 +26,5 @@ export interface User {
    downvotes?: Downvote[];
    articles?: Article[];
    canComment: boolean;
+   department: string[];
 }
