@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { NextSeo } from "next-seo";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
+import { LoadingOverlay } from "@mantine/core";
 
 import prisma from "../../lib/prisma";
 import DashboardStatistics from "../../components/DashboardStatistics";
 import { Statistics } from "./writer";
-import { LoadingOverlay } from "@mantine/core";
 
 interface Props {
    statistics: Statistics;

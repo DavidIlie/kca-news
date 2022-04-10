@@ -3,12 +3,12 @@ import { NextSeo } from "next-seo";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { Tab } from "@headlessui/react";
+import { LoadingOverlay } from "@mantine/core";
 
 import prisma from "../../lib/prisma";
 import DashboardStatistics from "../../components/DashboardStatistics";
 import { Statistics } from "./writer";
 import { Article } from "../../types/Article";
-import { LoadingOverlay } from "@mantine/core";
 import { User } from "../../types/User";
 import { Comment } from "../../types/Comment";
 
