@@ -357,7 +357,7 @@ const ArticleViewer: React.FC<Props> = ({
                         !article.published && "mb-20"
                      }`}
                   />
-                  {article.published && data?.user?.canComment && (
+                  {article.published && (
                      <div className="px-4 pb-10">
                         <h1 className="text-4xl font-semibold">
                            What do you think?
@@ -377,6 +377,12 @@ const ArticleViewer: React.FC<Props> = ({
                               >
                                  Login
                               </Button>
+                           ) : !data?.user?.canComment ? (
+                              <>
+                                 <p className="mt-2 font-semibold text-red-500">
+                                    You are currently restricted from commenting
+                                 </p>
+                              </>
                            ) : (
                               <div className="mt-2">
                                  <Formik
