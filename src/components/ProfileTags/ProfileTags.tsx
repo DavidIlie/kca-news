@@ -12,8 +12,8 @@ import {
 import { MdPreview } from "react-icons/md";
 import { RiAdminLine } from "react-icons/ri";
 import { BiCommentX } from "react-icons/bi";
-
 import { BsPen } from "react-icons/bs";
+
 import { User } from "../../types/User";
 
 interface ProfileTagsProps {
