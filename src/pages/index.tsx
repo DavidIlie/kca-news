@@ -134,6 +134,7 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                            className={`hoverItem duration-150 ${
                               index !== featuredPosts.length - 1 && "mb-6"
                            }`}
+                           key={index}
                         >
                            <Link href={`/article/${article.id}`}>
                               <a
@@ -160,6 +161,7 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
             {individualArticles.map((parsedLocation, index) => (
                <div
                   className={index !== featuredPosts.length - 1 ? "mb-12" : ""}
+                  key={index}
                >
                   <h1 className="border-b-2 pb-4 text-2xl font-semibold sm:text-4xl">
                      {getFormmatedLocation(parsedLocation.location)} -{" "}
