@@ -22,7 +22,7 @@ export const ArticleBadge: React.FC<ArticleBadgeProps> = ({
             resolvedTheme === "dark" ? "100" : "50"
          } bg-${color}-${
             resolvedTheme === "dark" ? "600" : "400"
-         } mb-1 rounded-md ${className}`}
+         } mb-1 rounded-md ${className ? className : ""}`}
       >
          {tag}
       </span>
