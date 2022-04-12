@@ -1,1 +1,1 @@
-export type Tag = "developer" | "commenter" | "liker" | "disliker";
+export type Tag = "developer" | "commenter" | "liker" | "disliker" | "teacher";

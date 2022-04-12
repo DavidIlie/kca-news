@@ -13,6 +13,7 @@ import { MdPreview } from "react-icons/md";
 import { RiAdminLine } from "react-icons/ri";
 import { BiCommentX } from "react-icons/bi";
 import { BsPen } from "react-icons/bs";
+import { GiTeacher } from "react-icons/gi";
 
 import { User } from "../../types/User";
 
@@ -70,10 +71,14 @@ const ProfileTags: React.FC<ProfileTagsProps> = ({ user }) => {
                         key={index}
                      />
                   );
+               case "teacher":
+                  return (
+                     <BaseTag label="Teacher" Icon={GiTeacher} key={index} />
+                  );
                default:
                   return (
                      <BaseTag
-                        label={`This tag has not been implemented yet, ${tag}`}
+                        label={`This tag has not been implemented yet, "${tag}"`}
                         Icon={AiOutlineQuestion}
                         key={index}
                      />

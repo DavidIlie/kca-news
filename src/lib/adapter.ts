@@ -20,6 +20,8 @@ export function PrismaAdapter(p: PrismaClient): Adapter {
             data.showYear = false;
          }
 
+         if (email.endsWith("kings.education")) data.tags = ["teacher"];
+
          data.nameIndex = 0;
          data.names = names;
 
