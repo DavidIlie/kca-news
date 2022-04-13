@@ -375,39 +375,46 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      />
                   </div>
                   <ArticleWriterInfo article={article} user={user} />
-                  <div className="relative mt-1 flex justify-center">
-                     <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
-                        <Button color="cyan" onClick={toggleChangeCoverModal}>
-                           Replace
-                        </Button>
-                     </div>
-                     <Image
-                        alt="Post picture"
-                        className="rounded-xl shadow-xl"
-                        src={article.cover}
-                        width={1280}
-                        height={720 / 2}
-                        blurDataURL={shimmer(1920, 1080)}
-                        placeholder="blur"
-                        objectFit="cover"
-                     />
-                  </div>
-                  {description !== article.description && (
-                     <div className="relative hidden sm:block">
-                        <RiRestartLine
-                           className="absolute -ml-10 mt-5 cursor-pointer text-2xl"
-                           onClick={() => {
-                              setDescription(article.description);
-                           }}
+                  <div className="items-center justify-evenly gap-4 sm:flex">
+                     <div className="relative mt-1 flex justify-center sm:w-2/3">
+                        <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
+                           <Button
+                              color="cyan"
+                              onClick={toggleChangeCoverModal}
+                           >
+                              Replace
+                           </Button>
+                        </div>
+                        <Image
+                           alt="Post picture"
+                           className="rounded-xl shadow-xl"
+                           src={article.cover}
+                           width={1280}
+                           height={720}
+                           blurDataURL={shimmer(1920, 1080)}
+                           placeholder="blur"
+                           objectFit="cover"
                         />
                      </div>
-                  )}
-                  <ContentEditable
-                     tagName="p"
-                     className="mt-4 text-justify"
-                     html={description}
-                     onChange={(e) => setDescription(e.target.value)}
-                  />
+                     <div className="sm:h-[300px] sm:w-1/2">
+                        {description !== article.description && (
+                           <div className="relative hidden sm:block">
+                              <RiRestartLine
+                                 className="absolute right-0 -mr-10 mt-5 cursor-pointer text-2xl"
+                                 onClick={() => {
+                                    setDescription(article.description);
+                                 }}
+                              />
+                           </div>
+                        )}
+                        <ContentEditable
+                           tagName="p"
+                           className="mt-4"
+                           html={description}
+                           onChange={(e) => setDescription(e.target.value)}
+                        />
+                     </div>
+                  </div>
                   <div
                      className={`mt-6 ${
                         markdownValue.length < 2 && "-mb-1"

@@ -327,21 +327,23 @@ const ArticleViewer: React.FC<Props> = ({
                      showEdit={true}
                      className="ml-4 mt-1"
                   />
-                  <div className="mx-4 mt-2 mb-6 flex justify-center">
-                     <Image
-                        alt="Post picture"
-                        className="rounded-xl shadow-xl"
-                        src={article.cover}
-                        width={1280}
-                        height={720}
-                        blurDataURL={shimmer(1920, 1080)}
-                        placeholder="blur"
-                        objectFit="cover"
-                     />
+                  <div className="mx-4 mt-2 mb-6 items-center justify-evenly gap-4 sm:flex">
+                     <div className="sm:w-2/3">
+                        <Image
+                           alt="Post picture"
+                           className="rounded-xl shadow-xl"
+                           src={article.cover}
+                           width={1280}
+                           height={720}
+                           blurDataURL={shimmer(1920, 1080)}
+                           placeholder="blur"
+                           objectFit="cover"
+                        />
+                     </div>
+                     <div className="sm:h-[300px] sm:w-1/2">
+                        <p>{article.description}</p>
+                     </div>
                   </div>
-                  <p className="w-full max-w-5xl px-4 text-justify">
-                     {article.description}
-                  </p>
                   <div className="mx-4 mt-4 border-t-2" />
                   <div className="px-4">
                      {/*
