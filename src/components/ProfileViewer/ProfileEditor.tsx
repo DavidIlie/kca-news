@@ -194,7 +194,7 @@ const ProfileEditor: React.FC<Props> = ({
                               className="w-1/2"
                            />
                         </div>
-                        <div className="mx-1.5 mt-4">
+                        <div className="mt-4">
                            <Button
                               className="w-full"
                               loading={isSubmitting}
