@@ -542,14 +542,22 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  withArrow
                                  transition="fade"
                                  transitionDuration={200}
-                                 disabled={article.underReview || user.isAdmin}
+                                 disabled={
+                                    location === null ||
+                                    (article.underReview && !user.isAdmin)
+                                 }
                               >
                                  <Radio
                                     label="Pending review"
                                     checked={article.underReview}
                                     labelSize="md"
                                     disabled={
-                                       article.underReview && !user.isAdmin
+                                       location === null ||
+                                       (article.underReview && !user.isAdmin)
+                                    }
+                                    labelDisabled={
+                                       location === null ||
+                                       (article.underReview && !user.isAdmin)
                                     }
                                     onChange={() => {
                                        if (!user.isAdmin) {
