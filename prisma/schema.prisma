@@ -62,6 +62,7 @@ model User {
   isReviewer    Boolean @default(false)
   isWriter      Boolean @default(false)
   department    String[]
+  gender        String?
 }
 
 model VerificationToken {

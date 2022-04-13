@@ -27,4 +27,5 @@ export interface User {
    articles?: Article[];
    canComment: boolean;
    department: string[];
+   gender: "male" | "female";
 }

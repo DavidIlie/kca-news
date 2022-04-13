@@ -20,8 +20,20 @@ export default NextAuth({
             user.email?.endsWith("@kings.education") ||
             user.email?.endsWith("@kingsgroup.org") ||
             user.email?.endsWith("@davidilie.com")
-         )
+         ) {
+            if ((user as any).gender === null) {
+               const r = await fetch(
+                  `https://api.genderize.io/?name=${(user as any).names[0]}`
+               );
+               const response = await r.json();
+
+               await prisma.user.update({
+                  where: { id: user.id },
+                  data: { gender: response.gender },
+               });
+            }
             return true;
+         }
          return false;
       },
       async session({ session, user }) {
@@ -39,6 +51,7 @@ export default NextAuth({
             session.user.showYear = user.showYear as boolean;
             session.user.canComment = user.canComment as boolean;
             session.user.department = user.department as string[];
+            (session.user as any).gender = user.gender as string;
          }
          return session;
       },

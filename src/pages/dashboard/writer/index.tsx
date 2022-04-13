@@ -8,6 +8,7 @@ import { DefaultSeo } from "next-seo";
 import { Disclosure } from "@headlessui/react";
 import { LoadingOverlay, Select, TextInput } from "@mantine/core";
 import { useNotifications } from "@mantine/notifications";
+import { useMediaQuery } from "@mantine/hooks";
 
 import {
    AiOutlineArrowDown,
@@ -29,7 +30,7 @@ import ArticleBadge from "../../../components/ArticleBadge";
 import ArticleUnderReviewCard from "../../../components/ArticleUnderReviewCard";
 import DashboardStatistics from "../../../components/DashboardStatistics";
 import ConfirmModal from "../../../ui/ConfirmModal";
-import { useMediaQuery } from "@mantine/hooks";
+import { computeKCAName } from "../../../lib/computeKCAName";
 
 export interface Statistics {
    totalArticles: number;
@@ -356,7 +357,9 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                                              href={`/profile/${article.writer?.id}`}
                                           >
                                              <a className="hover:underline">
-                                                {article.writer?.name}
+                                                {computeKCAName(
+                                                   article.writer!
+                                                )}
                                              </a>
                                           </Link>
                                        </span>

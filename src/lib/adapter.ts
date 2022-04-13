@@ -3,7 +3,7 @@ import type { Adapter } from "next-auth/adapters";
 
 export function PrismaAdapter(p: PrismaClient): Adapter {
    return {
-      createUser: (data) => {
+      createUser: async (data) => {
          const name = data.name as string;
 
          const fullName = name.split("Year")[0];
@@ -20,9 +20,13 @@ export function PrismaAdapter(p: PrismaClient): Adapter {
             data.showYear = false;
          }
 
-         if (email.endsWith("kings.education")) data.tags = ["teacher"];
+         if (email.endsWith("kings.education")) {
+            data.tags = ["teacher"];
+            data.nameIndex = 1;
+         } else {
+            data.nameIndex = 0;
+         }
 
-         data.nameIndex = 0;
          data.names = names;
 
          return p.user.create({ data: data as any });
