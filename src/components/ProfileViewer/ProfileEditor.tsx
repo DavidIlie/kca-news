@@ -109,7 +109,6 @@ const ProfileEditor: React.FC<Props> = ({
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
                                  selected: "dark:bg-foot",
                               }}
-                              required
                               error={errors.nameIndex}
                            />
                            <Field
