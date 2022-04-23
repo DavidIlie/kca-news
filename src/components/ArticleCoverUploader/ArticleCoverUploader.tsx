@@ -2,12 +2,12 @@ import React, { MouseEvent } from "react";
 import { useState, useRef, useEffect } from "react";
 import useFileUpload from "react-use-file-upload";
 import { useNotifications } from "@mantine/notifications";
+import { AiOutlineClose } from "react-icons/ai";
 
 import sendPost from "../../lib/sendPost";
 import { Article } from "../../types/Article";
 import { Button } from "../../ui/Button";
 import Modal from "../../ui/Modal";
-import { AiOutlineClose } from "react-icons/ai";
 
 interface ArticleCoverUploaderProps {
    article: Article;
@@ -33,6 +33,9 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
    const [uploadCycle, setUploadCycle] = useState<string>(
       Math.random().toString(36)
    );
+
+   const isDefaultCover =
+      article.cover !== "https://cdn.davidilie.com/kca-news/default-cover.jpg";
 
    const notifications = useNotifications();
 
@@ -88,6 +91,8 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
       setUploadFileState(false);
       if (modal) {
          closeModal!();
+      } else {
+         setUploadCycle(Math.random().toString(36));
       }
    };
 
@@ -101,7 +106,7 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
       } catch (_err) {}
    });
 
-   const HandleRestCover = async () => {
+   const HandleResetCover = async () => {
       setMainLoading(true);
       const r = await fetch(`/api/article/${article.id}/update/resetCover`, {
          method: "DELETE",
@@ -122,6 +127,7 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
          });
       }
 
+      setUploadCycle(Math.random().toString(36));
       setMainLoading(false);
    };
 
@@ -155,7 +161,9 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
                   <p
                      className={`px-0.5 ${
                         !modal &&
-                        `mt-2 ${files.length !== 0 && "-mb-2"} text-sm`
+                        `mt-2 ${
+                           files.length !== 0 && "-mb-2"
+                        } text-sm dark:text-gray-300`
                      }`}
                   >
                      {(files as any)[0].name}
@@ -164,24 +172,23 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
             </div>
          </div>
          <div className={`mt-3 ${modal && "flex"} justify-end gap-2`}>
-            {article.cover !==
-               "https://cdn.davidilie.com/kca-news/default-cover.jpg" && (
-               <button
-                  type="button"
+            {isDefaultCover && (
+               <Button
+                  color="secondary"
                   className={`${
                      !modal && `w-full ${files.length === 0 ? "mb-2" : "mt-4"}`
-                  } inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 duration-150 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:bg-red-500 dark:text-white dark:hover:bg-red-600`}
-                  onClick={() => HandleRestCover()}
+                  }`}
+                  onClick={() => HandleResetCover()}
                >
                   Reset Cover
-               </button>
+               </Button>
             )}
             {(modal || files.length !== 0) && (
-               <button
-                  type="button"
+               <Button
+                  color={!isDefaultCover ? "secondary" : "cyan"}
                   className={`${
                      !modal && `mb-2 ${article.cover ? "mt-2" : "mt-4"} w-full`
-                  }  inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 duration-150 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 dark:bg-sky-500 dark:text-white dark:hover:bg-sky-600`}
+                  }`}
                   onClick={() => {
                      if (modal) return HandleClose();
 
@@ -191,18 +198,17 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
                   }}
                >
                   {modal ? "Close" : "Reset Upload"}
-               </button>
+               </Button>
             )}
-            <button
-               type="button"
-               disabled={!uploadFileState}
-               className={`${
-                  !modal && "w-full"
-               } inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 duration-150 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:opacity-25 dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600`}
-               onClick={(e) => HandleUpload(e)}
-            >
-               {isLoading ? "Uploading" : "Upload"}
-            </button>
+            {uploadFileState && (
+               <Button
+                  disabled={!uploadFileState}
+                  className={`${!modal && "w-full"}`}
+                  onClick={(e) => HandleUpload(e)}
+               >
+                  {isLoading ? "Uploading" : "Upload"}
+               </Button>
+            )}
          </div>
       </>
    );
