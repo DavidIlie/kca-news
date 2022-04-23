@@ -25,9 +25,9 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
    setMainLoading,
    closeModal,
 }) => {
+   const notifications = useNotifications();
    const { files, setFiles, clearAllFiles } = useFileUpload();
    const inputRef = useRef<HTMLInputElement>();
-
    const [uploadFileState, setUploadFileState] = useState<boolean>(false);
    const [isLoading, setIsLoading] = useState<boolean>(false);
    const [uploadCycle, setUploadCycle] = useState<string>(
@@ -36,8 +36,6 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
 
    const isDefaultCover =
       article.cover !== "https://cdn.davidilie.com/kca-news/default-cover.jpg";
-
-   const notifications = useNotifications();
 
    const HandleUpload = async (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
@@ -191,7 +189,6 @@ const ArticleCoverUploader: React.FC<ArticleCoverUploaderProps> = ({
                   }`}
                   onClick={() => {
                      if (modal) return HandleClose();
-
                      setUploadFileState(false);
                      clearAllFiles();
                      setUploadCycle(Math.random().toString(36));
