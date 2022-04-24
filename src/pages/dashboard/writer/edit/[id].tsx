@@ -974,8 +974,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     }}
                                  />
                               </Tooltip>
-                              <div className="mt-3" />
-
+                              {article.shared && <div className="mt-3" />}
                               {article.shared && (
                                  <>
                                     <Button
