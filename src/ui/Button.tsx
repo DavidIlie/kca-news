@@ -39,11 +39,11 @@ export const Button: React.FC<ButtonProps> = ({
    return (
       <button
          disabled={disabled || loading}
-         className={`flex outline-none focus:ring-4 focus:ring-${color} ${colorClassnames[color]} flex items-center justify-center font-semibold disabled:cursor-not-allowed ${className}`}
+         className={`flex outline-none focus:ring-4 focus:ring-${color} ${colorClassnames[color]} flex items-center justify-center font-medium disabled:cursor-not-allowed ${className}`}
          {...props}
       >
          <span className={loading ? "opacity-0" : `flex items-center`}>
-            {icon ? <span className="mr-2 items-center">{icon}</span> : null}
+            {icon ? <span className="items-center mr-2">{icon}</span> : null}
             {children}
          </span>
          {loading && (
