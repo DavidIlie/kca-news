@@ -2,9 +2,10 @@ import React, { useState, Fragment } from "react";
 import Link from "next/link";
 import { NextSeo } from "next-seo";
 import { GetServerSideProps } from "next";
+import { Formik, Field, Form } from "formik";
 import { getSession } from "next-auth/react";
 import { Menu, Tab, Transition } from "@headlessui/react";
-import { Badge, LoadingOverlay, Tooltip } from "@mantine/core";
+import { Badge, LoadingOverlay, Tooltip, MultiSelect } from "@mantine/core";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiUserCircle } from "react-icons/bi";
 import { MdAccessibility } from "react-icons/md";
@@ -13,13 +14,15 @@ import { AiOutlineTags } from "react-icons/ai";
 import DashboardStatistics from "../../components/DashboardStatistics";
 import ProfileTags from "../../components/ProfileTags";
 import DropdownElement from "../../ui/DropdownElement";
+import Modal from "../../ui/Modal";
+import { Button } from "../../ui/Button";
 import NextLink from "../../ui/NextLink";
 
 import prisma from "../../lib/prisma";
 import { Statistics } from "./writer";
 import { User } from "../../types/User";
 import { computeKCAName } from "../../lib/computeKCAName";
-import Modal from "../../ui/Modal";
+import { tagArray } from "../../types/Tag";
 
 interface Props {
    statistics: Statistics;
@@ -222,8 +225,56 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
             }}
             title="User Tag Editor"
          >
-            <div className="mt-4">
-               <h1>hi</h1>
+            <div className="mt-2">
+               {tagEditorUser !== null && (
+                  <Formik
+                     validateOnChange={false}
+                     validateOnBlur={false}
+                     initialValues={{
+                        tags: tagEditorUser.tags,
+                     }}
+                     onSubmit={async (data, { setSubmitting }) => {
+                        setSubmitting(true);
+
+                        setSubmitting(false);
+                     }}
+                  >
+                     {({ errors, isSubmitting, values, setFieldValue }) => (
+                        <Form>
+                           <Field
+                              as={MultiSelect}
+                              value={values.tags}
+                              onChange={(v: string) => setFieldValue("tags", v)}
+                              data={tagArray.map((tag) => ({
+                                 value: tag,
+                                 label:
+                                    tag.charAt(0).toUpperCase() + tag.slice(1),
+                              }))}
+                              label="Tags"
+                              placeholder="Select tags"
+                              name="tags"
+                              classNames={{
+                                 filledVariant:
+                                    "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
+                                 dropdown:
+                                    "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
+                                 selected: "dark:bg-foot",
+                              }}
+                              error={errors.tags}
+                           />
+                           <div className="mt-4">
+                              <Button
+                                 className="w-full"
+                                 loading={isSubmitting}
+                                 disabled={isSubmitting}
+                              >
+                                 Update
+                              </Button>
+                           </div>
+                        </Form>
+                     )}
+                  </Formik>
+               )}
             </div>
          </Modal>
          <Modal
