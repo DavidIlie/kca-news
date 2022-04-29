@@ -1,37 +1,25 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
-import { Disclosure } from "@headlessui/react";
 import { LoadingOverlay, Select, TextInput } from "@mantine/core";
 import { useNotifications } from "@mantine/notifications";
 import { useMediaQuery } from "@mantine/hooks";
-
 import {
-   AiOutlineArrowDown,
-   AiOutlineArrowUp,
-   AiOutlineLike,
-   AiOutlineDislike,
    AiOutlineSearch,
    AiOutlineFilter,
    AiOutlineClose,
 } from "react-icons/ai";
 
 import prisma from "../../../lib/prisma";
-import { shimmer } from "../../../lib/shimmer";
-import { Article } from "../../../types/Article";
 import { Button } from "../../../ui/Button";
 import { User } from "../../../types/User";
-import Radio from "../../../ui/Radio";
-import ArticleBadge from "../../../components/ArticleBadge";
-import ArticleUnderReviewCard from "../../../components/ArticleUnderReviewCard";
 import DashboardStatistics from "../../../components/DashboardStatistics";
 import ConfirmModal from "../../../ui/ConfirmModal";
-import { computeKCAName } from "../../../lib/computeKCAName";
 import ArticleDashboardCard from "../../../components/ArticleDashboardCard";
+import { Article } from "../../../types/Article";
 
 export interface Statistics {
    totalArticles: number;
