@@ -6,10 +6,11 @@ import { Formik, Field, Form } from "formik";
 import { getSession } from "next-auth/react";
 import { Menu, Tab, Transition } from "@headlessui/react";
 import { Badge, LoadingOverlay, Tooltip, MultiSelect } from "@mantine/core";
+import { useNotifications } from "@mantine/notifications";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiUserCircle } from "react-icons/bi";
 import { MdAccessibility } from "react-icons/md";
-import { AiOutlineTags } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineTags } from "react-icons/ai";
 
 import DashboardStatistics from "../../components/DashboardStatistics";
 import ProfileTags from "../../components/ProfileTags";
@@ -34,6 +35,7 @@ function classNames(...classes: any) {
 }
 
 const AdminPage: React.FC<Props> = ({ statistics, users }) => {
+   const notifications = useNotifications();
    const [bigLoading, setBigLoading] = useState<boolean>(false);
    const [usersState, setUsersState] = useState<User[]>(users);
 
@@ -55,7 +57,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                   {...statistics}
                   className="mx-auto max-w-7xl lg:px-8"
                />
-               <Tab.Group as="div" className="mx-8 mt-6">
+               <Tab.Group as="div" className="mx-2 mt-6 mb-4 sm:mx-8 sm:mb-0">
                   <Tab.List className="flex space-x-1 rounded-xl border-2 border-gray-200 bg-gray-100 p-1 dark:border-gray-800 dark:bg-foot">
                      {options.map((option, index) => {
                         if (index > 0) {
@@ -109,17 +111,21 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                            }`}
                            key={index}
                         >
-                           <div className="flex items-center gap-4">
-                              <img
-                                 src={user.image}
-                                 alt={`${computeKCAName(user)}'s profile image`}
-                                 className="w-[15%] rounded-full"
-                                 referrerPolicy="no-referrer"
-                              />
-                              <h1 className="text-xl font-medium">
-                                 {computeKCAName(user)}
-                              </h1>
-                              <div className={`grid grid-cols-2 gap-2`}>
+                           <div className="items-center gap-4 sm:flex">
+                              <div className="mr-0 flex items-center gap-2 sm:-mr-8">
+                                 <img
+                                    src={user.image}
+                                    alt={`${computeKCAName(
+                                       user
+                                    )}'s profile image`}
+                                    className="w-[25%] rounded-full"
+                                    referrerPolicy="no-referrer"
+                                 />
+                                 <h1 className="text-xl font-medium">
+                                    {computeKCAName(user)}
+                                 </h1>
+                              </div>
+                              <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-0">
                                  {(user.isAdmin || user.isWriter) && (
                                     <>
                                        <Tooltip
@@ -224,6 +230,8 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                setTagEditorUser(null);
             }}
             title="User Tag Editor"
+            noAutoClose
+            width="xl"
          >
             <div className="mt-2">
                {tagEditorUser !== null && (
@@ -235,7 +243,9 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                      }}
                      onSubmit={async (data, { setSubmitting }) => {
                         setSubmitting(true);
+                        setBigLoading(true);
 
+                        setBigLoading(false);
                         setSubmitting(false);
                      }}
                   >
@@ -284,9 +294,142 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                setAccessEditorUser(null);
             }}
             title="User Access Editor"
+            width="xl"
          >
-            <div className="mt-4">
-               <h1>hi</h1>
+            <div className="mt-2">
+               {accessEditorUser?.isAdmin && (
+                  <p className="mb-2 font-medium">
+                     Contact developer to remove administrator privileges.
+                  </p>
+               )}
+               <div className="flex justify-evenly gap-2">
+                  <Button
+                     className="w-full"
+                     disabled={accessEditorUser?.isAdmin}
+                     onClick={async () => {
+                        setBigLoading(true);
+
+                        const r = await fetch(
+                           `/api/admin/setWriter?id=${accessEditorUser?.id}`,
+                           {
+                              credentials: "include",
+                           }
+                        );
+                        const response = await r.json();
+
+                        if (r.status === 200) {
+                           let final = [] as User[];
+                           usersState.forEach((user) => {
+                              if (user.id === accessEditorUser?.id) {
+                                 let cUser = user;
+                                 cUser.isWriter = !cUser.isWriter;
+                                 final.push(cUser);
+                              } else {
+                                 final.push(user);
+                              }
+                           });
+                           setUsersState(final);
+                        } else {
+                           notifications.showNotification({
+                              color: "red",
+                              title: "Toggle Writer - Error",
+                              message: response.message || "Unknown Error",
+                              icon: <AiOutlineClose />,
+                              autoClose: 5000,
+                           });
+                        }
+
+                        setBigLoading(false);
+                     }}
+                  >
+                     {accessEditorUser?.isWriter
+                        ? "Remove Writer"
+                        : "Set Writer"}
+                  </Button>
+                  <Button
+                     className="w-full"
+                     disabled={accessEditorUser?.isAdmin}
+                     onClick={async () => {
+                        setBigLoading(true);
+
+                        const r = await fetch(
+                           `/api/admin/setReviewer?id=${accessEditorUser?.id}`,
+                           {
+                              credentials: "include",
+                           }
+                        );
+                        const response = await r.json();
+
+                        if (r.status === 200) {
+                           let final = [] as User[];
+                           usersState.forEach((user) => {
+                              if (user.id === accessEditorUser?.id) {
+                                 let cUser = user;
+                                 cUser.isReviewer = !cUser.isReviewer;
+                                 final.push(cUser);
+                              } else {
+                                 final.push(user);
+                              }
+                           });
+                           setUsersState(final);
+                        } else {
+                           notifications.showNotification({
+                              color: "red",
+                              title: "Toggle Reviewer - Error",
+                              message: response.message || "Unknown Error",
+                              icon: <AiOutlineClose />,
+                              autoClose: 5000,
+                           });
+                        }
+
+                        setBigLoading(false);
+                     }}
+                  >
+                     {accessEditorUser?.isReviewer
+                        ? "Remove Reviewer"
+                        : "Set Reviewer"}
+                  </Button>
+                  <Button
+                     className="w-full"
+                     onClick={async () => {
+                        setBigLoading(true);
+
+                        const r = await fetch(
+                           `/api/admin/setMute?id=${accessEditorUser?.id}`,
+                           {
+                              credentials: "include",
+                           }
+                        );
+                        const response = await r.json();
+
+                        if (r.status === 200) {
+                           let final = [] as User[];
+                           usersState.forEach((user) => {
+                              if (user.id === accessEditorUser?.id) {
+                                 let cUser = user;
+                                 cUser.canComment = !cUser.canComment;
+                                 final.push(cUser);
+                              } else {
+                                 final.push(user);
+                              }
+                           });
+                           setUsersState(final);
+                        } else {
+                           notifications.showNotification({
+                              color: "red",
+                              title: "Toggle Mute - Error",
+                              message: response.message || "Unknown Error",
+                              icon: <AiOutlineClose />,
+                              autoClose: 5000,
+                           });
+                        }
+
+                        setBigLoading(false);
+                     }}
+                  >
+                     {accessEditorUser?.canComment ? "Mute" : "Unmute"}
+                  </Button>
+               </div>
             </div>
          </Modal>
       </>
@@ -324,6 +467,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
                downvotes: true,
             },
          },
+      },
+      orderBy: {
+         name: "desc",
       },
    });
 
