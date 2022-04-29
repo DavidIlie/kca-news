@@ -18,11 +18,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
    if (!user) return res.status(404).json({ message: "user not found" });
 
+   await prisma.user.update({
+      where: { id: user.id },
+      data: { canComment: !user.canComment },
+   });
+
    return res.json({
-      message: await prisma.user.update({
-         where: { id: user.id },
-         data: { canComment: !user.canComment },
-      }),
+      message: "ok",
    });
 };
 

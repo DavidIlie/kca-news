@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 
 import prisma from "../../../lib/prisma";
+import { tagSchema } from "../../../schema/admin";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    const session = await getSession({ req });
@@ -18,9 +19,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
    if (!user) return res.status(404).json({ message: "user not found" });
 
+   const body = await tagSchema.validate(req.body);
+
    await prisma.user.update({
       where: { id: user.id },
-      data: { isWriter: !user.isWriter },
+      data: { tags: body.tags },
    });
 
    return res.json({

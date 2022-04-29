@@ -24,6 +24,7 @@ import { Statistics } from "./writer";
 import { User } from "../../types/User";
 import { computeKCAName } from "../../lib/computeKCAName";
 import { tagArray } from "../../types/Tag";
+import { tagSchema } from "../../schema/admin";
 
 interface Props {
    statistics: Statistics;
@@ -238,12 +239,50 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                   <Formik
                      validateOnChange={false}
                      validateOnBlur={false}
+                     validationSchema={tagSchema}
                      initialValues={{
-                        tags: tagEditorUser.tags,
+                        tags: tagEditorUser.tags.includes("developer")
+                           ? tagEditorUser.tags.filter((s) => s !== "developer")
+                           : tagEditorUser.tags,
                      }}
                      onSubmit={async (data, { setSubmitting }) => {
                         setSubmitting(true);
                         setBigLoading(true);
+
+                        const r = await fetch(
+                           `/api/admin/tags?id=${tagEditorUser.id}`,
+                           {
+                              credentials: "include",
+                              method: "POST",
+                              body: JSON.stringify(data),
+                           }
+                        );
+                        const response = await r.json();
+
+                        if (r.status === 200) {
+                           let final = [] as User[];
+                           usersState.forEach((user) => {
+                              if (user.id === tagEditorUser?.id) {
+                                 let cUser = user;
+                                 cUser.tags = data.tags;
+                                 final.push(cUser);
+                              } else {
+                                 final.push(user);
+                              }
+                           });
+                           setUsersState(final);
+
+                           setOpenTagEditor(!openTagEditor);
+                           setTagEditorUser(null);
+                        } else {
+                           notifications.showNotification({
+                              color: "red",
+                              title: "Edit Tags - Error",
+                              message: response.message || "Unknown Error",
+                              icon: <AiOutlineClose />,
+                              autoClose: 5000,
+                           });
+                        }
 
                         setBigLoading(false);
                         setSubmitting(false);
@@ -329,6 +368,9 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                               }
                            });
                            setUsersState(final);
+
+                           setOpenAccessEditor(!openAccessEditor);
+                           setAccessEditorUser(null);
                         } else {
                            notifications.showNotification({
                               color: "red",
@@ -372,6 +414,9 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                               }
                            });
                            setUsersState(final);
+
+                           setOpenAccessEditor(!openAccessEditor);
+                           setAccessEditorUser(null);
                         } else {
                            notifications.showNotification({
                               color: "red",
@@ -414,6 +459,9 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                               }
                            });
                            setUsersState(final);
+
+                           setOpenAccessEditor(!openAccessEditor);
+                           setAccessEditorUser(null);
                         } else {
                            notifications.showNotification({
                               color: "red",
