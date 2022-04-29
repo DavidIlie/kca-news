@@ -1,44 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
+import Link from "next/link";
 import { NextSeo } from "next-seo";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import { Tab } from "@headlessui/react";
-import { LoadingOverlay } from "@mantine/core";
+import { Menu, Tab, Transition } from "@headlessui/react";
+import { Badge, LoadingOverlay, Tooltip } from "@mantine/core";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { BiUserCircle } from "react-icons/bi";
+import { MdAccessibility } from "react-icons/md";
+import { AiOutlineTags } from "react-icons/ai";
+
+import DashboardStatistics from "../../components/DashboardStatistics";
+import ProfileTags from "../../components/ProfileTags";
+import DropdownElement from "../../ui/DropdownElement";
+import NextLink from "../../ui/NextLink";
 
 import prisma from "../../lib/prisma";
-import DashboardStatistics from "../../components/DashboardStatistics";
 import { Statistics } from "./writer";
-import { Article } from "../../types/Article";
 import { User } from "../../types/User";
-import { Comment } from "../../types/Comment";
+import { computeKCAName } from "../../lib/computeKCAName";
+import Modal from "../../ui/Modal";
 
 interface Props {
    statistics: Statistics;
-   articles: Article[];
    users: User[];
-   comments: Comment[];
 }
 
 function classNames(...classes: any) {
    return classes.filter(Boolean).join(" ");
 }
 
-const AdminPage: React.FC<Props> = ({
-   statistics,
-   articles,
-   users,
-   comments,
-}) => {
+const AdminPage: React.FC<Props> = ({ statistics, users }) => {
    const [bigLoading, setBigLoading] = useState<boolean>(false);
-
-   const [statisticsState, setStatisticsState] =
-      useState<Statistics>(statistics);
-
-   const [articlesState, setArticlesState] = useState<Article[]>(articles);
    const [usersState, setUsersState] = useState<User[]>(users);
-   const [commentsState, setCommentsState] = useState<Comment[]>(comments);
 
-   const options = ["Articles", "Users", "Comments"];
+   const [openTagEditor, setOpenTagEditor] = useState<boolean>(false);
+   const [tagEditorUser, setTagEditorUser] = useState<User | null>(null);
+   const [openAccessEditor, setOpenAccessEditor] = useState<boolean>(false);
+   const [accessEditorUser, setAccessEditorUser] = useState<User | null>(null);
+
+   const options = ["Users", "Articles", "Comments"];
 
    return (
       <>
@@ -48,36 +49,195 @@ const AdminPage: React.FC<Props> = ({
             <div className="mx-auto">
                <DashboardStatistics
                   isAdmin={true}
-                  {...statisticsState}
+                  {...statistics}
                   className="mx-auto max-w-7xl lg:px-8"
                />
-               <Tab.Group as="div" className="mx-8 mt-12">
+               <Tab.Group as="div" className="mx-8 mt-6">
                   <Tab.List className="flex space-x-1 rounded-xl border-2 border-gray-200 bg-gray-100 p-1 dark:border-gray-800 dark:bg-foot">
-                     {options.map((option, index) => (
-                        <Tab
-                           key={index}
-                           className={({ selected }) =>
-                              classNames(
-                                 "w-full rounded-lg py-2.5 text-sm font-medium leading-5 duration-150",
-                                 "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
-                                 selected
-                                    ? "bg-white text-gray-800 shadow dark:bg-dark-bg dark:text-gray-100"
-                                    : "text-gray-600 hover:bg-gray-200 hover:text-gray-800"
-                              )
-                           }
-                        >
-                           {option}
-                        </Tab>
-                     ))}
+                     {options.map((option, index) => {
+                        if (index > 0) {
+                           return (
+                              <Link
+                                 href={
+                                    index === 1
+                                       ? "/dashboard/writer"
+                                       : index === 2
+                                       ? "/dashboard/reviewer"
+                                       : ""
+                                 }
+                              >
+                                 <a
+                                    key={index}
+                                    className={classNames(
+                                       "w-full rounded-lg py-2.5 text-center text-sm font-medium leading-5 duration-150",
+                                       "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
+                                       "text-gray-600 hover:bg-gray-200 hover:text-gray-800 dark:text-gray-300 dark:hover:bg-dark-bg dark:hover:bg-opacity-60"
+                                    )}
+                                 >
+                                    {option}
+                                 </a>
+                              </Link>
+                           );
+                        } else {
+                           return (
+                              <Tab
+                                 key={index}
+                                 className={({ selected }) =>
+                                    classNames(
+                                       "w-full rounded-lg py-2.5 text-sm font-medium leading-5 duration-150",
+                                       "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
+                                       selected
+                                          ? "bg-white text-gray-800 shadow dark:bg-dark-bg dark:text-gray-100"
+                                          : "text-gray-600 hover:bg-gray-200 hover:text-gray-800 dark:text-gray-300"
+                                    )
+                                 }
+                              >
+                                 {option}
+                              </Tab>
+                           );
+                        }
+                     })}
                   </Tab.List>
-                  <Tab.Panels>
-                     <Tab.Panel>Content 1</Tab.Panel>
-                     <Tab.Panel>Content 2</Tab.Panel>
-                     <Tab.Panel>Content 3</Tab.Panel>
-                  </Tab.Panels>
+                  <div className="mt-4">
+                     {usersState.map((user, index) => (
+                        <div
+                           className={`flex items-center justify-between rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-2 dark:border-gray-800 dark:bg-foot ${
+                              index !== usersState.length - 1 && "mb-4 "
+                           }`}
+                           key={index}
+                        >
+                           <div className="flex items-center gap-4">
+                              <img
+                                 src={user.image}
+                                 alt={`${computeKCAName(user)}'s profile image`}
+                                 className="w-[15%] rounded-full"
+                                 referrerPolicy="no-referrer"
+                              />
+                              <h1 className="text-xl font-medium">
+                                 {computeKCAName(user)}
+                              </h1>
+                              <div className={`grid grid-cols-2 gap-2`}>
+                                 {(user.isAdmin || user.isWriter) && (
+                                    <>
+                                       <Tooltip
+                                          label={`${
+                                             user._count!.coArticles
+                                          } Co Article
+                                          ${
+                                             user._count!.coArticles !== 1 &&
+                                             "s"
+                                          }`}
+                                          className="w-full"
+                                       >
+                                          <Badge className="w-full">
+                                             {user._count!.articles} Article
+                                             {user._count!.articles !== 1 &&
+                                                "s"}
+                                          </Badge>
+                                       </Tooltip>
+                                    </>
+                                 )}
+                                 <Badge
+                                    className={`${
+                                       (user.isAdmin || user.isWriter) && "mt-1"
+                                    }`}
+                                 >
+                                    {user._count!.comments} Comment
+                                    {user._count!.comments !== 1 && "s"}
+                                 </Badge>
+                                 <Badge>
+                                    {user._count!.upvotes} Like
+                                    {user._count!.upvotes !== 1 && "s"}
+                                 </Badge>
+                                 <Badge>
+                                    {user._count!.downvotes} Dislike
+                                    {user._count!.downvotes !== 1 && "s"}
+                                 </Badge>
+                              </div>
+                           </div>
+                           <div className="flex items-center gap-2">
+                              <ProfileTags user={user} />
+                              <Menu as="div" className="relative">
+                                 <Menu.Button
+                                    as={BsThreeDotsVertical}
+                                    size={25}
+                                    className="cursor-pointer"
+                                 />
+                                 <Transition
+                                    as={Fragment}
+                                    enter="transition ease-out duration-100"
+                                    enterFrom="transform opacity-0 scale-95"
+                                    enterTo="transform opacity-100 scale-100"
+                                    leave="transition ease-in duration-75"
+                                    leaveFrom="transform opacity-100 scale-100"
+                                    leaveTo="transform opacity-0 scale-95"
+                                 >
+                                    <Menu.Items className="absolute right-0 z-10 mt-2 -mr-4 w-36 rounded-md border-2 border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
+                                       <Menu.Item
+                                          as={NextLink}
+                                          href={`/profile/${user.id}`}
+                                       >
+                                          <DropdownElement>
+                                             <BiUserCircle className="mx-0.5 text-xl" />
+                                             View Profile
+                                          </DropdownElement>
+                                       </Menu.Item>
+                                       <Menu.Item
+                                          onClick={() => {
+                                             setOpenTagEditor(true);
+                                             setTagEditorUser(user);
+                                          }}
+                                       >
+                                          <DropdownElement>
+                                             <AiOutlineTags className="mx-0.5 text-xl" />
+                                             Change Tags
+                                          </DropdownElement>
+                                       </Menu.Item>
+                                       <Menu.Item
+                                          onClick={() => {
+                                             setOpenAccessEditor(true);
+                                             setAccessEditorUser(user);
+                                          }}
+                                       >
+                                          <DropdownElement>
+                                             <MdAccessibility className="mx-0.5 text-xl" />
+                                             Change Access
+                                          </DropdownElement>
+                                       </Menu.Item>
+                                    </Menu.Items>
+                                 </Transition>
+                              </Menu>
+                           </div>
+                        </div>
+                     ))}
+                  </div>
                </Tab.Group>
             </div>
          </div>
+         <Modal
+            isOpen={openTagEditor}
+            updateModalState={() => {
+               setOpenTagEditor(!openTagEditor);
+               setTagEditorUser(null);
+            }}
+            title="User Tag Editor"
+         >
+            <div className="mt-4">
+               <h1>hi</h1>
+            </div>
+         </Modal>
+         <Modal
+            isOpen={openAccessEditor}
+            updateModalState={() => {
+               setOpenAccessEditor(!openAccessEditor);
+               setAccessEditorUser(null);
+            }}
+            title="User Access Editor"
+         >
+            <div className="mt-4">
+               <h1>hi</h1>
+            </div>
+         </Modal>
       </>
    );
 };
@@ -101,33 +261,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const totalUpvotes = await prisma.upvote.count();
    const totalDownvotes = await prisma.downvote.count();
 
-   const articles = await prisma.article.findMany({
+   const users = await prisma.user.findMany({
+      where: { NOT: { id: session?.user?.id } },
       include: {
-         coWriters: true,
-         comments: {
-            take: 1,
-            orderBy: {
-               createdAt: "desc",
-            },
-            include: {
-               user: true,
+         _count: {
+            select: {
+               articles: true,
+               coArticles: true,
+               comments: true,
+               upvotes: true,
+               downvotes: true,
             },
          },
-         writer: true,
-         upvotes: true,
-         downvotes: true,
       },
-      orderBy: {
-         createdAt: "desc",
-      },
-   });
-
-   const users = prisma.user.findMany({
-      where: { NOT: { id: session?.user?.id } },
-   });
-
-   const comments = await prisma.comment.findMany({
-      orderBy: { createdAt: "desc" },
    });
 
    return {
@@ -139,9 +285,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             totalUpvotes,
             totalDownvotes,
          },
-         articles: JSON.parse(JSON.stringify(articles)),
          users: JSON.parse(JSON.stringify(users)),
-         comments: JSON.parse(JSON.stringify(comments)),
       },
    };
 };

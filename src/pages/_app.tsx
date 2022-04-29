@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 
 import "../styles/globals.css";
+import { isServer } from "../lib/isServer";
 
 import AppLayout from "../components/AppLayout";
 
@@ -13,6 +14,8 @@ const KingsNews = ({
    Component,
    pageProps: { session, ...pageProps },
 }: AppProps) => {
+   if (isServer) return null;
+
    return (
       <>
          <DefaultSeo
