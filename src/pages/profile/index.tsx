@@ -1,7 +1,6 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import { DefaultSeo } from "next-seo";
 
 import prisma from "../../lib/prisma";
 import { User } from "../../types/User";
@@ -13,12 +12,9 @@ interface Props {
 
 const PersonalProfileViewer: React.FC<Props> = ({ user }) => {
    return (
-      <>
-         <DefaultSeo title="Profile" />
-         <div className="my-12 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
-            <ProfileViewer user={user} editable={true} />
-         </div>
-      </>
+      <div className="my-12 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+         <ProfileViewer user={user} editable={true} />
+      </div>
    );
 };
 

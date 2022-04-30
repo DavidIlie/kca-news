@@ -12,6 +12,7 @@ import { Button } from "../../ui/Button";
 import ArticleBadge from "../ArticleBadge";
 import { shimmer } from "../../lib/shimmer";
 import ProfileEditor from "./ProfileEditor";
+import { NextSeo } from "next-seo";
 
 interface ProfileViewerProps {
    user: User;
@@ -31,6 +32,7 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
 
    return (
       <>
+         <NextSeo title={computeKCAName(userState)} />
          <div className="container max-w-5xl rounded-md border-2 border-gray-200 bg-white dark:border-gray-800 dark:bg-foot sm:flex">
             <div className="flex h-1/4 w-full border-b-2 border-gray-200 dark:border-gray-700 sm:block sm:h-full sm:w-1/4 sm:border-b-0 sm:border-r-2">
                <div className="w-1/3 px-6 pt-4 sm:h-1/2 sm:w-full">

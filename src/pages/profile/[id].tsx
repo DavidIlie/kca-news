@@ -1,11 +1,9 @@
 import React from "react";
-import { DefaultSeo } from "next-seo";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 
 import { User } from "../../types/User";
 import prisma from "../../lib/prisma";
-import { computeKCAName } from "../../lib/computeKCAName";
 import ProfileViewer from "../../components/ProfileViewer";
 
 interface Props {
@@ -14,12 +12,9 @@ interface Props {
 
 const ProfileViewerPage: React.FC<Props> = ({ user }) => {
    return (
-      <>
-         <DefaultSeo title={computeKCAName(user)} />
-         <div className="my-12 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
-            <ProfileViewer user={user} />
-         </div>
-      </>
+      <div className="my-12 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+         <ProfileViewer user={user} />
+      </div>
    );
 };
 
