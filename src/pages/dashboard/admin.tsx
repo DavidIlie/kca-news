@@ -132,10 +132,10 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                        <Tooltip
                                           label={`${
                                              user._count!.coArticles
-                                          } Co Article
-                                          ${
-                                             user._count!.coArticles !== 1 &&
-                                             "s"
+                                          } Co ${
+                                             user._count!.coArticles !== 1
+                                                ? "Articles"
+                                                : "Article"
                                           }`}
                                           className="w-full"
                                        >
