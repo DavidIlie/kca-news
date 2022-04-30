@@ -58,7 +58,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                   {...statistics}
                   className="mx-auto max-w-7xl lg:px-8"
                />
-               <Tab.Group as="div" className="mx-2 mt-6 mb-4 sm:mx-8 sm:mb-0">
+               <Tab.Group as="div" className="mx-2 my-6 sm:mx-8">
                   <Tab.List className="flex space-x-1 rounded-xl border-2 border-gray-200 bg-gray-100 p-1 dark:border-gray-800 dark:bg-foot">
                      {options.map((option, index) => {
                         if (index > 0) {
@@ -113,13 +113,13 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                            key={index}
                         >
                            <div className="items-center gap-4 sm:flex">
-                              <div className="mr-0 flex items-center gap-2 sm:-mr-8">
+                              <div className="mr-0 flex items-center gap-2">
                                  <img
                                     src={user.image}
                                     alt={`${computeKCAName(
                                        user
                                     )}'s profile image`}
-                                    className="w-[25%] rounded-full"
+                                    className="w-16 rounded-full"
                                     referrerPolicy="no-referrer"
                                  />
                                  <h1 className="text-xl font-medium">

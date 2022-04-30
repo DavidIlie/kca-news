@@ -29,17 +29,17 @@ const ProfileEditor: React.FC<Props> = ({
    const { data } = useSession();
    const notifications = useNotifications();
 
+   const samePerson = data?.user?.id === user.id;
+
    return (
       <Modal
          isOpen={isOpen}
          updateModalState={handleChangeState}
-         title={`Edit ${
-            data?.user?.id === user.id ? "my profile" : computeKCAName(user)
-         }`}
+         title={`Edit ${samePerson ? "my profile" : computeKCAName(user)}`}
          width="2xl"
          noAutoClose
       >
-         <div className="mt-4 px-0.5">
+         <div className="mt-3 px-0.5">
             <p className="text-gray-800 dark:text-gray-300">
                Below you can see the options that are available to be modified.
             </p>
@@ -101,7 +101,11 @@ const ProfileEditor: React.FC<Props> = ({
                               }
                               name="nameIndex"
                               className="w-1/2"
-                              description="Change to your preffered name."
+                              description={`Change to ${
+                                 samePerson
+                                    ? "your"
+                                    : `${user.names[values.nameIndex]}'s`
+                              } preffered name.`}
                               classNames={{
                                  filledVariant:
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
@@ -120,7 +124,11 @@ const ProfileEditor: React.FC<Props> = ({
                               }
                               name="extraName"
                               label="Extra Name"
-                              description="To not confuse yourself from others."
+                              description={`To not confuse ${
+                                 samePerson
+                                    ? "yourself"
+                                    : user.names[values.nameIndex]
+                              } from others.`}
                               classNames={{
                                  filledVariant:
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
@@ -138,9 +146,9 @@ const ProfileEditor: React.FC<Props> = ({
                                  checked={values.showYear}
                               />
                               <Tooltip
-                                 label={`Displayed next to your name, such as ${
+                                 label={`Displayed next to your name, such as "${
                                     user.names[values.nameIndex]
-                                 } ${user.year}`}
+                                 } in ${user.year}"`}
                               >
                                  <IoMdInformationCircleOutline className="mt-0.5" />
                               </Tooltip>
@@ -156,7 +164,11 @@ const ProfileEditor: React.FC<Props> = ({
                            placeholder="Enter description..."
                            name="description"
                            label="Description"
-                           description="Who are you?"
+                           description={
+                              samePerson
+                                 ? "Who are you?"
+                                 : `Who is ${user.names[values.nameIndex]}?`
+                           }
                            classNames={{
                               filledVariant:
                                  "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
@@ -170,7 +182,11 @@ const ProfileEditor: React.FC<Props> = ({
                               placeholder="Enter nickname..."
                               name="nickname"
                               label="Nickname"
-                              description="A informal way to address yourself."
+                              description={`Another way to address ${
+                                 samePerson
+                                    ? "yourself"
+                                    : user.names[values.nameIndex]
+                              }.`}
                               classNames={{
                                  filledVariant:
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
@@ -184,7 +200,11 @@ const ProfileEditor: React.FC<Props> = ({
                               placeholder="Enter status..."
                               name="status"
                               label="Status"
-                              description="What's on your mind?"
+                              description={`What's on ${
+                                 samePerson
+                                    ? "your"
+                                    : `${user.names[values.nameIndex]}'s`
+                              } mind?`}
                               classNames={{
                                  filledVariant:
                                     "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",

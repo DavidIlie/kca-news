@@ -39,19 +39,30 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                      disabled={!editable}
                      className="mb-2 flex w-full justify-center"
                   >
-                     <a
-                        href="https://myaccount.google.com"
-                        target="_blank"
-                        rel="norefferrer"
-                     >
+                     {editable ? (
+                        <a
+                           href="https://myaccount.google.com"
+                           target="_blank"
+                           rel="norefferrer"
+                        >
+                           <img
+                              src={
+                                 userState.image.split("=")[0] ||
+                                 userState.image
+                              }
+                              className="h-32 w-32 cursor-pointer rounded-full object-cover"
+                              referrerPolicy="no-referrer"
+                           />
+                        </a>
+                     ) : (
                         <img
                            src={
                               userState.image.split("=")[0] || userState.image
                            }
-                           className="w-40 cursor-pointer rounded-full"
+                           className="h-32 w-32 rounded-full object-cover"
                            referrerPolicy="no-referrer"
                         />
-                     </a>
+                     )}
                   </Tooltip>
                   <div className="pb-4 text-center">
                      <h1 className="font-semibold sm:text-lg">
