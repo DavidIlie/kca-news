@@ -382,7 +382,8 @@ const ArticleViewer: React.FC<Props> = ({
                            ) : !data?.user?.canComment ? (
                               <>
                                  <p className="mt-2 font-semibold text-red-500">
-                                    You are currently restricted from commenting
+                                    You are currently restricted from
+                                    commenting.
                                  </p>
                               </>
                            ) : (
