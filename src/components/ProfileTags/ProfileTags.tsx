@@ -66,7 +66,7 @@ const ProfileTags: React.FC<ProfileTagsProps> = ({ user }) => {
                case "disliker":
                   return (
                      <BaseTag
-                        label="Awarded due to disliking many articles! What a guy!"
+                        label="Awarded due to disliking many articles! What a person!"
                         Icon={AiOutlineDislike}
                         key={index}
                      />
