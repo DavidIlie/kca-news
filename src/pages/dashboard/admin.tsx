@@ -115,6 +115,18 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                )
             );
             break;
+         case "most-articles":
+            setUsersState(
+               baseUsers.sort((a, b) => b._count!.articles - a._count!.articles)
+            );
+            break;
+         case "most-coarticles":
+            setUsersState(
+               baseUsers.sort(
+                  (a, b) => b._count!.coArticles - a._count!.coArticles
+               )
+            );
+            break;
          case "most-comments":
             setUsersState(
                baseUsers.sort((a, b) => b._count!.comments - a._count!.comments)
@@ -226,6 +238,11 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                            { value: "reviewer", label: "Reviewer" },
                            { value: "muted", label: "Muted" },
                            { value: "admin", label: "Administrator" },
+                           { value: "most-articles", label: "Most Articles" },
+                           {
+                              value: "most-coarticles",
+                              label: "Most Co Articles",
+                           },
                            { value: "most-comments", label: "Most Comments" },
                            { value: "most-upvotes", label: "Most Likes" },
                            { value: "most-downvotes", label: "Most Downvotes" },
