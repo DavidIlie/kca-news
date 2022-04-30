@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
-import { MantineProvider, ColorScheme } from "@mantine/core";
+import { useTheme } from "next-themes";
+import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import { useHotkeys } from "@mantine/hooks";
 
@@ -16,21 +17,24 @@ interface AppLayoutProps {
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
    const router = useRouter();
 
-   const { colorScheme: stateColorScheme, toggleColorScheme } =
-      useColorScheme();
+   const { setTheme } = useTheme();
+
+   const { colorScheme, toggleColorScheme } = useColorScheme();
+
+   useEffect(() => setTheme(colorScheme), []);
 
    useHotkeys([
       [
          "ctrl+shift+e",
          () =>
-            stateColorScheme === "dark"
+            colorScheme === "dark"
                ? toggleColorScheme("light")
                : toggleColorScheme("dark"),
       ],
    ]);
 
    return (
-      <MantineProvider theme={{ colorScheme: stateColorScheme }}>
+      <MantineProvider theme={{ colorScheme: colorScheme }}>
          <NotificationsProvider>
             <div className="flex h-screen flex-col bg-white dark:bg-dark-bg">
                <NavBar />
