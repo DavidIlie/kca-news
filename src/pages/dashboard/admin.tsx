@@ -251,7 +251,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                      {usersState.map((user, index) => (
                         <div
                            className={`flex items-center justify-between rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-2 dark:border-gray-800 dark:bg-foot ${
-                              index !== usersState.length - 1 && "mb-4 "
+                              index !== usersState.length - 1 && "mb-2"
                            }`}
                            key={index}
                         >
