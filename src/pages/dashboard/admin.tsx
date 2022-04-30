@@ -224,7 +224,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                            filledVariant:
                               "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                         }}
-                        className="w-[25%]"
+                        className="w-full sm:w-[25%]"
                      />
                      <Select
                         placeholder="Filter"
@@ -257,6 +257,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                            dropdown:
                               "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                         }}
+                        className="w-full sm:w-auto"
                      />
                   </div>
                   <div className="mt-2">
