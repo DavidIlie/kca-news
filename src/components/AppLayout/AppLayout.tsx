@@ -1,12 +1,13 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, ColorScheme } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
-import { useTheme } from "next-themes";
 import { useHotkeys } from "@mantine/hooks";
 
 import NavBar from "../NavBar";
 import Footer from "../Footer";
+
+import useColorScheme from "../../hooks/useColorScheme";
 
 interface AppLayoutProps {
    children: React.ReactNode | React.ReactNode[];
@@ -14,18 +15,22 @@ interface AppLayoutProps {
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
    const router = useRouter();
-   const { resolvedTheme, setTheme } = useTheme();
+
+   const { colorScheme: stateColorScheme, toggleColorScheme } =
+      useColorScheme();
 
    useHotkeys([
       [
          "ctrl+shift+e",
          () =>
-            resolvedTheme === "dark" ? setTheme("light") : setTheme("dark"),
+            stateColorScheme === "dark"
+               ? toggleColorScheme("light")
+               : toggleColorScheme("dark"),
       ],
    ]);
 
    return (
-      <MantineProvider theme={{ colorScheme: resolvedTheme }}>
+      <MantineProvider theme={{ colorScheme: stateColorScheme }}>
          <NotificationsProvider>
             <div className="flex h-screen flex-col bg-white dark:bg-dark-bg">
                <NavBar />

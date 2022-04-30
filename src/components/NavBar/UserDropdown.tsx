@@ -6,14 +6,16 @@ import { BsPen } from "react-icons/bs";
 import { MdPreview, MdDarkMode, MdLightMode } from "react-icons/md";
 import { RiAdminLine } from "react-icons/ri";
 import { useSession, signOut } from "next-auth/react";
-import { useTheme } from "next-themes";
 
 import DropdownElement from "../../ui/DropdownElement";
 import NextLink from "../../ui/NextLink";
 
+import useColorScheme from "../../hooks/useColorScheme";
+
 const UserDropdown: React.FC = () => {
    const { data } = useSession();
-   const { resolvedTheme, setTheme } = useTheme();
+
+   const { colorScheme, toggleColorScheme } = useColorScheme();
 
    const isWriter = data?.user?.isAdmin ? true : data?.user?.isWriter;
    const isReviewer = data?.user?.isAdmin ? true : data?.user?.isReviewer;
@@ -74,18 +76,18 @@ const UserDropdown: React.FC = () => {
                   )}
                   <DropdownElement
                      onClick={() =>
-                        resolvedTheme === "dark"
-                           ? setTheme("light")
-                           : setTheme("dark")
+                        colorScheme === "dark"
+                           ? toggleColorScheme("light")
+                           : toggleColorScheme("dark")
                      }
                      title="ctrl+shift+e"
                   >
-                     {resolvedTheme === "dark" ? (
+                     {colorScheme === "dark" ? (
                         <MdLightMode className="mx-0.5 text-xl" />
                      ) : (
                         <MdDarkMode className="mx-0.5 text-xl" />
                      )}
-                     {resolvedTheme === "dark" ? "Light Mode" : "Dark Mode"}
+                     {colorScheme === "dark" ? "Light Mode" : "Dark Mode"}
                   </DropdownElement>
                </div>
                <Menu.Item

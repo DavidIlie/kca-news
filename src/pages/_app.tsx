@@ -1,20 +1,29 @@
 import type { AppProps } from "next/app";
+import { GetServerSidePropsContext } from "next";
+import { useEffect } from "react";
 import Head from "next/head";
 import { DefaultSeo } from "next-seo";
 import NextNprogress from "nextjs-progressbar";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
+import { getCookie } from "cookies-next";
+import { ColorScheme } from "@mantine/core";
 
 import "../styles/globals.css";
-import { isServer } from "../lib/isServer";
 
 import AppLayout from "../components/AppLayout";
+import { useThemeStore } from "../stores/useThemeStore";
 
 const KingsNews = ({
    Component,
+   colorScheme,
    pageProps: { session, ...pageProps },
-}: AppProps) => {
-   if (isServer) return null;
+}: AppProps & { colorScheme: ColorScheme }) => {
+   const { colorScheme: stateColorScheme, updateColorScheme } = useThemeStore();
+
+   useEffect(() => {
+      updateColorScheme(colorScheme);
+   }, []);
 
    return (
       <>
@@ -48,14 +57,20 @@ const KingsNews = ({
             showOnShallow={true}
          />
          <SessionProvider session={session}>
-            <ThemeProvider attribute="class">
-               <AppLayout>
-                  <Component {...pageProps} />
-               </AppLayout>
-            </ThemeProvider>
+            {stateColorScheme !== undefined && (
+               <ThemeProvider attribute="class">
+                  <AppLayout>
+                     <Component {...pageProps} />
+                  </AppLayout>
+               </ThemeProvider>
+            )}
          </SessionProvider>
       </>
    );
 };
+
+KingsNews.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
+   colorScheme: getCookie("mantine-color-scheme", ctx) || "light",
+});
 
 export default KingsNews;

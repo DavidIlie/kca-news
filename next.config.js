@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-   reactStrictMode: true,
+   reactStrictMode: false,
    swcMinify: true,
    images: {
       domains: [
@@ -12,5 +12,6 @@ module.exports = {
    },
    experimental: {
       outputStandalone: true,
+      concurrentFeatures: true,
    },
 };

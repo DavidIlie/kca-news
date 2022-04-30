@@ -180,9 +180,9 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                        ? "/dashboard/reviewer"
                                        : ""
                                  }
+                                 key={index}
                               >
                                  <a
-                                    key={index}
                                     className={classNames(
                                        "w-full rounded-lg py-2.5 text-center text-sm font-medium leading-5 duration-150",
                                        "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
