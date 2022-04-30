@@ -282,9 +282,11 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                     className="w-16 rounded-full"
                                     referrerPolicy="no-referrer"
                                  />
-                                 <h1 className="text-xl font-medium">
-                                    {computeKCAName(user)}
-                                 </h1>
+                                 <Link href={`/profile/${user.id}`}>
+                                    <a className="cursor-pointer text-xl font-medium duration-150 hover:text-blue-500">
+                                       {computeKCAName(user)}
+                                    </a>
+                                 </Link>
                               </div>
                               <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-0">
                                  {(user.isAdmin || user.isWriter) && (
