@@ -5,12 +5,24 @@ import { GetServerSideProps } from "next";
 import { Formik, Field, Form } from "formik";
 import { getSession } from "next-auth/react";
 import { Menu, Tab, Transition } from "@headlessui/react";
-import { Badge, LoadingOverlay, Tooltip, MultiSelect } from "@mantine/core";
+import {
+   Badge,
+   LoadingOverlay,
+   Tooltip,
+   MultiSelect,
+   TextInput,
+   Select,
+} from "@mantine/core";
 import { useNotifications } from "@mantine/notifications";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiUserCircle } from "react-icons/bi";
 import { MdAccessibility } from "react-icons/md";
-import { AiOutlineClose, AiOutlineTags } from "react-icons/ai";
+import {
+   AiOutlineClose,
+   AiOutlineFilter,
+   AiOutlineSearch,
+   AiOutlineTags,
+} from "react-icons/ai";
 
 import DashboardStatistics from "../../components/DashboardStatistics";
 import ProfileTags from "../../components/ProfileTags";
@@ -38,14 +50,99 @@ function classNames(...classes: any) {
 const AdminPage: React.FC<Props> = ({ statistics, users }) => {
    const notifications = useNotifications();
    const [bigLoading, setBigLoading] = useState<boolean>(false);
-   const [usersState, setUsersState] = useState<User[]>(users);
+   const [baseUsers, setBaseUsers] = useState<User[]>(users);
+   const [usersState, setUsersState] = useState<User[]>(baseUsers);
 
    const [openTagEditor, setOpenTagEditor] = useState<boolean>(false);
    const [tagEditorUser, setTagEditorUser] = useState<User | null>(null);
    const [openAccessEditor, setOpenAccessEditor] = useState<boolean>(false);
    const [accessEditorUser, setAccessEditorUser] = useState<User | null>(null);
 
+   const [searchQuery, setSearchQuery] = useState<string>("");
+   const [hasSearched, setHasSearched] = useState<boolean>(false);
+   const [filter, setFilter] = useState<string | null>(null);
+
    const options = ["Users", "Articles", "Comments"];
+
+   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+
+      setHasSearched(true);
+      setSearchQuery(val);
+
+      setUsersState(
+         baseUsers.filter(
+            (user) =>
+               user.name.toLowerCase().includes(val.toLowerCase()) ||
+               user.email.toLowerCase().includes(val.toLowerCase())
+         )
+      );
+   };
+
+   const handleFilter = (v: string) => {
+      setFilter(v);
+      setSearchQuery("");
+      setUsersState(baseUsers);
+
+      switch (v) {
+         case "writer":
+            setUsersState(baseUsers.filter((user) => user.isWriter));
+            break;
+         case "reviewer":
+            setUsersState(baseUsers.filter((user) => user.isReviewer));
+            break;
+         case "admin":
+            setUsersState(baseUsers.filter((user) => user.isAdmin));
+            break;
+         case "muted":
+            setUsersState(baseUsers.filter((user) => !user.canComment));
+            break;
+         case "newest":
+            setUsersState(
+               baseUsers.sort(
+                  (a, b) =>
+                     new Date(b.joinedAt).getTime() -
+                     new Date(a.joinedAt).getTime()
+               )
+            );
+            break;
+         case "oldest":
+            setUsersState(
+               baseUsers.sort(
+                  (a, b) =>
+                     new Date(a.joinedAt).getTime() -
+                     new Date(b.joinedAt).getTime()
+               )
+            );
+            break;
+         case "most-comments":
+            setUsersState(
+               baseUsers.sort((a, b) => b._count!.comments - a._count!.comments)
+            );
+            break;
+         case "most-upvotes":
+            setUsersState(
+               baseUsers.sort((a, b) => b._count!.upvotes - a._count!.upvotes)
+            );
+            break;
+         case "most-downvotes":
+            setUsersState(
+               baseUsers.sort(
+                  (a, b) => b._count!.downvotes - a._count!.downvotes
+               )
+            );
+            break;
+         default:
+            setUsersState(
+               baseUsers.sort(
+                  (a, b) =>
+                     new Date(b.joinedAt).getTime() -
+                     new Date(a.joinedAt).getTime()
+               )
+            );
+            break;
+      }
+   };
 
    return (
       <>
@@ -58,7 +155,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                   {...statistics}
                   className="mx-auto max-w-7xl lg:px-8"
                />
-               <Tab.Group as="div" className="mx-2 my-6 sm:mx-8">
+               <Tab.Group as="div" className="mx-2 mt-6 mb-8 sm:mx-8">
                   <Tab.List className="flex space-x-1 rounded-xl border-2 border-gray-200 bg-gray-100 p-1 dark:border-gray-800 dark:bg-foot">
                      {options.map((option, index) => {
                         if (index > 0) {
@@ -104,7 +201,53 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                         }
                      })}
                   </Tab.List>
-                  <div className="mt-4">
+                  <div className="mt-4 flex items-center gap-2">
+                     <TextInput
+                        icon={<AiOutlineSearch />}
+                        placeholder="Search"
+                        value={searchQuery}
+                        onChange={handleSearch}
+                        error={usersState.length === 0 && hasSearched}
+                        classNames={{
+                           filledVariant:
+                              "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                        }}
+                        className="w-[25%]"
+                     />
+                     <Select
+                        placeholder="Filter"
+                        clearable
+                        allowDeselect
+                        nothingFound="No options"
+                        maxDropdownHeight={180}
+                        icon={<AiOutlineFilter />}
+                        data={[
+                           { value: "writer", label: "Writer" },
+                           { value: "reviewer", label: "Reviewer" },
+                           { value: "muted", label: "Muted" },
+                           { value: "admin", label: "Administrator" },
+                           { value: "most-comments", label: "Most Comments" },
+                           { value: "most-upvotes", label: "Most Likes" },
+                           { value: "most-downvotes", label: "Most Downvotes" },
+                           { value: "newest", label: "Newest" },
+                           { value: "oldest", label: "Oldest" },
+                        ]}
+                        value={filter}
+                        onChange={handleFilter}
+                        classNames={{
+                           filledVariant:
+                              "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                           dropdown:
+                              "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                        }}
+                     />
+                  </div>
+                  <div className="mt-2">
+                     {usersState.length === 0 && (
+                        <h1 className="text-center text-4xl font-semibold">
+                           No users...
+                        </h1>
+                     )}
                      {usersState.map((user, index) => (
                         <div
                            className={`flex items-center justify-between rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-2 dark:border-gray-800 dark:bg-foot ${
