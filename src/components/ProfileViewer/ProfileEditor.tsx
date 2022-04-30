@@ -146,7 +146,11 @@ const ProfileEditor: React.FC<Props> = ({
                                  checked={values.showYear}
                               />
                               <Tooltip
-                                 label={`Displayed next to your name, such as "${
+                                 label={`Displayed next to ${
+                                    samePerson
+                                       ? "your"
+                                       : `${user.names[values.nameIndex]}'s`
+                                 } name, such as "${
                                     user.names[values.nameIndex]
                                  } in ${user.year}"`}
                               >
