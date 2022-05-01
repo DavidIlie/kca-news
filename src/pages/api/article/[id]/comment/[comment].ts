@@ -24,13 +24,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
          .status(404)
          .json({ message: "this article has not been published yet." });
 
-   const commentCheck = await prisma.comment.findFirst({
-      where: {
-         articleId: article.id,
-         id: comment as string,
-         userId: session!.user!.id,
-      },
-   });
+   const commentCheck = session?.user?.isAdmin
+      ? await prisma.comment.findFirst({
+           where: { articleId: article.id, id: comment as string },
+        })
+      : await prisma.comment.findFirst({
+           where: {
+              articleId: article.id,
+              id: comment as string,
+              userId: session!.user!.id,
+           },
+        });
    if (!commentCheck)
       return res.status(404).json({ message: "comment not found" });
 

@@ -513,25 +513,25 @@ const ArticleViewer: React.FC<Props> = ({
                                              "d MMM yyyy 'at' h:mm bb"
                                           )}
                                        </p>
-                                       {data?.user &&
-                                          comment.userId === data.user?.id && (
-                                             <>
-                                                <span className="text-gray-800 dark:text-gray-200">
-                                                   /
-                                                </span>
-                                                <button
-                                                   className="text-sm text-red-600 dark:text-red-500"
-                                                   onClick={() => {
-                                                      setDeleteCommentId(
-                                                         comment.id
-                                                      );
-                                                      setOpenConfirmModal(true);
-                                                   }}
-                                                >
-                                                   Delete
-                                                </button>
-                                             </>
-                                          )}
+                                       {(comment.userId === data?.user?.id ||
+                                          data?.user?.isAdmin) && (
+                                          <>
+                                             <span className="text-gray-800 dark:text-gray-200">
+                                                /
+                                             </span>
+                                             <button
+                                                className="text-sm text-red-600 dark:text-red-500"
+                                                onClick={() => {
+                                                   setDeleteCommentId(
+                                                      comment.id
+                                                   );
+                                                   setOpenConfirmModal(true);
+                                                }}
+                                             >
+                                                Delete
+                                             </button>
+                                          </>
+                                       )}
                                     </div>
                                  </div>
                               </div>

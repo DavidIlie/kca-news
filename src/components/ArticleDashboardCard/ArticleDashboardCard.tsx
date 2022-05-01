@@ -63,7 +63,11 @@ const ArticleDashboardCard: React.FC<Props> = ({
             />
             <div className="flex w-full items-center justify-between">
                <h1 className="-ml-2">
-                  {article.title}
+                  <Link href={`/article/${article.id}`}>
+                     <a className="duration-150 hover:text-blue-500">
+                        {article.title}
+                     </a>
+                  </Link>
                   {article.writer?.id !== user?.id && (
                      <span>
                         {" - by "}
