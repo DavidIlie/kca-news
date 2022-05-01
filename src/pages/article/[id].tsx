@@ -184,7 +184,7 @@ const ArticleViewer: React.FC<Props> = ({
          }
       );
       if (r.status === 200) {
-         let finalArray = [] as Array<Comment>;
+         let finalArray = [] as Comment[];
          commentsState.map(
             (comment) =>
                comment.id !== deleteCommentId && finalArray.push(comment)

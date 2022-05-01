@@ -8,6 +8,7 @@ interface Props
    children: React.ReactNode | React.ReactNode[];
    opening?: boolean;
    openingFunction?: () => void;
+   color?: "normal" | "red";
 }
 
 const DropdownElement: React.FC<Props> = ({
@@ -15,11 +16,17 @@ const DropdownElement: React.FC<Props> = ({
    className,
    opening = false,
    openingFunction,
+   color = "normal",
    ...rest
 }) => {
    return (
       <div
-         className={`flex w-full cursor-pointer items-center px-2 py-2 text-sm text-black duration-200 hover:bg-gray-200 dark:bg-opacity-10 dark:text-white dark:hover:bg-dark-bg ${className}`}
+         className={`flex w-full cursor-pointer items-center px-2 py-2 text-sm duration-200 ${
+            color === "normal" &&
+            "bg-white text-black hover:bg-gray-100 dark:bg-opacity-10 dark:text-white dark:hover:bg-dark-bg"
+         } ${
+            color === "red" && "bg-red-500 text-white hover:bg-red-600"
+         } ${className}`}
          {...rest}
          onClick={openingFunction || rest.onClick}
       >

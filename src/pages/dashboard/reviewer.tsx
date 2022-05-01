@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
+import { useRouter } from "next/router";
+import Image from "next/image";
 import Link from "next/link";
 import { NextSeo } from "next-seo";
 import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import { LoadingOverlay } from "@mantine/core";
-import { Tab } from "@headlessui/react";
+import { useNotifications } from "@mantine/notifications";
+import { Tab, Menu, Transition } from "@headlessui/react";
+import { format } from "date-fns";
+import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { GrArticle } from "react-icons/gr";
+import { HiLockClosed } from "react-icons/hi";
 
 import DashboardStatistics from "../../components/DashboardStatistics";
 
@@ -13,6 +21,10 @@ import { Statistics } from "./writer";
 import classNames from "../../lib/classNames";
 import { Article } from "../../types/Article";
 import { Comment } from "../../types/Comment";
+import { computeKCAName } from "../../lib/computeKCAName";
+import { shimmer } from "../../lib/shimmer";
+import NextLink from "../../ui/NextLink";
+import DropdownElement from "../../ui/DropdownElement";
 
 interface Props {
    statistics: Statistics;
@@ -23,6 +35,8 @@ interface Props {
 const ReviewerPage: React.FC<Props> = ({ statistics, articles, comments }) => {
    const { data } = useSession();
    const [bigLoading, setBigLoading] = useState<boolean>(false);
+   const [statisticsState, setStatisticsState] =
+      useState<Statistics>(statistics);
 
    return (
       <>
@@ -32,7 +46,7 @@ const ReviewerPage: React.FC<Props> = ({ statistics, articles, comments }) => {
             <div className="mx-auto">
                <DashboardStatistics
                   isAdmin={true}
-                  {...statistics}
+                  {...statisticsState}
                   className="mx-auto max-w-7xl lg:px-8"
                />
                <Tab.Group
@@ -83,19 +97,40 @@ const ReviewerPage: React.FC<Props> = ({ statistics, articles, comments }) => {
                         Comments
                      </Tab>
                   </Tab.List>
+                  <div className="mt-4" />
                   <Tab.Panels>
                      <Tab.Panel>
                         {data!.user!.isAdmin ? (
-                           <CommentList comments={comments} />
+                           <CommentList
+                              comments={comments}
+                              setLoad={setBigLoading}
+                              statistics={statistics}
+                              setStatistics={setStatisticsState}
+                           />
                         ) : (
-                           <ArticleList articles={articles} />
+                           <ArticleList
+                              articles={articles}
+                              setLoad={setBigLoading}
+                              statistics={statistics}
+                              setStatistics={setStatisticsState}
+                           />
                         )}
                      </Tab.Panel>
                      <Tab.Panel>
                         {data!.user!.isAdmin ? (
-                           <ArticleList articles={articles} />
+                           <ArticleList
+                              articles={articles}
+                              setLoad={setBigLoading}
+                              statistics={statistics}
+                              setStatistics={setStatisticsState}
+                           />
                         ) : (
-                           <CommentList comments={comments} />
+                           <CommentList
+                              comments={comments}
+                              setLoad={setBigLoading}
+                              statistics={statistics}
+                              setStatistics={setStatisticsState}
+                           />
                         )}
                      </Tab.Panel>
                   </Tab.Panels>
@@ -106,32 +141,180 @@ const ReviewerPage: React.FC<Props> = ({ statistics, articles, comments }) => {
    );
 };
 
-interface ArticleListProps {
+interface BaseListProps {
+   setLoad: React.Dispatch<React.SetStateAction<boolean>>;
+   statistics: Statistics;
+   setStatistics: React.Dispatch<React.SetStateAction<Statistics>>;
+}
+
+interface ArticleListProps extends BaseListProps {
    articles: Article[];
 }
 
-const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
+const ArticleList: React.FC<ArticleListProps> = ({
+   articles,
+   setLoad,
+   setStatistics,
+}) => {
    return <>articles</>;
 };
 
-interface CommentListProps {
+interface CommentListProps extends BaseListProps {
    comments: Comment[];
 }
 
-const CommentList: React.FC<CommentListProps> = ({ comments }) => {
+const CommentList: React.FC<CommentListProps> = ({
+   comments,
+   setLoad,
+   statistics,
+   setStatistics,
+}) => {
+   const { reload } = useRouter();
+   const { data } = useSession();
+   const notifications = useNotifications();
    const [commentsState, setCommentsState] = useState<Comment[]>(comments);
 
    return (
-      <div className="mt-4">
+      <>
          {commentsState.map((comment, index) => (
             <div
                className={`flex items-center justify-between rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-2 dark:border-gray-800 dark:bg-foot ${
                   index !== commentsState.length - 1 && "mb-2"
                }`}
                key={index}
-            ></div>
+            >
+               <div className="flex items-center gap-4">
+                  <Image
+                     src={comment.user?.image || "/no-pfp.jpg"}
+                     width={55}
+                     height={55}
+                     blurDataURL={shimmer(10, 10)}
+                     placeholder="blur"
+                     className="rounded-full object-cover"
+                     alt={`${
+                        comment.user?.names[comment.user?.nameIndex]
+                     }'s profile image`}
+                  />
+                  <div className="flex flex-col items-center space-y-2">
+                     <div className="w-full">{comment.comment}</div>
+                     <div className="flex items-center space-x-2">
+                        <p className="text-sm text-gray-500 dark:text-gray-300">
+                           {computeKCAName(comment.user!)}
+                        </p>
+                        <span className="text-gray-800 dark:text-gray-200">
+                           /
+                        </span>
+                        <p className="text-sm text-gray-400 dark:text-gray-300">
+                           {format(
+                              new Date(comment.createdAt),
+                              "d MMM yyyy 'at' h:mm bb"
+                           )}
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <Menu as="div" className="relative">
+                  <Menu.Button
+                     as={BsThreeDotsVertical}
+                     size={25}
+                     className="cursor-pointer"
+                  />
+                  <Transition
+                     as={Fragment}
+                     enter="transition ease-out duration-100"
+                     enterFrom="transform opacity-0 scale-95"
+                     enterTo="transform opacity-100 scale-100"
+                     leave="transition ease-in duration-75"
+                     leaveFrom="transform opacity-100 scale-100"
+                     leaveTo="transform opacity-0 scale-95"
+                  >
+                     <Menu.Items className="absolute right-0 z-10 mt-2 -mr-4 w-36 rounded-md border-2 border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
+                        <Menu.Item
+                           as={NextLink}
+                           href={`/article/${comment.article?.id}`}
+                        >
+                           <DropdownElement>
+                              <GrArticle className="mx-0.5 text-xl" />
+                              View Article
+                           </DropdownElement>
+                        </Menu.Item>
+                        {data!.user!.isAdmin && (
+                           <Menu.Item
+                              onClick={async () => {
+                                 setLoad(true);
+
+                                 const r = await fetch(
+                                    `/api/admin/setMute?id=${comment?.user?.id}`
+                                 );
+
+                                 if (r.status !== 200) {
+                                    const response = await r.json();
+                                    notifications.showNotification({
+                                       color: "red",
+                                       title: "Mute User - Error",
+                                       message:
+                                          response.message || "Unknown Error",
+                                       icon: <AiOutlineClose />,
+                                       autoClose: 5000,
+                                    });
+                                 }
+
+                                 setLoad(false);
+                              }}
+                           >
+                              <DropdownElement>
+                                 <HiLockClosed className="mx-0.5 text-xl" />
+                                 Toggle Mute
+                              </DropdownElement>
+                           </Menu.Item>
+                        )}
+                        <Menu.Item
+                           onClick={async () => {
+                              setLoad(true);
+
+                              const r = await fetch(
+                                 `/api/article/${comment.article?.id}/comment/${comment.id}`,
+                                 { credentials: "include", method: "DELETE" }
+                              );
+                              const response = await r.json();
+
+                              if (r.status === 200) {
+                                 let finalArray = [] as Comment[];
+                                 commentsState.map(
+                                    (fComment) =>
+                                       fComment.id !== comment.id &&
+                                       finalArray.push(comment)
+                                 );
+                                 setCommentsState(finalArray);
+                                 let newStats = statistics;
+                                 newStats.totalComments =
+                                    newStats.totalComments - 1;
+                                 setStatistics(newStats);
+                              } else {
+                                 notifications.showNotification({
+                                    color: "red",
+                                    title: "Delete Comment - Error",
+                                    message:
+                                       response.message || "Unknown Error",
+                                    icon: <AiOutlineClose />,
+                                    autoClose: 5000,
+                                 });
+                              }
+
+                              setLoad(false);
+                           }}
+                        >
+                           <DropdownElement color="red">
+                              <AiOutlineDelete className="mx-0.5 text-xl" />
+                              Delete
+                           </DropdownElement>
+                        </Menu.Item>
+                     </Menu.Items>
+                  </Transition>
+               </Menu>
+            </div>
          ))}
-      </div>
+      </>
    );
 };
 
