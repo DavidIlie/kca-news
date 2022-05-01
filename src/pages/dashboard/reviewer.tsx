@@ -11,12 +11,16 @@ import DashboardStatistics from "../../components/DashboardStatistics";
 import prisma from "../../lib/prisma";
 import { Statistics } from "./writer";
 import classNames from "../../lib/classNames";
+import { Article } from "../../types/Article";
+import { Comment } from "../../types/Comment";
 
 interface Props {
    statistics: Statistics;
+   articles: Article[];
+   comments: Comment[];
 }
 
-const ReviewerPage: React.FC<Props> = ({ statistics }) => {
+const ReviewerPage: React.FC<Props> = ({ statistics, articles, comments }) => {
    const { data } = useSession();
    const [bigLoading, setBigLoading] = useState<boolean>(false);
 
@@ -81,10 +85,18 @@ const ReviewerPage: React.FC<Props> = ({ statistics }) => {
                   </Tab.List>
                   <Tab.Panels>
                      <Tab.Panel>
-                        <h1>articles</h1>
+                        {data!.user!.isAdmin ? (
+                           <CommentList comments={comments} />
+                        ) : (
+                           <ArticleList articles={articles} />
+                        )}
                      </Tab.Panel>
                      <Tab.Panel>
-                        <h1>comments</h1>
+                        {data!.user!.isAdmin ? (
+                           <ArticleList articles={articles} />
+                        ) : (
+                           <CommentList comments={comments} />
+                        )}
                      </Tab.Panel>
                   </Tab.Panels>
                </Tab.Group>
@@ -92,6 +104,22 @@ const ReviewerPage: React.FC<Props> = ({ statistics }) => {
          </div>
       </>
    );
+};
+
+interface ArticleListProps {
+   articles: Article[];
+}
+
+const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
+   return <>articles</>;
+};
+
+interface CommentListProps {
+   comments: Comment[];
+}
+
+const CommentList: React.FC<CommentListProps> = ({ comments }) => {
+   return <>comments</>;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
