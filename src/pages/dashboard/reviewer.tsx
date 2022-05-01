@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
@@ -17,10 +18,12 @@ interface Props {
 
 const AdminPage: React.FC<Props> = ({ statistics }) => {
    const { data } = useSession();
-
    const [bigLoading, setBigLoading] = useState<boolean>(false);
-   const [statisticsState, setStatisticsState] =
-      useState<Statistics>(statistics);
+   const { query, push } = useRouter();
+
+   useEffect(() => {
+      if (query.tab) push("/dashboard/reviewer", "", { shallow: true });
+   }, []);
 
    return (
       <>
@@ -30,10 +33,14 @@ const AdminPage: React.FC<Props> = ({ statistics }) => {
             <div className="mx-auto">
                <DashboardStatistics
                   isAdmin={data!.user!.isAdmin}
-                  {...statisticsState}
+                  {...statistics}
                   className="mx-auto max-w-7xl lg:px-8"
                />
-               <Tab.Group as="div" className="mx-2 mt-6 mb-8 sm:mx-8">
+               <Tab.Group
+                  as="div"
+                  className="mx-2 mt-6 mb-8 sm:mx-8"
+                  defaultIndex={query.tab === "comments" ? 1 : 0}
+               >
                   <Tab.List className="flex space-x-1 rounded-xl border-2 border-gray-200 bg-gray-100 p-1 dark:border-gray-800 dark:bg-foot">
                      <Tab
                         className={({ selected }) =>
@@ -81,24 +88,56 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
          },
       };
 
-   const totalArticles = await prisma.article.count({
-      where: {
-         location: {
-            in: session?.user?.department,
-         },
-      },
-   });
-   const publishedArticles = await prisma.article.count({
-      where: {
-         published: true,
-         location: {
-            in: session?.user?.department,
-         },
-      },
-   });
-   const totalComments = await prisma.comment.count();
-   const totalUpvotes = await prisma.upvote.count();
-   const totalDownvotes = await prisma.downvote.count();
+   const totalArticles = session?.user?.isAdmin
+      ? await prisma.article.count()
+      : await prisma.article.count({
+           where: {
+              location: {
+                 in: session?.user?.department,
+              },
+           },
+        });
+
+   const publishedArticles = session?.user?.isAdmin
+      ? await prisma.article.count({ where: { published: true } })
+      : await prisma.article.count({
+           where: {
+              published: true,
+              location: {
+                 in: session?.user?.department,
+              },
+           },
+        });
+   const totalComments = session?.user?.isAdmin
+      ? await prisma.comment.count()
+      : await prisma.comment.count({
+           where: {
+              article: {
+                 published: true,
+                 location: { in: session?.user?.department },
+              },
+           },
+        });
+   const totalUpvotes = session?.user?.isAdmin
+      ? await prisma.comment.count()
+      : await prisma.comment.count({
+           where: {
+              article: {
+                 published: true,
+                 location: { in: session?.user?.department },
+              },
+           },
+        });
+   const totalDownvotes = session?.user?.isAdmin
+      ? await prisma.comment.count()
+      : await prisma.comment.count({
+           where: {
+              article: {
+                 published: true,
+                 location: { in: session?.user?.department },
+              },
+           },
+        });
 
    return {
       props: {

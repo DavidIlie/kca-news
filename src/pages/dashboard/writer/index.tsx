@@ -360,9 +360,44 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
            where: { published: true, user: session?.user?.id },
         });
 
-   const totalComments = await prisma.comment.count();
-   const totalUpvotes = await prisma.upvote.count();
-   const totalDownvotes = await prisma.downvote.count();
+   const params =
+      session?.user?.isAdmin || session?.user?.isReviewer
+         ? {
+              writer: {
+                 location: {
+                    in: session?.user?.department,
+                 },
+              },
+           }
+         : (session?.user?.isAdmin || session?.user?.isWriter) && {
+              writer: {
+                 id: session?.user?.id,
+              },
+           };
+
+   const totalComments = session?.user?.isAdmin
+      ? await prisma.comment.count()
+      : await prisma.comment.count({
+           where: {
+              article: params as any,
+           },
+        });
+
+   const totalUpvotes = session?.user?.isAdmin
+      ? await prisma.upvote.count()
+      : await prisma.upvote.count({
+           where: {
+              article: params as any,
+           },
+        });
+
+   const totalDownvotes = session?.user?.isAdmin
+      ? await prisma.downvote.count()
+      : await prisma.downvote.count({
+           where: {
+              article: params as any,
+           },
+        });
 
    const includeParams = {
       coWriters: true,
