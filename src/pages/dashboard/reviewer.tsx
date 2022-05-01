@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from "react";
-import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { NextSeo } from "next-seo";
@@ -169,7 +168,6 @@ const CommentList: React.FC<CommentListProps> = ({
    statistics,
    setStatistics,
 }) => {
-   const { reload } = useRouter();
    const { data } = useSession();
    const notifications = useNotifications();
    const [commentsState, setCommentsState] = useState<Comment[]>(comments);
