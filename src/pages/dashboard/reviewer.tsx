@@ -11,8 +11,8 @@ import { Tab, Menu, Transition } from "@headlessui/react";
 import { format } from "date-fns";
 import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { GrArticle } from "react-icons/gr";
 import { HiLockClosed } from "react-icons/hi";
+import { RiArticleLine } from "react-icons/ri";
 
 import DashboardStatistics from "../../components/DashboardStatistics";
 import NextLink from "../../ui/NextLink";
@@ -234,7 +234,7 @@ const CommentList: React.FC<CommentListProps> = ({
                            href={`/article/${comment.article?.id}`}
                         >
                            <DropdownElement>
-                              <GrArticle className="mx-0.5 text-xl" />
+                              <RiArticleLine className="mx-0.5 text-xl" />
                               View Article
                            </DropdownElement>
                         </Menu.Item>
