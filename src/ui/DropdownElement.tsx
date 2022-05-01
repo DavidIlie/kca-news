@@ -23,7 +23,7 @@ const DropdownElement: React.FC<Props> = ({
       <div
          className={`flex w-full cursor-pointer items-center px-2 py-2 text-sm duration-200 ${
             color === "normal" &&
-            "bg-white text-black hover:bg-gray-100 dark:bg-opacity-10 dark:text-white dark:hover:bg-dark-bg"
+            "bg-white text-black hover:bg-gray-100 dark:bg-foot dark:bg-opacity-10 dark:text-white dark:hover:bg-dark-bg"
          } ${
             color === "red" && "bg-red-500 text-white hover:bg-red-600"
          } ${className}`}
