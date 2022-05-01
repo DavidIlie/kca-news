@@ -5,6 +5,7 @@ import { GetServerSideProps } from "next";
 import { Formik, Field, Form } from "formik";
 import { getSession } from "next-auth/react";
 import { Menu, Tab, Transition } from "@headlessui/react";
+import { useSession } from "next-auth/react";
 import {
    Badge,
    LoadingOverlay,
@@ -46,6 +47,7 @@ interface Props {
 }
 
 const AdminPage: React.FC<Props> = ({ statistics, users }) => {
+   const { data } = useSession();
    const notifications = useNotifications();
    const [bigLoading, setBigLoading] = useState<boolean>(false);
    const [baseUsers, setBaseUsers] = useState<User[]>(users);
@@ -281,7 +283,8 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                  />
                                  <Link href={`/profile/${user.id}`}>
                                     <a className="cursor-pointer text-xl font-medium duration-150 hover:text-blue-500">
-                                       {computeKCAName(user)}
+                                       {computeKCAName(user)}{" "}
+                                       {user.id === data!.user!.id && "(you)"}
                                     </a>
                                  </Link>
                               </div>
@@ -760,7 +763,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const totalDownvotes = await prisma.downvote.count();
 
    const users = await prisma.user.findMany({
-      where: { NOT: { id: session?.user?.id } },
       include: {
          _count: {
             select: {
