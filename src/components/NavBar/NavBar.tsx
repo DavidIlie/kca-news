@@ -160,9 +160,7 @@ const NavBar: React.FC = () => {
                      }}
                   />
                </div>
-               {status === "loading" ? (
-                  <Spinner size="6" />
-               ) : status === "unauthenticated" ? (
+               {status === "unauthenticated" ? (
                   <Button onClick={() => signIn("google")}>Login</Button>
                ) : (
                   <UserDropdown />

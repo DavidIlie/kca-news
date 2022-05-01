@@ -3,15 +3,18 @@ import { GetServerSidePropsContext } from "next";
 import { useEffect } from "react";
 import { DefaultSeo } from "next-seo";
 import NextNprogress from "nextjs-progressbar";
-import { SessionProvider } from "next-auth/react";
-import { ThemeProvider } from "next-themes";
+import { SessionProvider, useSession } from "next-auth/react";
+import { ThemeProvider, useTheme } from "next-themes";
 import { getCookie } from "cookies-next";
 import { ColorScheme } from "@mantine/core";
+import { useHotkeys } from "@mantine/hooks";
 
 import "../styles/globals.css";
 
 import AppLayout from "../components/AppLayout";
 import { useThemeStore } from "../stores/useThemeStore";
+import Loader from "../components/Loader";
+import useColorScheme from "../hooks/useColorScheme";
 
 const KingsNews = ({
    Component,
@@ -52,14 +55,43 @@ const KingsNews = ({
          <SessionProvider session={session}>
             {stateColorScheme !== undefined && (
                <ThemeProvider attribute="class">
-                  <AppLayout>
-                     <Component {...pageProps} />
-                  </AppLayout>
+                  <ThemeHandler>
+                     <AuthLoaderWrappedCheck>
+                        <AppLayout>
+                           <Component {...pageProps} />
+                        </AppLayout>
+                     </AuthLoaderWrappedCheck>
+                  </ThemeHandler>
                </ThemeProvider>
             )}
          </SessionProvider>
       </>
    );
+};
+
+const AuthLoaderWrappedCheck: React.FC = ({ children }) => {
+   const sessionHook = useSession();
+   return <>{sessionHook.status === "loading" ? <Loader /> : children}</>;
+};
+
+const ThemeHandler: React.FC = ({ children }) => {
+   const { setTheme } = useTheme();
+
+   const { colorScheme, toggleColorScheme } = useColorScheme();
+
+   useEffect(() => setTheme(colorScheme), []);
+
+   useHotkeys([
+      [
+         "ctrl+shift+e",
+         () =>
+            colorScheme === "dark"
+               ? toggleColorScheme("light")
+               : toggleColorScheme("dark"),
+      ],
+   ]);
+
+   return <>{children}</>;
 };
 
 KingsNews.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
