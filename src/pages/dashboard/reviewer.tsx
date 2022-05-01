@@ -119,7 +119,20 @@ interface CommentListProps {
 }
 
 const CommentList: React.FC<CommentListProps> = ({ comments }) => {
-   return <>comments</>;
+   const [commentsState, setCommentsState] = useState<Comment[]>(comments);
+
+   return (
+      <div className="mt-4">
+         {commentsState.map((comment, index) => (
+            <div
+               className={`flex items-center justify-between rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-2 dark:border-gray-800 dark:bg-foot ${
+                  index !== commentsState.length - 1 && "mb-2"
+               }`}
+               key={index}
+            ></div>
+         ))}
+      </div>
+   );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
@@ -167,8 +180,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
            },
         });
    const totalUpvotes = session?.user?.isAdmin
-      ? await prisma.comment.count()
-      : await prisma.comment.count({
+      ? await prisma.upvote.count()
+      : await prisma.upvote.count({
            where: {
               article: {
                  published: true,
@@ -177,8 +190,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
            },
         });
    const totalDownvotes = session?.user?.isAdmin
-      ? await prisma.comment.count()
-      : await prisma.comment.count({
+      ? await prisma.downvote.count()
+      : await prisma.downvote.count({
            where: {
               article: {
                  published: true,
@@ -209,12 +222,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
            orderBy: {
               createdAt: "desc",
            },
+           where: {
+              underReview: true,
+           },
         })
       : await prisma.article.findMany({
            include: includeParams as any,
            where: {
               user: session?.user?.id,
               location: { in: session?.user?.department },
+              underReview: true,
            },
            orderBy: {
               createdAt: "desc",
