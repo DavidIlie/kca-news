@@ -68,10 +68,10 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
    return (
       <>
          <NextSeo title="Home" />
-         <div className="flex min-h-screen items-center justify-center px-4 sm:pt-20 lg:px-0">
-            <div className="-ml-32 flex w-full justify-center gap-6">
+         <div className="mb-24 mt-20 flex items-center justify-center px-4 sm:pt-20 lg:mt-28 lg:px-0">
+            <div className="flex w-full justify-center lg:-ml-32 lg:gap-6">
                <Slide cascade triggerOnce direction="left">
-                  <div className="relative -mr-96 flex items-center gap-4">
+                  <div className="relative -mr-96 hidden items-center gap-4 lg:flex">
                      <button
                         className="cursor-pointer rounded-full border bg-gray-100 p-4 duration-150 hover:bg-gray-200 focus:ring-2 focus:ring-gray-500 disabled:cursor-not-allowed disabled:text-gray-400 hover:disabled:bg-gray-100 dark:border-gray-800 dark:bg-foot dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:disabled:bg-foot dark:disabled:bg-opacity-50 dark:disabled:text-gray-500"
                         disabled={index === 0}
@@ -124,7 +124,7 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                   </div>
                </Slide>
                <Slide cascade triggerOnce direction="down">
-                  <div className="mt-6 text-center">
+                  <div className="text-center lg:mt-6">
                      <h1 className="text-4xl font-medium text-black dark:text-gray-200">
                         Latest Posts:
                      </h1>
@@ -157,7 +157,7 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                </Slide>
             </div>
          </div>
-         <div className="container mx-auto max-w-7xl py-12 px-4">
+         <div className="container mx-auto max-w-7xl px-4">
             {individualArticles.map((parsedLocation, index) => (
                <div
                   className={index !== featuredPosts.length - 1 ? "mb-12" : ""}

@@ -30,7 +30,7 @@ const NavBar: React.FC = () => {
 
    return (
       <nav className="borderColor z-[100] w-full border-b-2 bg-white text-gray-600 dark:bg-dark-bg dark:text-gray-100 sm:fixed 2xl:px-12">
-         <div className="container mx-auto flex flex-col flex-wrap items-center p-5 md:flex-row">
+         <div className="container mx-auto flex flex-col flex-wrap items-center p-5 lg:flex-row">
             <Link href="/">
                <a className="mb-4 flex items-center font-medium text-gray-900 dark:text-gray-100 md:mb-0">
                   <svg
@@ -128,7 +128,7 @@ const NavBar: React.FC = () => {
                   )}
                </NewsDropdown>
             </nav>
-            <div className="mx-auto mt-1 flex items-center gap-4 xl:mt-0">
+            <div className="mx-auto mt-1 flex w-full items-center gap-4 sm:w-auto xl:mt-0">
                <div className="relative mx-auto text-gray-600">
                   <input
                      className="h-10 rounded-lg border-2 border-gray-300 bg-white px-5 pr-16 text-sm text-gray-900 focus:outline-none dark:border-gray-800 dark:bg-foot dark:text-gray-100 sm:ml-0"
