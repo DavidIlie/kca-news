@@ -682,7 +682,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               </h1>
                            )}
                            <Select
-                              data={fullLocations.map((location) => ({
+                              data={user.department.map((location: any) => ({
                                  value: location,
                                  label: getFormmatedLocation(location),
                               }))}
@@ -692,7 +692,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               label="Category"
                               required
                               clearable
-                              nothingFound="Nothing found"
+                              nothingFound="Contact an administrator to add your correct department(s)."
                               icon={<BiCategory />}
                               classNames={{
                                  filledVariant:

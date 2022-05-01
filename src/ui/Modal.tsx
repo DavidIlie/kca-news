@@ -53,7 +53,7 @@ const Modal: React.FC<ModalProps> = ({
                   leaveTo="opacity-0 scale-95"
                >
                   <div
-                     className={`my-8 inline-block w-full max-w-${width} transform overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-6 text-left align-middle shadow-xl transition-all dark:border-gray-800 dark:bg-foot`}
+                     className={`my-8 inline-block w-full max-w-${width} transform overflow-hidden rounded-md border-2 border-gray-200 bg-white p-6 text-left align-middle shadow-xl transition-all dark:border-gray-800 dark:bg-foot`}
                   >
                      <div className="borderColor mb-1 flex items-center justify-between border-b-2 pb-1">
                         <Dialog.Title

@@ -15,26 +15,27 @@ export default NextAuth({
    ],
    callbacks: {
       async signIn({ user }) {
+         if ((user as any).gender === null) {
+            const r = await fetch(
+               `https://api.genderize.io/?name=${(user as any).names[0]}`
+            );
+            const response = await r.json();
+
+            await prisma.user.update({
+               where: { id: user.id },
+               data: { gender: response.gender },
+            });
+         }
+
          if (
             user.email?.endsWith("@kcpupils.org") ||
             user.email?.endsWith("@kings.education") ||
             user.email?.endsWith("@kingsgroup.org") ||
             user.email?.endsWith("@davidilie.com")
          ) {
-            if ((user as any).gender === null) {
-               const r = await fetch(
-                  `https://api.genderize.io/?name=${(user as any).names[0]}`
-               );
-               const response = await r.json();
-
-               await prisma.user.update({
-                  where: { id: user.id },
-                  data: { gender: response.gender },
-               });
-            }
             return true;
          }
-         return false;
+         return process.env.NODE_ENV === "development";
       },
       async session({ session, user }) {
          if (session?.user) {
