@@ -222,7 +222,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                            filledVariant:
                               "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                         }}
-                        className="w-full sm:w-[25%]"
+                        className="w-full sm:w-auto"
                      />
                      <Select
                         placeholder="Filter"
@@ -260,7 +260,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                   </div>
                   <div className="mt-2">
                      {usersState.length === 0 && (
-                        <h1 className="text-center text-4xl font-semibold">
+                        <h1 className="mt-4 text-center text-4xl font-semibold">
                            No users...
                         </h1>
                      )}

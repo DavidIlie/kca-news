@@ -184,12 +184,8 @@ const ArticleViewer: React.FC<Props> = ({
          }
       );
       if (r.status === 200) {
-         let finalArray = [] as Comment[];
-         commentsState.map(
-            (comment) =>
-               comment.id !== deleteCommentId && finalArray.push(comment)
-         );
-         setComments(finalArray);
+         setComments(commentsState.filter((v) => v.id !== deleteCommentId));
+
          notifications.updateNotification(id, {
             id,
             color: "teal",

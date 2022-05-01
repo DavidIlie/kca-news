@@ -4,11 +4,16 @@ import Link from "next/link";
 import { NextSeo } from "next-seo";
 import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
-import { LoadingOverlay } from "@mantine/core";
+import { LoadingOverlay, Select, TextInput } from "@mantine/core";
 import { useNotifications } from "@mantine/notifications";
 import { Tab, Menu, Transition } from "@headlessui/react";
 import { format } from "date-fns";
-import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
+import {
+   AiOutlineClose,
+   AiOutlineDelete,
+   AiOutlineFilter,
+   AiOutlineSearch,
+} from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { HiLockClosed } from "react-icons/hi";
 import { RiArticleLine } from "react-icons/ri";
@@ -170,10 +175,118 @@ const CommentList: React.FC<CommentListProps> = ({
 }) => {
    const { data } = useSession();
    const notifications = useNotifications();
+   const [baseComments, setBaseComments] = useState<Comment[]>(comments);
    const [commentsState, setCommentsState] = useState<Comment[]>(comments);
+
+   const [searchQuery, setSearchQuery] = useState<string>("");
+   const [hasSearched, setHasSearched] = useState<boolean>(false);
+   const [filter, setFilter] = useState<string | null>(null);
+
+   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+
+      setHasSearched(true);
+      setSearchQuery(val);
+
+      setCommentsState(
+         baseComments.filter(
+            (comment) =>
+               comment.comment.toLowerCase().includes(val.toLowerCase()) ||
+               comment.user!.email.toLowerCase().includes(val.toLowerCase())
+         )
+      );
+   };
+
+   const handleFilter = (v: string) => {
+      setFilter(v);
+      setSearchQuery("");
+      setCommentsState(baseComments);
+
+      switch (v) {
+         case "a-z":
+            setCommentsState(
+               baseComments.sort((a, b) => a.comment.localeCompare(b.comment))
+            );
+            break;
+         case "z-a":
+            setCommentsState(
+               baseComments.sort((a, b) => b.comment.localeCompare(a.comment))
+            );
+            break;
+         case "newest":
+            setCommentsState(
+               baseComments.sort(
+                  (a, b) =>
+                     new Date(b.createdAt).getTime() -
+                     new Date(a.createdAt).getTime()
+               )
+            );
+            break;
+         case "oldest":
+            setCommentsState(
+               baseComments.sort(
+                  (a, b) =>
+                     new Date(a.createdAt).getTime() -
+                     new Date(b.createdAt).getTime()
+               )
+            );
+            break;
+         default:
+            setCommentsState(
+               baseComments.sort(
+                  (a, b) =>
+                     new Date(b.createdAt).getTime() -
+                     new Date(a.createdAt).getTime()
+               )
+            );
+            break;
+      }
+   };
 
    return (
       <>
+         <div className="mt-4 mb-2 flex items-center gap-2">
+            <TextInput
+               icon={<AiOutlineSearch />}
+               placeholder="Search"
+               value={searchQuery}
+               onChange={handleSearch}
+               error={commentsState.length === 0 && hasSearched}
+               classNames={{
+                  filledVariant:
+                     "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+               }}
+               className="w-full sm:w-auto"
+            />
+            <Select
+               placeholder="Filter"
+               clearable
+               allowDeselect
+               nothingFound="No options"
+               maxDropdownHeight={180}
+               icon={<AiOutlineFilter />}
+               data={[
+                  { value: "a-z", label: "A-Z" },
+                  { value: "z-a", label: "Z-A" },
+                  { value: "newest", label: "Newest" },
+                  { value: "oldest", label: "Oldest" },
+               ]}
+               value={filter}
+               onChange={handleFilter}
+               classNames={{
+                  filledVariant:
+                     "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                  dropdown:
+                     "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+               }}
+               className="w-full sm:w-auto"
+            />
+         </div>
+         {commentsState.length === 0 && (
+            <h1 className="mt-6 text-center text-4xl font-semibold">
+               No comments...
+            </h1>
+         )}
          {commentsState.map((comment, index) => (
             <div
                className={`flex items-center justify-between rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-2 dark:border-gray-800 dark:bg-foot ${
@@ -277,13 +390,17 @@ const CommentList: React.FC<CommentListProps> = ({
                               const response = await r.json();
 
                               if (r.status === 200) {
-                                 let finalArray = [] as Comment[];
-                                 commentsState.map(
-                                    (fComment) =>
-                                       fComment.id !== comment.id &&
-                                       finalArray.push(comment)
+                                 setBaseComments(
+                                    baseComments.filter(
+                                       (v) => v.id !== comment.id
+                                    )
                                  );
-                                 setCommentsState(finalArray);
+                                 setCommentsState(
+                                    baseComments.filter(
+                                       (v) => v.id !== comment.id
+                                    )
+                                 );
+
                                  let newStats = statistics;
                                  newStats.totalComments =
                                     newStats.totalComments - 1;
