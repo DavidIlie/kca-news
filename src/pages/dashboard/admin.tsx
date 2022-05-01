@@ -175,7 +175,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                     index === 1
                                        ? "/dashboard/writer"
                                        : index === 2
-                                       ? "/dashboard/reviewer?tab=comments"
+                                       ? "/dashboard/reviewer"
                                        : ""
                                  }
                                  key={index}

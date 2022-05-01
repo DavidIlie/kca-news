@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from "next";
 import { useEffect } from "react";
 import { DefaultSeo } from "next-seo";
 import NextNprogress from "nextjs-progressbar";
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider, useSession, getSession } from "next-auth/react";
 import { ThemeProvider, useTheme } from "next-themes";
 import { getCookie } from "cookies-next";
 import { ColorScheme } from "@mantine/core";
@@ -94,8 +94,13 @@ const ThemeHandler: React.FC = ({ children }) => {
    return <>{children}</>;
 };
 
-KingsNews.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
+KingsNews.getInitialProps = async ({
+   ctx,
+}: {
+   ctx: GetServerSidePropsContext;
+}) => ({
    colorScheme: getCookie("mantine-color-scheme", ctx) || "light",
+   session: await getSession(ctx),
 });
 
 export default KingsNews;
