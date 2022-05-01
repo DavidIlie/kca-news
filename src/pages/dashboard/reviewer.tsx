@@ -15,6 +15,8 @@ import { GrArticle } from "react-icons/gr";
 import { HiLockClosed } from "react-icons/hi";
 
 import DashboardStatistics from "../../components/DashboardStatistics";
+import NextLink from "../../ui/NextLink";
+import DropdownElement from "../../ui/DropdownElement";
 
 import prisma from "../../lib/prisma";
 import { Statistics } from "./writer";
@@ -23,8 +25,6 @@ import { Article } from "../../types/Article";
 import { Comment } from "../../types/Comment";
 import { computeKCAName } from "../../lib/computeKCAName";
 import { shimmer } from "../../lib/shimmer";
-import NextLink from "../../ui/NextLink";
-import DropdownElement from "../../ui/DropdownElement";
 
 interface Props {
    statistics: Statistics;
