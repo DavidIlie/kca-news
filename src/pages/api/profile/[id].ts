@@ -10,7 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const session = await getSession({ req });
 
-      if (id !== session?.id && !session?.user?.isAdmin)
+      if (id !== session?.id || !session?.user?.isAdmin)
          return res
             .status(401)
             .json({ message: "you don't have permission cheif" });
