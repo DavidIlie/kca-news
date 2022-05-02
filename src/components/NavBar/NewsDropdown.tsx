@@ -40,7 +40,7 @@ const NewsLink: React.FC<Props> = ({ name, children, special = false }) => {
                   name === "More" && special ? "-ml-40" : "-ml-16"
                } ${
                   special ? "w-56" : "w-32"
-               } z-[200] rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-900 dark:bg-foot`}
+               } z-[200] rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-900 dark:bg-foot sm:ml-auto`}
             >
                {children}
             </Menu.Items>
