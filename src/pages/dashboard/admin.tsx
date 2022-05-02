@@ -636,7 +636,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                      {accessEditorUser?.canComment ? "Mute" : "Unmute"}
                   </Button>
                </div>
-               {accessEditorUser !== undefined && (
+               {accessEditorUser !== undefined && !accessEditorUser?.isAdmin && (
                   <>
                      {(accessEditorUser?.isAdmin ||
                         accessEditorUser?.isWriter ||

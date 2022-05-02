@@ -27,6 +27,10 @@ export function PrismaAdapter(p: PrismaClient): Adapter {
             data.nameIndex = 0;
          }
 
+         const r = await fetch(`https://api.genderize.io/?name=${names[0]}`);
+         const response = await r.json();
+         data.gender = response.gender;
+
          data.names = names;
 
          return p.user.create({ data: data as any });

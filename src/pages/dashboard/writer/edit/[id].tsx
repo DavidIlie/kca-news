@@ -686,10 +686,17 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               </h1>
                            )}
                            <Select
-                              data={user.department.map((location: any) => ({
-                                 value: location,
-                                 label: getFormmatedLocation(location),
-                              }))}
+                              data={
+                                 user.isAdmin
+                                    ? fullLocations.map((location: any) => ({
+                                         value: location,
+                                         label: getFormmatedLocation(location),
+                                      }))
+                                    : user.department.map((location: any) => ({
+                                         value: location,
+                                         label: getFormmatedLocation(location),
+                                      }))
+                              }
                               value={location}
                               onChange={(e) => setLocation(e as any)}
                               placeholder="Pick all the appropiate category"
