@@ -26,6 +26,19 @@ export const getArticles = async (
               })
            )
         )
+      : user?.isReviewer
+      ? JSON.parse(
+           JSON.stringify(
+              await prisma.article.findMany({
+                 where: { location: { in: user?.department }, ...where },
+                 orderBy: {
+                    createdAt: "desc",
+                 },
+                 ...extra,
+                 include: includeValues as any,
+              })
+           )
+        )
       : user?.isWriter
       ? JSON.parse(
            JSON.stringify(

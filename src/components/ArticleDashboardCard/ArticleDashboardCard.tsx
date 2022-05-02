@@ -63,7 +63,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
             />
             <div className="flex w-full items-center justify-between">
                <h1 className="-ml-2">
-                  <Link href={`/article/${article.id}`}>
+                  <Link href={`/dashboard/writer/edit/${article.id}`}>
                      <a className="duration-150 hover:text-blue-500">
                         {article.title}
                      </a>

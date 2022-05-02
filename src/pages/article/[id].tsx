@@ -558,6 +558,15 @@ export const getServerSideProps: GetServerSideProps = async ({
    const article = await prisma.article.findFirst({
       where: session?.user?.isAdmin
          ? { id: id as string }
+         : session?.user?.isReviewer
+         ? {
+              id: id as string,
+              OR: [
+                 { sharedId: share as string },
+                 { user: session?.user?.id },
+                 { location: { in: session?.user?.department } },
+              ],
+           }
          : session?.user?.isWriter
          ? {
               id: id as string,
@@ -565,10 +574,16 @@ export const getServerSideProps: GetServerSideProps = async ({
            }
          : {
               id: id as string,
-              OR: [
-                 { sharedToTeam: false, sharedId: share as string },
-                 { published: true, underReview: false },
-              ],
+              OR:
+                 share !== undefined
+                    ? [
+                         {
+                            sharedToTeam: false,
+                            sharedId: share as string,
+                            shared: true,
+                         },
+                      ]
+                    : [{ published: true, underReview: false }],
            },
       include: {
          coWriters: true,

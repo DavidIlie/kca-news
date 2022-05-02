@@ -8,6 +8,8 @@ export const searchArticles = async (
 ): Promise<Article[]> => {
    const extraWhere = user?.isAdmin
       ? {}
+      : user?.isReviewer
+      ? { location: { in: user?.department } }
       : user?.isWriter
       ? { user: user.id }
       : { underReview: false, published: true };
