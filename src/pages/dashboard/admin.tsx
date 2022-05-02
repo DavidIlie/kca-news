@@ -159,7 +159,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
    return (
       <>
          <NextSeo title="Admin" />
-         <LoadingOverlay visible={bigLoading} />
+         <LoadingOverlay visible={bigLoading} className="fixed" />
          <div className="flex flex-grow px-4 pt-10 dark:bg-dark-bg sm:pt-32">
             <div className="mx-auto">
                <DashboardStatistics

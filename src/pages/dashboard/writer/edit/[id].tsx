@@ -314,7 +314,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
             />
          )}
          <div className="mt-4 flex flex-grow sm:mt-[5.4rem]">
-            <LoadingOverlay visible={loadingContentUpdate || bigLoad} />
+            <LoadingOverlay
+               visible={loadingContentUpdate || bigLoad}
+               className="fixed"
+            />
             <ScrollArea
                ref={ref}
                className={`mx-auto ${contentHeightSystem} px-4 pb-5 sm:pt-[1.75rem] ${
@@ -490,6 +493,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      <>
                         <LoadingOverlay
                            visible={loadingRest && !loadingContentUpdate}
+                           className="fixed"
                         />
                         {!mobile && (
                            <div className="borderColor flex items-center justify-between gap-2 border-b-2 px-4 pb-4">

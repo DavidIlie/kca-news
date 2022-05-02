@@ -82,16 +82,16 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
                   />
                </div>
                <div className="mt-4">
-                  <LoadingOverlay visible={loading} />
+                  <LoadingOverlay visible={loading} className="fixed" />
                   {results.map((article, index) => (
-                     <>
+                     <div key={index}>
                         <div className="hidden sm:block">
                            <ArticleCard article={article} />
                         </div>
                         <div className="block sm:hidden">
                            <FeaturedArticleCard article={article} />
                         </div>
-                     </>
+                     </div>
                   ))}
                   {results.length === 0 && (
                      <h1 className="text-center text-xl font-semibold">
