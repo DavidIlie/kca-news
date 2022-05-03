@@ -6,7 +6,6 @@ import { getSession } from "next-auth/react";
 import { DefaultSeo } from "next-seo";
 import { LoadingOverlay, Select, TextInput } from "@mantine/core";
 import { useNotifications } from "@mantine/notifications";
-import { useMediaQuery } from "@mantine/hooks";
 import {
    AiOutlineSearch,
    AiOutlineFilter,
@@ -40,7 +39,6 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
 
    const notifications = useNotifications();
    const { push } = useRouter();
-   const desktop = useMediaQuery("(min-width: 1240px)");
 
    const [statisticsState, setStatistics] = useState<Statistics>(statistics);
    const [baseArticles, setBaseArticles] = useState<Article[]>(articles);
@@ -315,10 +313,9 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            selected={selected}
                            setSelected={setSelected}
                            user={user}
-                           desktop={desktop}
-                           setOpenConfirmModal={setOpenConfirmModal}
                            setSelectedId={setSelectedId}
-                           className={`rounded-md border-2 border-gray-100 bg-gray-50 px-6 py-4 dark:border-gray-800 dark:bg-foot ${
+                           deleteArticle={deleteArticle}
+                           className={`${
                               index !== articles.length - 1 && "mb-4 "
                            }`}
                            key={article.id}
