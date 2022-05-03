@@ -160,6 +160,8 @@ const ArticleList: React.FC<ArticleListProps> = ({
    setLoad,
    setStatistics,
 }) => {
+   const [articlesState, setArticlesState] = useState<Article[]>(articles);
+
    return <>articles</>;
 };
 

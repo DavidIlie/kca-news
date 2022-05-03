@@ -312,7 +312,6 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            article={article}
                            selected={selected}
                            setSelected={setSelected}
-                           user={user}
                            setSelectedId={setSelectedId}
                            deleteArticle={deleteArticle}
                            className={`${

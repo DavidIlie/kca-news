@@ -12,26 +12,25 @@ import {
    AiOutlineClose,
 } from "react-icons/ai";
 import { useMediaQuery } from "@mantine/hooks";
+import { useSession } from "next-auth/react";
 
 import Radio from "../../ui/Radio";
 import ArticleBadge from "../ArticleBadge";
 import ArticleUnderReviewCard from "../ArticleUnderReviewCard";
+import ConfirmModal from "../../ui/ConfirmModal";
 
 import { computeKCAName } from "../../lib/computeKCAName";
 import type { Article } from "../../types/Article";
-import type { User } from "../../types/User";
 import { shimmer } from "../../lib/shimmer";
 import { Button } from "../../ui/Button";
-import ConfirmModal from "../../ui/ConfirmModal";
 
 interface Props {
    article: Article;
    selected?: Article | null;
    setSelected?: React.Dispatch<React.SetStateAction<Article | null>>;
-   user: User;
-   setSelectedId: React.Dispatch<React.SetStateAction<string>>;
+   setSelectedId?: React.Dispatch<React.SetStateAction<string>>;
    className?: string;
-   deleteArticle: () => void;
+   deleteArticle?: () => void;
    getDeletedArticleId?: (s: string) => void;
 }
 
@@ -39,13 +38,13 @@ const ArticleDashboardCard: React.FC<Props> = ({
    article,
    selected,
    setSelected,
-   user,
    setSelectedId,
    deleteArticle,
    className,
    getDeletedArticleId,
    ...rest
 }) => {
+   const { data } = useSession();
    const notifications = useNotifications();
    const [bigLoading, setBigLoading] = useState<boolean>(false);
    const [openConfirmModal, setOpenConfirmModal] = useState<boolean>(false);
@@ -73,7 +72,6 @@ const ArticleDashboardCard: React.FC<Props> = ({
          });
       }
 
-      setSelectedId("");
       setBigLoading(false);
    };
 
@@ -113,7 +111,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
                            {article.title}
                         </a>
                      </Link>
-                     {article.writer?.id !== user?.id && (
+                     {article.writer?.id !== data!.user?.id && (
                         <span>
                            {" - by "}
                            <Link href={`/profile/${article.writer?.id}`}>
@@ -247,7 +245,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
                         </a>
                      </Link>
                      {desktop &&
-                        (user.isAdmin || !article.underReview ? (
+                        (data!.user!.isAdmin || !article.underReview ? (
                            <Link
                               href={`/dashboard/writer/edit/${article.id}?menu=true&visibility=true`}
                            >
@@ -256,7 +254,8 @@ const ArticleDashboardCard: React.FC<Props> = ({
                                     className="w-full"
                                     color="sky"
                                     disabled={
-                                       !user.isAdmin && article.underReview
+                                       !data!.user!.isAdmin &&
+                                       article.underReview
                                     }
                                  >
                                     Edit Visibility
@@ -279,7 +278,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
                            disabled={article.underReview || article.published}
                            onClick={() => {
                               if (setSelected) {
-                                 setSelectedId(article.id);
+                                 setSelectedId!(article.id);
                               }
                               setOpenConfirmModal(true);
                            }}
@@ -293,7 +292,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
          </Disclosure>
          <ConfirmModal
             isOpen={openConfirmModal}
-            successFunction={setSelected ? deleteArticle : deleteArticleNormal}
+            successFunction={setSelected ? deleteArticle! : deleteArticleNormal}
             updateModalState={() => setOpenConfirmModal(!openConfirmModal)}
          />
       </>

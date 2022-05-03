@@ -44,6 +44,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    try {
       const unnamedArticles = await prisma.article.count({
          where: {
+            user: session?.user?.id,
             title: {
                contains: "Untitled Article",
                mode: "insensitive",
