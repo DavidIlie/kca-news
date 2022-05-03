@@ -23,6 +23,7 @@ import { computeKCAName } from "../../lib/computeKCAName";
 import type { Article } from "../../types/Article";
 import { shimmer } from "../../lib/shimmer";
 import { Button } from "../../ui/Button";
+import { getFormmatedLocation } from "../../lib/categories";
 
 interface Props {
    article: Article;
@@ -196,6 +197,10 @@ const ArticleDashboardCard: React.FC<Props> = ({
                   <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
                      Extra Details
                   </h1>
+                  <p>
+                     <span className="font-semibold">Department:</span>{" "}
+                     {getFormmatedLocation(article.location)}
+                  </p>
                   {article.coWriters.length !== 0 && (
                      <p>
                         <span className="font-semibold">Co Writers:</span>{" "}
