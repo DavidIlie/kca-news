@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LoadingOverlay } from "@mantine/core";
+import { LoadingOverlay, Tooltip } from "@mantine/core";
 import Link from "next/link";
 import Image from "next/image";
 import { Disclosure } from "@headlessui/react";
@@ -279,25 +279,35 @@ const ArticleDashboardCard: React.FC<Props> = ({
                            </Button>
                         ))}
                      <div className="w-1/2 sm:w-1/3">
-                        <Button
+                        <Tooltip
                            className="w-full"
-                           color="secondary"
+                           label="You cannot delete an article which is not written by you."
                            disabled={
-                              article.underReview ||
-                              article.published ||
-                              (!setSelected &&
-                                 data!.user!.isReviewer &&
-                                 article.writer?.id !== data!.user?.id)
+                              setSelected &&
+                              !data!.user!.isReviewer &&
+                              article.writer?.id === data!.user?.id
                            }
-                           onClick={() => {
-                              if (setSelected) {
-                                 setSelectedId!(article.id);
-                              }
-                              setOpenConfirmModal(true);
-                           }}
                         >
-                           Delete
-                        </Button>
+                           <Button
+                              className="w-full"
+                              color="secondary"
+                              disabled={
+                                 article.underReview ||
+                                 article.published ||
+                                 (!setSelected &&
+                                    data!.user!.isReviewer &&
+                                    article.writer?.id !== data!.user?.id)
+                              }
+                              onClick={() => {
+                                 if (setSelected) {
+                                    setSelectedId!(article.id);
+                                 }
+                                 setOpenConfirmModal(true);
+                              }}
+                           >
+                              Delete
+                           </Button>
+                        </Tooltip>
                      </div>
                   </div>
                </div>
