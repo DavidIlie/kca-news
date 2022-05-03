@@ -323,7 +323,7 @@ const ArticleViewer: React.FC<Props> = ({
                      showEdit={true}
                      className="ml-4 mt-1"
                   />
-                  <div className="mx-4 mt-2 mb-6 items-center justify-evenly gap-4 sm:flex">
+                  <div className="mx-4 mt-2 mb-6 items-center justify-evenly gap-6 sm:flex">
                      <div className="sm:w-2/3">
                         <Image
                            alt="Post picture"
@@ -336,11 +336,17 @@ const ArticleViewer: React.FC<Props> = ({
                            objectFit="cover"
                         />
                      </div>
-                     <div className="sm:h-[300px] sm:w-1/2">
-                        <p>{article.description}</p>
+                     <div className="sm:h-[300px] sm:w-1/2 sm:pt-2">
+                        {/*
+                        // @ts-ignore */}
+                        <Editor
+                           defaultValue={article.description}
+                           readOnly
+                           dark={resolvedTheme === "dark"}
+                        />
                      </div>
                   </div>
-                  <div className="mx-4 mt-4 border-t-2" />
+                  <div className="mx-4 mt-4 mb-1 border-t-2" />
                   <div className="px-4">
                      {/*
                         // @ts-ignore */}

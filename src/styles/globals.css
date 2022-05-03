@@ -64,10 +64,6 @@
    scrollbar-width: none;
 }
 
-.ProseMirror {
-   @apply dark:bg-dark-bg;
-}
-
 .ProseMirror h1 {
    @apply text-4xl text-black dark:text-white;
 }

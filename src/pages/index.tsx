@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -35,6 +36,7 @@ interface Props {
 const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
    const [index, setSelectedIndex] = useState<number>(0);
    const { reload } = useRouter();
+   const { resolvedTheme } = useTheme();
 
    useHotkeys([
       ["ArrowLeft", () => index !== 0 && setSelectedIndex(index - 1)],

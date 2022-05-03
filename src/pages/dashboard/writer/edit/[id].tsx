@@ -308,7 +308,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
          <DefaultSeo title={article.title} />
          {!openSidebar && (
             <AiOutlineMenu
-               className="fixed right-0 top-0 z-[200] mt-[55%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 sm:mt-[6%]"
+               className="fixed right-0 top-0 z-[200] mt-[55%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 sm:mt-[7%]"
                title="Open Settings"
                onClick={() => setOpenSidebar(true)}
             />
@@ -378,7 +378,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      />
                   </div>
                   <ArticleWriterInfo article={article} user={user} />
-                  <div className="items-center justify-evenly gap-4 sm:flex">
+                  <div className="items-center justify-evenly gap-6 sm:flex">
                      <div className="relative mt-1 flex justify-center sm:w-2/3">
                         <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
                            <Button
@@ -410,12 +410,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               />
                            </div>
                         )}
-                        {/* <ContentEditable
-                           tagName="p"
-                           className="mt-4"
-                           html={description}
-                           onChange={(e) => setDescription(e.target.value)}
-                        /> */}
                         {/*
                         // @ts-ignore */}
                         <Editor
@@ -424,6 +418,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            defaultValue={description}
                            className="z-0 mt-4"
                            dark={resolvedTheme === "dark"}
+                           maxLength={400}
+                           disableExtensions={["heading", "image", "table"]}
                         />
                      </div>
                   </div>

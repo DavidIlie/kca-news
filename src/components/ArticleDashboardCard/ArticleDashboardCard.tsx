@@ -197,10 +197,12 @@ const ArticleDashboardCard: React.FC<Props> = ({
                   <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
                      Extra Details
                   </h1>
-                  <p>
-                     <span className="font-semibold">Department:</span>{" "}
-                     {getFormmatedLocation(article.location)}
-                  </p>
+                  {article.location && (
+                     <p>
+                        <span className="font-semibold">Department:</span>{" "}
+                        {getFormmatedLocation(article.location)}
+                     </p>
+                  )}
                   {article.coWriters.length !== 0 && (
                      <p>
                         <span className="font-semibold">Co Writers:</span>{" "}
