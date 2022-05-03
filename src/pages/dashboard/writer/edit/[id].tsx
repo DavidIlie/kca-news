@@ -410,11 +410,20 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               />
                            </div>
                         )}
-                        <ContentEditable
+                        {/* <ContentEditable
                            tagName="p"
                            className="mt-4"
                            html={description}
                            onChange={(e) => setDescription(e.target.value)}
+                        /> */}
+                        {/*
+                        // @ts-ignore */}
+                        <Editor
+                           placeholder="Write description..."
+                           onChange={(markdown) => setDescription(markdown())}
+                           defaultValue={description}
+                           className="z-0 mt-4"
+                           dark={resolvedTheme === "dark"}
                         />
                      </div>
                   </div>
@@ -638,31 +647,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            >
                               Delete
                            </Button>
-                        </EditorSettingsDisclosure>
-                        <EditorSettingsDisclosure
-                           name="Description"
-                           warning={description === ""}
-                           defaultOpen={description === ""}
-                        >
-                           {description === "" && (
-                              <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
-                                 You need a description in order to publish
-                              </h1>
-                           )}
-                           <Textarea
-                              placeholder="Description"
-                              required
-                              onChange={(e) =>
-                                 setDescription(e.currentTarget.value)
-                              }
-                              value={description}
-                              minRows={4}
-                              maxRows={8}
-                              classNames={{
-                                 filledVariant:
-                                    "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
-                              }}
-                           />
                         </EditorSettingsDisclosure>
                         <EditorSettingsDisclosure
                            name="Categories"

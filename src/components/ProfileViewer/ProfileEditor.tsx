@@ -104,7 +104,11 @@ const ProfileEditor: React.FC<Props> = ({
                               description={`Change to ${
                                  samePerson
                                     ? "your"
-                                    : `${user.names[values.nameIndex]}'s`
+                                    : `${
+                                         user.email.endsWith("kings.education")
+                                            ? computeKCAName(user)
+                                            : user.names[values.nameIndex]
+                                      }'s`
                               } preffered name.`}
                               classNames={{
                                  filledVariant:
@@ -127,6 +131,8 @@ const ProfileEditor: React.FC<Props> = ({
                               description={`To not confuse ${
                                  samePerson
                                     ? "yourself"
+                                    : user.email.endsWith("kings.education")
+                                    ? computeKCAName(user)
                                     : user.names[values.nameIndex]
                               } from others.`}
                               classNames={{
@@ -171,7 +177,11 @@ const ProfileEditor: React.FC<Props> = ({
                            description={
                               samePerson
                                  ? "Who are you?"
-                                 : `Who is ${user.names[values.nameIndex]}?`
+                                 : `Who is ${
+                                      user.email.endsWith("kings.education")
+                                         ? computeKCAName(user)
+                                         : user.names[values.nameIndex]
+                                   }?`
                            }
                            classNames={{
                               filledVariant:
@@ -189,6 +199,8 @@ const ProfileEditor: React.FC<Props> = ({
                               description={`Another way to address ${
                                  samePerson
                                     ? "yourself"
+                                    : user.email.endsWith("kings.education")
+                                    ? computeKCAName(user)
                                     : user.names[values.nameIndex]
                               }.`}
                               classNames={{
@@ -207,7 +219,11 @@ const ProfileEditor: React.FC<Props> = ({
                               description={`What's on ${
                                  samePerson
                                     ? "your"
-                                    : `${user.names[values.nameIndex]}'s`
+                                    : `${
+                                         user.email.endsWith("kings.education")
+                                            ? computeKCAName(user)
+                                            : user.names[values.nameIndex]
+                                      }'s`
                               } mind?`}
                               classNames={{
                                  filledVariant:
