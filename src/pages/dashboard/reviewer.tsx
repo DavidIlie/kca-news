@@ -161,18 +161,169 @@ const ArticleList: React.FC<ArticleListProps> = ({
    statistics,
    setStatistics,
 }) => {
-   const [articlesState, setArticlesState] = useState<Article[]>(articles);
+   const [baseArticles, setBaseArticles] = useState<Article[]>(articles);
+   const [filteredArticles, setFilteredArticles] =
+      useState<Article[]>(baseArticles);
+   const [articlesState, setArticles] = useState<Article[]>(filteredArticles);
+   const [searchQuery, setSearchQuery] = useState<string>("");
+   const [hasSearched, setHasSearched] = useState<boolean>(false);
+   const [filter, setFilter] = useState<string | null>(null);
 
    const handleRemoveArticle = (id: string) => {
-      setArticlesState(articlesState.filter((a) => a.id !== id));
+      setArticles(articlesState.filter((a) => a.id !== id));
+      setBaseArticles(articlesState.filter((a) => a.id !== id));
 
       let newStats = statistics;
       newStats.totalArticles = newStats.totalArticles - 1;
       setStatistics(newStats);
    };
 
+   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+
+      setHasSearched(true);
+      setSearchQuery(val);
+
+      setArticles(
+         filteredArticles.filter(
+            (article) =>
+               article.title.toLowerCase().includes(val.toLowerCase()) ||
+               article.writer?.name.toLowerCase().includes(val.toLowerCase()) ||
+               article.writer?.email.toLowerCase().includes(val.toLowerCase())
+         )
+      );
+   };
+
+   const handleFilter = (v: string) => {
+      setFilter(v);
+      setSearchQuery("");
+      setArticles(filteredArticles);
+
+      switch (v) {
+         case "newest":
+            setArticles(
+               baseArticles.sort(
+                  (a, b) =>
+                     new Date(b.createdAt).getTime() -
+                     new Date(a.createdAt).getTime()
+               )
+            );
+            break;
+         case "oldest":
+            setArticles(
+               baseArticles.sort(
+                  (a, b) =>
+                     new Date(a.createdAt).getTime() -
+                     new Date(b.createdAt).getTime()
+               )
+            );
+            break;
+         case "most-likes":
+            setArticles(
+               baseArticles.sort(
+                  (a, b) => b.upvotes!.length - a.upvotes!.length
+               )
+            );
+            break;
+         case "least-likes":
+            setArticles(
+               baseArticles.sort(
+                  (a, b) => a.upvotes!.length - b.upvotes!.length
+               )
+            );
+            break;
+         case "most-dislikes":
+            setArticles(
+               baseArticles.sort(
+                  (a, b) => b.downvotes!.length - a.downvotes!.length
+               )
+            );
+            break;
+         case "least-dislikes":
+            setArticles(
+               baseArticles.sort(
+                  (a, b) => a.downvotes!.length - b.downvotes!.length
+               )
+            );
+            break;
+         case "published":
+            setArticles(baseArticles.filter((article) => article.published));
+            break;
+         case "not-published":
+            setArticles(baseArticles.filter((article) => !article.published));
+            break;
+         case "review":
+            setArticles(baseArticles.filter((article) => article.underReview));
+            break;
+         case "not-review":
+            setArticles(baseArticles.filter((article) => !article.underReview));
+            break;
+         default:
+            setFilteredArticles(baseArticles);
+            break;
+      }
+   };
+
    return (
       <>
+         <div className="mb-2 flex items-center gap-2">
+            <TextInput
+               icon={<AiOutlineSearch />}
+               placeholder="Search"
+               value={searchQuery}
+               onChange={handleSearch}
+               error={articlesState.length === 0 && hasSearched}
+               classNames={{
+                  filledVariant:
+                     "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+               }}
+            />
+            <Select
+               placeholder="Filter"
+               clearable
+               allowDeselect
+               nothingFound="No options"
+               maxDropdownHeight={180}
+               icon={<AiOutlineFilter />}
+               data={[
+                  { value: "newest", label: "Newest" },
+                  { value: "oldest", label: "Oldest" },
+                  { value: "most-likes", label: "Most Likes" },
+                  { value: "least-likes", label: "Least Likes" },
+                  {
+                     value: "most-dislikes",
+                     label: "Most Dislikes",
+                  },
+                  {
+                     value: "least-dislikes",
+                     label: "Least Dislikes",
+                  },
+                  { value: "published", label: "Published" },
+                  {
+                     value: "not-published",
+                     label: "Not Published",
+                  },
+                  { value: "review", label: "Under Review" },
+                  {
+                     value: "not-review",
+                     label: "Not Under Review",
+                  },
+               ]}
+               value={filter}
+               onChange={handleFilter}
+               classNames={{
+                  filledVariant:
+                     "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                  dropdown:
+                     "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+               }}
+            />
+         </div>
+         {articlesState.length === 0 && (
+            <h1 className="text-center text-4xl font-semibold">
+               No articles...
+            </h1>
+         )}
          {articlesState.map((article, index) => (
             <ArticleDashboardCard
                article={article}
