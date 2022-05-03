@@ -12,8 +12,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
    const { id } = req.query;
 
-   const article = await prisma.article.findFirst({
+   const article = session?.user?.isAdmin ? await prisma.article.findFirst({
       where: { id: id as string },
+   }) : await prisma.article.findFirst({
+      where: { id: id as string, user: session?.user?.id },
    });
 
    if (!article) return res.status(404).json({ message: "article not found" });

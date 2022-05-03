@@ -31,7 +31,7 @@ interface Props {
    setSelectedId?: React.Dispatch<React.SetStateAction<string>>;
    className?: string;
    deleteArticle?: () => void;
-   getDeletedArticleId?: (s: string) => void;
+   handleRemoveArticle?: (id: string) => void;
 }
 
 const ArticleDashboardCard: React.FC<Props> = ({
@@ -41,7 +41,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
    setSelectedId,
    deleteArticle,
    className,
-   getDeletedArticleId,
+   handleRemoveArticle,
    ...rest
 }) => {
    const { data } = useSession();
@@ -61,7 +61,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
       const response = await r.json();
 
       if (r.status === 200) {
-         getDeletedArticleId!(article.id);
+         handleRemoveArticle!(article.id);
       } else {
          notifications.showNotification({
             color: "red",
@@ -84,7 +84,9 @@ const ArticleDashboardCard: React.FC<Props> = ({
             {...rest}
          >
             <div className="flex items-center gap-2">
-               <Disclosure.Button className="cursor-pointer text-lg">
+               <Disclosure.Button
+                  className={`cursor-pointer text-lg ${!setSelected && "mr-2"}`}
+               >
                   {({ open }) =>
                      open ? (
                         <AiOutlineArrowUp title="Less Details" />
@@ -275,7 +277,13 @@ const ArticleDashboardCard: React.FC<Props> = ({
                         <Button
                            className="w-full"
                            color="secondary"
-                           disabled={article.underReview || article.published}
+                           disabled={
+                              article.underReview ||
+                              article.published ||
+                              (!setSelected &&
+                                 data!.user!.isReviewer &&
+                                 article.writer?.id !== data!.user?.id)
+                           }
                            onClick={() => {
                               if (setSelected) {
                                  setSelectedId!(article.id);

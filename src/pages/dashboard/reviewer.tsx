@@ -29,6 +29,7 @@ import { Article } from "../../types/Article";
 import { Comment } from "../../types/Comment";
 import { computeKCAName } from "../../lib/computeKCAName";
 import { shimmer } from "../../lib/shimmer";
+import ArticleDashboardCard from "../../components/ArticleDashboardCard";
 
 interface Props {
    statistics: Statistics;
@@ -157,12 +158,31 @@ interface ArticleListProps extends BaseListProps {
 
 const ArticleList: React.FC<ArticleListProps> = ({
    articles,
-   setLoad,
+   statistics,
    setStatistics,
 }) => {
    const [articlesState, setArticlesState] = useState<Article[]>(articles);
 
-   return <>articles</>;
+   const handleRemoveArticle = (id: string) => {
+      setArticlesState(articlesState.filter((a) => a.id !== id));
+
+      let newStats = statistics;
+      newStats.totalArticles = newStats.totalArticles - 1;
+      setStatistics(newStats);
+   };
+
+   return (
+      <>
+         {articlesState.map((article, index) => (
+            <ArticleDashboardCard
+               article={article}
+               key={index}
+               handleRemoveArticle={handleRemoveArticle}
+               className={index !== articlesState.length - 1 ? "mb-4" : ""}
+            />
+         ))}
+      </>
+   );
 };
 
 interface CommentListProps extends BaseListProps {
@@ -516,27 +536,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       downvotes: true,
    };
 
-   const articles = session?.user?.isAdmin
-      ? await prisma.article.findMany({
-           include: includeParams as any,
-           orderBy: {
-              createdAt: "desc",
-           },
-           where: {
-              underReview: true,
-           },
-        })
-      : await prisma.article.findMany({
-           include: includeParams as any,
-           where: {
-              user: session?.user?.id,
-              location: { in: session?.user?.department },
-              underReview: true,
-           },
-           orderBy: {
-              createdAt: "desc",
-           },
-        });
+   const articles = await prisma.article.findMany({
+      include: includeParams as any,
+      where: {
+         location: { in: session?.user?.department },
+      },
+      orderBy: {
+         createdAt: "desc",
+      },
+   });
 
    const comments = session?.user?.isAdmin
       ? await prisma.comment.findMany({
