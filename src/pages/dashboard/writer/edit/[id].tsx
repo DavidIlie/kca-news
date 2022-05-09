@@ -111,6 +111,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
    const [coWriterSearchValue, setCoWriterSearchValue] = useState<any>();
    const [loadingSearch, setLoadingSearchWriter] = useState<boolean>(false);
+   const [key, setKey] = useState<number>(0);
 
    const [openChangeCoverModal, setOpenChangeCoverModal] =
       useState<boolean>(false);
@@ -403,9 +404,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         {description !== article.description && (
                            <div className="relative hidden sm:block">
                               <RiRestartLine
-                                 className="absolute right-0 -mr-10 mt-5 cursor-pointer text-2xl"
+                                 className="absolute right-0 -mr-10 mt-5 cursor-pointer select-none text-2xl"
                                  onClick={() => {
                                     setDescription(article.description);
+                                    setKey(key + 1);
                                  }}
                               />
                            </div>
@@ -416,6 +418,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            placeholder="Write description..."
                            onChange={(markdown) => setDescription(markdown())}
                            defaultValue={description}
+                           key={key}
                            className="z-0 mt-4"
                            dark={resolvedTheme === "dark"}
                            maxLength={400}
