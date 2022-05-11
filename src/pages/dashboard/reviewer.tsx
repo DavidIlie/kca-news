@@ -28,7 +28,7 @@ import { Statistics } from "./writer";
 import classNames from "../../lib/classNames";
 import { Article } from "../../types/Article";
 import { Comment } from "../../types/Comment";
-import { computeKCAName } from "../../lib/computeKCAName";
+import { ChangeableKCAName } from "../../lib/computeKCAName";
 import { shimmer } from "../../lib/shimmer";
 import ArticleDashboardCard from "../../components/ArticleDashboardCard";
 
@@ -516,7 +516,10 @@ const CommentList: React.FC<CommentListProps> = ({
                      <div className="w-full">{comment.comment}</div>
                      <div className="flex items-center space-x-2">
                         <p className="text-sm text-gray-500 dark:text-gray-300">
-                           {computeKCAName(comment.user!)}
+                           <ChangeableKCAName
+                              user={comment.user!}
+                              showNickName={true}
+                           />
                         </p>
                         <span className="text-gray-800 dark:text-gray-200">
                            /

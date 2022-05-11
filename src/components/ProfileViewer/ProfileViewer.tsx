@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 
 import { User } from "../../types/User";
-import { computeKCAName } from "../../lib/computeKCAName";
+import { ChangeableKCAName, computeKCAName } from "../../lib/computeKCAName";
 import ProfileTags from "../ProfileTags";
 import { Button } from "../../ui/Button";
 import ArticleBadge from "../ArticleBadge";
@@ -68,7 +68,10 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                   </Tooltip>
                   <div className="pb-4 text-center">
                      <h1 className="font-semibold sm:text-lg">
-                        {computeKCAName(userState)}
+                        <ChangeableKCAName
+                           user={userState}
+                           showNickName={true}
+                        />
                      </h1>
                      <p className="text-sm sm:text-base">
                         Joined{" "}

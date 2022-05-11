@@ -36,7 +36,7 @@ import ErrorMessage from "../../ui/ErrorMessage";
 import SuccessMessage from "../../ui/SuccessMessage";
 import ConfirmModal from "../../ui/ConfirmModal";
 import ArticleWriterInfo from "../../components/ArticleWriterInfo";
-import { computeKCAName } from "../../lib/computeKCAName";
+import { ChangeableKCAName, computeKCAName } from "../../lib/computeKCAName";
 
 interface Props {
    article: Article;
@@ -506,7 +506,10 @@ const ArticleViewer: React.FC<Props> = ({
                                     </div>
                                     <div className="flex items-center space-x-2">
                                        <p className="text-sm text-gray-500 dark:text-gray-300">
-                                          {computeKCAName(comment.user!)}
+                                          <ChangeableKCAName
+                                             user={comment.user!}
+                                             showNickName={true}
+                                          />
                                        </p>
                                        <span className="text-gray-800 dark:text-gray-200">
                                           /
