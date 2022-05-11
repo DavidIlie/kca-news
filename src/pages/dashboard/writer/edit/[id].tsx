@@ -38,7 +38,7 @@ import { BiCategory } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import { useBeforeUnload } from "react-use";
 
-const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
+const Editor = dynamic(() => import("david-markdown-editor"), { ssr: false });
 
 import prisma from "../../../../lib/prisma";
 import { Article } from "../../../../types/Article";

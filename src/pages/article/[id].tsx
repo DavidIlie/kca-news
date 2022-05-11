@@ -12,7 +12,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
 
-const Editor = dynamic(() => import("rich-markdown-editor"), { ssr: false });
+const Editor = dynamic(() => import("david-markdown-editor"), { ssr: false });
 
 import {
    AiOutlineLike,
