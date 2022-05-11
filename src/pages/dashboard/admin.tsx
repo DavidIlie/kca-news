@@ -841,7 +841,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
          },
       },
       orderBy: {
-         name: "desc",
+         joinedAt: "desc",
       },
    });
 
