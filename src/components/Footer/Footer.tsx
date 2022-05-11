@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
             </div>
             <div className="-mb-10 mt-10 grid grid-cols-2 text-center sm:flex sm:flex-grow sm:flex-wrap md:mt-0 md:text-left">
                {fullLocations.map((location, index) => (
-                  <div key={index} className="px-8">
+                  <div key={index} className="px-6">
                      <Link href={`/${location}`}>
                         <a className="mb-3 text-base font-medium tracking-widest text-gray-900 duration-150 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-500">
                            {getFormmatedLocation(location).toUpperCase()}
