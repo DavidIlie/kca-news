@@ -1,4 +1,5 @@
 import React from "react";
+import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 import { Fade } from "react-awesome-reveal";
 
@@ -124,6 +125,12 @@ const OurTeam: React.FC = () => {
          </div>
       </>
    );
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+   return {
+      props: {},
+   };
 };
 
 export default OurTeam;

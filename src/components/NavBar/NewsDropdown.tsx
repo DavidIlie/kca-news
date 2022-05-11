@@ -13,7 +13,7 @@ const NewsLink: React.FC<Props> = ({ name, children, special = false }) => {
       <Menu as="div" className="relative inline-flex select-none">
          <Menu.Button
             as="div"
-            className="flex cursor-pointer items-center gap-1 rounded-md border-2 border-gray-200 bg-gray-100 px-2 py-1 duration-150 hover:bg-gray-200 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg"
+            className="flex cursor-pointer items-center gap-1 rounded-md border-2 border-blue-500 bg-blue-500 px-2 py-1 text-white duration-150 hover:border-blue-600 hover:bg-blue-600 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg"
          >
             {({ open }) => (
                <>

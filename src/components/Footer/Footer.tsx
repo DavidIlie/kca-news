@@ -1,6 +1,8 @@
 import React from "react";
 import Link from "next/link";
+import { AiOutlineInstagram } from "react-icons/ai";
 
+import { Button } from "../../ui/Button";
 import {
    fullLocations,
    getFormmatedLocation,
@@ -29,9 +31,19 @@ const Footer: React.FC = () => {
                      <span className="ml-3 text-xl">KCA News</span>
                   </a>
                </Link>
-               <p className="mt-2 text-sm text-gray-500 dark:text-gray-200">
-                  Make the school cool.
+               <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-200">
+                  Share your views on KCA News!
                </p>
+               <a
+                  href="https://instagram.com/kca_news"
+                  target="_blank"
+                  rel="noreferrer"
+               >
+                  <Button className="mt-2">
+                     <AiOutlineInstagram className="mr-1 text-xl" />
+                     Instagram
+                  </Button>
+               </a>
             </div>
             <div className="-mb-10 mt-10 grid grid-cols-2 text-center sm:flex sm:flex-grow sm:flex-wrap md:mt-0 md:text-left">
                {fullLocations.map((location, index) => (
