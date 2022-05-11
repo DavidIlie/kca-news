@@ -7,10 +7,12 @@ import { updateProfileSchema } from "../../../schema/user";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    try {
       const { id } = req.query;
-
       const session = await getSession({ req });
 
-      if (id !== session?.id || !session?.user?.isAdmin)
+      if (!session)
+         return res.status(404).json({ message: "not authenticated" });
+
+      if (id !== session?.user?.id && !session?.user?.isAdmin)
          return res
             .status(401)
             .json({ message: "you don't have permission cheif" });
