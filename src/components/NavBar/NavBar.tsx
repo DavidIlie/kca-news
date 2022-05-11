@@ -20,6 +20,7 @@ import {
 import NewsDropdown from "./NewsDropdown";
 import DropdownElement from "../../ui/DropdownElement";
 import NextLink from "../../ui/NextLink";
+import Logo from "../Logo";
 
 const NavBar: React.FC = () => {
    const { status } = useSession();
@@ -33,18 +34,9 @@ const NavBar: React.FC = () => {
          <div className="container mx-auto flex flex-col flex-wrap items-center p-5 lg:flex-row">
             <Link href="/">
                <a className="mb-4 flex items-center font-medium text-gray-900 dark:text-gray-100 md:mb-0">
-                  <svg
-                     xmlns="http://www.w3.org/2000/svg"
-                     fill="none"
-                     stroke="currentColor"
-                     strokeLinecap="round"
-                     strokeLinejoin="round"
-                     strokeWidth="2"
-                     className="h-10 w-10 rounded-full bg-blue-500 p-2 text-white dark:text-black"
-                     viewBox="0 0 24 24"
-                  >
-                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                  </svg>
+                  <div className="max-w-[4rem]">
+                     <Logo />
+                  </div>
                   <span className="ml-3 text-xl text-white dark:text-black">
                      KCA News
                   </span>
