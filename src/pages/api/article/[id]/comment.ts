@@ -37,17 +37,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             userId: session!.user!.id,
             articleId: article.id,
             comment: body.message,
+            underReview: session?.user?.isAdmin ? false : true,
          },
-      });
-
-      const comment = await prisma.comment.findFirst({
-         where: { id: commentCreation.id },
          include: {
             user: true,
          },
       });
 
-      return res.json(comment);
+      return res.json({ comment: commentCreation });
    } catch (error: any) {
       return res.status(400).json({ message: error?.message });
    }

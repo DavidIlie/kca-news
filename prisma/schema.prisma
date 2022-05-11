@@ -59,6 +59,7 @@ model User {
   tags          String[]
   canComment    Boolean @default(true)
   isAdmin       Boolean @default(false)
+  isEditorial   Boolean @default(false)
   isReviewer    Boolean @default(false)
   isWriter      Boolean @default(false)
   department    String[]
@@ -107,7 +108,7 @@ model Comment {
   article       Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
   createdAt     DateTime  @default(now())
   comment       String
-  underReview   Boolean   @default(false)
+  underReview   Boolean   @default(true)
 }
 
 model Upvote {

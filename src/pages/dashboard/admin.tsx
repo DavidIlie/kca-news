@@ -50,7 +50,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
    const { data } = useSession();
    const notifications = useNotifications();
    const [bigLoading, setBigLoading] = useState<boolean>(false);
-   const [baseUsers, setBaseUsers] = useState<User[]>(users);
+   const [baseUsers, _setBaseUsers] = useState<User[]>(users);
    const [usersState, setUsersState] = useState<User[]>(baseUsers);
 
    const [openTagEditor, setOpenTagEditor] = useState<boolean>(false);
@@ -257,6 +257,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                         }}
                         className="w-full sm:w-auto"
                      />
+                     <p className="font-medium">Total Users: {users.length}</p>
                   </div>
                   <div className="mt-2">
                      {usersState.length === 0 && (
@@ -594,14 +595,15 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                   </Button>
                   <Button
                      className="w-full"
+                     disabled={data?.user?.isAdmin ? false : true}
                      color={
-                        accessEditorUser?.canComment ? "secondary" : "primary"
+                        accessEditorUser?.isEditorial ? "secondary" : "primary"
                      }
                      onClick={async () => {
                         setBigLoading(true);
 
                         const r = await fetch(
-                           `/api/admin/setMute?id=${accessEditorUser?.id}`,
+                           `/api/admin/setEditorial?id=${accessEditorUser?.id}`,
                            {
                               credentials: "include",
                            }
@@ -613,7 +615,16 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                            usersState.forEach((user) => {
                               if (user.id === accessEditorUser?.id) {
                                  let cUser = user;
-                                 cUser.canComment = !cUser.canComment;
+                                 cUser.isEditorial = !cUser.isEditorial;
+                                 if (cUser.isEditorial) {
+                                    cUser.isWriter = true;
+                                    cUser.isReviewer = true;
+                                    cUser.department = fullLocations;
+                                 } else {
+                                    cUser.isWriter = false;
+                                    cUser.isReviewer = false;
+                                    cUser.department = [];
+                                 }
                                  final.push(cUser);
                               } else {
                                  final.push(user);
@@ -623,7 +634,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                         } else {
                            notifications.showNotification({
                               color: "red",
-                              title: "Toggle Mute - Error",
+                              title: "Toggle Editorial - Error",
                               message: response.message || "Unknown Error",
                               icon: <AiOutlineClose />,
                               autoClose: 5000,
@@ -633,108 +644,156 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                         setBigLoading(false);
                      }}
                   >
-                     {accessEditorUser?.canComment ? "Mute" : "Unmute"}
+                     {accessEditorUser?.isEditorial
+                        ? "Remove Editorial"
+                        : "Set Editorial"}
                   </Button>
                </div>
+               <Button
+                  className="mx-auto mt-2 w-1/3"
+                  color={accessEditorUser?.canComment ? "secondary" : "sky"}
+                  onClick={async () => {
+                     setBigLoading(true);
+
+                     const r = await fetch(
+                        `/api/admin/setMute?id=${accessEditorUser?.id}`,
+                        {
+                           credentials: "include",
+                        }
+                     );
+                     const response = await r.json();
+
+                     if (r.status === 200) {
+                        let final = [] as User[];
+                        usersState.forEach((user) => {
+                           if (user.id === accessEditorUser?.id) {
+                              let cUser = user;
+                              cUser.canComment = !cUser.canComment;
+                              final.push(cUser);
+                           } else {
+                              final.push(user);
+                           }
+                        });
+                        setUsersState(final);
+                     } else {
+                        notifications.showNotification({
+                           color: "red",
+                           title: "Toggle Mute - Error",
+                           message: response.message || "Unknown Error",
+                           icon: <AiOutlineClose />,
+                           autoClose: 5000,
+                        });
+                     }
+
+                     setBigLoading(false);
+                  }}
+               >
+                  {accessEditorUser?.canComment ? "Mute" : "Unmute"}
+               </Button>
                {accessEditorUser !== undefined && !accessEditorUser?.isAdmin && (
                   <>
-                     {(accessEditorUser?.isAdmin ||
-                        accessEditorUser?.isWriter ||
-                        accessEditorUser?.isReviewer) && (
-                        <div className="borderColor mt-4 border-t-2 pt-2">
-                           <h1 className="text-xl font-medium">
-                              Change Department
-                           </h1>
-                           <Formik
-                              validateOnChange={false}
-                              validateOnBlur={false}
-                              validationSchema={departmentSchema}
-                              initialValues={{
-                                 department: accessEditorUser.department,
-                              }}
-                              onSubmit={async (data, { setSubmitting }) => {
-                                 setSubmitting(true);
-                                 setBigLoading(true);
+                     {(accessEditorUser?.isWriter ||
+                        accessEditorUser?.isReviewer) &&
+                        !accessEditorUser.isEditorial && (
+                           <div className="borderColor mt-4 border-t-2 pt-2">
+                              <h1 className="text-xl font-medium">
+                                 Change Department
+                              </h1>
+                              <Formik
+                                 validateOnChange={false}
+                                 validateOnBlur={false}
+                                 validationSchema={departmentSchema}
+                                 initialValues={{
+                                    department: accessEditorUser.department,
+                                 }}
+                                 onSubmit={async (data, { setSubmitting }) => {
+                                    setSubmitting(true);
+                                    setBigLoading(true);
 
-                                 const r = await fetch(
-                                    `/api/admin/setDepartment?id=${accessEditorUser.id}`,
-                                    {
-                                       credentials: "include",
-                                       method: "POST",
-                                       body: JSON.stringify(data),
+                                    const r = await fetch(
+                                       `/api/admin/setDepartment?id=${accessEditorUser.id}`,
+                                       {
+                                          credentials: "include",
+                                          method: "POST",
+                                          body: JSON.stringify(data),
+                                       }
+                                    );
+                                    const response = await r.json();
+
+                                    if (r.status === 200) {
+                                       let final = [] as User[];
+                                       usersState.forEach((user) => {
+                                          if (user.id === tagEditorUser?.id) {
+                                             let cUser = user;
+                                             cUser.department = data.department;
+                                             final.push(cUser);
+                                          } else {
+                                             final.push(user);
+                                          }
+                                       });
+                                       setUsersState(final);
+                                    } else {
+                                       notifications.showNotification({
+                                          color: "red",
+                                          title: "Change Department - Error",
+                                          message:
+                                             response.message ||
+                                             "Unknown Error",
+                                          icon: <AiOutlineClose />,
+                                          autoClose: 5000,
+                                       });
                                     }
-                                 );
-                                 const response = await r.json();
 
-                                 if (r.status === 200) {
-                                    let final = [] as User[];
-                                    usersState.forEach((user) => {
-                                       if (user.id === tagEditorUser?.id) {
-                                          let cUser = user;
-                                          cUser.department = data.department;
-                                          final.push(cUser);
-                                       } else {
-                                          final.push(user);
-                                       }
-                                    });
-                                    setUsersState(final);
-                                 } else {
-                                    notifications.showNotification({
-                                       color: "red",
-                                       title: "Change Department - Error",
-                                       message:
-                                          response.message || "Unknown Error",
-                                       icon: <AiOutlineClose />,
-                                       autoClose: 5000,
-                                    });
-                                 }
-
-                                 setBigLoading(false);
-                                 setSubmitting(false);
-                              }}
-                           >
-                              {({
-                                 errors,
-                                 isSubmitting,
-                                 values,
-                                 setFieldValue,
-                              }) => (
-                                 <Form className="mt-2">
-                                    <Field
-                                       as={MultiSelect}
-                                       value={values.department}
-                                       onChange={(v: string) =>
-                                          setFieldValue("department", v)
-                                       }
-                                       data={fullLocations.map((location) => ({
-                                          value: location,
-                                          label: getFormmatedLocation(location),
-                                       }))}
-                                       placeholder="Select tags"
-                                       name="tags"
-                                       classNames={{
-                                          filledVariant:
-                                             "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
-                                          dropdown:
-                                             "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
-                                          selected: "dark:bg-foot",
-                                       }}
-                                       error={errors.department}
-                                       size="md"
-                                    />
-                                    <Button
-                                       className="mt-3 w-full"
-                                       type="submit"
-                                       loading={isSubmitting}
-                                       disabled={isSubmitting}
-                                    >
-                                       Update
-                                    </Button>
-                                 </Form>
-                              )}
-                           </Formik>
-                        </div>
-                     )}
+                                    setBigLoading(false);
+                                    setSubmitting(false);
+                                 }}
+                              >
+                                 {({
+                                    errors,
+                                    isSubmitting,
+                                    values,
+                                    setFieldValue,
+                                 }) => (
+                                    <Form className="mt-2">
+                                       <Field
+                                          as={MultiSelect}
+                                          value={values.department}
+                                          onChange={(v: string) =>
+                                             setFieldValue("department", v)
+                                          }
+                                          data={fullLocations.map(
+                                             (location) => ({
+                                                value: location,
+                                                label: getFormmatedLocation(
+                                                   location
+                                                ),
+                                             })
+                                          )}
+                                          placeholder="Select tags"
+                                          name="tags"
+                                          classNames={{
+                                             filledVariant:
+                                                "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
+                                             dropdown:
+                                                "dark:bg-dark-bg border-2 dark:border-gray-800 border-gray-300",
+                                             selected: "dark:bg-foot",
+                                          }}
+                                          error={errors.department}
+                                          size="md"
+                                       />
+                                       <Button
+                                          className="mt-3 w-full"
+                                          type="submit"
+                                          loading={isSubmitting}
+                                          disabled={isSubmitting}
+                                       >
+                                          Update
+                                       </Button>
+                                    </Form>
+                                 )}
+                              </Formik>
+                           </div>
+                        )}
                   </>
                )}
             </div>
@@ -746,7 +805,14 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const session = await getSession({ req });
 
-   if (!session || !session?.user?.isAdmin)
+   if (
+      !session ||
+      (session?.user?.isAdmin
+         ? false
+         : session?.user?.isEditorial
+         ? false
+         : true)
+   )
       return {
          redirect: {
             destination: "/",

@@ -8,6 +8,7 @@ import {
    AiOutlineLike,
    AiOutlineDislike,
    AiOutlineQuestion,
+   AiFillEdit,
 } from "react-icons/ai";
 import { MdPreview } from "react-icons/md";
 import { RiAdminLine } from "react-icons/ri";
@@ -86,6 +87,7 @@ const ProfileTags: React.FC<ProfileTagsProps> = ({ user }) => {
             }
          })}
          {user.isAdmin && <BaseTag label="Administrator" Icon={RiAdminLine} />}
+         {user.isEditorial && <BaseTag label="Editorial" Icon={AiFillEdit} />}
          {user.isWriter && <BaseTag label="Writer" Icon={BsPen} />}
          {user.isReviewer && <BaseTag label="Reviewer" Icon={MdPreview} />}
          {!user.canComment && (

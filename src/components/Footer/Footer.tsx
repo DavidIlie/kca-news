@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { AiOutlineInstagram } from "react-icons/ai";
+import { Tooltip } from "@mantine/core";
 
 import { Button } from "../../ui/Button";
 import {
@@ -29,10 +30,12 @@ const Footer: React.FC = () => {
                   target="_blank"
                   rel="noreferrer"
                >
-                  <Button className="mt-2">
-                     <AiOutlineInstagram className="mr-1 text-xl" />
-                     Instagram
-                  </Button>
+                  <Tooltip label="kca_news on Instagram">
+                     <Button className="mt-2">
+                        <AiOutlineInstagram className="mr-1 text-xl" />
+                        Instagram
+                     </Button>
+                  </Tooltip>
                </a>
             </div>
             <div className="-mb-10 mt-10 grid grid-cols-2 text-center sm:flex sm:flex-grow sm:flex-wrap md:mt-0 md:text-left">

@@ -11,4 +11,5 @@ export interface Comment {
    pfp: string;
    user?: User;
    article?: Article;
+   underReview: boolean;
 }

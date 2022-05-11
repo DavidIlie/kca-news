@@ -462,7 +462,9 @@ const ArticleViewer: React.FC<Props> = ({
                                              </ErrorMessage>
                                           ) : formSuccess ? (
                                              <SuccessMessage>
-                                                Created successfully!
+                                                Success! Your comment will be
+                                                published once reviewed by an
+                                                moderator.
                                              </SuccessMessage>
                                           ) : (
                                              <p className="text-sm text-gray-800 dark:text-gray-200">
@@ -600,6 +602,15 @@ export const getServerSideProps: GetServerSideProps = async ({
             orderBy: {
                createdAt: "desc",
             },
+            where: session
+               ? session?.user?.isAdmin || session?.user?.isReviewer
+                  ? {}
+                  : {
+                       OR: [{ userId: session?.user?.id }],
+                    }
+               : {
+                    underReview: false,
+                 },
          },
          upvotes: true,
          downvotes: true,

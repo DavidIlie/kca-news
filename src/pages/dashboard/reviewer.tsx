@@ -4,7 +4,7 @@ import Link from "next/link";
 import { NextSeo } from "next-seo";
 import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
-import { LoadingOverlay, Select, TextInput } from "@mantine/core";
+import { LoadingOverlay, Select, TextInput, Tooltip } from "@mantine/core";
 import { useNotifications } from "@mantine/notifications";
 import { Tab, Menu, Transition } from "@headlessui/react";
 import { format } from "date-fns";
@@ -17,6 +17,7 @@ import {
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { HiLockClosed } from "react-icons/hi";
 import { RiArticleLine } from "react-icons/ri";
+import { BiHide } from "react-icons/bi";
 
 import DashboardStatistics from "../../components/DashboardStatistics";
 import NextLink from "../../ui/NextLink";
@@ -416,6 +417,38 @@ const CommentList: React.FC<CommentListProps> = ({
       }
    };
 
+   const handleVisibility = async (id: string) => {
+      setLoad(true);
+
+      const r = await fetch(`/api/comment/toggleVisibility?id=${id}`);
+
+      if (r.status === 200) {
+         let final = [] as Comment[];
+         baseComments.forEach((comment) => {
+            if (comment.id === id) {
+               let cComment = comment;
+               cComment.underReview = !cComment.underReview;
+               final.push(cComment);
+            } else {
+               final.push(comment);
+            }
+         });
+         setBaseComments(final);
+         setCommentsState(final);
+      } else {
+         const response = await r.json();
+         notifications.showNotification({
+            color: "red",
+            title: "Toggle Visibility - Error",
+            message: response.message || "Unknown Error",
+            icon: <AiOutlineClose />,
+            autoClose: 5000,
+         });
+      }
+
+      setLoad(false);
+   };
+
    return (
       <>
          <div className="mt-4 mb-2 flex items-center gap-2">
@@ -494,6 +527,39 @@ const CommentList: React.FC<CommentListProps> = ({
                               "d MMM yyyy 'at' h:mm bb"
                            )}
                         </p>
+                        {comment.underReview && (
+                           <>
+                              <span className="text-gray-800 dark:text-gray-200">
+                                 /
+                              </span>
+                              <Tooltip
+                                 label="Click to remove review status."
+                                 disabled={
+                                    data?.user?.isAdmin
+                                       ? false
+                                       : data?.user?.isEditorial
+                                       ? false
+                                       : true
+                                 }
+                              >
+                                 <p
+                                    className={`${
+                                       (data?.user?.isAdmin ||
+                                          data?.user?.isEditorial) &&
+                                       "cursor-pointer select-none italic hover:underline"
+                                    } text-sm text-gray-500 dark:text-gray-300`}
+                                    onClick={() =>
+                                       data?.user?.isAdmin ||
+                                       data?.user?.isEditorial
+                                          ? handleVisibility(comment.id)
+                                          : null
+                                    }
+                                 >
+                                    Under Review
+                                 </p>
+                              </Tooltip>
+                           </>
+                        )}
                      </div>
                   </div>
                </div>
@@ -522,7 +588,19 @@ const CommentList: React.FC<CommentListProps> = ({
                               View Article
                            </DropdownElement>
                         </Menu.Item>
-                        {data!.user!.isAdmin && (
+                        {((comment.underReview &&
+                           (data?.user?.isAdmin || data?.user?.isEditorial)) ||
+                           !comment.underReview) && (
+                           <Menu.Item
+                              onClick={() => handleVisibility(comment.id)}
+                           >
+                              <DropdownElement>
+                                 <BiHide className="mx-0.5 text-xl" />
+                                 {comment.underReview ? "Show" : "Hide"} Comment
+                              </DropdownElement>
+                           </Menu.Item>
+                        )}
+                        {(data?.user?.isAdmin || data?.user?.isEditorial) && (
                            <Menu.Item
                               onClick={async () => {
                                  setLoad(true);

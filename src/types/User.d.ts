@@ -1,7 +1,9 @@
-import { Comment } from "./Comment";
 import { Upvote, Downvote } from "@prisma/client";
+
+import { Comment } from "./Comment";
 import { Tag } from "./Tag";
 import { Article } from "./Article";
+import { Locations } from "../lib/categories";
 
 export interface UserCount {
    articles: number;
@@ -34,7 +36,8 @@ export interface User {
    downvotes?: Downvote[];
    articles?: Article[];
    canComment: boolean;
-   department: string[];
+   department: Locations[];
+   isEditorial: boolean;
    gender: "male" | "female";
    _count?: UserCount;
 }

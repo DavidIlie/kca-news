@@ -51,8 +51,9 @@ export default NextAuth({
             session.user.names = user.names as string[];
             session.user.showYear = user.showYear as boolean;
             session.user.canComment = user.canComment as boolean;
-            session.user.department = user.department as string[];
+            (session.user as any).department = user.department as string[];
             (session.user as any).gender = user.gender as string;
+            session.user.isEditorial = user.isEditorial as boolean;
          }
          return session;
       },

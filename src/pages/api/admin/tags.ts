@@ -7,7 +7,14 @@ import { tagSchema } from "../../../schema/admin";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    const session = await getSession({ req });
 
-   if (!session || !session.user?.isAdmin) {
+   if (
+      !session ||
+      (session.user?.isAdmin
+         ? false
+         : session?.user?.isEditorial
+         ? false
+         : true)
+   ) {
       return res.status(401).json({ message: "not authenticated" });
    }
 

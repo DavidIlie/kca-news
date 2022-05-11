@@ -19,6 +19,7 @@ const UserDropdown: React.FC = () => {
 
    const isWriter = data?.user?.isAdmin ? true : data?.user?.isWriter;
    const isReviewer = data?.user?.isAdmin ? true : data?.user?.isReviewer;
+   const isEditorial = data?.user?.isAdmin ? true : data?.user?.isEditorial;
 
    return (
       <Menu as="div" className="relative m-0 inline-flex">
@@ -66,11 +67,11 @@ const UserDropdown: React.FC = () => {
                         </DropdownElement>
                      </Menu.Item>
                   )}
-                  {data?.user?.isAdmin && (
+                  {isEditorial && (
                      <Menu.Item as={NextLink} href="/dashboard/admin">
                         <DropdownElement>
                            <RiAdminLine className="mx-0.5 text-xl" />
-                           Admin Panel
+                           {data?.user?.isAdmin ? "Admin" : "Editorial"} Panel
                         </DropdownElement>
                      </Menu.Item>
                   )}
