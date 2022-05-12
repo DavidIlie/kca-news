@@ -493,7 +493,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                normalProps={{
                   className: `${
                      openSidebar ? "w-1/5" : "hidden"
-                  } relative border-l-2 borderColor py-4 flex h-full flex-col flex-grow`,
+                  } relative border-l-2 borderColor flex h-full flex-col flex-grow`,
                }}
             >
                <Consumer>
