@@ -3,7 +3,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import fileUpload from "express-fileupload";
 import { getSession } from "next-auth/react";
 import { v4 } from "uuid";
-import sharp from "sharp";
 
 import prisma from "../../../../lib/prisma";
 import { expressFiles, uploadedFile } from "../../../../types/fileUpload";

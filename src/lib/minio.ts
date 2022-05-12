@@ -39,12 +39,14 @@ export const getObjectsByMetadata = async (
    const data = await getObjects(bucket);
 
    const keys = Object.keys(metadata);
+   const values = Object.values(metadata);
    let match = [] as minio.BucketItemWithMetadata[];
 
    data.forEach((object: minio.BucketItemWithMetadata) => {
       let found = false;
-      keys.forEach((key) => {
-         if (key in object.metadata) found = true;
+      keys.forEach((key, index) => {
+         if (key in object.metadata && object.metadata[key] === values[index])
+            found = true;
       });
 
       if (found) match.push(object);

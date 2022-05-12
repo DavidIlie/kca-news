@@ -59,9 +59,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
                   ? "Untitled Article"
                   : `Untitled Article #${unnamedArticles}`,
             user: session?.user?.id,
-            mdx: `## This is an example of the actual content for the article\n\nStart writing here… Use / on a new line to insert headings, etc.`,
+            mdx: `## This is an example of the actual content for your article\n\nStart writing here… Use / on a new line to insert headings, etc.`,
             description:
-               "This is an example of the description for the untitled article. The purpose of this section is to write a rough summary of what your article is about, as this is what is displayed on the main page before a reader clicks on the article.",
+               "This is an example of the description for your article. The purpose of this section is to write a rough summary of what your article is about, as this is what is displayed on the main page before a reader clicks on the article.",
          },
       });
 

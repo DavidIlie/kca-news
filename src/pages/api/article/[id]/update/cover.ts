@@ -60,7 +60,6 @@ router.post(async (req: NextApiRequest, res) => {
          const objects = await getObjectsByMetadata("news-covers", {
             "X-Amz-Meta-Article": article.id,
          });
-
          let names = [] as Array<string>;
          objects.forEach((object) => names.push(object.name));
          await minioClient.removeObjects("news-covers", names);
