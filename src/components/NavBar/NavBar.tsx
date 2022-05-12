@@ -6,8 +6,11 @@ import { AiOutlineSearch, AiOutlineArrowLeft } from "react-icons/ai";
 import { Menu } from "@headlessui/react";
 
 import { Button } from "../../ui/Button";
-import { Spinner } from "../../ui/Spinner";
 import UserDropdown from "./UserDropdown";
+import NewsDropdown from "./NewsDropdown";
+import DropdownElement from "../../ui/DropdownElement";
+import NextLink from "../../ui/NextLink";
+import Logo from "../Logo";
 
 import NewsLink from "./NewsLink";
 import {
@@ -17,10 +20,6 @@ import {
    visibleLocations,
    moreLocations,
 } from "../../lib/categories";
-import NewsDropdown from "./NewsDropdown";
-import DropdownElement from "../../ui/DropdownElement";
-import NextLink from "../../ui/NextLink";
-import Logo from "../Logo";
 
 const NavBar: React.FC = () => {
    const { status } = useSession();
