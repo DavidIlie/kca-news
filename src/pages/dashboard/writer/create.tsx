@@ -59,9 +59,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
                   ? "Untitled Article"
                   : `Untitled Article #${unnamedArticles}`,
             user: session?.user?.id,
-            mdx: `# Welcome to the template article`,
+            mdx: `## This is an example of the actual content for the article\n\nStart writing here… Use / on a new line to insert headings, etc.`,
             description:
-               "This is an example of the description for the untitled article. This can be modified from the menu on the right or by simply editing this text field.",
+               "This is an example of the description for the untitled article. The purpose of this section is to write a rough summary of what your article is about, as this is what is displayed on the main page before a reader clicks on the article.",
          },
       });
 

@@ -504,7 +504,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            className="fixed"
                         />
                         {!mobile && (
-                           <div className="borderColor flex items-center justify-between gap-2 border-b-2 px-4 pb-4">
+                           <div className="borderColor flex items-center justify-between gap-2 border-b-2 px-4 py-4">
                               <h1 className="text-2xl font-semibold">
                                  Settings
                               </h1>

@@ -69,7 +69,7 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
       <>
          <NextSeo title="Home" />
          <div className="mb-24 mt-20 flex items-center justify-center px-4 sm:pt-20 lg:mt-28 lg:px-0">
-            <div className="flex w-full justify-center lg:-ml-32 lg:gap-6">
+            <div className="flex w-full justify-center">
                <Slide cascade triggerOnce direction="left">
                   <div className="relative -mr-96 hidden items-center gap-4 lg:flex">
                      <button
@@ -138,10 +138,10 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                         >
                            <Link href={`/article/${article.id}`}>
                               <a
-                                 className="container max-w-md cursor-pointer truncate rounded-md border-2 border-gray-200 bg-gray-50 px-16 py-1 text-xl dark:border-gray-800 dark:bg-foot"
+                                 className="cursor-pointer truncate rounded-md border-2 border-gray-200 bg-gray-50 px-16 py-1 text-xl dark:border-gray-800 dark:bg-foot"
                                  key={index}
                               >
-                                 {article.title} -{" "}
+                                 {article.title}-{" "}
                                  <span className="text-base font-normal italic text-gray-700 dark:text-gray-300">
                                     {formatDistance(
                                        new Date(featuredPosts[index].createdAt),
