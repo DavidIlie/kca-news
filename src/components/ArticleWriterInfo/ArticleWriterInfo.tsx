@@ -44,15 +44,11 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                   "KCA News Team"
                ) : (
                   <div className="flex gap-2">
-                     {showEdit ? (
-                        <Link href={`/profile/${article.writer!.id}`}>
-                           <a className="duration-150 hover:text-blue-500">
-                              {computeKCAName(article.writer!)}
-                           </a>
-                        </Link>
-                     ) : (
-                        <span>{computeKCAName(article.writer!)}</span>
-                     )}
+                     <Link href={`/profile/${article.writer!.id}`}>
+                        <a className="duration-150 hover:text-blue-500">
+                           {computeKCAName(article.writer!)}
+                        </a>
+                     </Link>
                      {article.coWriters.length !== 0 && (
                         <Popover className="relative">
                            <Popover.Button
