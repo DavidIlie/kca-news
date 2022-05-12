@@ -34,7 +34,7 @@ const NavBar: React.FC = () => {
          <div className="container mx-auto flex flex-col flex-wrap items-center p-5 lg:flex-row">
             <Link href="/">
                <a className="mb-4 flex items-center font-medium text-gray-900 dark:text-gray-100 md:mb-0">
-                  <div className="max-w-[4rem]">
+                  <div className="-mt-3 h-12 max-w-[4rem]">
                      <Logo />
                   </div>
                   <span className="ml-3 text-xl text-white">KCA News</span>

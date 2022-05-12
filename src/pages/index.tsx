@@ -138,7 +138,7 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                         >
                            <Link href={`/article/${article.id}`}>
                               <a
-                                 className="cursor-pointer truncate rounded-md border-2 border-gray-200 bg-gray-50 px-16 py-1 text-xl dark:border-gray-800 dark:bg-foot"
+                                 className="cursor-pointer truncate rounded-md border-2 border-gray-200 bg-gray-50 px-4 py-1 text-xl dark:border-gray-800 dark:bg-foot"
                                  key={index}
                               >
                                  {article.title}-{" "}
