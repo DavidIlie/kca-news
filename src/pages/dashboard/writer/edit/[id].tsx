@@ -381,7 +381,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                   <ArticleWriterInfo article={article} user={user} />
                   <div className="items-center justify-evenly gap-6 sm:flex">
                      <div className="relative mt-1 flex justify-center sm:w-2/3">
-                        <div className="absolute top-0 right-0 z-50 mt-2 mr-4 flex items-center gap-4">
+                        <div className="absolute top-0 right-0 z-[1] mt-2 mr-4 flex items-center gap-4">
                            <Button
                               color="cyan"
                               onClick={toggleChangeCoverModal}
