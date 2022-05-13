@@ -65,6 +65,7 @@ import ArticleCoverUploader, {
 } from "../../../../components/ArticleCoverUploader/ArticleCoverUploader";
 import sendPost from "../../../../lib/sendPost";
 import { computeKCAName } from "../../../../lib/computeKCAName";
+import { formatDistance } from "date-fns";
 
 interface Props {
    user: User;
@@ -112,6 +113,42 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [coWriterSearchValue, setCoWriterSearchValue] = useState<any>();
    const [loadingSearch, setLoadingSearchWriter] = useState<boolean>(false);
    const [key, setKey] = useState<number>(0);
+   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
+   const handleAutoSave = async () => {
+      console.log("buenas");
+      const r = await fetch(`/api/article/${article.id}/update/content`, {
+         method: "POST",
+         credentials: "include",
+         body: JSON.stringify({
+            title,
+            description,
+            content: markdownValue,
+         }),
+      });
+      const response = await r.json();
+      if (r.status !== 200) {
+         notifications.showNotification({
+            color: "red",
+            title: "Auto Save - Error",
+            message: response.message || "Unknown Error",
+            icon: <AiOutlineClose />,
+            autoClose: 5000,
+         });
+      } else {
+         setLastSaved(new Date());
+         setArticle(article);
+      }
+   };
+
+   // BROKEN
+   // useEffect(() => {
+   //    const interval = setInterval(async () => {
+   //       if (canSave) await handleAutoSave();
+   //    }, 5000);
+
+   //    return () => clearInterval(interval);
+   // }, []);
 
    const [openChangeCoverModal, setOpenChangeCoverModal] =
       useState<boolean>(false);
@@ -501,8 +538,24 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         />
                         {!mobile && (
                            <div className="borderColor flex items-center justify-between gap-2 border-b-2 px-4 py-4">
-                              <h1 className="text-2xl font-semibold">
-                                 Settings
+                              <h1 className="flex items-center gap-2 text-2xl font-semibold">
+                                 Settings{" "}
+                                 {lastSaved && (
+                                    <span className="mt-1.5 text-sm font-normal text-gray-300">
+                                       {" "}
+                                       - Saved{" "}
+                                       {formatDistance(lastSaved, new Date(), {
+                                          addSuffix: true,
+                                       })}{" "}
+                                       -{" "}
+                                       <span
+                                          onClick={() => attemptToSave()}
+                                          className="cursor-pointer hover:underline"
+                                       >
+                                          Save Now
+                                       </span>
+                                    </span>
+                                 )}
                               </h1>
                               <AiOutlineCloseCircle
                                  size="25"
