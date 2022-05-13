@@ -348,8 +348,6 @@ const ArticleViewer: React.FC<Props> = ({
                   </div>
                   <div className="mx-4 mt-4 mb-1 border-t-2" />
                   <div className="px-4">
-                     {/*
-                        // @ts-ignore */}
                      <Editor
                         defaultValue={article.mdx}
                         readOnly

@@ -412,8 +412,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               />
                            </div>
                         )}
-                        {/*
-                        // @ts-ignore */}
                         <Editor
                            placeholder="Write description..."
                            onChange={(markdown) => setDescription(markdown())}
@@ -431,8 +429,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         markdownValue.length < 2 && "-mb-1"
                      } border-t-2`}
                   />
-                  {/*
-                  // @ts-ignore */}
                   <Editor
                      placeholder="Start typing..."
                      onChange={(markdown) => changeMarkdownValue(markdown())}
