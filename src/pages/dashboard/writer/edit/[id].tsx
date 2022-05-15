@@ -26,7 +26,6 @@ import {
    TextInput,
    Tooltip,
    LoadingOverlay,
-   Textarea,
    Alert,
    ScrollArea,
    Select,
@@ -38,7 +37,9 @@ import { BiCategory } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import { useBeforeUnload } from "react-use";
 
-const Editor = dynamic(() => import("david-markdown-editor"), { ssr: false });
+const Editor = dynamic(() => import("@davidilie/markdown-editor"), {
+   ssr: false,
+});
 
 import prisma from "../../../../lib/prisma";
 import { Article } from "../../../../types/Article";
@@ -457,7 +458,15 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            className="z-0 mt-4"
                            dark={resolvedTheme === "dark"}
                            maxLength={400}
-                           disableExtensions={["heading", "image", "table"]}
+                           disableExtensions={[
+                              "heading",
+                              "image",
+                              "table",
+                              "bullet_list",
+                              "ordered_list",
+                              "checkbox_list",
+                              "blockquote",
+                           ]}
                         />
                      </div>
                   </div>
@@ -474,9 +483,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      dark={resolvedTheme === "dark"}
                      onImageUploadStart={() => setBigLoad(true)}
                      onImageUploadStop={() => setBigLoad(false)}
-                     uploadImage={async (file) => {
+                     uploadMedia={async (media) => {
                         const formData = new FormData();
-                        formData.append("image", file);
+                        formData.append("image", media);
 
                         try {
                            const { statusCode, response } = await sendPost(
