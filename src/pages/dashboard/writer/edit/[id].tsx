@@ -15,11 +15,13 @@ import {
 import { RiRestartLine } from "react-icons/ri";
 import ContentEditable from "react-contenteditable";
 import { useNotifications } from "@mantine/notifications";
+import { formatDistance } from "date-fns";
 import {
    useLocalStorage,
    useElementSize,
    useViewportSize,
    useClipboard,
+   useDebouncedValue,
 } from "@mantine/hooks";
 import {
    MultiSelect,
@@ -66,7 +68,6 @@ import ArticleCoverUploader, {
 } from "../../../../components/ArticleCoverUploader/ArticleCoverUploader";
 import sendPost from "../../../../lib/sendPost";
 import { computeKCAName } from "../../../../lib/computeKCAName";
-import { formatDistance } from "date-fns";
 
 interface Props {
    user: User;
@@ -116,40 +117,32 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [key, setKey] = useState<number>(0);
    const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
-   const handleAutoSave = async () => {
-      console.log("buenas");
-      const r = await fetch(`/api/article/${article.id}/update/content`, {
-         method: "POST",
-         credentials: "include",
-         body: JSON.stringify({
-            title,
-            description,
-            content: markdownValue,
-         }),
-      });
-      const response = await r.json();
-      if (r.status !== 200) {
-         notifications.showNotification({
-            color: "red",
-            title: "Auto Save - Error",
-            message: response.message || "Unknown Error",
-            icon: <AiOutlineClose />,
-            autoClose: 5000,
-         });
-      } else {
-         setLastSaved(new Date());
-         setArticle(article);
-      }
-   };
+   // useDebouncedValue(async () => {
+   //    if (!canSave) return;
 
-   // BROKEN
-   // useEffect(() => {
-   //    const interval = setInterval(async () => {
-   //       if (canSave) await handleAutoSave();
-   //    }, 5000);
-
-   //    return () => clearInterval(interval);
-   // }, []);
+   //    const r = await fetch(`/api/article/${article.id}/update/content`, {
+   //       method: "POST",
+   //       credentials: "include",
+   //       body: JSON.stringify({
+   //          title,
+   //          description,
+   //          content: markdownValue,
+   //       }),
+   //    });
+   //    const response = await r.json();
+   //    if (r.status !== 200) {
+   //       notifications.showNotification({
+   //          color: "red",
+   //          title: "Auto Save - Error",
+   //          message: response.message || "Unknown Error",
+   //          icon: <AiOutlineClose />,
+   //          autoClose: 5000,
+   //       });
+   //    } else {
+   //       setLastSaved(new Date());
+   //       setArticle(article);
+   //    }
+   // }, 1000);
 
    const [openChangeCoverModal, setOpenChangeCoverModal] =
       useState<boolean>(false);
@@ -203,6 +196,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       if (r.status === 200) {
          setArticle(response.article);
          setDisplayAlert(true);
+         setLastSaved(new Date());
       } else {
          notifications.showNotification({
             color: "red",
@@ -230,6 +224,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
          if (!user.isAdmin) {
             setDisplayAlert(true);
          }
+         setLastSaved(new Date());
       } else {
          notifications.showNotification({
             color: "red",
@@ -263,6 +258,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                icon: <AiOutlineClose />,
                autoClose: 5000,
             });
+         } else {
+            setLastSaved(new Date());
          }
       }
 
@@ -280,6 +277,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       if (r.status === 200) {
          setArticle(response.article);
          setDisplayAlert(true);
+         setLastSaved(new Date());
       } else {
          notifications.showNotification({
             color: "red",
@@ -555,14 +553,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                        - Saved{" "}
                                        {formatDistance(lastSaved, new Date(), {
                                           addSuffix: true,
-                                       })}{" "}
-                                       -{" "}
-                                       <span
-                                          onClick={() => attemptToSave()}
-                                          className="cursor-pointer hover:underline"
-                                       >
-                                          Save Now
-                                       </span>
+                                       })}
                                     </span>
                                  )}
                               </h1>
