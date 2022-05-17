@@ -545,18 +545,34 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         />
                         {!mobile && (
                            <div className="borderColor flex items-center justify-between gap-2 border-b-2 px-4 py-4">
-                              <h1 className="flex items-center gap-2 text-2xl font-semibold">
-                                 Settings{" "}
+                              <div className={`${lastSaved && "-mb-2"}`}>
+                                 <h1 className="text-2xl font-semibold">
+                                    Settings
+                                 </h1>
                                  {lastSaved && (
-                                    <span className="mt-1.5 text-sm font-normal text-gray-300">
-                                       {" "}
-                                       - Saved{" "}
-                                       {formatDistance(lastSaved, new Date(), {
-                                          addSuffix: true,
-                                       })}
-                                    </span>
+                                    <Tooltip
+                                       label="Save now"
+                                       disabled={!canSave}
+                                    >
+                                       <span
+                                          className={`text-xs font-normal text-gray-300 ${
+                                             canSave &&
+                                             "cursor-pointer hover:underline"
+                                          }`}
+                                          onClick={attemptToSave}
+                                       >
+                                          Saved{" "}
+                                          {formatDistance(
+                                             lastSaved,
+                                             new Date(),
+                                             {
+                                                addSuffix: true,
+                                             }
+                                          )}
+                                       </span>
+                                    </Tooltip>
                                  )}
-                              </h1>
+                              </div>
                               <AiOutlineCloseCircle
                                  size="25"
                                  className="mt-1 cursor-pointer text-black duration-150 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
