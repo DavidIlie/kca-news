@@ -581,7 +581,11 @@ export const getServerSideProps: GetServerSideProps = async ({
          : session?.user?.isWriter
          ? {
               id: id as string,
-              OR: [{ sharedId: share as string }, { user: session?.user?.id }],
+              OR: [
+                 { sharedId: share as string },
+                 { user: session?.user?.id },
+                 { published: true },
+              ],
            }
          : {
               id: id as string,
