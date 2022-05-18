@@ -43,7 +43,7 @@ export const getArticles = async (
       ? JSON.parse(
            JSON.stringify(
               await prisma.article.findMany({
-                 where: { user: user?.id, ...where },
+                 where: { OR: [{ user: user?.id }], ...where },
                  orderBy: {
                     createdAt: "desc",
                  },

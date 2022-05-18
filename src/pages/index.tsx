@@ -141,7 +141,8 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
                                  className="cursor-pointer truncate rounded-md border-2 border-gray-200 bg-gray-50 px-4 py-1 text-xl dark:border-gray-800 dark:bg-foot"
                                  key={index}
                               >
-                                 {article.title}-{" "}
+                                 {article.title}
+                                 {" - "}
                                  <span className="text-base font-normal italic text-gray-700 dark:text-gray-300">
                                     {formatDistance(
                                        new Date(featuredPosts[index].createdAt),
