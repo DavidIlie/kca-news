@@ -16,15 +16,14 @@ const OurTeam: React.FC = () => {
                      What is KCA News?
                   </h1>
                   <p className="text-justify">
-                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                     Donec auctor magna semper tortor finibus gravida. Donec
-                     libero ante, dapibus ut orci sit amet, volutpat facilisis
-                     massa. Aenean sed nulla ac nunc pharetra porttitor. Nullam
-                     viverra nibh lectus. Pellentesque nisl felis, suscipit id
-                     leo sed, accumsan accumsan mi. Mauris a lacus vehicula,
-                     ullamcorper odio ut, venenatis dolor. Vivamus vel nisi ex.
-                     Integer tempus turpis pellentesque nibh imperdiet, sed
-                     molestie enim consequat.
+                     KCA News is a student-led newspaper of King's College
+                     Alicante. Here, we publish articles about the school news,
+                     world politics, fashion, entertainment, environment, and
+                     sports. Educate yourself about the global world events, or
+                     indulge in detailed horoscope predictions for you and your
+                     friends. Enjoy your time during breaks, registration, and
+                     study periods reading all about the latest at KCA and
+                     beyond!
                   </p>
                   <div className="py-6" />
                   <div className="justify-evenly gap-12 sm:flex">
@@ -33,16 +32,18 @@ const OurTeam: React.FC = () => {
                            Welcome from the editor
                         </h1>
                         <p className="text-justify">
-                           Lorem ipsum dolor sit amet, consectetur adipiscing
-                           elit. Donec auctor magna semper tortor finibus
-                           gravida. Donec libero ante, dapibus ut orci sit amet,
-                           volutpat facilisis massa. Aenean sed nulla ac nunc
-                           pharetra porttitor. Nullam viverra nibh lectus.
-                           Pellentesque nisl felis, suscipit id leo sed,
-                           accumsan accumsan mi. Mauris a lacus vehicula,
-                           ullamcorper odio ut, venenatis dolor. Vivamus vel
-                           nisi ex. Integer tempus turpis pellentesque nibh
-                           imperdiet, sed molestie enim consequat.
+                           Welcome to all the young, aspiring readers of KCA
+                           News! Here, we publish articles every week on various
+                           topics, including our own school, the world news, the
+                           latest films, horoscopes, and recent sports events.
+                           KCA News is a student-led initiative that was
+                           inspired by the desire to strengthen the school
+                           community by uniting KCA students as readers,
+                           thinkers, and dreamers. It is our job to deliver you
+                           a fruitful reading experience that you can enjoy in
+                           your free time. So get comfy, open up your favorite
+                           KCA News section, and enthrall yourself with the
+                           stories it hides!
                         </p>
                      </div>
                      <div className="mt-4 object-cover sm:mt-0 sm:w-[200%]">
