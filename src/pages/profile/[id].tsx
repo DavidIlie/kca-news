@@ -29,6 +29,11 @@ export const getServerSideProps: GetServerSideProps = async ({
       where: { id: id as string },
       include: {
          comments: {
+            where: {
+               article: {
+                  published: true,
+               },
+            },
             include: {
                user: true,
                article: true,
@@ -44,6 +49,7 @@ export const getServerSideProps: GetServerSideProps = async ({
             include: {
                writer: true,
             },
+            where: { published: true },
             orderBy: {
                upvotes: {
                   _count: "desc",

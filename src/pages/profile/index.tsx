@@ -33,6 +33,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       where: { id: session.user!.id },
       include: {
          comments: {
+            where: {
+               article: {
+                  published: true,
+               },
+            },
             include: {
                user: true,
                article: true,
@@ -48,6 +53,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             include: {
                writer: true,
             },
+            where: { published: true },
             orderBy: {
                upvotes: {
                   _count: "desc",
