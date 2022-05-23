@@ -25,15 +25,13 @@ export const getServerSideProps: GetServerSideProps = async ({
    const session = await getSession({ req });
    const { id } = query;
 
+   if (id === session?.user?.id)
+      return { redirect: { destination: "/profile", permanent: false } };
+
    const user = await prisma.user.findUnique({
       where: { id: id as string },
       include: {
          comments: {
-            where: {
-               article: {
-                  published: true,
-               },
-            },
             include: {
                user: true,
                article: true,
@@ -49,7 +47,6 @@ export const getServerSideProps: GetServerSideProps = async ({
             include: {
                writer: true,
             },
-            where: { published: true },
             orderBy: {
                upvotes: {
                   _count: "desc",
@@ -67,9 +64,6 @@ export const getServerSideProps: GetServerSideProps = async ({
             permanent: false,
          },
       };
-
-   if (user.id === session?.user?.id)
-      return { redirect: { destination: "/profile", permanent: false } };
 
    return {
       props: {
