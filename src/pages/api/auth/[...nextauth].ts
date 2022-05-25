@@ -20,13 +20,11 @@ export default NextAuth({
                `https://api.genderize.io/?name=${(user as any).names[0]}`
             );
             const response = await r.json();
-
             await prisma.user.update({
                where: { id: user.id },
                data: { gender: response.gender },
             });
          }
-
          if (
             user.email?.endsWith("@kcpupils.org") ||
             user.email?.endsWith("@kings.education") ||
