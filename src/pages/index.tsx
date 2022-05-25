@@ -55,10 +55,10 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
          <div className="container mx-auto mt-12 max-w-7xl px-4 sm:mt-32">
             <CategorySection articles={featuredPosts}>Latest</CategorySection>
          </div>
-         <div className="container mx-auto mt-12 max-w-7xl px-4">
+         <div className="container mx-auto mt-6 max-w-7xl px-4">
             {individualArticles.map((parsedLocation, index) => (
                <div
-                  className={index !== featuredPosts.length - 1 ? "mb-12" : ""}
+                  className={index !== featuredPosts.length - 1 ? "mb-6" : ""}
                   key={index}
                >
                   <CategorySection articles={parsedLocation.articles}>
@@ -80,7 +80,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const session = await getSession({ req });
 
    const featuredPosts = await getArticles(session?.user, null, null, {
-      take: 5,
+      take: 4,
    });
 
    const individualArticles: IndividualArticleType[] = await Promise.all(

@@ -30,7 +30,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                {article.categoryId.concat(article.tags).map((tag, i) => (
                   <ArticleBadge tag={tag} key={i} />
                ))}
-               <h1 className="text-section mt-1 mb-1 font-semibold md:text-2xl xl:text-2xl">
+               <h1 className="text-section mt-1 mb-1 font-semibold line-clamp-2 md:text-2xl xl:text-2xl">
                   {article.title}
                </h1>
                <p className="text-gray-800 line-clamp-6 dark:text-gray-100">
