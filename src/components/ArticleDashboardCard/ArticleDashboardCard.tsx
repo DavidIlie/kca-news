@@ -108,7 +108,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
                   />
                )}
                <div className="flex w-full items-center justify-between">
-                  <h1 className="-ml-2">
+                  <h1 className="-ml-2 truncate">
                      <Link href={`/dashboard/writer/edit/${article.id}`}>
                         <a className="duration-150 hover:text-blue-500">
                            {article.title}
@@ -126,12 +126,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
                      )}
                      {article.published && !article.underReview && (
                         <span className="font-semibold"> (published)</span>
-                     )}{" "}
-                     <Link href={`/article/${article.id}`}>
-                        <a className="hidden font-semibold text-blue-600 duration-150 hover:text-blue-800 hover:underline dark:text-blue-400 dark:hover:text-blue-600 sm:inline-flex">
-                           {" - "} See article
-                        </a>
-                     </Link>
+                     )}
                   </h1>
                   <div className="flex items-center gap-2">
                      {article.published ? (
