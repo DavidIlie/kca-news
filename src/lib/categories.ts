@@ -30,7 +30,7 @@ export const getFormmatedLocation = (l: Locations) => {
 export type Category = {
    id: string;
    name: string;
-   location: Array<Locations>;
+   location: Locations[];
 };
 
 export const links: Category[] = [
