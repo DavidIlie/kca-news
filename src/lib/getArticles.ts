@@ -16,6 +16,7 @@ export const getArticles = async (
       cover: true,
       tags: true,
    };
+
    const extraData = excludeContent
       ? extra
          ? {
@@ -36,6 +37,7 @@ export const getArticles = async (
       : extra
       ? { select: { writer: true, ...select }, ...extra }
       : { select: { writer: true, ...select } };
+
    return user?.isAdmin
       ? JSON.parse(
            JSON.stringify(
