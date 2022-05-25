@@ -79,17 +79,27 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    const session = await getSession({ req });
 
-   const featuredPosts = await getArticles(session?.user, null, null, {
-      take: 4,
-   });
+   const featuredPosts = await getArticles(
+      session?.user,
+      null,
+      {
+         take: 4,
+      },
+      true
+   );
 
    const individualArticles: IndividualArticleType[] = await Promise.all(
       fullLocations.map(
          async (location): Promise<IndividualArticleType> => ({
             location,
-            articles: await getArticles(session?.user, { location }, null, {
-               take: 4,
-            }),
+            articles: await getArticles(
+               session?.user,
+               { location },
+               {
+                  take: 4,
+               },
+               true
+            ),
          })
       )
    );

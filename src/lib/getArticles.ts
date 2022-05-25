@@ -5,13 +5,38 @@ import { Article } from "../types/Article";
 export const getArticles = async (
    user?: User,
    where?: any,
-   include?: any,
-   extra?: any
+   extra?: any,
+   excludeContent = false
 ): Promise<Article[]> => {
-   const includeValues = {
-      writer: true,
-      ...include,
+   const select = {
+      categoryId: true,
+      createdAt: true,
+      title: true,
+      description: true,
+      cover: true,
+      tags: true,
    };
+
+   const extraData = excludeContent
+      ? extra
+         ? {
+              select: {
+                 writer: true,
+                 mdx: false,
+                 ...select,
+              },
+              ...extra,
+           }
+         : {
+              select: {
+                 writer: true,
+                 mdx: false,
+                 ...select,
+              },
+           }
+      : extra
+      ? { select: { writer: true, ...select }, ...extra }
+      : { select: { writer: true, ...select } };
 
    return user?.isAdmin
       ? JSON.parse(
@@ -21,8 +46,7 @@ export const getArticles = async (
                  orderBy: {
                     createdAt: "desc",
                  },
-                 ...extra,
-                 include: includeValues as any,
+                 ...extraData,
               })
            )
         )
@@ -34,8 +58,7 @@ export const getArticles = async (
                  orderBy: {
                     createdAt: "desc",
                  },
-                 ...extra,
-                 include: includeValues as any,
+                 ...extraData,
               })
            )
         )
@@ -50,8 +73,7 @@ export const getArticles = async (
                  orderBy: {
                     createdAt: "desc",
                  },
-                 ...extra,
-                 include: includeValues as any,
+                 ...extraData,
               })
            )
         )
@@ -62,8 +84,7 @@ export const getArticles = async (
                  orderBy: {
                     createdAt: "desc",
                  },
-                 ...extra,
-                 include: includeValues as any,
+                 ...extraData,
               })
            )
         );

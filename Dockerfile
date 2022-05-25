@@ -2,7 +2,7 @@ FROM node:16.13.0-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --production
 
 FROM node:16.13.0-alpine AS builder
 WORKDIR /app
