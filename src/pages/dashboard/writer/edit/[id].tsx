@@ -211,7 +211,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    };
 
    const handleSetUnderReview = async () => {
-      if (article.underReview && !user.isAdmin) return;
+      if (article.underReview && !(user.isAdmin || user.isEditorial)) return;
       setLoadingRest(true);
 
       const r = await fetch(`/api/article/${article.id}/update/underReview`, {
@@ -221,7 +221,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
       if (r.status === 200) {
          setArticle(response.article);
-         if (!user.isAdmin) {
+         if (!(user.isAdmin || user.isEditorial)) {
             setDisplayAlert(true);
          }
          setLastSaved(new Date());
@@ -621,7 +621,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  transitionDuration={200}
                                  disabled={
                                     location === null ||
-                                    (article.underReview && !user.isAdmin)
+                                    (article.underReview &&
+                                       !(user.isAdmin || user.isEditorial))
                                  }
                               >
                                  <Radio
@@ -630,14 +631,18 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     labelSize="md"
                                     disabled={
                                        location === null ||
-                                       (article.underReview && !user.isAdmin)
+                                       (article.underReview &&
+                                          !(user.isAdmin || user.isEditorial))
                                     }
                                     labelDisabled={
                                        location === null ||
-                                       (article.underReview && !user.isAdmin)
+                                       (article.underReview &&
+                                          !(user.isAdmin || user.isEditorial))
                                     }
                                     onChange={() => {
-                                       if (!user.isAdmin) {
+                                       if (
+                                          !(user.isAdmin || user.isEditorial)
+                                       ) {
                                           setOpenConfirmModalUnderReview(
                                              !openConfirmModalUnderReview
                                           );
@@ -647,9 +652,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     }}
                                  />
                               </Tooltip>
-                              {article.underReview && !user.isAdmin && (
-                                 <ArticleUnderReviewCard />
-                              )}
+                              {article.underReview &&
+                                 !(user.isAdmin || user.isEditorial) && (
+                                    <ArticleUnderReviewCard />
+                                 )}
                            </div>
                            {user.isAdmin && (
                               <div className="mt-2 flex items-center gap-2">
@@ -1189,23 +1195,24 @@ export const getServerSideProps: GetServerSideProps = async ({
          },
       };
 
-   const article = session?.user?.isAdmin
-      ? await prisma.article.findFirst({
-           where: {
-              id: id as string,
-           },
-           include: {
-              writer: true,
-              coWriters: true,
-           },
-        })
-      : await prisma.article.findFirst({
-           where: { id: id as string, user: session?.user?.id },
-           include: {
-              writer: true,
-              coWriters: true,
-           },
-        });
+   const article =
+      session?.user?.isAdmin || session?.user?.isEditorial
+         ? await prisma.article.findFirst({
+              where: {
+                 id: id as string,
+              },
+              include: {
+                 writer: true,
+                 coWriters: true,
+              },
+           })
+         : await prisma.article.findFirst({
+              where: { id: id as string, user: session?.user?.id },
+              include: {
+                 writer: true,
+                 coWriters: true,
+              },
+           });
 
    if (!article)
       return {

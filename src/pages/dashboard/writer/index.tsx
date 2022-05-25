@@ -402,20 +402,21 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       downvotes: true,
    };
 
-   const articles = session?.user?.isAdmin
-      ? await prisma.article.findMany({
-           include: includeParams as any,
-           orderBy: {
-              createdAt: "desc",
-           },
-        })
-      : await prisma.article.findMany({
-           include: includeParams as any,
-           where: { user: session?.user?.id },
-           orderBy: {
-              createdAt: "desc",
-           },
-        });
+   const articles =
+      session?.user?.isAdmin || session?.user?.isEditorial
+         ? await prisma.article.findMany({
+              include: includeParams as any,
+              orderBy: {
+                 createdAt: "desc",
+              },
+           })
+         : await prisma.article.findMany({
+              include: includeParams as any,
+              where: { user: session?.user?.id },
+              orderBy: {
+                 createdAt: "desc",
+              },
+           });
 
    return {
       props: {

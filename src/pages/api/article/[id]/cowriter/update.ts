@@ -10,27 +10,30 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       if (
          !session ||
-         (session?.user?.isAdmin ? false : !session?.user?.isWriter)
+         (session?.user?.isAdmin || session?.user?.isEditorial
+            ? false
+            : !session?.user?.isWriter)
       )
          return res.status(401).json({ message: "not authorized" });
 
       const { id } = req.query;
 
-      const article = session?.user?.isAdmin
-         ? await prisma.article.findFirst({
-              where: {
-                 id: id as string,
-              },
-              include: {
-                 coWriters: true,
-              },
-           })
-         : await prisma.article.findFirst({
-              where: { id: id as string, user: session?.user?.id },
-              include: {
-                 coWriters: true,
-              },
-           });
+      const article =
+         session?.user?.isAdmin || session?.user?.isEditorial
+            ? await prisma.article.findFirst({
+                 where: {
+                    id: id as string,
+                 },
+                 include: {
+                    coWriters: true,
+                 },
+              })
+            : await prisma.article.findFirst({
+                 where: { id: id as string, user: session?.user?.id },
+                 include: {
+                    coWriters: true,
+                 },
+              });
 
       if (!article)
          return res.status(404).json({ message: "article not found" });
