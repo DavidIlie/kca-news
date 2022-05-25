@@ -12,16 +12,22 @@ jobs:
       steps:
          - name: "Build:checkout"
            uses: actions/checkout@v2
-         - name: Login to GitHub Container Registry
-           uses: docker/login-action@v1
-           with:
-              registry: ghcr.io
-              username: DavidIlie
-              password: ${{ secrets.GHCR_PASSWORD }}
-         - name: Build and publish Docker image
-           run: |
-              docker build -t ghcr.io/davidilie/kca-news:latest .
-              docker push ghcr.io/davidilie/kca-news:latest
+         - name: Push to GitHub Container Registry
+            uses: docker/build-push-action@v2
+            with:
+               context: .
+               push: true
+               tags: ghcr.io/davidilie/kca-news
+         # - name: Login to GitHub Container Registry
+         #   uses: docker/login-action@v1
+         #   with:
+         #      registry: ghcr.io
+         #      username: DavidIlie
+         #      password: ${{ secrets.GHCR_PASSWORD }}
+         # - name: Build and publish Docker image
+         #   run: |
+         #      docker build -t ghcr.io/davidilie/kca-news:latest .
+         #      docker push ghcr.io/davidilie/kca-news:latest
    deploy_self:
       name: "Deploy"
       runs-on: ubuntu-latest
