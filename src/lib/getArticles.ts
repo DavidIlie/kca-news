@@ -6,9 +6,10 @@ export const getArticles = async (
    user?: User,
    where?: any,
    extra?: any,
-   excludeContent = false
+   excludeContent = false,
+   select?: any
 ): Promise<Article[]> => {
-   const select = {
+   const defaultSelect = {
       categoryId: true,
       createdAt: true,
       title: true,
@@ -16,28 +17,26 @@ export const getArticles = async (
       cover: true,
       tags: true,
       id: true,
+      ...select,
    };
 
    const extraData = excludeContent
-      ? extra
-         ? {
-              select: {
-                 writer: true,
-                 mdx: false,
-                 ...select,
-              },
-              ...extra,
-           }
-         : {
-              select: {
-                 writer: true,
-                 mdx: false,
-                 ...select,
-              },
-           }
-      : extra
-      ? { select: { writer: true, ...select }, ...extra }
-      : { select: { writer: true, ...select } };
+      ? {
+           select: {
+              writer: true,
+              mdx: false,
+              ...defaultSelect,
+           },
+           ...extra,
+        }
+      : {
+           select: {
+              writer: true,
+              mdx: false,
+              ...defaultSelect,
+           },
+           ...extra,
+        };
 
    return user?.isAdmin
       ? JSON.parse(

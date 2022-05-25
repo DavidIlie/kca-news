@@ -98,7 +98,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
                {
                   take: 4,
                },
-               true
+               true,
+               null
             ),
          })
       )

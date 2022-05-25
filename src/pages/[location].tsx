@@ -133,6 +133,8 @@ export const getServerSideProps: GetServerSideProps = async ({
          : {
               location: location as string,
            },
+      null,
+      true,
       { upvotes: true, downvotes: true, comments: true, writer: true }
    );
 
