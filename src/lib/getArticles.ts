@@ -15,6 +15,7 @@ export const getArticles = async (
       description: true,
       cover: true,
       tags: true,
+      id: true,
    };
 
    const extraData = excludeContent
