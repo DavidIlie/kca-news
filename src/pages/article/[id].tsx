@@ -63,7 +63,7 @@ const ArticleViewer: React.FC<Props> = ({
 }) => {
    if (notFound) {
       return (
-         <div className="flex flex-grow items-center justify-center">
+         <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
             <Slide triggerOnce direction="down">
                <div>
                   <h1 className="mb-4 text-6xl font-bold text-red-500">
@@ -71,7 +71,9 @@ const ArticleViewer: React.FC<Props> = ({
                   </h1>
                   <Link href="/">
                      <a>
-                        <Button className="mx-auto">Go Home</Button>
+                        <Button className="mx-auto" title="Go big or go home">
+                           Go Home
+                        </Button>
                      </a>
                   </Link>
                </div>
