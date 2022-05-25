@@ -769,7 +769,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                                 ),
                                              })
                                           )}
-                                          placeholder="Select tags"
+                                          placeholder="Select departments"
                                           name="tags"
                                           classNames={{
                                              filledVariant:

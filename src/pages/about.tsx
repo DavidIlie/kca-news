@@ -1,9 +1,46 @@
 import React from "react";
+import Image from "next/image";
 import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 import { Fade } from "react-awesome-reveal";
 
 import { Button } from "../ui/Button";
+import { shimmer } from "../lib/shimmer";
+import { getFormmatedLocation, Locations } from "../lib/categories";
+
+interface TeamMember {
+   name: string;
+   department: Locations;
+   photo: string;
+}
+
+const team: TeamMember[] = [
+   {
+      name: "Adina Tursyn",
+      department: "news",
+      photo: "/static/adina.jpg",
+   },
+   {
+      name: "Sara Campos",
+      department: "society",
+      photo: "/static/sara.jpg",
+   },
+   {
+      name: "Antonio López",
+      department: "entertainment",
+      photo: "/static/antonio.jpeg",
+   },
+   {
+      name: "Paz Casamitjana",
+      department: "sports",
+      photo: "/static/paz.jpg",
+   },
+   {
+      name: "Vadim Rikunov",
+      department: "humanities",
+      photo: "/static/vadim.jpg",
+   },
+];
 
 const OurTeam: React.FC = () => {
    return (
@@ -47,64 +84,54 @@ const OurTeam: React.FC = () => {
                         </p>
                      </div>
                      <div className="mt-4 object-cover sm:mt-0 sm:w-[200%]">
-                        <img
-                           src="./kings-alicante-1.jpg"
+                        <Image
+                           src="/static/rocio.jpg"
                            className="rounded-xl duration-150 hover:shadow-md"
+                           width={500}
+                           height={300}
+                           blurDataURL={shimmer(1905 / 2, 957 / 2)}
+                           placeholder="blur"
+                           objectFit="cover"
                         />
                         <h1 className="mt-1 text-center text-lg font-semibold">
-                           Name
+                           Rocio De La Fuente Andrade
                         </h1>
                      </div>
                   </div>
                   <h1 className="mt-8 text-center text-5xl font-medium">
                      The Team
                   </h1>
-                  <div className="mx-auto mt-12 grid grid-cols-4 gap-12">
-                     <div className="hoverItem duration-150">
-                        <img
-                           src="/no-pfp.jpg"
-                           className="mx-auto w-[70%] rounded-full ring-1 ring-gray-800 duration-150 hover:shadow-md"
-                        />
-                        <h1 className="mt-1 text-center text-lg font-semibold">
-                           Name
-                        </h1>
-                     </div>
-                     <div className="hoverItem duration-150">
-                        <img
-                           src="/no-pfp.jpg"
-                           className="mx-auto w-[70%] rounded-full ring-1 ring-gray-800 duration-150 hover:shadow-md"
-                        />
-                        <h1 className="mt-1 text-center text-lg font-semibold">
-                           Name
-                        </h1>
-                     </div>
-                     <div className="hoverItem duration-150">
-                        <img
-                           src="/no-pfp.jpg"
-                           className="mx-auto w-[70%] rounded-full ring-1 ring-gray-800 duration-150 hover:shadow-md"
-                        />
-                        <h1 className="mt-1 text-center text-lg font-semibold">
-                           Name
-                        </h1>
-                     </div>
-                     <div className="hoverItem duration-150">
-                        <img
-                           src="/no-pfp.jpg"
-                           className="mx-auto w-[70%] rounded-full ring-1 ring-gray-800 duration-150 hover:shadow-md"
-                        />
-                        <h1 className="mt-1 text-center text-lg font-semibold">
-                           Name
-                        </h1>
-                     </div>
+                  <div className="mx-auto mt-12 grid grid-cols-2 gap-12 sm:grid-cols-5">
+                     {team.map((member, index) => (
+                        <div className="hoverItem duration-150" key={index}>
+                           <Image
+                              src={member.photo}
+                              className="mx-auto rounded-full ring-1 ring-gray-800 duration-150 hover:shadow-md"
+                              width={300}
+                              height={300}
+                              blurDataURL={shimmer(1905 / 2, 957 / 2)}
+                              placeholder="blur"
+                              objectFit="cover"
+                           />
+                           <div className="mt-1 text-center">
+                              <h1 className="text-lg font-semibold">
+                                 {member.name}
+                              </h1>
+                              <p className="-mt-1 italic text-gray-600 dark:text-gray-300">
+                                 {getFormmatedLocation(member.department)}
+                              </p>
+                           </div>
+                        </div>
+                     ))}
                   </div>
                   <div className="mt-24 mb-20 flex justify-evenly dark:bg-dark-bg">
                      <div>
-                        <h1 className="text-5xl font-semibold">
-                           The Creative Team
-                        </h1>
                         <div className="-mt-4 flex h-full items-center">
-                           <div className="container max-w-sm">
-                              <h1 className="mb-4 text-center font-medium">
+                           <div className="container max-w-[30rem]">
+                              <h1 className="mb-4 w-full text-center text-5xl font-semibold">
+                                 The Creative Team
+                              </h1>
+                              <h1 className="mb-4 text-center">
                                  Want to help with writing articles, contribute
                                  new ideas or show off to other KCA students?
                               </h1>

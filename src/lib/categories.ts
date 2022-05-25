@@ -124,4 +124,9 @@ export const links: Category[] = [
       name: "General Art",
       location: ["arts"],
    },
+   {
+      id: "tech",
+      name: "Technology",
+      location: ["humanities"],
+   },
 ];
