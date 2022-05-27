@@ -17,9 +17,9 @@ const CategorySection: React.FC<CategorySectionProps> = ({
             {children}
          </h1>
          <div
-            className={`mt-6 ${articles.length !== 1 && "grid"} grid-cols-${
+            className={`mt-6 ${articles.length !== 1 && "grid"} sm:grid-cols-${
                articles.length
-            } gap-4`}
+            } grid-cols-2 gap-4`}
          >
             {articles.length === 1 ? (
                <>

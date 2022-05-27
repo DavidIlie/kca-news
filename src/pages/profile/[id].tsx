@@ -53,6 +53,9 @@ export const getServerSideProps: GetServerSideProps = async ({
                },
             },
             take: 3,
+            where: {
+               published: true,
+            },
          },
       },
    });

@@ -55,7 +55,7 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
          <div className="container mx-auto mt-12 max-w-7xl px-4 sm:mt-32">
             <CategorySection articles={featuredPosts}>Latest</CategorySection>
          </div>
-         <div className="container mx-auto mt-6 max-w-7xl px-4">
+         <div className="container mx-auto mt-3 max-w-7xl px-4">
             {individualArticles.map((parsedLocation, index) => (
                <div
                   className={index !== featuredPosts.length - 1 ? "mb-6" : ""}
