@@ -432,7 +432,7 @@ const ArticleViewer: React.FC<Props> = ({
                                              2000
                                           );
                                           setComments([
-                                             response,
+                                             response.comment,
                                              ...commentsState,
                                           ]);
                                        }
