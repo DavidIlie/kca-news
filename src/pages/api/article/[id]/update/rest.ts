@@ -40,16 +40,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             categoryId: body.categories,
             tags: body.tags,
             location: body.location,
-            published:
-               session?.user?.isAdmin || session?.user?.isEditorial
-                  ? article.published
-                  : false,
-            underReview:
-               session?.user?.isAdmin || session?.user?.isEditorial
-                  ? article.underReview
-                  : article.published
-                  ? true
-                  : false,
          },
          include: {
             writer: true,

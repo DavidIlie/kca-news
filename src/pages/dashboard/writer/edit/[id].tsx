@@ -372,13 +372,9 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            withCloseButton
                            onClose={() => setDisplayAlert(false)}
                         >
-                           {article.underReview && !article.published
-                              ? "Your article has been put under review so that your changes can be moderated."
-                              : `                     ${
-                                   article.writer!.id === user.id
-                                      ? "Your"
-                                      : "This"
-                                } article
+                           {`${
+                              article.writer!.id === user.id ? "Your" : "This"
+                           } article
                      has successfully been updated!`}{" "}
                            <Link href={`/article/${article.id}`}>
                               <a className="font-semibold text-blue-500 duration-150 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-600">
@@ -513,6 +509,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            });
                         }
                      }}
+                     onSave={attemptToSave}
                   />
                   <div className="mt-7 border-t-2 pt-4">
                      <Button

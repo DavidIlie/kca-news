@@ -40,16 +40,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             title: body.title,
             description: body.description,
             mdx: body.content,
-            published:
-               session?.user?.isAdmin || session?.user?.isEditorial
-                  ? article.published
-                  : false,
-            underReview:
-               session?.user?.isAdmin || session?.user?.isEditorial
-                  ? article.underReview
-                  : article.published
-                  ? true
-                  : false,
          },
          include: {
             writer: true,
