@@ -20,7 +20,7 @@ const KingsNews = ({
    colorScheme,
    pageProps: { session, ...pageProps },
 }: AppProps & { colorScheme: ColorScheme }) => {
-   const { colorScheme: stateColorScheme, updateColorScheme } = useThemeStore();
+   const { updateColorScheme } = useThemeStore();
 
    useEffect(() => {
       updateColorScheme(colorScheme);
@@ -69,7 +69,7 @@ const ThemeHandler: React.FC = ({ children }) => {
 
    const { colorScheme, toggleColorScheme } = useColorScheme();
 
-   useEffect(() => setTheme(colorScheme), []);
+   useEffect(() => setTheme(colorScheme || "light"));
 
    useHotkeys([
       [
