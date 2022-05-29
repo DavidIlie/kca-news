@@ -594,7 +594,7 @@ export const getServerSideProps: GetServerSideProps = async ({
                  gte: new Date(`${year}-${month}-01`),
                  lt: new Date(`${year}-${month}-31`),
               },
-              id: getCookie("article-view") as string,
+              slug: title as string,
            },
       select: { id: true },
    });
