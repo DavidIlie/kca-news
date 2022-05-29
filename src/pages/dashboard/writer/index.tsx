@@ -94,30 +94,30 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
             break;
          case "most-likes":
             setArticles(
-               baseArticles.sort(
-                  (a, b) => b.upvotes!.length - a.upvotes!.length
-               )
+               baseArticles
+                  .filter((s) => s.published)
+                  .sort((a, b) => b.upvotes!.length - a.upvotes!.length)
             );
             break;
          case "least-likes":
             setArticles(
-               baseArticles.sort(
-                  (a, b) => a.upvotes!.length - b.upvotes!.length
-               )
+               baseArticles
+                  .filter((s) => s.published)
+                  .sort((a, b) => a.upvotes!.length - b.upvotes!.length)
             );
             break;
          case "most-dislikes":
             setArticles(
-               baseArticles.sort(
-                  (a, b) => b.downvotes!.length - a.downvotes!.length
-               )
+               baseArticles
+                  .filter((s) => s.published)
+                  .sort((a, b) => b.downvotes!.length - a.downvotes!.length)
             );
             break;
          case "least-dislikes":
             setArticles(
-               baseArticles.sort(
-                  (a, b) => a.downvotes!.length - b.downvotes!.length
-               )
+               baseArticles
+                  .filter((s) => s.published)
+                  .sort((a, b) => a.downvotes!.length - b.downvotes!.length)
             );
             break;
          case "published":

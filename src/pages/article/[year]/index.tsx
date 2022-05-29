@@ -31,28 +31,9 @@ const ArticleURLConverter: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-   let test = await prisma.article.findFirst({
-      where: { id: query.year as string },
-      select: {
-         title: true,
-         createdAt: true,
-         id: true,
-         slug: true,
-         published: true,
-      },
-   });
-
-   if (!test)
-      return {
-         props: {
-            notFound: true,
-         },
-      };
-
-   if (!test.slug) {
-      test = await prisma.article.update({
-         where: { id: test.id },
-         data: { slug: createSlug(test.title) },
+   try {
+      let test = await prisma.article.findFirst({
+         where: { id: query.year as string },
          select: {
             title: true,
             createdAt: true,
@@ -61,18 +42,41 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
             published: true,
          },
       });
+
+      if (!test)
+         return {
+            props: {
+               notFound: true,
+            },
+         };
+
+      if (!test.slug) {
+         test = await prisma.article.update({
+            where: { id: test.id },
+            data: { slug: createSlug(test.title) },
+            select: {
+               title: true,
+               createdAt: true,
+               id: true,
+               slug: true,
+               published: true,
+            },
+         });
+      }
+
+      const date = new Date(test.createdAt).toISOString().split("-");
+
+      return {
+         redirect: {
+            destination: `/article/${date[0]}/${date[1]}/${
+               test.published ? test.slug : test.id
+            }`,
+            permanent: false,
+         },
+      };
+   } catch (error) {
+      return { props: {} };
    }
-
-   const date = new Date(test.createdAt).toISOString().split("-");
-
-   return {
-      redirect: {
-         destination: `/article/${date[0]}/${date[1]}/${
-            test.published ? test.slug : test.id
-         }`,
-         permanent: false,
-      },
-   };
 };
 
 export default ArticleURLConverter;
