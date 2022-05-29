@@ -59,7 +59,7 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
    } ${
       userState.isWriter && !userState.isAdmin && !userState.isEditorial
          ? `${
-              userState.gender === "male" ? "he" : "she"
+              userState.gender === "male" ? "He" : "She"
            } has written ${writtenArticles} article${
               writtenArticles !== 1 ? "s" : ""
            }`
