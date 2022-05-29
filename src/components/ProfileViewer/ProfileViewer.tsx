@@ -99,22 +99,26 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                            target="_blank"
                            rel="norefferrer"
                         >
-                           <img
+                           <Image
                               src={
                                  userState.image.split("=")[0] ||
                                  userState.image
                               }
                               className="h-32 w-32 cursor-pointer rounded-full object-cover"
                               referrerPolicy="no-referrer"
+                              width={150}
+                              height={150}
                            />
                         </a>
                      ) : (
-                        <img
+                        <Image
                            src={
                               userState.image.split("=")[0] || userState.image
                            }
                            className="h-32 w-32 rounded-full object-cover"
                            referrerPolicy="no-referrer"
+                           width={150}
+                           height={150}
                         />
                      )}
                   </Tooltip>
