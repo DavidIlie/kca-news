@@ -30,7 +30,11 @@ const NavBar: React.FC = () => {
 
    return (
       <nav className="borderColor z-[100] w-full border-b-2 bg-emerald-600 text-gray-600 dark:bg-dark-bg dark:text-gray-100 sm:fixed 2xl:px-12">
-         <div className="container mx-auto mt-4 flex flex-col flex-wrap items-center p-2 sm:mt-0 lg:flex-row">
+         <div
+            className={`container mx-auto mt-4 flex flex-col flex-wrap items-center ${
+               status === "unauthenticated" ? "p-4" : "p-2"
+            } sm:mt-0 lg:flex-row`}
+         >
             <Link href="/">
                <a className="mb-4 flex items-center font-medium text-gray-900 dark:text-gray-100 md:mb-0">
                   <div className="-mt-3 h-12 max-w-[4rem]">
@@ -153,10 +157,14 @@ const NavBar: React.FC = () => {
                </div>
                {status === "unauthenticated" ? (
                   <Button onClick={() => signIn("google")}>Login</Button>
-               ) : (
+               ) : status === "authenticated" ? (
                   <div className="mt-2">
                      <UserDropdown />
                   </div>
+               ) : (
+                  <Button onClick={() => signIn("google")} className="hidden">
+                     Login
+                  </Button>
                )}
             </div>
          </div>

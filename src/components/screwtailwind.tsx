@@ -458,6 +458,8 @@ export default function tailwindbad() {
          <div className="sm:grid-cols-2" />
          <div className="sm:grid-cols-3" />
          <div className="sm:grid-cols-4" />
+         <div className="p-2" />
+         <div className="p-4" />
       </>
    );
 }
