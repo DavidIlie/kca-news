@@ -25,20 +25,20 @@ import {
    AiOutlineClose,
 } from "react-icons/ai";
 
-import prisma from "../../lib/prisma";
-import type { Article } from "../../types/Article";
-import type { User } from "../../types/User";
-import type { Comment } from "../../types/Comment";
-import { shimmer } from "../../lib/shimmer";
-import { crudCommentSchema } from "../../schema/comment";
+import prisma from "../../../../lib/prisma";
+import type { Article } from "../../../../types/Article";
+import type { Comment } from "../../../../types/Comment";
+import { shimmer } from "../../../../lib/shimmer";
+import { crudCommentSchema } from "../../../../schema/comment";
 
-import { Button } from "../../ui/Button";
-import ArticleBadge from "../../components/ArticleBadge";
-import ErrorMessage from "../../ui/ErrorMessage";
-import SuccessMessage from "../../ui/SuccessMessage";
-import ConfirmModal from "../../ui/ConfirmModal";
-import ArticleWriterInfo from "../../components/ArticleWriterInfo";
-import { ChangeableKCAName, computeKCAName } from "../../lib/computeKCAName";
+import { Button } from "../../../../ui/Button";
+import ArticleBadge from "../../../../components/ArticleBadge";
+import ErrorMessage from "../../../../ui/ErrorMessage";
+import SuccessMessage from "../../../../ui/SuccessMessage";
+import ConfirmModal from "../../../../ui/ConfirmModal";
+import ArticleWriterInfo from "../../../../components/ArticleWriterInfo";
+import { ChangeableKCAName } from "../../../../lib/computeKCAName";
+import { getCookie } from "cookies-next";
 
 interface Props {
    article: Article;
@@ -63,22 +63,28 @@ const ArticleViewer: React.FC<Props> = ({
 }) => {
    if (notFound) {
       return (
-         <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
-            <Slide triggerOnce direction="down">
-               <div>
-                  <h1 className="mb-4 text-6xl font-bold text-red-500">
-                     404 not found.
-                  </h1>
-                  <Link href="/">
-                     <a>
-                        <Button className="mx-auto" title="Go big or go home">
-                           Go Home
-                        </Button>
-                     </a>
-                  </Link>
-               </div>
-            </Slide>
-         </div>
+         <>
+            <NextSeo title="Not Found" />
+            <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+               <Slide triggerOnce direction="down">
+                  <div>
+                     <h1 className="mb-4 text-6xl font-bold text-red-500">
+                        404 not found.
+                     </h1>
+                     <Link href="/">
+                        <a>
+                           <Button
+                              className="mx-auto"
+                              title="Go big or go home"
+                           >
+                              Go Home
+                           </Button>
+                        </a>
+                     </Link>
+                  </div>
+               </Slide>
+            </div>
+         </>
       );
    }
 
@@ -560,11 +566,49 @@ const ArticleViewer: React.FC<Props> = ({
    );
 };
 
+const uuidRegex =
+   /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
+
 export const getServerSideProps: GetServerSideProps = async ({
    query,
    req,
 }) => {
-   const { id, share } = query;
+   const { year, month, title } = query;
+
+   if (!year && !month && !title)
+      return {
+         props: {
+            notFound: true,
+         },
+      };
+
+   const isId = uuidRegex.test(title as string);
+
+   const dynamicCheck = await prisma.article.findFirst({
+      where: isId
+         ? {
+              id: title as string,
+           }
+         : {
+              createdAt: {
+                 gte: new Date(`${year}-${month}-01`),
+                 lt: new Date(`${year}-${month}-31`),
+              },
+              id: getCookie("article-view") as string,
+           },
+      select: { id: true },
+   });
+
+   if (!dynamicCheck)
+      return {
+         props: {
+            notFound: true,
+         },
+      };
+
+   const id = dynamicCheck.id;
+
+   const { share } = query;
 
    const session = await getSession({ req });
 

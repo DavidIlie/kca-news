@@ -7,6 +7,7 @@ import { getSession } from "next-auth/react";
 
 import prisma from "../../../lib/prisma";
 import { Button } from "../../../ui/Button";
+import { createSlug } from "../../../lib/createSlug";
 
 const CreatePage: React.FC = () => {
    return (
@@ -52,16 +53,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
          },
       });
 
+      const title =
+         unnamedArticles === 0
+            ? "Untitled Article"
+            : `Untitled Article #${unnamedArticles}`;
+
       const createdArticle = await prisma.article.create({
          data: {
-            title:
-               unnamedArticles === 0
-                  ? "Untitled Article"
-                  : `Untitled Article #${unnamedArticles}`,
+            title,
             user: session?.user?.id,
             mdx: `## This is an example of the actual content for your article\n\nStart writing here… Use / on a new line to insert headings, etc.`,
             description:
                "This is an example of the description for your article. The purpose of this section is to write a rough summary of what your article is about, as this is what is displayed on the main page before a reader clicks on the article.",
+            slug: createSlug(title),
          },
       });
 

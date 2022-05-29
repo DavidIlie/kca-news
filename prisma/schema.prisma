@@ -82,6 +82,7 @@ model Article {
   anonymous     Boolean   @default(false)
   comments      Comment[]
   title         String
+  slug          String?
   createdAt     DateTime  @default(now())
   upvotes       Upvote[]
   downvotes     Downvote[]
