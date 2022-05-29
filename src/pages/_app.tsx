@@ -12,12 +12,14 @@ import "../styles/globals.css";
 import AppLayout from "../components/AppLayout";
 import { useThemeStore } from "../stores/useThemeStore";
 import useColorScheme from "../hooks/useColorScheme";
+import Loader from "../components/Loader";
 
 const KingsNews = ({
    Component,
    pageProps: { session, ...pageProps },
+   router,
 }: AppProps) => {
-   const { updateColorScheme } = useThemeStore();
+   const { colorScheme, updateColorScheme } = useThemeStore();
 
    useEffect(() => {
       updateColorScheme((getCookie("mantine-color-scheme") as any) || "light");
@@ -40,6 +42,10 @@ const KingsNews = ({
                ],
             }}
             description="KCA News is a student-led newspaper of King's College Alicante. Here, we publish articles about the school news, world politics, fashion, entertainment, environment, and sports. Educate yourself about the global world events, or indulge in detailed horoscope predictions for you and your friends. Enjoy your time during breaks, registration, and study periods reading all about the latest at KCA and beyond!"
+            twitter={{
+               cardType: "summary_large_image",
+               site: "@KCAlicante",
+            }}
          />
          <NextNprogress
             color="#156896"
@@ -51,9 +57,14 @@ const KingsNews = ({
          <SessionProvider session={session}>
             <ThemeProvider attribute="class">
                <ThemeHandler>
-                  <AppLayout>
-                     <Component {...pageProps} />
-                  </AppLayout>
+                  {colorScheme === undefined &&
+                  router.asPath.includes("/dashboard") ? (
+                     <Loader />
+                  ) : (
+                     <AppLayout>
+                        <Component {...pageProps} />
+                     </AppLayout>
+                  )}
                </ThemeHandler>
             </ThemeProvider>
          </SessionProvider>

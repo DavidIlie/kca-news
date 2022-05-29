@@ -12,7 +12,9 @@ export const computeKCAName = (user: User, showNickname = false) =>
               : ""
         }  ${user.names[user.nameIndex]} ${
            user.extraName ? user.extraName : ""
-        } ${user.showYear ? `in ${user.year}` : ""}`;
+        } ${user.showYear ? `in ${user.year}` : ""}`
+           .replace(/\s+/g, " ")
+           .trim();
 
 export const ChangeableKCAName: React.FC<{
    user: User;

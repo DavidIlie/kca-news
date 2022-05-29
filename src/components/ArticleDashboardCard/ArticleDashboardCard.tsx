@@ -114,7 +114,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
                            {article.title}
                         </a>
                      </Link>
-                     {article.writer?.id !== data!.user?.id && (
+                     {article.writer?.id !== data?.user?.id && (
                         <span>
                            {" - by "}
                            <Link href={`/profile/${article.writer?.id}`}>
@@ -249,7 +249,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
                         </a>
                      </Link>
                      {desktop &&
-                        (data!.user!.isAdmin || !article.underReview ? (
+                        (data?.user?.isAdmin || !article.underReview ? (
                            <Link
                               href={`/dashboard/writer/edit/${article.id}?menu=true&visibility=true`}
                            >
@@ -258,7 +258,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
                                     className="w-full"
                                     color="sky"
                                     disabled={
-                                       !data!.user!.isAdmin &&
+                                       !data?.user?.isAdmin &&
                                        article.underReview
                                     }
                                  >
@@ -281,8 +281,8 @@ const ArticleDashboardCard: React.FC<Props> = ({
                            label="You cannot delete an article which is not written by you."
                            disabled={
                               setSelected &&
-                              !data!.user!.isReviewer &&
-                              article.writer?.id === data!.user?.id
+                              !data?.user!.isReviewer &&
+                              article.writer?.id === data?.user?.id
                            }
                         >
                            <Button
@@ -292,8 +292,8 @@ const ArticleDashboardCard: React.FC<Props> = ({
                                  article.underReview ||
                                  article.published ||
                                  (!setSelected &&
-                                    data!.user!.isReviewer &&
-                                    article.writer?.id !== data!.user?.id)
+                                    data?.user?.isReviewer &&
+                                    article.writer?.id !== data?.user?.id)
                               }
                               onClick={() => {
                                  if (setSelected) {

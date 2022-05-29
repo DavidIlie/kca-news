@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { Tooltip } from "@mantine/core";
 import { format, formatDistance } from "date-fns";
 import Link from "next/link";
@@ -12,7 +14,7 @@ import { Button } from "../../ui/Button";
 import ArticleBadge from "../ArticleBadge";
 import { shimmer } from "../../lib/shimmer";
 import ProfileEditor from "./ProfileEditor";
-import { NextSeo } from "next-seo";
+import arrayToEnglish from "../../lib/arrayToEnglish";
 
 interface ProfileViewerProps {
    user: User;
@@ -24,15 +26,54 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
    editable = false,
 }) => {
    const { data } = useSession();
+   const router = useRouter();
 
    const [openEditorModal, setOpenEditorModal] = useState<boolean>(false);
    const toggleModal = () => setOpenEditorModal(!openEditorModal);
 
    const [userState, setUserState] = useState<User>(user);
 
+   const writtenArticles =
+      (userState._count?.articles || 0) + (userState._count?.coArticles || 0);
+
+   const description = `Profile about ${computeKCAName(userState)}, ${
+      userState.gender === "male" ? "he" : "she"
+   } is a ${arrayToEnglish(
+      [
+         userState.isAdmin ? "administrator" : "",
+         userState.isEditorial ? "Editorial" : "",
+         userState.isWriter ? "writer" : "",
+         userState.isReviewer ? "reviewer" : "",
+         ...userState.tags,
+      ].filter((s) => s !== "")
+   )}. ${
+      userState.isWriter
+         ? `${computeKCAName(
+              userState
+           )} has written ${writtenArticles} article${
+              writtenArticles !== 0 ? "s" : ""
+           }`
+         : ""
+   }`;
+
    return (
       <>
-         <NextSeo title={computeKCAName(userState)} />
+         <NextSeo
+            title={`${computeKCAName(userState)}'s profile`}
+            description={description}
+            canonical={`${process.env.NEXT_PUBLIC_APP_URL}/${router.asPath}`}
+            openGraph={{
+               title: `${computeKCAName(userState)}'s profile`,
+               site_name: "KCA News",
+               description: description,
+               url: `${process.env.NEXT_PUBLIC_APP_URL}/${router.asPath}`,
+               images: [
+                  {
+                     url: userState.image,
+                  },
+               ],
+            }}
+         />
          <div className="container max-w-5xl rounded-md border-2 border-gray-200 bg-white dark:border-gray-800 dark:bg-foot sm:flex">
             <div className="flex h-1/4 w-full border-b-2 border-gray-200 dark:border-gray-700 sm:block sm:h-full sm:w-1/4 sm:border-b-0 sm:border-r-2">
                <div className="w-1/3 px-6 pt-4 sm:h-1/2 sm:w-full">

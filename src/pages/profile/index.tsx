@@ -61,6 +61,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             },
             take: 3,
          },
+         _count: {
+            select: {
+               articles: true,
+               coArticles: true,
+               comments: true,
+               upvotes: true,
+               downvotes: true,
+            },
+         },
       },
    });
 

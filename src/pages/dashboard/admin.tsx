@@ -285,7 +285,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                  <Link href={`/profile/${user.id}`}>
                                     <a className="cursor-pointer text-xl font-medium duration-150 hover:text-blue-500">
                                        {computeKCAName(user)}{" "}
-                                       {user.id === data!.user!.id && "(you)"}
+                                       {user.id === data?.user?.id && "(you)"}
                                     </a>
                                  </Link>
                               </div>

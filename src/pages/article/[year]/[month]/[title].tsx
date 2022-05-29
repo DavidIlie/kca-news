@@ -235,10 +235,6 @@ const ArticleViewer: React.FC<Props> = ({
             title={article.title}
             description={description}
             canonical={`${process.env.NEXT_PUBLIC_APP_URL}/${router.asPath}`}
-            twitter={{
-               cardType: "summary_large_image",
-               site: "@KCAlicante",
-            }}
             openGraph={{
                title: article.title,
                site_name: "KCA News",

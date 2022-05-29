@@ -58,14 +58,14 @@ const ReviewerPage: React.FC<Props> = ({ statistics, articles, comments }) => {
                <Tab.Group
                   as="div"
                   className="mx-2 mt-6 mb-8 sm:mx-8"
-                  defaultIndex={data!.user!.isAdmin ? 1 : 0}
+                  defaultIndex={data?.user?.isAdmin ? 1 : 0}
                >
                   <Tab.List
                      className={`flex ${
-                        data!.user!.isAdmin && "flex-row-reverse"
+                        data?.user?.isAdmin && "flex-row-reverse"
                      } space-x-1 rounded-xl border-2 border-gray-200 bg-gray-100 p-1 dark:border-gray-800 dark:bg-foot`}
                   >
-                     {data!.user!.isAdmin ? (
+                     {data?.user?.isAdmin ? (
                         <Link href="/dashboard/writer">
                            <a
                               className={classNames(
@@ -106,7 +106,7 @@ const ReviewerPage: React.FC<Props> = ({ statistics, articles, comments }) => {
                   <div className="mt-4" />
                   <Tab.Panels>
                      <Tab.Panel>
-                        {data!.user!.isAdmin ? (
+                        {data?.user?.isAdmin || data?.user?.isEditorial ? (
                            <CommentList
                               comments={comments}
                               setLoad={setBigLoading}
@@ -123,7 +123,7 @@ const ReviewerPage: React.FC<Props> = ({ statistics, articles, comments }) => {
                         )}
                      </Tab.Panel>
                      <Tab.Panel>
-                        {data!.user!.isAdmin ? (
+                        {data?.user?.isAdmin || data?.user?.isEditorial ? (
                            <ArticleList
                               articles={articles}
                               setLoad={setBigLoading}
