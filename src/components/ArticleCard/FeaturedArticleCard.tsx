@@ -58,7 +58,7 @@ const FeaturedArticleCard: React.FC<Props> = ({
                   <p className="text-md mt-2 mb-3 h-24 text-gray-800 line-clamp-3 dark:text-gray-200">
                      {article.description}
                   </p>
-                  {article.categoryId.splice(0, 3).map((tag, i) => (
+                  {article.categoryId.slice(0, 3).map((tag, i) => (
                      <ArticleBadge tag={tag} key={i} />
                   ))}
                   <div className="mt-1 mb-1 mr-1 flex items-center gap-2">

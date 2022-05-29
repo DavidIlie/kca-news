@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from "next";
 import { useEffect } from "react";
 import { DefaultSeo } from "next-seo";
 import NextNprogress from "nextjs-progressbar";
-import { SessionProvider, useSession, getSession } from "next-auth/react";
+import { SessionProvider, getSession } from "next-auth/react";
 import { ThemeProvider, useTheme } from "next-themes";
 import { getCookie } from "cookies-next";
 import { ColorScheme } from "@mantine/core";
@@ -13,7 +13,6 @@ import "../styles/globals.css";
 
 import AppLayout from "../components/AppLayout";
 import { useThemeStore } from "../stores/useThemeStore";
-// import Loader from "../components/Loader";
 import useColorScheme from "../hooks/useColorScheme";
 
 const KingsNews = ({
@@ -28,54 +27,42 @@ const KingsNews = ({
    }, []);
 
    return (
-      stateColorScheme !== undefined && (
-         <>
-            <DefaultSeo
-               defaultTitle="KCA News"
-               titleTemplate="%s | KCA News"
-               openGraph={{
-                  title: `KCA News`,
-                  type: `website`,
-                  site_name: `KCA News`,
-                  images: [
-                     {
-                        url: `${process.env.NEXT_PUBLIC_APP_URL}/logo.png`,
-                        alt: `Logo`,
-                     },
-                  ],
-               }}
-               description="KCA News is a student-led newspaper of King's College Alicante. Here, we publish articles about the school news, world politics, fashion, entertainment, environment, and sports. Educate yourself about the global world events, or indulge in detailed horoscope predictions for you and your friends. Enjoy your time during breaks, registration, and study periods reading all about the latest at KCA and beyond!"
-            />
-            <NextNprogress
-               color="#156896"
-               startPosition={0.3}
-               stopDelayMs={200}
-               height={3}
-               showOnShallow={true}
-            />
-            <SessionProvider session={session}>
-               <ThemeProvider attribute="class">
-                  <ThemeHandler>
-                     {/* <AuthLoaderWrappedCheck>
-                              <AppLayout>
-                                    <Component {...pageProps} />
-                                 </AppLayout>
-                              </AuthLoaderWrappedCheck> */}
-                     <AppLayout>
-                        <Component {...pageProps} />
-                     </AppLayout>
-                  </ThemeHandler>
-               </ThemeProvider>
-            </SessionProvider>
-         </>
-      )
+      <>
+         <DefaultSeo
+            defaultTitle="KCA News"
+            titleTemplate="%s | KCA News"
+            openGraph={{
+               title: `KCA News`,
+               type: `website`,
+               site_name: `KCA News`,
+               images: [
+                  {
+                     url: `${process.env.NEXT_PUBLIC_APP_URL}/logo.png`,
+                     alt: `Logo`,
+                  },
+               ],
+            }}
+            description="KCA News is a student-led newspaper of King's College Alicante. Here, we publish articles about the school news, world politics, fashion, entertainment, environment, and sports. Educate yourself about the global world events, or indulge in detailed horoscope predictions for you and your friends. Enjoy your time during breaks, registration, and study periods reading all about the latest at KCA and beyond!"
+         />
+         <NextNprogress
+            color="#156896"
+            startPosition={0.3}
+            stopDelayMs={200}
+            height={3}
+            showOnShallow={true}
+         />
+         <SessionProvider session={session}>
+            <ThemeProvider attribute="class">
+               <ThemeHandler>
+                  <AppLayout>
+                     <Component {...pageProps} />
+                  </AppLayout>
+               </ThemeHandler>
+            </ThemeProvider>
+         </SessionProvider>
+      </>
    );
 };
-
-// const AuthLoaderWrappedCheck: React.FC = ({ children }) => {
-//    const sessionHook = useSession();
-//    return <>{sessionHook.status === "loading" ? <Loader /> : children}</>;
-// };
 
 const ThemeHandler: React.FC = ({ children }) => {
    const { setTheme } = useTheme();
