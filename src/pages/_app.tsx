@@ -13,7 +13,7 @@ import "../styles/globals.css";
 
 import AppLayout from "../components/AppLayout";
 import { useThemeStore } from "../stores/useThemeStore";
-import Loader from "../components/Loader";
+// import Loader from "../components/Loader";
 import useColorScheme from "../hooks/useColorScheme";
 
 const KingsNews = ({
@@ -56,11 +56,14 @@ const KingsNews = ({
             {stateColorScheme !== undefined && (
                <ThemeProvider attribute="class">
                   <ThemeHandler>
-                     <AuthLoaderWrappedCheck>
+                     {/* <AuthLoaderWrappedCheck>
                         <AppLayout>
                            <Component {...pageProps} />
                         </AppLayout>
-                     </AuthLoaderWrappedCheck>
+                     </AuthLoaderWrappedCheck> */}
+                     <AppLayout>
+                        <Component {...pageProps} />
+                     </AppLayout>
                   </ThemeHandler>
                </ThemeProvider>
             )}
@@ -69,10 +72,10 @@ const KingsNews = ({
    );
 };
 
-const AuthLoaderWrappedCheck: React.FC = ({ children }) => {
-   const sessionHook = useSession();
-   return <>{sessionHook.status === "loading" ? <Loader /> : children}</>;
-};
+// const AuthLoaderWrappedCheck: React.FC = ({ children }) => {
+//    const sessionHook = useSession();
+//    return <>{sessionHook.status === "loading" ? <Loader /> : children}</>;
+// };
 
 const ThemeHandler: React.FC = ({ children }) => {
    const { setTheme } = useTheme();
