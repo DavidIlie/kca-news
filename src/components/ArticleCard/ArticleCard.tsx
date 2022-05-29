@@ -13,8 +13,13 @@ interface ArticleCardProps {
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
+   const date = new Date(article.createdAt).toISOString().split("-");
    return (
-      <Link href={`/article/${article.id}`}>
+      <Link
+         href={`/article/${date[0]}/${date[1]}/${
+            article.published ? article.slug : article.id
+         }`}
+      >
          <a className="hoverItem t-11 mb-4 flex cursor-pointer gap-4 rounded-xl border-2 border-gray-100 bg-gray-50 duration-200 dark:border-gray-800 dark:bg-foot md:flex-nowrap md:px-3 md:py-2">
             <Image
                alt="Post picture"

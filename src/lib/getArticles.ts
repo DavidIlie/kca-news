@@ -17,6 +17,8 @@ export const getArticles = async (
       cover: true,
       tags: true,
       id: true,
+      slug: true,
+      published: true,
       ...select,
    };
 

@@ -19,8 +19,13 @@ const FeaturedArticleCard: React.FC<Props> = ({
    latest = false,
    solo = false,
 }) => {
+   const date = new Date(article.createdAt).toISOString().split("-");
    return (
-      <Link href={`/article/${article.id}`}>
+      <Link
+         href={`/article/${date[0]}/${date[1]}/${
+            article.published ? article.slug : article.id
+         }`}
+      >
          <a className={`${latest && "hoverItem"} relative duration-200`}>
             {latest && !solo && (
                <h1

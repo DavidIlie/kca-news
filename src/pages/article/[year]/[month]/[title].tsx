@@ -11,6 +11,7 @@ import { useNotifications } from "@mantine/notifications";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
+import { validate } from "uuid";
 
 const Editor = dynamic(() => import("@davidilie/markdown-editor"), {
    ssr: false,
@@ -38,7 +39,6 @@ import SuccessMessage from "../../../../ui/SuccessMessage";
 import ConfirmModal from "../../../../ui/ConfirmModal";
 import ArticleWriterInfo from "../../../../components/ArticleWriterInfo";
 import { ChangeableKCAName } from "../../../../lib/computeKCAName";
-import { getCookie } from "cookies-next";
 
 interface Props {
    article: Article;
@@ -566,9 +566,6 @@ const ArticleViewer: React.FC<Props> = ({
    );
 };
 
-const uuidRegex =
-   /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
-
 export const getServerSideProps: GetServerSideProps = async ({
    query,
    req,
@@ -582,10 +579,8 @@ export const getServerSideProps: GetServerSideProps = async ({
          },
       };
 
-   const isId = uuidRegex.test(title as string);
-
    const dynamicCheck = await prisma.article.findFirst({
-      where: isId
+      where: validate(title as string)
          ? {
               id: title as string,
            }

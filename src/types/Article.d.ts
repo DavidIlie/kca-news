@@ -27,4 +27,5 @@ export interface Article {
    shared: boolean;
    sharedToTeam: boolean;
    sharedId: string;
+   slug: string;
 }
