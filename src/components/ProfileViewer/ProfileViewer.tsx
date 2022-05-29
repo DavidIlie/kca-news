@@ -63,7 +63,9 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
            )} has written ${writtenArticles} article${
               writtenArticles !== 1 ? "s" : ""
            }`
-         : `Tags: ${arrayToEnglish(userState.tags)}.`
+         : userState.tags.length > 0
+         ? `Tags: ${arrayToEnglish(userState.tags)}.`
+         : ``
    }`;
 
    return (
