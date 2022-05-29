@@ -28,47 +28,47 @@ const KingsNews = ({
    }, []);
 
    return (
-      <>
-         <DefaultSeo
-            defaultTitle="KCA News"
-            titleTemplate="%s | KCA News"
-            openGraph={{
-               title: `KCA News`,
-               type: `website`,
-               site_name: `KCA News`,
-               images: [
-                  {
-                     url: ``,
-                     alt: `Logo`,
-                  },
-               ],
-            }}
-            description="KCA News is a website run by the students for other students or teachers to visit in King's College Alicante. KCA News has many articles written for many categories and topics occuring throughout the world. Make the school cool."
-         />
-         <NextNprogress
-            color="#156896"
-            startPosition={0.3}
-            stopDelayMs={200}
-            height={3}
-            showOnShallow={true}
-         />
-         <SessionProvider session={session}>
-            {stateColorScheme !== undefined && (
+      stateColorScheme !== undefined && (
+         <>
+            <DefaultSeo
+               defaultTitle="KCA News"
+               titleTemplate="%s | KCA News"
+               openGraph={{
+                  title: `KCA News`,
+                  type: `website`,
+                  site_name: `KCA News`,
+                  images: [
+                     {
+                        url: `${process.env.NEXT_PUBLIC_APP_URL}/logo.png`,
+                        alt: `Logo`,
+                     },
+                  ],
+               }}
+               description="KCA News is a student-led newspaper of King's College Alicante. Here, we publish articles about the school news, world politics, fashion, entertainment, environment, and sports. Educate yourself about the global world events, or indulge in detailed horoscope predictions for you and your friends. Enjoy your time during breaks, registration, and study periods reading all about the latest at KCA and beyond!"
+            />
+            <NextNprogress
+               color="#156896"
+               startPosition={0.3}
+               stopDelayMs={200}
+               height={3}
+               showOnShallow={true}
+            />
+            <SessionProvider session={session}>
                <ThemeProvider attribute="class">
                   <ThemeHandler>
                      {/* <AuthLoaderWrappedCheck>
-                        <AppLayout>
-                           <Component {...pageProps} />
-                        </AppLayout>
-                     </AuthLoaderWrappedCheck> */}
+                              <AppLayout>
+                                    <Component {...pageProps} />
+                                 </AppLayout>
+                              </AuthLoaderWrappedCheck> */}
                      <AppLayout>
                         <Component {...pageProps} />
                      </AppLayout>
                   </ThemeHandler>
                </ThemeProvider>
-            )}
-         </SessionProvider>
-      </>
+            </SessionProvider>
+         </>
+      )
    );
 };
 
