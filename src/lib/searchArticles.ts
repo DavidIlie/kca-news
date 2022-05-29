@@ -6,13 +6,14 @@ export const searchArticles = async (
    q: string | string[],
    user?: User
 ): Promise<Article[]> => {
-   const extraWhere = user?.isAdmin
-      ? {}
-      : user?.isReviewer
-      ? { location: { in: user?.department } }
-      : user?.isWriter
-      ? { user: user.id }
-      : { underReview: false, published: true };
+   const extraWhere =
+      user?.isAdmin && user?.isEditorial
+         ? {}
+         : user?.isReviewer
+         ? { location: { in: user?.department } }
+         : user?.isWriter
+         ? { user: user.id }
+         : { underReview: false, published: true };
 
    return JSON.parse(
       JSON.stringify(
