@@ -58,9 +58,9 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
          : "."
    } ${
       userState.isWriter && !userState.isAdmin && !userState.isEditorial
-         ? `${computeKCAName(
-              userState
-           )} has written ${writtenArticles} article${
+         ? `${
+              userState.gender === "male" ? "he" : "she"
+           } has written ${writtenArticles} article${
               writtenArticles !== 1 ? "s" : ""
            }`
          : userState.tags.length > 0
