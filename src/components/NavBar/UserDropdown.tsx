@@ -1,5 +1,6 @@
 import React from "react";
 import { Menu, Transition } from "@headlessui/react";
+import Image from "next/image";
 import { Fragment } from "react";
 import { BiUserCircle } from "react-icons/bi";
 import { BsPen } from "react-icons/bs";
@@ -11,6 +12,7 @@ import DropdownElement from "../../ui/DropdownElement";
 import NextLink from "../../ui/NextLink";
 
 import useColorScheme from "../../hooks/useColorScheme";
+import { shimmer } from "../../lib/shimmer";
 
 const UserDropdown: React.FC = () => {
    const { data } = useSession();
@@ -24,15 +26,15 @@ const UserDropdown: React.FC = () => {
    return (
       <Menu as="div" className="relative m-0 inline-flex">
          <Menu.Button className="w-1/2">
-            {({ open }) => (
-               <img
-                  src={data?.user?.image}
-                  className={`flex rounded-full duration-150 hover:ring-2 dark:ring-blue-900 ${
-                     open && "ring-2"
-                  }`}
-                  referrerPolicy="no-referrer"
-               />
-            )}
+            <Image
+               src={data?.user?.image || "/no-pfp.jpg"}
+               className="flex rounded-full duration-150"
+               referrerPolicy="no-referrer"
+               placeholder="blur"
+               blurDataURL={shimmer(1920, 1080)}
+               height={100}
+               width={100}
+            />
          </Menu.Button>
          <Transition
             as={Fragment}

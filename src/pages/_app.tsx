@@ -1,12 +1,10 @@
 import type { AppProps } from "next/app";
-import { GetServerSidePropsContext } from "next";
 import { useEffect } from "react";
 import { DefaultSeo } from "next-seo";
 import NextNprogress from "nextjs-progressbar";
-import { SessionProvider, getSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 import { ThemeProvider, useTheme } from "next-themes";
 import { getCookie } from "cookies-next";
-import { ColorScheme } from "@mantine/core";
 import { useHotkeys } from "@mantine/hooks";
 
 import "../styles/globals.css";
@@ -17,13 +15,12 @@ import useColorScheme from "../hooks/useColorScheme";
 
 const KingsNews = ({
    Component,
-   colorScheme,
    pageProps: { session, ...pageProps },
-}: AppProps & { colorScheme: ColorScheme }) => {
+}: AppProps) => {
    const { updateColorScheme } = useThemeStore();
 
    useEffect(() => {
-      updateColorScheme(colorScheme);
+      updateColorScheme((getCookie("mantine-color-scheme") as any) || "light");
    }, []);
 
    return (
@@ -83,14 +80,5 @@ const ThemeHandler: React.FC = ({ children }) => {
 
    return <>{children}</>;
 };
-
-KingsNews.getInitialProps = async ({
-   ctx,
-}: {
-   ctx: GetServerSidePropsContext;
-}) => ({
-   colorScheme: getCookie("mantine-color-scheme", ctx) || "light",
-   session: await getSession(ctx),
-});
 
 export default KingsNews;

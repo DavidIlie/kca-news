@@ -30,7 +30,7 @@ const NavBar: React.FC = () => {
 
    return (
       <nav className="borderColor z-[100] w-full border-b-2 bg-emerald-600 text-gray-600 dark:bg-dark-bg dark:text-gray-100 sm:fixed 2xl:px-12">
-         <div className="container mx-auto flex flex-col flex-wrap items-center p-5 lg:flex-row">
+         <div className="container mx-auto mt-4 flex flex-col flex-wrap items-center p-2 sm:mt-0 lg:flex-row">
             <Link href="/">
                <a className="mb-4 flex items-center font-medium text-gray-900 dark:text-gray-100 md:mb-0">
                   <div className="-mt-3 h-12 max-w-[4rem]">
@@ -119,7 +119,7 @@ const NavBar: React.FC = () => {
                   )}
                </NewsDropdown>
             </nav>
-            <div className="mx-auto mt-1 flex w-full items-center gap-4 sm:w-auto xl:mt-0">
+            <div className="mx-auto flex w-auto items-center gap-4">
                <div className="relative mx-auto text-gray-600">
                   <input
                      className="h-10 rounded-lg border-2 border-green-700 bg-green-700 bg-opacity-50 px-5 pr-16 text-sm text-white placeholder:text-white focus:outline-none dark:border-gray-800 dark:bg-foot dark:text-gray-100 sm:ml-0"
@@ -154,7 +154,9 @@ const NavBar: React.FC = () => {
                {status === "unauthenticated" ? (
                   <Button onClick={() => signIn("google")}>Login</Button>
                ) : (
-                  <UserDropdown />
+                  <div className="mt-2">
+                     <UserDropdown />
+                  </div>
                )}
             </div>
          </div>

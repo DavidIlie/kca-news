@@ -1,25 +1,26 @@
 import React from "react";
-import { NextApiResponse } from "next";
+import { DefaultSeo } from "next-seo";
 
-import ErrorPage from "../components/ErrorPage";
+import Link from "next/link";
 
-interface Props {
-   statusCode: number;
-}
+import { Button } from "../ui/Button";
 
-const Error: React.FC<Props> = ({ statusCode }) => {
-   return <ErrorPage statusCode={statusCode} />;
-};
-
-export const getInitialProps = ({
-   res,
-   err,
-}: {
-   res: NextApiResponse;
-   err: { statusCode: number };
-}) => {
-   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-   return { statusCode };
+const Error: React.FC = () => {
+   return (
+      <>
+         <DefaultSeo title="Not Found" />
+         <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-16 lg:px-0">
+            <div className="text-center">
+               <h1 className="mb-4 text-4xl font-semibold text-red-500 sm:text-6xl">
+                  Error
+               </h1>
+               <Link href="/">
+                  <Button className="mx-auto">Go Home</Button>
+               </Link>
+            </div>
+         </div>
+      </>
+   );
 };
 
 export default Error;
