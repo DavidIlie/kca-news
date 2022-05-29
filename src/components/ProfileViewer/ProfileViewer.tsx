@@ -36,23 +36,34 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
    const writtenArticles =
       (userState._count?.articles || 0) + (userState._count?.coArticles || 0);
 
-   const description = `Profile about ${computeKCAName(userState)}, ${
-      userState.gender === "male" ? "he" : "she"
-   } is part of the ${arrayToEnglish(
-      [
-         userState.isAdmin ? "administrator" : "",
-         userState.isEditorial ? "editorial" : "",
-         userState.isWriter ? "writer" : "",
-         userState.isReviewer ? "reviewer" : "",
-      ].filter((s) => s !== "")
-   )} group of permissions. ${
+   const perms = [
+      userState.isAdmin ? "administrator" : "",
+      userState.isEditorial ? "editorial" : "",
+      userState.isWriter ? "writer" : "",
+      userState.isReviewer ? "reviewer" : "",
+   ].filter((s) => s !== "");
+
+   const description = `Profile about ${computeKCAName(userState)}${
+      perms.length > 0
+         ? `, ${
+              userState.gender === "male" ? "he" : "she"
+           } is part of the ${arrayToEnglish(
+              [
+                 userState.isAdmin ? "administrator" : "",
+                 userState.isEditorial ? "editorial" : "",
+                 userState.isWriter ? "writer" : "",
+                 userState.isReviewer ? "reviewer" : "",
+              ].filter((s) => s !== "")
+           )} group of permissions.`
+         : "."
+   } ${
       userState.isWriter && !userState.isAdmin && !userState.isEditorial
          ? `${computeKCAName(
               userState
            )} has written ${writtenArticles} article${
               writtenArticles !== 1 ? "s" : ""
            }`
-         : `Tags: ${arrayToEnglish(userState.tags)}`
+         : `Tags: ${arrayToEnglish(userState.tags)}.`
    }`;
 
    return (
@@ -68,7 +79,7 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                url: `${process.env.NEXT_PUBLIC_APP_URL}/${router.asPath}`,
                images: [
                   {
-                     url: `${process.env.NEXT_PUBLIC_APP_URL}/logo.png`,
+                     url: userState.image,
                      alt: `${computeKCAName(userState)}'s profile image`,
                   },
                ],
