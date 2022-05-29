@@ -68,9 +68,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
       return {
          redirect: {
-            destination: `/article/${date[0]}/${date[1]}/${
+            destination: `${`/article/${date[0]}/${date[1]}/${
                test.published ? test.slug : test.id
-            }`,
+            }`}${query.share ? `?share=${query.share}` : ""}`,
             permanent: false,
          },
       };
