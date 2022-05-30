@@ -77,6 +77,14 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+   // for special purposes
+   // return {
+   //    redirect: {
+   //       destination: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+   //       permanent: true,
+   //    },
+   // };
+
    const session = await getSession({ req });
 
    const featuredPosts = await getArticles(
