@@ -7,6 +7,9 @@ import { format, formatDistance } from "date-fns";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
+//@ts-ignore
+import Linkify from "react-linkify";
+
 import { User } from "../../types/User";
 import { ChangeableKCAName, computeKCAName } from "../../lib/computeKCAName";
 import ProfileTags from "../ProfileTags";
@@ -47,14 +50,7 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
       perms.length > 0
          ? `, ${
               userState.gender === "male" ? "he" : "she"
-           } is part of the ${arrayToEnglish(
-              [
-                 userState.isAdmin ? "administrator" : "",
-                 userState.isEditorial ? "editorial" : "",
-                 userState.isWriter ? "writer" : "",
-                 userState.isReviewer ? "reviewer" : "",
-              ].filter((s) => s !== "")
-           )} group of permissions.`
+           } is part of the ${arrayToEnglish(perms)} group of permissions.`
          : "."
    } ${
       userState.isWriter && !userState.isAdmin && !userState.isEditorial
@@ -150,7 +146,24 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                   <div className="mb-2">
                      <h1 className="text-lg font-semibold">Description</h1>
                      <h1 className="mt-1 text-sm text-gray-700 dark:text-gray-200">
-                        {userState.description || "No description..."}
+                        <Linkify
+                           componentDecorator={(
+                              decoratedHref: any,
+                              decoratedText: any,
+                              key: any
+                           ) => (
+                              <a
+                                 target="blank"
+                                 href={decoratedHref}
+                                 key={key}
+                                 className="font-medium text-blue-500 duration-150 hover:text-blue-600"
+                              >
+                                 {decoratedText}
+                              </a>
+                           )}
+                        >
+                           {userState.description || "No description..."}
+                        </Linkify>
                      </h1>
                   </div>
                   {user.email.endsWith("kcpupils.org") && (
