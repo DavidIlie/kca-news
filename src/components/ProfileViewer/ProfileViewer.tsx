@@ -7,9 +7,6 @@ import { format, formatDistance } from "date-fns";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
-//@ts-ignore
-import Linkify from "react-linkify";
-
 import { User } from "../../types/User";
 import { ChangeableKCAName, computeKCAName } from "../../lib/computeKCAName";
 import ProfileTags from "../ProfileTags";
@@ -18,6 +15,7 @@ import ArticleBadge from "../ArticleBadge";
 import { shimmer } from "../../lib/shimmer";
 import ProfileEditor from "./ProfileEditor";
 import arrayToEnglish from "../../lib/arrayToEnglish";
+import LinkifyText from "../Linkify";
 
 interface ProfileViewerProps {
    user: User;
@@ -146,24 +144,9 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                   <div className="mb-2">
                      <h1 className="text-lg font-semibold">Description</h1>
                      <h1 className="mt-1 text-sm text-gray-700 dark:text-gray-200">
-                        <Linkify
-                           componentDecorator={(
-                              decoratedHref: any,
-                              decoratedText: any,
-                              key: any
-                           ) => (
-                              <a
-                                 target="blank"
-                                 href={decoratedHref}
-                                 key={key}
-                                 className="font-medium text-blue-500 duration-150 hover:text-blue-600"
-                              >
-                                 {decoratedText}
-                              </a>
-                           )}
-                        >
+                        <LinkifyText>
                            {userState.description || "No description..."}
-                        </Linkify>
+                        </LinkifyText>
                      </h1>
                   </div>
                   {user.email.endsWith("kcpupils.org") && (
@@ -183,7 +166,9 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                   <div className="mb-4">
                      <h1 className="text-lg font-semibold">Status</h1>
                      <h1 className="text-gray-700 dark:text-gray-200">
-                        {userState.status || "No status..."}
+                        <LinkifyText>
+                           {userState.status || "No status..."}
+                        </LinkifyText>
                      </h1>
                   </div>
                   <Button
