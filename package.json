@@ -9,7 +9,8 @@
       "prisma:migrate-dev": "prisma migrate dev",
       "prod:dev": "DATABASE_URL=prisma://aws-eu-central-1.prisma-data.com/?api_key=bxiH1JnVbC2N0Yd-2_VTHVhe1p545FaL62isjY6aFrdpW9hOiDeS3qnfzqlhzA6N yarn dev",
       "prod:prisma:studio": "DATABASE_URL=prisma://aws-eu-central-1.prisma-data.com/?api_key=bxiH1JnVbC2N0Yd-2_VTHVhe1p545FaL62isjY6aFrdpW9hOiDeS3qnfzqlhzA6N prisma studio",
-      "prod:prisma:migrate": "DATABASE_URL=prisma://aws-eu-central-1.prisma-data.com/?api_key=bxiH1JnVbC2N0Yd-2_VTHVhe1p545FaL62isjY6aFrdpW9hOiDeS3qnfzqlhzA6N prisma migrate deploy"
+      "prod:prisma:migrate": "DATABASE_URL=prisma://aws-eu-central-1.prisma-data.com/?api_key=bxiH1JnVbC2N0Yd-2_VTHVhe1p545FaL62isjY6aFrdpW9hOiDeS3qnfzqlhzA6N prisma migrate deploy",
+      "vercel-build": "prisma generate && prod:prisma:migrate && next build"
    },
    "dependencies": {
       "@davidilie/markdown-editor": "^1.0.3",
