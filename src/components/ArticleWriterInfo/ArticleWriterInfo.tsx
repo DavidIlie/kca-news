@@ -31,6 +31,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
 
    const notifications = useNotifications();
    const [openLoading, setOpenLoading] = useState<boolean>(false);
+
    const ref = useRef<HTMLInputElement>();
    const [date, setDate] = useState<Date>(article.createdAt);
 
@@ -53,8 +54,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
          }
          setOpenLoading(false);
       };
-
-      if (date !== article.createdAt) makeRequest();
+      makeRequest();
    }, [date]);
 
    return (
