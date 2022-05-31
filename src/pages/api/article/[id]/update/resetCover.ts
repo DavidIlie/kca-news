@@ -41,7 +41,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    const newArticle = await prisma.article.update({
       where: { id: article.id },
       data: {
-         cover: "https://cdn.davidilie.com/kca-news/default-cover.jpg",
+         cover: "https://cdn.kcanews.org/kca-news/default-cover.jpg",
       },
       include: {
          writer: true,
