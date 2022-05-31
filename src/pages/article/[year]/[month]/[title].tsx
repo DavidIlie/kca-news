@@ -655,10 +655,15 @@ export const getServerSideProps: GetServerSideProps = async ({
                createdAt: "desc",
             },
             where: session
-               ? session?.user?.isAdmin || session?.user?.isReviewer
+               ? session?.user?.isAdmin ||
+                 session?.user?.isEditorial ||
+                 session?.user?.isReviewer
                   ? {}
                   : {
-                       OR: [{ userId: session?.user?.id }],
+                       OR: [
+                          { userId: session?.user?.id },
+                          { underReview: false },
+                       ],
                     }
                : {
                     underReview: false,
