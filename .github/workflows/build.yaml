@@ -1,34 +1,34 @@
-name: "build_deploy_app"
+# name: "build_deploy_app"
 
-on:
-   push:
-      branches:
-         - master
+# on:
+#    push:
+#       branches:
+#          - master
 
-jobs:
-   build-deploy:
-      name: "build & deploy"
-      runs-on: ubuntu-latest
-      steps:
-         - name: checkout
-           uses: actions/checkout@v2
-         - name: login to ghcr.io
-           uses: docker/login-action@v2
-           with:
-              registry: ghcr.io
-              username: DavidIlie
-              password: ${{ secrets.GHCR_PASSWORD }}
-         - name: build and push to container registry
-           uses: docker/build-push-action@v3
-           with:
-              context: .
-              push: true
-              tags: ghcr.io/davidilie/kca-news:latest
-              password: ${{ secrets.GHCR_PASSWORD }}
-         - name: "Set Kubernetes Context"
-           uses: Azure/k8s-set-context@v1
-           with:
-              method: kubeconfig
-              kubeconfig: ${{ secrets.KUBE_CONFIG }}
-         - name: "Restart deployment"
-           run: kubectl rollout restart deploy app -n kca-news
+# jobs:
+#    build-deploy:
+#       name: "build & deploy"
+#       runs-on: ubuntu-latest
+#       steps:
+#          - name: checkout
+#            uses: actions/checkout@v2
+#          - name: login to ghcr.io
+#            uses: docker/login-action@v2
+#            with:
+#               registry: ghcr.io
+#               username: DavidIlie
+#               password: ${{ secrets.GHCR_PASSWORD }}
+#          - name: build and push to container registry
+#            uses: docker/build-push-action@v3
+#            with:
+#               context: .
+#               push: true
+#               tags: ghcr.io/davidilie/kca-news:latest
+#               password: ${{ secrets.GHCR_PASSWORD }}
+#          - name: "Set Kubernetes Context"
+#            uses: Azure/k8s-set-context@v1
+#            with:
+#               method: kubeconfig
+#               kubeconfig: ${{ secrets.KUBE_CONFIG }}
+#          - name: "Restart deployment"
+#            run: kubectl rollout restart deploy app -n kca-news

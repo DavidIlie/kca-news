@@ -77,7 +77,7 @@ const ThemeHandler: React.FC = ({ children }) => {
 
    const { colorScheme, toggleColorScheme } = useColorScheme();
 
-   useEffect(() => setTheme(colorScheme || "light"));
+   useEffect(() => setTheme(colorScheme || "light"), [colorScheme]);
 
    useHotkeys([
       [
