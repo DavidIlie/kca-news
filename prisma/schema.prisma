@@ -88,7 +88,7 @@ model Article {
   downvotes     Downvote[]
   mdx           String
   review        Boolean   @default(false)
-  cover         String    @default("https://cdn.kcanews.org/kca-news/default-cover.jpg")
+  cover         String    @default("https://cdn.kcanews.org/news-covers/default-cover.jpg")
   description   String
   published     Boolean   @default(false)
   location      String?
