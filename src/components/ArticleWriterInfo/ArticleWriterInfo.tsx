@@ -35,6 +35,8 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
    const ref = useRef<HTMLInputElement>();
    const [date, setDate] = useState<Date>(article.createdAt);
 
+   const isInEditor = asPath.includes("/dashboard/writer/edit");
+
    useEffect(() => {
       const makeRequest = async () => {
          setOpenLoading(true);
@@ -54,7 +56,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
          }
          setOpenLoading(false);
       };
-      makeRequest();
+      if (isInEditor) makeRequest();
    }, [date]);
 
    return (
@@ -146,8 +148,8 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                   }
                />
                <div
-                  className={`ml-2 ${!showEdit && "cursor-pointer"}`}
-                  onClick={() => !showEdit && ref.current?.click()}
+                  className={`ml-2 ${isInEditor && "cursor-pointer"}`}
+                  onClick={() => isInEditor && ref.current?.click()}
                >
                   {" "}
                   {format(
