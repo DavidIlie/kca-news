@@ -39,6 +39,7 @@ import SuccessMessage from "../../../../ui/SuccessMessage";
 import ConfirmModal from "../../../../ui/ConfirmModal";
 import ArticleWriterInfo from "../../../../components/ArticleWriterInfo";
 import { ChangeableKCAName } from "../../../../lib/computeKCAName";
+import Linkify from "../../../../components/Linkify";
 
 interface Props {
    article: Article;
@@ -491,11 +492,11 @@ const ArticleViewer: React.FC<Props> = ({
                                  }`}
                                  key={index}
                               >
-                                 <Image
+                                 <img
                                     src={comment.user?.image || "/no-pfp.jpg"}
                                     width={55}
                                     height={24}
-                                    blurDataURL={shimmer(10, 10)}
+                                    // blurDataURL={shimmer(10, 10)}
                                     placeholder="blur"
                                     className="rounded-full object-cover"
                                     alt={`${
@@ -504,9 +505,9 @@ const ArticleViewer: React.FC<Props> = ({
                                        ]
                                     }'s profile image`}
                                  />
-                                 <div className="flex flex-col items-center space-y-2">
+                                 <div className="space-y-1">
                                     <div className="w-full">
-                                       {comment.comment}
+                                       <Linkify>{comment.comment}</Linkify>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                        <Link

@@ -31,6 +31,7 @@ import { Comment } from "../../types/Comment";
 import { ChangeableKCAName } from "../../lib/computeKCAName";
 import { shimmer } from "../../lib/shimmer";
 import ArticleDashboardCard from "../../components/ArticleDashboardCard";
+import Linkify from "../../components/Linkify";
 
 interface Props {
    statistics: Statistics;
@@ -450,7 +451,7 @@ const CommentList: React.FC<CommentListProps> = ({
    };
 
    return (
-      <>
+      <div className="container max-w-6xl">
          <div className="mt-4 mb-2 flex items-center gap-2">
             <TextInput
                icon={<AiOutlineSearch />}
@@ -501,19 +502,21 @@ const CommentList: React.FC<CommentListProps> = ({
                key={index}
             >
                <div className="flex items-center gap-4">
-                  <Image
+                  <img
                      src={comment.user?.image || "/no-pfp.jpg"}
                      width={55}
                      height={55}
-                     blurDataURL={shimmer(10, 10)}
+                     // blurDataURL={shimmer(10, 10)}
                      placeholder="blur"
                      className="rounded-full object-cover"
                      alt={`${
                         comment.user?.names[comment.user?.nameIndex]
                      }'s profile image`}
                   />
-                  <div className="flex flex-col items-center space-y-2">
-                     <div className="w-full">{comment.comment}</div>
+                  <div className="space-y-1">
+                     <div className="w-full">
+                        <Linkify>{comment.comment}</Linkify>
+                     </div>
                      <div className="flex items-center space-x-2">
                         <Link href={`/profile/${comment.user?.id}`}>
                            <a
@@ -688,7 +691,7 @@ const CommentList: React.FC<CommentListProps> = ({
                </Menu>
             </div>
          ))}
-      </>
+      </div>
    );
 };
 
