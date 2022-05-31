@@ -66,6 +66,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             description:
                "This is an example of the description for your article. The purpose of this section is to write a rough summary of what your article is about, as this is what is displayed on the main page before a reader clicks on the article.",
             slug: createSlug(title),
+            cover: "https://cdn.kcanews.org/news-covers/default-cover.jpg",
          },
       });
 
