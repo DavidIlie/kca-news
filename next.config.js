@@ -12,8 +12,8 @@ module.exports = withPlausibleProxy({
          "cdn.davidilie.com",
       ],
    },
-   // experimental: {
-   //    outputStandalone: true,
-   //    concurrentFeatures: true,
-   // },
+   experimental: {
+      outputStandalone: true,
+      concurrentFeatures: true,
+   },
 });
