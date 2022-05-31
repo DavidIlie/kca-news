@@ -12,7 +12,6 @@ import { ChangeableKCAName, computeKCAName } from "../../lib/computeKCAName";
 import ProfileTags from "../ProfileTags";
 import { Button } from "../../ui/Button";
 import ArticleBadge from "../ArticleBadge";
-import { shimmer } from "../../lib/shimmer";
 import ProfileEditor from "./ProfileEditor";
 import arrayToEnglish from "../../lib/arrayToEnglish";
 import LinkifyText from "../Linkify";
@@ -232,51 +231,33 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                            Latest Comment:
                         </h1>
                         <div className="hoverItem -mx-1.5 mt-2 flex gap-4 rounded-md border border-gray-200 bg-gray-50 py-4 px-4 duration-150 dark:border-gray-800 dark:bg-dark-bg dark:bg-opacity-50">
-                           <Tooltip label="View Post">
-                              <Link
-                                 href={`/article/${
-                                    user.comments![0].article!.id
-                                 }`}
-                              >
-                                 <Image
-                                    src={user.comments![0].article!.cover}
-                                    width={100}
-                                    height={100}
-                                    blurDataURL={shimmer(10, 10)}
-                                    placeholder="blur"
-                                    className="cursor-pointer rounded-md object-cover"
-                                    alt={`${
-                                       user.comments![0].user?.names[
-                                          user.comments![0].user?.nameIndex
-                                       ]
-                                    }'s profile image`}
-                                 />
-                              </Link>
-                           </Tooltip>
-                           <div className="relative">
-                              <p className="w-full">
-                                 {user.comments![0].comment}
-                              </p>
-                              <div className="flex-col">
-                                 <div className="flex items-center space-x-2">
-                                    <p className="text-sm text-gray-500 dark:text-gray-300">
-                                       {computeKCAName(user.comments![0].user!)}
-                                    </p>
-                                    <span className="text-gray-800 dark:text-gray-200">
-                                       /
-                                    </span>
-                                    <p className="text-sm text-gray-400 dark:text-gray-300">
-                                       {format(
-                                          new Date(user.comments![0].createdAt),
-                                          "d MMM yyyy 'at' h:mm bb"
-                                       )}
-                                    </p>
-                                 </div>
-                                 <p className="w-full text-sm italic text-gray-600 dark:text-gray-400">
-                                    On {user.comments![0].article!.title}
+                           <Link
+                              href={`/article/${user.comments![0].article!.id}`}
+                           >
+                              <a className="relative">
+                                 <p className="w-full line-clamp-2">
+                                    {user.comments![0].comment}
                                  </p>
-                              </div>
-                           </div>
+                                 <div className="flex-col">
+                                    <div className="flex items-center space-x-2">
+                                       <p className="text-sm text-gray-500 dark:text-gray-300">
+                                          On {user.comments![0].article!.title}
+                                       </p>
+                                       <span className="text-gray-800 dark:text-gray-200">
+                                          /
+                                       </span>
+                                       <p className="text-sm text-gray-400 dark:text-gray-300">
+                                          {format(
+                                             new Date(
+                                                user.comments![0].createdAt
+                                             ),
+                                             "d MMM yyyy 'at' h:mm bb"
+                                          )}
+                                       </p>
+                                    </div>
+                                 </div>
+                              </a>
+                           </Link>
                         </div>
                      </>
                   )}
