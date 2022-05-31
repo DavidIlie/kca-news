@@ -10,7 +10,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 RUN yarn prisma generate
-RUN NEXT_PUBLIC_APP_URL=https://news.davidilie.com yarn build
+RUN NEXT_PUBLIC_APP_URL=https://kcanews.org NEXTAUTH_URL=http://kcanews.org yarn build
 
 
 FROM node:16.13.0-alpine AS runner
