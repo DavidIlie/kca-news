@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { ThemeProvider, useTheme } from "next-themes";
 import { getCookie } from "cookies-next";
 import { useHotkeys } from "@mantine/hooks";
+import PlausibleProvider from "next-plausible";
 
 import "../styles/globals.css";
 
@@ -54,20 +55,28 @@ const KingsNews = ({
             height={3}
             showOnShallow={true}
          />
-         <SessionProvider session={session}>
-            <ThemeProvider attribute="class">
-               <ThemeHandler>
-                  {colorScheme === undefined &&
-                  router.asPath.includes("/dashboard") ? (
-                     <Loader />
-                  ) : (
-                     <AppLayout>
-                        <Component {...pageProps} />
-                     </AppLayout>
-                  )}
-               </ThemeHandler>
-            </ThemeProvider>
-         </SessionProvider>
+         <PlausibleProvider
+            domain="davidilie.com"
+            selfHosted
+            trackOutboundLinks
+            enabled={process.env.NODE_ENV === "production"}
+            customDomain={"https://stats.davidilie.com"}
+         >
+            <SessionProvider session={session}>
+               <ThemeProvider attribute="class">
+                  <ThemeHandler>
+                     {colorScheme === undefined &&
+                     router.asPath.includes("/dashboard") ? (
+                        <Loader />
+                     ) : (
+                        <AppLayout>
+                           <Component {...pageProps} />
+                        </AppLayout>
+                     )}
+                  </ThemeHandler>
+               </ThemeProvider>
+            </SessionProvider>
+         </PlausibleProvider>
       </>
    );
 };

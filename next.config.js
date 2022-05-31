@@ -1,5 +1,7 @@
+const { withPlausibleProxy } = require("next-plausible");
+
 /** @type {import('next').NextConfig} */
-module.exports = {
+module.exports = withPlausibleProxy({
    reactStrictMode: false,
    swcMinify: true,
    images: {
@@ -10,8 +12,8 @@ module.exports = {
          "cdn.davidilie.com",
       ],
    },
-   experimental: {
-      outputStandalone: true,
-      concurrentFeatures: true,
-   },
-};
+   // experimental: {
+   //    outputStandalone: true,
+   //    concurrentFeatures: true,
+   // },
+});
