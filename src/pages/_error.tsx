@@ -8,7 +8,7 @@ import { Button } from "../ui/Button";
 const Error: React.FC = () => {
    return (
       <>
-         <DefaultSeo title="Not Found" />
+         <DefaultSeo title="Error" />
          <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-16 lg:px-0">
             <div className="text-center">
                <h1 className="mb-4 text-4xl font-semibold text-red-500 sm:text-6xl">

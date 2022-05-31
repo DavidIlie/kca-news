@@ -1,13 +1,13 @@
 import * as minio from "minio";
 
-export const minioUrl = "cdn.davidilie.com";
+export const minioUrl = "cdn.kcanews.org";
 
 export const minioClient = new minio.Client({
    endPoint: minioUrl,
    port: 443,
    useSSL: true,
-   accessKey: "worklog-development",
-   secretKey: "W0rkL0g-D3v3l0pment6969",
+   accessKey: process.env.MINIO_ACCESS_KEY,
+   secretKey: process.env.MINIO_SECRET_KEY,
 });
 
 export type BucketItem = minio.BucketItemWithMetadata;
