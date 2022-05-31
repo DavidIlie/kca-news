@@ -7,11 +7,11 @@ import { DatePicker } from "@mantine/dates";
 import { LoadingOverlay } from "@mantine/core";
 import { useNotifications } from "@mantine/notifications";
 import { AiOutlineClose } from "react-icons/ai";
+import { format, parseISO } from "date-fns";
 
 import { Article } from "../../types/Article";
 import { User } from "../../types/User";
 import { shimmer } from "../../lib/shimmer";
-import { format, parseISO } from "date-fns";
 import { computeKCAName } from "../../lib/computeKCAName";
 
 interface ArticleWriterInfoProps {
