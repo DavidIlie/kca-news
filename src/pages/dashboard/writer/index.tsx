@@ -402,7 +402,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       downvotes: true,
    };
 
-   const articles =
+   let articles =
       session?.user?.isAdmin || session?.user?.isEditorial
          ? await prisma.article.findMany({
               include: includeParams as any,
@@ -417,6 +417,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
                  createdAt: "desc",
               },
            });
+
+   articles.forEach((article) => {
+      //@ts-ignore
+      delete article.mdx;
+   });
 
    return {
       props: {
