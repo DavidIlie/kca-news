@@ -56,7 +56,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
          }
          setOpenLoading(false);
       };
-      if (isInEditor) makeRequest();
+      if (isInEditor && date !== article.createdAt) makeRequest();
    }, [date]);
 
    return (
