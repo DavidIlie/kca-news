@@ -36,3 +36,11 @@ export const updateArticleRestSchema = yup.object().shape({
 export const coWriterSchema = yup.object().shape({
    coWriters: yup.array().of(yup.string().required()).required(),
 });
+
+export const updateDate = yup.object().shape({
+   date: yup
+      .date()
+      .min(`${new Date().getFullYear()}-01-01T00:00:00.000Z`)
+      .max(new Date())
+      .required(),
+});

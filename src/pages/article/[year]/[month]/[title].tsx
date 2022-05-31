@@ -590,8 +590,8 @@ export const getServerSideProps: GetServerSideProps = async ({
            }
          : {
               createdAt: {
-                 gte: new Date(`${year}-${month}-01`),
-                 lt: new Date(`${year}-${month}-31`),
+                 gte: new Date(`${year}-${month}-01T00:00:00.000Z`),
+                 lte: new Date(`${year}-${month}-31T23:59:59.000Z`),
               },
               slug: title as string,
            },

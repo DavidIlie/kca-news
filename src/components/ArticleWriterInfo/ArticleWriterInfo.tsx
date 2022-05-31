@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
+import { DatePicker } from "@mantine/dates";
+import { LoadingOverlay } from "@mantine/core";
+import { useNotifications } from "@mantine/notifications";
+import { AiOutlineClose } from "react-icons/ai";
 
 import { Article } from "../../types/Article";
 import { User } from "../../types/User";
@@ -24,8 +28,38 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
    className,
 }) => {
    const { asPath } = useRouter();
+
+   const notifications = useNotifications();
+   const [openLoading, setOpenLoading] = useState<boolean>(false);
+   const ref = useRef<HTMLInputElement>();
+   const [date, setDate] = useState<Date>(article.createdAt);
+
+   useEffect(() => {
+      const makeRequest = async () => {
+         setOpenLoading(true);
+         const r = await fetch(`/api/article/${article.id}/update/date`, {
+            method: "POST",
+            body: JSON.stringify({ date }),
+         });
+         if (r.status !== 200) {
+            const response = await r.json();
+            notifications.showNotification({
+               color: "red",
+               title: "Search - Error",
+               message: response.message || "Unknown Error",
+               icon: <AiOutlineClose />,
+               autoClose: 5000,
+            });
+         }
+         setOpenLoading(false);
+      };
+
+      if (date !== article.createdAt) makeRequest();
+   }, [date]);
+
    return (
       <div className={`${className} flex items-center`}>
+         <LoadingOverlay className="fixed" visible={openLoading} />
          <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
             <Image
                className="rounded-full"
@@ -98,12 +132,26 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
             </span>
          </span>
          <div className="sm:flex">
-            <h1 className="ml-1 flex items-center text-gray-800 dark:text-gray-100">
+            <h1 className="relative ml-1 flex items-center text-gray-800 dark:text-gray-100">
                <div className="hidden sm:block">{" / "}</div>
-               <div className="ml-2">
+               <DatePicker
+                  ref={ref as any}
+                  maxDate={new Date()}
+                  className="hidden"
+                  dropdownType="modal"
+                  value={date}
+                  onChange={(v: Date) => setDate(v)}
+                  minDate={
+                     new Date(`${new Date().getFullYear()}-01-01T00:00:00.000Z`)
+                  }
+               />
+               <div
+                  className={`ml-2 ${!showEdit && "cursor-pointer"}`}
+                  onClick={() => !showEdit && ref.current?.click()}
+               >
                   {" "}
                   {format(
-                     parseISO(new Date(article.createdAt).toISOString()),
+                     parseISO(new Date(date).toISOString()),
                      "MMMM do, yyyy"
                   )}
                </div>
