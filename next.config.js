@@ -5,10 +5,6 @@ module.exports = withPlausibleProxy()({
    reactStrictMode: false,
    swcMinify: true,
    images: {
-      domains: [
-         "lh3.googleusercontent.com",
-         "cdn.davidilie.com",
-         "cdn.kcanews.org",
-      ],
+      domains: ["lh3.googleusercontent.com", "cdn.kcanews.org"],
    },
 });

@@ -142,7 +142,7 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                <div className="w-2/3 border-l-2 py-4 px-6 dark:border-gray-700 sm:h-1/2 sm:w-full sm:border-t-2 sm:border-l-0">
                   <div className="mb-2">
                      <h1 className="text-lg font-semibold">Description</h1>
-                     <h1 className="mt-1 text-sm text-gray-700 dark:text-gray-200">
+                     <h1 className="mt-1 truncate text-sm text-gray-700 dark:text-gray-200">
                         <LinkifyText>
                            {userState.description || "No description..."}
                         </LinkifyText>
@@ -164,7 +164,7 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                   )}
                   <div className="mb-4">
                      <h1 className="text-lg font-semibold">Status</h1>
-                     <h1 className="text-gray-700 dark:text-gray-200">
+                     <h1 className="truncate text-gray-700 dark:text-gray-200">
                         <LinkifyText>
                            {userState.status || "No status..."}
                         </LinkifyText>
