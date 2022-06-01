@@ -40,9 +40,15 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
    useEffect(() => {
       const makeRequest = async () => {
          setOpenLoading(true);
+
+         const submittedDate = date;
+         submittedDate.setTime(new Date().getTime());
+
          const r = await fetch(`/api/article/${article.id}/update/date`, {
             method: "POST",
-            body: JSON.stringify({ date }),
+            body: JSON.stringify({
+               date: submittedDate,
+            }),
          });
          if (r.status !== 200) {
             const response = await r.json();

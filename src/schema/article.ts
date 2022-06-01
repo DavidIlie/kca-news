@@ -41,6 +41,5 @@ export const updateDate = yup.object().shape({
    date: yup
       .date()
       .min(`${new Date().getFullYear()}-01-01T00:00:00.000Z`)
-      .max(new Date())
       .required(),
 });
