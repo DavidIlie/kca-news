@@ -88,8 +88,12 @@ const ProfileTags: React.FC<ProfileTagsProps> = ({ user }) => {
          })}
          {user.isAdmin && <BaseTag label="Administrator" Icon={RiAdminLine} />}
          {user.isEditorial && <BaseTag label="Editorial" Icon={AiFillEdit} />}
-         {user.isWriter && <BaseTag label="Writer" Icon={BsPen} />}
-         {user.isReviewer && <BaseTag label="Reviewer" Icon={MdPreview} />}
+         {user.isWriter && !user.isEditorial && (
+            <BaseTag label="Writer" Icon={BsPen} />
+         )}
+         {user.isReviewer && !user.isEditorial && (
+            <BaseTag label="Reviewer" Icon={MdPreview} />
+         )}
          {!user.canComment && (
             <BaseTag
                label="Muted from commenting, what a guy!"
