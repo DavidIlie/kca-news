@@ -28,7 +28,7 @@ import { Statistics } from "./writer";
 import classNames from "../../lib/classNames";
 import { Article } from "../../types/Article";
 import { Comment } from "../../types/Comment";
-import { ChangeableKCAName } from "../../lib/computeKCAName";
+import { computeKCAName } from "../../lib/computeKCAName";
 import { shimmer } from "../../lib/shimmer";
 import ArticleDashboardCard from "../../components/ArticleDashboardCard";
 import Linkify from "../../components/Linkify";
@@ -523,10 +523,7 @@ const CommentList: React.FC<CommentListProps> = ({
                               className="text-sm text-gray-500 duration-150 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-500"
                               target="_blank"
                            >
-                              <ChangeableKCAName
-                                 user={comment.user!}
-                                 showNickName={true}
-                              />
+                              {computeKCAName(comment.user!, true)}
                            </a>
                         </Link>
                         <span className="text-gray-800 dark:text-gray-200">
