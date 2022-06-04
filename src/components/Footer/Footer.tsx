@@ -67,9 +67,7 @@ const Footer: React.FC = () => {
          </div>
          <p className="borderColor mx-auto border-t-2 bg-gray-100 py-4 px-5 text-center text-sm text-gray-800 dark:bg-foot dark:text-gray-100 sm:text-left sm:text-base">
             © {new Date().getFullYear()}{" "}
-            <a href="https://davidilie.com" target="_blank" rel="noreferrer">
-               David Ilie
-            </a>
+            <a href="https://davidilie.com">David Ilie</a>
          </p>
       </footer>
    );
