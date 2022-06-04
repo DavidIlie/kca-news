@@ -12,7 +12,6 @@ const LinkifyText: React.FC = ({ children }) => {
             key: any
          ) => (
             <a
-               target="blank"
                href={decoratedHref}
                key={key}
                className="font-medium text-blue-500 duration-150 hover:text-blue-600"
