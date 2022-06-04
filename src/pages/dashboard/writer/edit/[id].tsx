@@ -972,141 +972,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               </div>
                            ))}
                         </EditorSettingsDisclosure>
-                        {(article.upvotes!.length > 0 ||
-                           article.downvotes!.length) > 0 && (
-                           <EditorSettingsDisclosure name="Opinion">
-                              <>
-                                 <h1>
-                                    {article.writer!.id !== user.id
-                                       ? "This"
-                                       : "Your"}{" "}
-                                    article has {article.upvotes!.length} like
-                                    {article.upvotes!.length !== 1 &&
-                                       "s"} and {article.downvotes!.length}{" "}
-                                    dislike
-                                    {article.downvotes!.length !== 1 && "s"}.
-                                 </h1>
-
-                                 <Tabs
-                                    className="-px-1 mt-1"
-                                    grow
-                                    position="center"
-                                 >
-                                    <Tabs.Tab
-                                       label="Likes"
-                                       icon={<AiOutlineLike />}
-                                    >
-                                       {article.upvotes!.length === 0 ? (
-                                          <p className="text-gray-700 dark:text-gray-300">
-                                             What? Show this article around!
-                                          </p>
-                                       ) : (
-                                          <div
-                                             className={`mt-1 grid ${
-                                                bigScreen || mobile
-                                                   ? "grid-cols-2"
-                                                   : "grid-cols-1"
-                                             } gap-2`}
-                                          >
-                                             {article.upvotes!.map(
-                                                (
-                                                   upvote: Upvote & {
-                                                      user?: User;
-                                                   },
-                                                   index
-                                                ) => (
-                                                   <div
-                                                      className={`flex items-center gap-2 ${
-                                                         index !==
-                                                            article.upvotes!
-                                                               .length -
-                                                               1 && "mb-2"
-                                                      }`}
-                                                      key={index}
-                                                   >
-                                                      <img
-                                                         src={
-                                                            upvote.user!.image
-                                                         }
-                                                         className="w-[20%] rounded-full"
-                                                      />
-                                                      <Link
-                                                         href={`/profile/${
-                                                            upvote.user!.id
-                                                         }`}
-                                                      >
-                                                         <a className="truncate font-medium duration-150 hover:text-blue-500">
-                                                            {computeKCAName(
-                                                               upvote.user!
-                                                            )}
-                                                         </a>
-                                                      </Link>
-                                                   </div>
-                                                )
-                                             )}
-                                          </div>
-                                       )}
-                                    </Tabs.Tab>
-                                    <Tabs.Tab
-                                       label="Dislikes"
-                                       icon={<AiOutlineDislike />}
-                                       color="red"
-                                    >
-                                       {article.downvotes!.length === 0 ? (
-                                          <p className="text-gray-700 dark:text-gray-300">
-                                             Woohoo! No dislikes!
-                                          </p>
-                                       ) : (
-                                          <div
-                                             className={`mt-1 grid ${
-                                                bigScreen || mobile
-                                                   ? "grid-cols-2"
-                                                   : "grid-cols-1"
-                                             } gap-2`}
-                                          >
-                                             {article.downvotes!.map(
-                                                (
-                                                   downvote: Downvote & {
-                                                      user?: User;
-                                                   },
-                                                   index
-                                                ) => (
-                                                   <div
-                                                      className={`flex items-center gap-2 ${
-                                                         index !==
-                                                            article.upvotes!
-                                                               .length -
-                                                               1 && "mb-2"
-                                                      }`}
-                                                      key={index}
-                                                   >
-                                                      <img
-                                                         src={
-                                                            downvote.user!.image
-                                                         }
-                                                         className="w-[20%] rounded-full"
-                                                      />
-                                                      <Link
-                                                         href={`/profile/${
-                                                            downvote.user!.id
-                                                         }`}
-                                                      >
-                                                         <a className="font-medium duration-150 hover:text-blue-500">
-                                                            {computeKCAName(
-                                                               downvote.user!
-                                                            )}
-                                                         </a>
-                                                      </Link>
-                                                   </div>
-                                                )
-                                             )}
-                                          </div>
-                                       )}
-                                    </Tabs.Tab>
-                                 </Tabs>
-                              </>
-                           </EditorSettingsDisclosure>
-                        )}
                         {!article.published && (
                            <EditorSettingsDisclosure name="Sharing">
                               <Radio
@@ -1238,6 +1103,155 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     </Button>
                                  </>
                               )}
+                           </EditorSettingsDisclosure>
+                        )}
+                        {(article.upvotes!.length > 0 ||
+                           article.downvotes!.length) > 0 && (
+                           <EditorSettingsDisclosure name="Opinion">
+                              <>
+                                 <h1>
+                                    {article.writer!.id !== user.id
+                                       ? "This"
+                                       : "Your"}{" "}
+                                    article has {article.upvotes!.length} like
+                                    {article.upvotes!.length !== 1 &&
+                                       "s"} and {article.downvotes!.length}{" "}
+                                    dislike
+                                    {article.downvotes!.length !== 1 && "s"}.
+                                 </h1>
+
+                                 <Tabs
+                                    className="-px-1 mt-1"
+                                    grow
+                                    position="center"
+                                 >
+                                    <Tabs.Tab
+                                       label="Likes"
+                                       icon={<AiOutlineLike />}
+                                    >
+                                       {article.upvotes!.length === 0 ? (
+                                          <p className="text-gray-700 dark:text-gray-300">
+                                             What? Show this article around!
+                                          </p>
+                                       ) : (
+                                          <div
+                                             className={`mt-1 grid ${
+                                                bigScreen || mobile
+                                                   ? "grid-cols-2"
+                                                   : "grid-cols-1"
+                                             } gap-2`}
+                                          >
+                                             {article.upvotes!.map(
+                                                (
+                                                   upvote: Upvote & {
+                                                      user?: User;
+                                                   },
+                                                   index
+                                                ) => (
+                                                   <div
+                                                      className={`flex items-center gap-2 ${
+                                                         index !==
+                                                            article.upvotes!
+                                                               .length -
+                                                               1 && "mb-2"
+                                                      }`}
+                                                      key={index}
+                                                   >
+                                                      <Image
+                                                         width={50}
+                                                         height={50}
+                                                         placeholder="blur"
+                                                         blurDataURL={shimmer(
+                                                            100,
+                                                            100
+                                                         )}
+                                                         src={
+                                                            upvote.user!.image
+                                                         }
+                                                         className="w-[20%] rounded-full"
+                                                      />
+                                                      <Link
+                                                         href={`/profile/${
+                                                            upvote.user!.id
+                                                         }`}
+                                                      >
+                                                         <a className="truncate font-medium duration-150 hover:text-blue-500">
+                                                            {computeKCAName(
+                                                               upvote.user!
+                                                            )}
+                                                         </a>
+                                                      </Link>
+                                                   </div>
+                                                )
+                                             )}
+                                          </div>
+                                       )}
+                                    </Tabs.Tab>
+                                    <Tabs.Tab
+                                       label="Dislikes"
+                                       icon={<AiOutlineDislike />}
+                                       color="red"
+                                    >
+                                       {article.downvotes!.length === 0 ? (
+                                          <p className="text-gray-700 dark:text-gray-300">
+                                             Woohoo! No dislikes!
+                                          </p>
+                                       ) : (
+                                          <div
+                                             className={`mt-1 grid ${
+                                                bigScreen || mobile
+                                                   ? "grid-cols-2"
+                                                   : "grid-cols-1"
+                                             } gap-2`}
+                                          >
+                                             {article.downvotes!.map(
+                                                (
+                                                   downvote: Downvote & {
+                                                      user?: User;
+                                                   },
+                                                   index
+                                                ) => (
+                                                   <div
+                                                      className={`flex items-center gap-2 ${
+                                                         index !==
+                                                            article.upvotes!
+                                                               .length -
+                                                               1 && "mb-2"
+                                                      }`}
+                                                      key={index}
+                                                   >
+                                                      <Image
+                                                         width={50}
+                                                         height={50}
+                                                         placeholder="blur"
+                                                         blurDataURL={shimmer(
+                                                            100,
+                                                            100
+                                                         )}
+                                                         src={
+                                                            downvote.user!.image
+                                                         }
+                                                         className="w-[20%] rounded-full"
+                                                      />
+                                                      <Link
+                                                         href={`/profile/${
+                                                            downvote.user!.id
+                                                         }`}
+                                                      >
+                                                         <a className="font-medium duration-150 hover:text-blue-500">
+                                                            {computeKCAName(
+                                                               downvote.user!
+                                                            )}
+                                                         </a>
+                                                      </Link>
+                                                   </div>
+                                                )
+                                             )}
+                                          </div>
+                                       )}
+                                    </Tabs.Tab>
+                                 </Tabs>
+                              </>
                            </EditorSettingsDisclosure>
                         )}
                         <div
