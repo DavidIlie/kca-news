@@ -47,6 +47,7 @@ const Editor = dynamic(() => import("@davidilie/markdown-editor"), {
    ssr: false,
 });
 
+import { Downvote, Upvote } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
 import { Article } from "../../../../types/Article";
 import { User } from "../../../../types/User";
@@ -72,7 +73,6 @@ import ArticleCoverUploader, {
 } from "../../../../components/ArticleCoverUploader/ArticleCoverUploader";
 import sendPost from "../../../../lib/sendPost";
 import { computeKCAName } from "../../../../lib/computeKCAName";
-import { Downvote, Upvote } from "@prisma/client";
 
 interface Props {
    user: User;
