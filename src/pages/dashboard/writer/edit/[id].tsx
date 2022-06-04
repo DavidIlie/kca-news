@@ -1325,7 +1325,12 @@ export const getServerSideProps: GetServerSideProps = async ({
    const { id } = query;
    const session = await getSession({ req });
 
-   if (!session || (session?.user?.isAdmin ? false : !session?.user?.isWriter))
+   if (
+      !session ||
+      (session?.user?.isAdmin || session?.user?.isEditorial
+         ? false
+         : !session?.user?.isWriter)
+   )
       return {
          redirect: {
             destination: "/",
