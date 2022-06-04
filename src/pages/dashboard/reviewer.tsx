@@ -519,10 +519,7 @@ const CommentList: React.FC<CommentListProps> = ({
                      </div>
                      <div className="flex items-center space-x-2">
                         <Link href={`/profile/${comment.user?.id}`}>
-                           <a
-                              className="text-sm text-gray-500 duration-150 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-500"
-                              target="_blank"
-                           >
+                           <a className="text-sm text-gray-500 duration-150 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-500">
                               {computeKCAName(comment.user!, true)}
                            </a>
                         </Link>

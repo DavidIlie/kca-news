@@ -97,6 +97,16 @@ router.post(async (req: NextApiRequest, res) => {
          include: {
             writer: true,
             coWriters: true,
+            upvotes: {
+               include: {
+                  user: true,
+               },
+            },
+            downvotes: {
+               include: {
+                  user: true,
+               },
+            },
          },
       });
 

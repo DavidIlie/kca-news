@@ -130,20 +130,26 @@ const ArticleDashboardCard: React.FC<Props> = ({
                   </h1>
                   <div className="flex items-center gap-2">
                      {article.published ? (
-                        <div className="mr-2 grid grid-cols-2 divide-x-2 divide-gray-500">
-                           <div className="mr-2 flex items-center justify-center gap-1">
-                              <AiOutlineLike size="25" />
-                              <p className="font-medium">
-                                 {article.upvotes?.length || 0}
-                              </p>
-                           </div>
-                           <div className="flex items-center justify-center gap-1 pl-2">
-                              <AiOutlineDislike size="25" />
-                              <p className="font-medium">
-                                 {article.downvotes?.length || 0}
-                              </p>
-                           </div>
-                        </div>
+                        <Tooltip label="See who interacted with this article.">
+                           <Link
+                              href={`/dashboard/writer/edit/${article.id}?menu=true&opinion=true`}
+                           >
+                              <a className="mr-2 grid grid-cols-2 divide-x-2 divide-gray-500">
+                                 <div className="mr-2 flex items-center justify-center gap-1">
+                                    <AiOutlineLike size="25" />
+                                    <p className="font-medium">
+                                       {article.upvotes?.length || 0}
+                                    </p>
+                                 </div>
+                                 <div className="flex items-center justify-center gap-1 pl-2">
+                                    <AiOutlineDislike size="25" />
+                                    <p className="font-medium">
+                                       {article.downvotes?.length || 0}
+                                    </p>
+                                 </div>
+                              </a>
+                           </Link>
+                        </Tooltip>
                      ) : (
                         <h1
                            className={`font-semibold ${

@@ -38,7 +38,7 @@ import ErrorMessage from "../../../../ui/ErrorMessage";
 import SuccessMessage from "../../../../ui/SuccessMessage";
 import ConfirmModal from "../../../../ui/ConfirmModal";
 import ArticleWriterInfo from "../../../../components/ArticleWriterInfo";
-import { ChangeableKCAName } from "../../../../lib/computeKCAName";
+import { computeKCAName } from "../../../../lib/computeKCAName";
 import Linkify from "../../../../components/Linkify";
 
 interface Props {
@@ -513,14 +513,8 @@ const ArticleViewer: React.FC<Props> = ({
                                        <Link
                                           href={`/profile/${comment.user?.id}`}
                                        >
-                                          <a
-                                             className="text-sm text-gray-500 duration-150 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-500"
-                                             target="_blank"
-                                          >
-                                             <ChangeableKCAName
-                                                user={comment.user!}
-                                                showNickName={true}
-                                             />
+                                          <a className="text-sm text-gray-500 duration-150 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-500">
+                                             {computeKCAName(comment.user!)}
                                           </a>
                                        </Link>
                                        <span className="text-gray-800 dark:text-gray-200">

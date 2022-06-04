@@ -9,6 +9,8 @@ import {
    AiOutlineCheck,
    AiOutlineClose,
    AiOutlineCloseCircle,
+   AiOutlineDislike,
+   AiOutlineLike,
    AiOutlineMenu,
    AiOutlineUser,
 } from "react-icons/ai";
@@ -22,6 +24,7 @@ import {
    useViewportSize,
    useClipboard,
    useDebouncedValue,
+   useMediaQuery,
 } from "@mantine/hooks";
 import {
    MultiSelect,
@@ -31,6 +34,7 @@ import {
    Alert,
    ScrollArea,
    Select,
+   Tabs,
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -68,6 +72,7 @@ import ArticleCoverUploader, {
 } from "../../../../components/ArticleCoverUploader/ArticleCoverUploader";
 import sendPost from "../../../../lib/sendPost";
 import { computeKCAName } from "../../../../lib/computeKCAName";
+import { Downvote, Upvote } from "@prisma/client";
 
 interface Props {
    user: User;
@@ -94,6 +99,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const { ref, height } = useElementSize();
    const clipboard = useClipboard({ timeout: 2000 });
    const secondClipboard = useClipboard({ timeout: 2000 });
+   const bigScreen = useMediaQuery("(min-width: 1800px)");
 
    const [article, setArticle] = useState<Article>(articleServer);
    const [categories, setCategories] = useState<string[]>(article.categoryId);
@@ -345,7 +351,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
          <DefaultSeo title={article.title} />
          {!openSidebar && (
             <AiOutlineMenu
-               className="fixed right-0 top-0 z-[200] mt-[55%] mr-5 cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 sm:mt-[7%]"
+               className="fixed right-0 top-0 z-[200] mr-5 mt-[175px] cursor-pointer rounded-full border-2 border-gray-100 bg-gray-50 p-2 text-[3rem] duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-900 sm:mt-[100px]"
                title="Open Settings"
                onClick={() => setOpenSidebar(true)}
             />
@@ -966,6 +972,141 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               </div>
                            ))}
                         </EditorSettingsDisclosure>
+                        {(article.upvotes!.length > 0 ||
+                           article.downvotes!.length) > 0 && (
+                           <EditorSettingsDisclosure name="Opinion">
+                              <>
+                                 <h1>
+                                    {article.writer!.id !== user.id
+                                       ? "This"
+                                       : "Your"}{" "}
+                                    article has {article.upvotes!.length} like
+                                    {article.upvotes!.length !== 1 &&
+                                       "s"} and {article.downvotes!.length}{" "}
+                                    dislike
+                                    {article.downvotes!.length !== 1 && "s"}.
+                                 </h1>
+
+                                 <Tabs
+                                    className="-px-1 mt-1"
+                                    grow
+                                    position="center"
+                                 >
+                                    <Tabs.Tab
+                                       label="Likes"
+                                       icon={<AiOutlineLike />}
+                                    >
+                                       {article.upvotes!.length === 0 ? (
+                                          <p className="text-gray-700 dark:text-gray-300">
+                                             What? Show this article around!
+                                          </p>
+                                       ) : (
+                                          <div
+                                             className={`mt-1 grid ${
+                                                bigScreen || mobile
+                                                   ? "grid-cols-2"
+                                                   : "grid-cols-1"
+                                             } gap-2`}
+                                          >
+                                             {article.upvotes!.map(
+                                                (
+                                                   upvote: Upvote & {
+                                                      user?: User;
+                                                   },
+                                                   index
+                                                ) => (
+                                                   <div
+                                                      className={`flex items-center gap-2 ${
+                                                         index !==
+                                                            article.upvotes!
+                                                               .length -
+                                                               1 && "mb-2"
+                                                      }`}
+                                                      key={index}
+                                                   >
+                                                      <img
+                                                         src={
+                                                            upvote.user!.image
+                                                         }
+                                                         className="w-[20%] rounded-full"
+                                                      />
+                                                      <Link
+                                                         href={`/profile/${
+                                                            upvote.user!.id
+                                                         }`}
+                                                      >
+                                                         <a className="truncate font-medium duration-150 hover:text-blue-500">
+                                                            {computeKCAName(
+                                                               upvote.user!
+                                                            )}
+                                                         </a>
+                                                      </Link>
+                                                   </div>
+                                                )
+                                             )}
+                                          </div>
+                                       )}
+                                    </Tabs.Tab>
+                                    <Tabs.Tab
+                                       label="Dislikes"
+                                       icon={<AiOutlineDislike />}
+                                       color="red"
+                                    >
+                                       {article.downvotes!.length === 0 ? (
+                                          <p className="text-gray-700 dark:text-gray-300">
+                                             Woohoo! No dislikes!
+                                          </p>
+                                       ) : (
+                                          <div
+                                             className={`mt-1 grid ${
+                                                bigScreen || mobile
+                                                   ? "grid-cols-2"
+                                                   : "grid-cols-1"
+                                             } gap-2`}
+                                          >
+                                             {article.downvotes!.map(
+                                                (
+                                                   downvote: Downvote & {
+                                                      user?: User;
+                                                   },
+                                                   index
+                                                ) => (
+                                                   <div
+                                                      className={`flex items-center gap-2 ${
+                                                         index !==
+                                                            article.upvotes!
+                                                               .length -
+                                                               1 && "mb-2"
+                                                      }`}
+                                                      key={index}
+                                                   >
+                                                      <img
+                                                         src={
+                                                            downvote.user!.image
+                                                         }
+                                                         className="w-[20%] rounded-full"
+                                                      />
+                                                      <Link
+                                                         href={`/profile/${
+                                                            downvote.user!.id
+                                                         }`}
+                                                      >
+                                                         <a className="font-medium duration-150 hover:text-blue-500">
+                                                            {computeKCAName(
+                                                               downvote.user!
+                                                            )}
+                                                         </a>
+                                                      </Link>
+                                                   </div>
+                                                )
+                                             )}
+                                          </div>
+                                       )}
+                                    </Tabs.Tab>
+                                 </Tabs>
+                              </>
+                           </EditorSettingsDisclosure>
+                        )}
                         {!article.published && (
                            <EditorSettingsDisclosure name="Sharing">
                               <Radio
@@ -1201,6 +1342,16 @@ export const getServerSideProps: GetServerSideProps = async ({
               include: {
                  writer: true,
                  coWriters: true,
+                 upvotes: {
+                    include: {
+                       user: true,
+                    },
+                 },
+                 downvotes: {
+                    include: {
+                       user: true,
+                    },
+                 },
               },
            })
          : await prisma.article.findFirst({
@@ -1208,6 +1359,16 @@ export const getServerSideProps: GetServerSideProps = async ({
               include: {
                  writer: true,
                  coWriters: true,
+                 upvotes: {
+                    include: {
+                       user: true,
+                    },
+                 },
+                 downvotes: {
+                    include: {
+                       user: true,
+                    },
+                 },
               },
            });
 

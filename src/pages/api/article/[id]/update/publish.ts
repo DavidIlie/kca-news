@@ -37,6 +37,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       include: {
          writer: true,
          coWriters: true,
+         upvotes: {
+            include: {
+               user: true,
+            },
+         },
+         downvotes: {
+            include: {
+               user: true,
+            },
+         },
       },
    });
 

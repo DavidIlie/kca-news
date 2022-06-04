@@ -23,10 +23,10 @@ const EditorSettingsDisclosure: React.FC<Props> = ({
    defaultOpen = false,
 }) => {
    const router = useRouter();
-   const { visibility } = router.query;
+   const query = router.query[name.split(" ").join("-").toLowerCase()];
 
    const [defaultOpenState, setDefaultOpenState] = useState<boolean>(
-      ((visibility as any as boolean) && name === "Visibility") || defaultOpen
+      (query as never as boolean) || defaultOpen
    );
 
    const finalUrl = useDetermineCustomQueryEditor("visibility");
@@ -42,10 +42,7 @@ const EditorSettingsDisclosure: React.FC<Props> = ({
                <div
                   className="mx-4 flex w-[93%] items-center justify-between gap-2"
                   onClick={() => {
-                     if (
-                        name === "Visibility" &&
-                        (visibility as any as boolean)
-                     ) {
+                     if (query as never as boolean) {
                         router.push(finalUrl, "", { shallow: true });
                         setDefaultOpenState(defaultOpen);
                      }
