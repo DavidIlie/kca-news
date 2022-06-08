@@ -243,7 +243,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                            },
                            { value: "most-comments", label: "Most Comments" },
                            { value: "most-upvotes", label: "Most Likes" },
-                           { value: "most-downvotes", label: "Most Downvotes" },
+                           { value: "most-downvotes", label: "Most Dislikes" },
                            { value: "newest", label: "Newest" },
                            { value: "oldest", label: "Oldest" },
                         ]}
