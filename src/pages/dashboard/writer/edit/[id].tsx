@@ -1119,7 +1119,12 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                        <span className="font-medium">
                                           Email:
                                        </span>{" "}
-                                       {article.writer?.email}
+                                       <a
+                                          href={`mailto:${article.writer?.email}`}
+                                          className="duration-150 hover:text-blue-500"
+                                       >
+                                          {article.writer?.email}
+                                       </a>
                                     </h1>
                                  </>
                               </EditorSettingsDisclosure>
