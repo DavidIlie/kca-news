@@ -4,24 +4,24 @@ datasource db {
 }
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 model Account {
-  id                 String  @id @default(uuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
-  user               User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -34,10 +34,15 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model BannedUsers {
+  id    String @id @default(uuid())
+  email String
+}
+
 model User {
-  id            String    @id @default(uuid())
+  id            String     @id @default(uuid())
   name          String?
-  email         String?   @unique
+  email         String?    @unique
   emailVerified DateTime?
   image         String?
   sessions      Session[]
@@ -46,22 +51,22 @@ model User {
   names         String[]
   extraName     String?
   year          String
-  showYear      Boolean @default(true)
-  joinedAt      DateTime  @default(now())
+  showYear      Boolean    @default(true)
+  joinedAt      DateTime   @default(now())
   comments      Comment[]
   upvotes       Upvote[]
   downvotes     Downvote[]
-  articles      Article[] @relation("writer")
-  coArticles    Article[] @relation("coWriter")
+  articles      Article[]  @relation("writer")
+  coArticles    Article[]  @relation("coWriter")
   description   String?
   status        String?
   nickname      String?
   tags          String[]
-  canComment    Boolean @default(true)
-  isAdmin       Boolean @default(false)
-  isEditorial   Boolean @default(false)
-  isReviewer    Boolean @default(false)
-  isWriter      Boolean @default(false)
+  canComment    Boolean    @default(true)
+  isAdmin       Boolean    @default(false)
+  isEditorial   Boolean    @default(false)
+  isReviewer    Boolean    @default(false)
+  isWriter      Boolean    @default(false)
   department    String[]
   gender        String?
 }
@@ -75,55 +80,55 @@ model VerificationToken {
 }
 
 model Article {
-  id            String    @id @default(uuid())
-  user          String?
-  writer        User?     @relation("writer", fields: [user], references: [id], onDelete: Cascade)
-  coWriters     User[]    @relation("coWriter", references: [id])
-  anonymous     Boolean   @default(false)
-  comments      Comment[]
-  title         String
-  slug          String?
-  createdAt     DateTime  @default(now())
-  upvotes       Upvote[]
-  downvotes     Downvote[]
-  mdx           String
-  review        Boolean   @default(false)
-  cover         String    @default("https://cdn.kcanews.org/news-covers/default-cover.jpg")
-  description   String
-  published     Boolean   @default(false)
-  location      String?
-  categoryId    String[]
-  tags          String[]
-  filter        String[]
-  underReview   Boolean   @default(false)
-  shared        Boolean   @default(false)
-  sharedToTeam  Boolean   @default(false)
-  sharedId      String    @default(uuid())
+  id           String     @id @default(uuid())
+  user         String?
+  writer       User?      @relation("writer", fields: [user], references: [id], onDelete: Cascade)
+  coWriters    User[]     @relation("coWriter", references: [id])
+  anonymous    Boolean    @default(false)
+  comments     Comment[]
+  title        String
+  slug         String?
+  createdAt    DateTime   @default(now())
+  upvotes      Upvote[]
+  downvotes    Downvote[]
+  mdx          String
+  review       Boolean    @default(false)
+  cover        String     @default("https://cdn.kcanews.org/news-covers/default-cover.jpg")
+  description  String
+  published    Boolean    @default(false)
+  location     String?
+  categoryId   String[]
+  tags         String[]
+  filter       String[]
+  underReview  Boolean    @default(false)
+  shared       Boolean    @default(false)
+  sharedToTeam Boolean    @default(false)
+  sharedId     String     @default(uuid())
 }
 
 model Comment {
-  id            String    @id @default(uuid())
-  userId        String
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  articleId     String
-  article       Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  createdAt     DateTime  @default(now())
-  comment       String
-  underReview   Boolean   @default(true)
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  articleId   String
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  comment     String
+  underReview Boolean  @default(true)
 }
 
 model Upvote {
-  id            String   @id @default(uuid())
-  articleId     String
-  article       Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  votedBy       String
-  user          User     @relation(fields: [votedBy], references: [id], onDelete: Cascade)
+  id        String  @id @default(uuid())
+  articleId String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  votedBy   String
+  user      User    @relation(fields: [votedBy], references: [id], onDelete: Cascade)
 }
 
 model Downvote {
-  id            String   @id @default(uuid())
-  articleId     String
-  article       Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  votedBy       String
-  user          User     @relation(fields: [votedBy], references: [id], onDelete: Cascade)
+  id        String  @id @default(uuid())
+  articleId String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  votedBy   String
+  user      User    @relation(fields: [votedBy], references: [id], onDelete: Cascade)
 }

@@ -15,15 +15,17 @@ import {
    Select,
 } from "@mantine/core";
 import { useNotifications } from "@mantine/notifications";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsHammer, BsThreeDotsVertical } from "react-icons/bs";
 import { BiUserCircle } from "react-icons/bi";
 import { MdAccessibility } from "react-icons/md";
 import {
+   AiOutlineCheck,
    AiOutlineClose,
    AiOutlineFilter,
    AiOutlineSearch,
    AiOutlineTags,
 } from "react-icons/ai";
+import * as yup from "yup";
 
 import DashboardStatistics from "../../components/DashboardStatistics";
 import ProfileTags from "../../components/ProfileTags";
@@ -40,6 +42,11 @@ import { tagArray } from "../../types/Tag";
 import { departmentSchema, tagSchema } from "../../schema/admin";
 import classNames from "../../lib/classNames";
 import { fullLocations, getFormmatedLocation } from "../../lib/categories";
+import ConfirmModal from "../../ui/ConfirmModal";
+
+const emailSchema = yup
+   .object()
+   .shape({ email: yup.string().email().required() });
 
 interface Props {
    statistics: Statistics;
@@ -61,6 +68,13 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
    const [searchQuery, setSearchQuery] = useState<string>("");
    const [hasSearched, setHasSearched] = useState<boolean>(false);
    const [filter, setFilter] = useState<string | null>(null);
+
+   const [confirmModalEmail, setConfirmModalEmail] = useState<string | null>(
+      null
+   );
+
+   const [openRestoreAccountModal, setOpenRestoreAccountModal] =
+      useState<boolean>(false);
 
    const options = ["Users", "Articles", "Comments"];
 
@@ -211,53 +225,74 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                         }
                      })}
                   </Tab.List>
-                  <div className="mt-4 flex items-center gap-2">
-                     <TextInput
-                        icon={<AiOutlineSearch />}
-                        placeholder="Search"
-                        value={searchQuery}
-                        onChange={handleSearch}
-                        error={usersState.length === 0 && hasSearched}
-                        classNames={{
-                           filledVariant:
-                              "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
-                        }}
-                        className="w-full sm:w-auto"
-                     />
-                     <Select
-                        placeholder="Filter"
-                        clearable
-                        allowDeselect
-                        nothingFound="No options"
-                        maxDropdownHeight={180}
-                        icon={<AiOutlineFilter />}
-                        data={[
-                           { value: "writer", label: "Writer" },
-                           { value: "reviewer", label: "Reviewer" },
-                           { value: "muted", label: "Muted" },
-                           { value: "admin", label: "Administrator" },
-                           { value: "most-articles", label: "Most Articles" },
-                           {
-                              value: "most-coarticles",
-                              label: "Most Co Articles",
-                           },
-                           { value: "most-comments", label: "Most Comments" },
-                           { value: "most-upvotes", label: "Most Likes" },
-                           { value: "most-downvotes", label: "Most Dislikes" },
-                           { value: "newest", label: "Newest" },
-                           { value: "oldest", label: "Oldest" },
-                        ]}
-                        value={filter}
-                        onChange={handleFilter}
-                        classNames={{
-                           filledVariant:
-                              "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
-                           dropdown:
-                              "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
-                        }}
-                        className="w-full sm:w-auto"
-                     />
-                     <p className="font-medium">Total Users: {users.length}</p>
+                  <div className="mt-4 flex items-center justify-between">
+                     <div className="flex items-center gap-2">
+                        <TextInput
+                           icon={<AiOutlineSearch />}
+                           placeholder="Search"
+                           value={searchQuery}
+                           onChange={handleSearch}
+                           error={usersState.length === 0 && hasSearched}
+                           classNames={{
+                              filledVariant:
+                                 "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                           }}
+                           className="w-full sm:w-auto"
+                        />
+                        <Select
+                           placeholder="Filter"
+                           clearable
+                           allowDeselect
+                           nothingFound="No options"
+                           maxDropdownHeight={180}
+                           icon={<AiOutlineFilter />}
+                           data={[
+                              { value: "writer", label: "Writer" },
+                              { value: "reviewer", label: "Reviewer" },
+                              { value: "muted", label: "Muted" },
+                              { value: "admin", label: "Administrator" },
+                              {
+                                 value: "most-articles",
+                                 label: "Most Articles",
+                              },
+                              {
+                                 value: "most-coarticles",
+                                 label: "Most Co Articles",
+                              },
+                              {
+                                 value: "most-comments",
+                                 label: "Most Comments",
+                              },
+                              { value: "most-upvotes", label: "Most Likes" },
+                              {
+                                 value: "most-downvotes",
+                                 label: "Most Dislikes",
+                              },
+                              { value: "newest", label: "Newest" },
+                              { value: "oldest", label: "Oldest" },
+                           ]}
+                           value={filter}
+                           onChange={handleFilter}
+                           classNames={{
+                              filledVariant:
+                                 "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                              dropdown:
+                                 "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
+                           }}
+                           className="w-full sm:w-auto"
+                        />
+                        <p className="font-medium">
+                           Total Users: {users.length}
+                        </p>
+                     </div>
+                     {data?.user?.isAdmin && (
+                        <Button
+                           onClick={() => setOpenRestoreAccountModal(true)}
+                           disabled={openRestoreAccountModal}
+                        >
+                           Restore Account
+                        </Button>
+                     )}
                   </div>
                   <div className="mt-2">
                      {usersState.length === 0 && (
@@ -377,6 +412,18 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                              Change Access
                                           </DropdownElement>
                                        </Menu.Item>
+                                       {user.id !== data?.user?.id && (
+                                          <Menu.Item
+                                             onClick={() =>
+                                                setConfirmModalEmail(user.email)
+                                             }
+                                          >
+                                             <DropdownElement color="red">
+                                                <BsHammer className="mx-0.5 text-xl" />
+                                                Ban User
+                                             </DropdownElement>
+                                          </Menu.Item>
+                                       )}
                                     </Menu.Items>
                                  </Transition>
                               </Menu>
@@ -387,6 +434,31 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                </Tab.Group>
             </div>
          </div>
+         <ConfirmModal
+            isOpen={confirmModalEmail !== null}
+            updateModalState={() => setConfirmModalEmail(null)}
+            successFunction={async () => {
+               setBigLoading(true);
+               const r = await fetch(`/api/admin/delete/${confirmModalEmail}`, {
+                  credentials: "include",
+               });
+               if (r.status !== 200) {
+                  const response = await r.json();
+                  notifications.showNotification({
+                     color: "red",
+                     title: "Ban User - Error",
+                     message: response.message || "Unknown Error",
+                     icon: <AiOutlineClose />,
+                     autoClose: 5000,
+                  });
+               } else {
+                  setUsersState(
+                     usersState.filter((u) => u.email !== confirmModalEmail)
+                  );
+               }
+               setBigLoading(false);
+            }}
+         />
          <Modal
             isOpen={openTagEditor}
             updateModalState={() => {
@@ -797,6 +869,76 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                   </>
                )}
             </div>
+         </Modal>
+         <Modal
+            isOpen={openRestoreAccountModal}
+            updateModalState={() =>
+               setOpenRestoreAccountModal(!openRestoreAccountModal)
+            }
+            title="Restore Account"
+            width="xl"
+         >
+            <>
+               <h1 className="text-gray-700 dark:text-gray-300">
+                  Restore a account which is banned from KCA News.
+               </h1>
+               <Formik
+                  initialValues={{ email: "" }}
+                  validateOnChange={false}
+                  validateOnBlur={false}
+                  validationSchema={emailSchema}
+                  onSubmit={async (
+                     data,
+                     { setSubmitting, setFieldError, resetForm }
+                  ) => {
+                     setBigLoading(true);
+                     setSubmitting(true);
+                     const r = await fetch(`/api/admin/restore/${data.email}`, {
+                        credentials: "include",
+                     });
+                     if (r.status !== 200) {
+                        const response = await r.json();
+                        setFieldError(
+                           "email",
+                           response.message || "Unkown Error"
+                        );
+                     } else {
+                        notifications.showNotification({
+                           title: "Unban Account",
+                           message: "Account unbanned! They can now log in!",
+                           icon: <AiOutlineCheck />,
+                           autoClose: 5000,
+                        });
+                        resetForm();
+                        setOpenRestoreAccountModal(false);
+                     }
+                     setSubmitting(false);
+                     setBigLoading(false);
+                  }}
+               >
+                  {({ errors, isSubmitting, setFieldValue, values }) => (
+                     <Form>
+                        <TextInput
+                           label="Email"
+                           onChange={(e) =>
+                              setFieldValue("email", e.currentTarget.value)
+                           }
+                           value={values.email}
+                           required
+                           error={errors.email}
+                        />
+                        <Button
+                           className="mt-3 w-full"
+                           type="submit"
+                           loading={isSubmitting}
+                           disabled={isSubmitting}
+                        >
+                           Restore
+                        </Button>
+                     </Form>
+                  )}
+               </Formik>
+            </>
          </Modal>
       </>
    );

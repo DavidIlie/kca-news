@@ -15,6 +15,13 @@ export default NextAuth({
    ],
    callbacks: {
       async signIn({ user }) {
+         const banned = await prisma.bannedUsers.findFirst({
+            where: { email: user.email as any },
+         });
+         if (banned) {
+            return false;
+         }
+
          if ((user as any).gender === null) {
             const r = await fetch(
                `https://api.genderize.io/?name=${(user as any).names[0]}`
