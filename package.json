@@ -2,7 +2,7 @@
    "private": true,
    "scripts": {
       "dev": "yarn openweb && concurrently --kill-others \"npx next dev\" \"yarn prisma:studio\"",
-      "build": "next build",
+      "build": "npx prisma generate && next build",
       "start": "next start",
       "openweb": "open-cli http://localhost:3000",
       "prisma:studio": "prisma studio",
