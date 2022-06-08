@@ -606,7 +606,7 @@ export const getServerSideProps: GetServerSideProps = async ({
    const session = await getSession({ req });
 
    const article = await prisma.article.findFirst({
-      where: session?.user?.isAdmin
+      where: (session?.user?.isAdmin || session?.user?.isEditorial)
          ? { id: id as string }
          : session?.user?.isReviewer
          ? {

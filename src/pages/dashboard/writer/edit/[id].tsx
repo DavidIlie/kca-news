@@ -1105,6 +1105,25 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               )}
                            </EditorSettingsDisclosure>
                         )}
+                        {(user?.isAdmin || user?.isEditorial) &&
+                           user.id !== article.writer?.id && (
+                              <EditorSettingsDisclosure name="Contact Information">
+                                 <>
+                                    <h1>
+                                       <span className="font-medium">
+                                          Name:
+                                       </span>{" "}
+                                       {article.writer?.name}
+                                    </h1>
+                                    <h1>
+                                       <span className="font-medium">
+                                          Email:
+                                       </span>{" "}
+                                       {article.writer?.email}
+                                    </h1>
+                                 </>
+                              </EditorSettingsDisclosure>
+                           )}
                         {(article.upvotes!.length > 0 ||
                            article.downvotes!.length) > 0 && (
                            <EditorSettingsDisclosure name="Opinion">

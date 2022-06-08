@@ -40,7 +40,7 @@ export const getArticles = async (
            ...extra,
         };
 
-   return user?.isAdmin
+   return (user?.isAdmin || user?.isEditorial)
       ? JSON.parse(
            JSON.stringify(
               await prisma.article.findMany({
