@@ -200,11 +200,8 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                   className="mx-auto max-w-7xl lg:px-8"
                />
                <div className="container mt-4 max-w-7xl px-2 sm:px-8">
-                  <h1 className="mb-4 text-4xl font-semibold">
-                     {user.isAdmin ? "Total" : "Your"} Articles
-                  </h1>
                   <div className="borderColor justify-between border-b-2 pb-4 sm:flex">
-                     <div className="mb-4 flex items-center gap-2 sm:mb-0">
+                     <div className="mb-4 mt-1 flex items-center gap-2 sm:mb-0">
                         <Link href="/dashboard/writer/create">
                            <a className="w-1/3 sm:w-auto">
                               <Button className="w-full">
