@@ -244,7 +244,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            </span>
                         </Button>
                      </div>
-                     <div className="flex items-center gap-2">
+                     <div className="mt-1 flex items-center gap-2">
                         <TextInput
                            icon={<AiOutlineSearch />}
                            placeholder="Search"
@@ -255,6 +255,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                               filledVariant:
                                  "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                            }}
+                           size="md"
                         />
                         <Select
                            placeholder="Filter"
@@ -295,6 +296,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                               dropdown:
                                  "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                            }}
+                           size="md"
                         />
                      </div>
                   </div>
