@@ -412,18 +412,21 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                              Change Access
                                           </DropdownElement>
                                        </Menu.Item>
-                                       {user.id !== data?.user?.id && (
-                                          <Menu.Item
-                                             onClick={() =>
-                                                setConfirmModalEmail(user.email)
-                                             }
-                                          >
-                                             <DropdownElement color="red">
-                                                <BsHammer className="mx-0.5 text-xl" />
-                                                Ban User
-                                             </DropdownElement>
-                                          </Menu.Item>
-                                       )}
+                                       {user.id !== data?.user?.id &&
+                                          data?.user?.isAdmin && (
+                                             <Menu.Item
+                                                onClick={() =>
+                                                   setConfirmModalEmail(
+                                                      user.email
+                                                   )
+                                                }
+                                             >
+                                                <DropdownElement color="red">
+                                                   <BsHammer className="mx-0.5 text-xl" />
+                                                   Ban User
+                                                </DropdownElement>
+                                             </Menu.Item>
+                                          )}
                                     </Menu.Items>
                                  </Transition>
                               </Menu>
@@ -878,67 +881,59 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
             title="Restore Account"
             width="xl"
          >
-            <>
-               <h1 className="text-gray-700 dark:text-gray-300">
-                  Restore a account which is banned from KCA News.
-               </h1>
-               <Formik
-                  initialValues={{ email: "" }}
-                  validateOnChange={false}
-                  validateOnBlur={false}
-                  validationSchema={emailSchema}
-                  onSubmit={async (
-                     data,
-                     { setSubmitting, setFieldError, resetForm }
-                  ) => {
-                     setBigLoading(true);
-                     setSubmitting(true);
-                     const r = await fetch(`/api/admin/restore/${data.email}`, {
-                        credentials: "include",
+            <Formik
+               initialValues={{ email: "" }}
+               validateOnChange={false}
+               validateOnBlur={false}
+               validationSchema={emailSchema}
+               onSubmit={async (
+                  data,
+                  { setSubmitting, setFieldError, resetForm }
+               ) => {
+                  setBigLoading(true);
+                  setSubmitting(true);
+                  const r = await fetch(`/api/admin/restore/${data.email}`, {
+                     credentials: "include",
+                  });
+                  if (r.status !== 200) {
+                     const response = await r.json();
+                     setFieldError("email", response.message || "Unkown Error");
+                  } else {
+                     notifications.showNotification({
+                        title: "Unban Account",
+                        message: "Account unbanned! They can now log in!",
+                        icon: <AiOutlineCheck />,
+                        autoClose: 5000,
                      });
-                     if (r.status !== 200) {
-                        const response = await r.json();
-                        setFieldError(
-                           "email",
-                           response.message || "Unkown Error"
-                        );
-                     } else {
-                        notifications.showNotification({
-                           title: "Unban Account",
-                           message: "Account unbanned! They can now log in!",
-                           icon: <AiOutlineCheck />,
-                           autoClose: 5000,
-                        });
-                        resetForm();
-                        setOpenRestoreAccountModal(false);
-                     }
-                     setSubmitting(false);
-                     setBigLoading(false);
-                  }}
-               >
-                  {({ errors, isSubmitting, setFieldValue, values }) => (
-                     <Form>
-                        <TextInput
-                           label="Email"
-                           onChange={(e) =>
-                              setFieldValue("email", e.currentTarget.value)
-                           }
-                           value={values.email}
-                           required
-                           error={errors.email}
-                        />
-                        <Button
-                           className="mt-3 w-full"
-                           type="submit"
-                           loading={isSubmitting}
-                           disabled={isSubmitting}
-                        >
-                           Restore
-                        </Button>
-                     </Form>
-                  )}
-               </Formik>
-            </>
+                     resetForm();
+                     setOpenRestoreAccountModal(false);
+                  }
+                  setSubmitting(false);
+                  setBigLoading(false);
+               }}
+            >
+               {({ errors, isSubmitting, setFieldValue, values }) => (
+                  <Form>
+                     <TextInput
+                        label="Email"
+                        onChange={(e) =>
+                           setFieldValue("email", e.currentTarget.value)
+                        }
+                        value={values.email}
+                        required
+                        error={errors.email}
+                     />
+                     <Button
+                        className="mt-3 w-full"
+                        type="submit"
+                        loading={isSubmitting}
+                        disabled={isSubmitting}
+                     >
+                        Restore
+                     </Button>
+                  </Form>
+               )}
+            </Formik>
          </Modal>
       </>
    );
