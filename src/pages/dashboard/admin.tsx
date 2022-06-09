@@ -238,6 +238,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                  "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                            }}
                            className="w-full sm:w-auto"
+                           size="md"
                         />
                         <Select
                            placeholder="Filter"
@@ -280,6 +281,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                  "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                            }}
                            className="w-full sm:w-auto"
+                           size="md"
                         />
                         <p className="font-medium">
                            Total Users: {users.length}

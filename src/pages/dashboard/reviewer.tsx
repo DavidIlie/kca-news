@@ -464,6 +464,7 @@ const CommentList: React.FC<CommentListProps> = ({
                      "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                }}
                className="w-full sm:w-auto"
+               size="md"
             />
             <Select
                placeholder="Filter"
@@ -487,6 +488,7 @@ const CommentList: React.FC<CommentListProps> = ({
                      "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                }}
                className="w-full sm:w-auto"
+               size="md"
             />
          </div>
          {commentsState.length === 0 && (
