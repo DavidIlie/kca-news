@@ -25,6 +25,7 @@ import {
    useClipboard,
    useDebouncedValue,
    useMediaQuery,
+   useHotkeys,
 } from "@mantine/hooks";
 import {
    MultiSelect,
@@ -42,6 +43,7 @@ import { useTheme } from "next-themes";
 import { BiCategory } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import { useBeforeUnload } from "react-use";
+import readingTime from "reading-time";
 
 const Editor = dynamic(() => import("@davidilie/markdown-editor"), {
    ssr: false,
@@ -73,6 +75,7 @@ import ArticleCoverUploader, {
 } from "../../../../components/ArticleCoverUploader/ArticleCoverUploader";
 import sendPost from "../../../../lib/sendPost";
 import { computeKCAName } from "../../../../lib/computeKCAName";
+import EditorWordCount from "../../../../components/EditorWordCount";
 
 interface Props {
    user: User;
@@ -87,6 +90,11 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       key: "editorOpenSidebar",
       defaultValue: (menu as any as boolean) || true,
    });
+   const [openWordCountOverlay, setOpenWordCountOverlay] =
+      useLocalStorage<boolean>({
+         key: "wordCountOverlay",
+         defaultValue: false,
+      });
 
    useEffect(() => setOpenSidebar((menu as any as boolean) || openSidebar), []);
 
@@ -122,6 +130,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [loadingSearch, setLoadingSearchWriter] = useState<boolean>(false);
    const [key, setKey] = useState<number>(0);
    const [lastSaved, setLastSaved] = useState<Date | null>(null);
+   const [openWordCountModal, setOpenWordCountModal] = useState<boolean>(false);
+   const readingTimeInfo = readingTime(markdownValue);
+
+   useHotkeys([["ctrl+shift+c", () => setOpenWordCountModal(true)]]);
 
    // useDebouncedValue(async () => {
    //    if (!canSave) return;
@@ -355,6 +367,17 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                title="Open Settings"
                onClick={() => setOpenSidebar(true)}
             />
+         )}
+         {openWordCountOverlay && (
+            <div
+               className="dark:text-whit borderColor fixed left-0 bottom-0 z-[100] mb-[25px] ml-5 cursor-pointer rounded-md border bg-white px-3 py-2 shadow-2xl dark:bg-foot"
+               onClick={() => setOpenWordCountModal(!openWordCountModal)}
+            >
+               <span className="font-medium">
+                  {(readingTimeInfo as any).words}
+               </span>{" "}
+               Words
+            </div>
          )}
          <div className="mt-4 flex flex-grow sm:mt-[5.4rem]">
             <LoadingOverlay
@@ -1327,6 +1350,11 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                setDisplayAlert(true);
             }}
             setMainLoading={setBigLoad}
+         />
+         <EditorWordCount
+            content={markdownValue}
+            isOpen={openWordCountModal}
+            toggleIsOpen={() => setOpenWordCountModal(!openWordCountModal)}
          />
       </>
    );
