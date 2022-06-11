@@ -44,6 +44,7 @@ import { BiCategory } from "react-icons/bi";
 import { BsKeyboardFill, BsTrash } from "react-icons/bs";
 import { useBeforeUnload } from "react-use";
 import readingTime from "reading-time";
+import ContentEditable from "react-contenteditable";
 
 const Editor = dynamic(() => import("@davidilie/markdown-editor"), {
    ssr: false,
@@ -472,12 +473,19 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            />
                         </div>
                      )}
-                     <input
-                        className="-mb-3 w-full resize-none text-4xl font-semibold leading-[3rem] outline-none"
-                        style={{ background: "transparent" }}
+                     <ContentEditable
+                        tagName="h1"
+                        className="text-4xl font-semibold leading-[3rem]"
+                        html={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        value={title}
-                        maxLength={100}
+                        onPaste={(e) => {
+                           let clipboardData, pastedData;
+                           e.stopPropagation();
+                           e.preventDefault();
+                           clipboardData = e.clipboardData;
+                           pastedData = clipboardData.getData("Text");
+                           setTitle(pastedData);
+                        }}
                      />
                   </div>
                   <ArticleWriterInfo article={article} user={user} />
