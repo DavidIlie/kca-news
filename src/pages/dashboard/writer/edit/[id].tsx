@@ -150,7 +150,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 
    useHotkeys([
       ["ctrl+shift+c", () => setOpenWordCountModal(true)],
-      ["ctrl+s", () => attemptToSave()],
+      ["ctrl+s", () => !canBeAttemptedSave && attemptToSave()],
    ]);
 
    // useDebouncedValue(async () => {
@@ -631,7 +631,10 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                              canSave &&
                                              "cursor-pointer hover:underline"
                                           }`}
-                                          onClick={attemptToSave}
+                                          onClick={() =>
+                                             !canBeAttemptedSave &&
+                                             attemptToSave()
+                                          }
                                        >
                                           Saved{" "}
                                           {formatDistance(
