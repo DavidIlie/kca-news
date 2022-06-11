@@ -1,10 +1,11 @@
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect, forwardRef, useCallback } from "react";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { DefaultSeo } from "next-seo";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
+   AiFillSave,
    AiFillTag,
    AiOutlineCheck,
    AiOutlineClose,
@@ -40,7 +41,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { BiCategory } from "react-icons/bi";
-import { BsTrash } from "react-icons/bs";
+import { BsKeyboardFill, BsTrash } from "react-icons/bs";
 import { useBeforeUnload } from "react-use";
 import readingTime from "reading-time";
 
@@ -75,6 +76,7 @@ import ArticleCoverUploader, {
 import sendPost from "../../../../lib/sendPost";
 import { computeKCAName } from "../../../../lib/computeKCAName";
 import EditorWordCount from "../../../../components/EditorWordCount";
+import useContextMenu from "../../../../hooks/useContextMenu";
 
 interface Props {
    user: User;
@@ -131,8 +133,24 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    const [lastSaved, setLastSaved] = useState<Date | null>(null);
    const [openWordCountModal, setOpenWordCountModal] = useState<boolean>(false);
    const readingTimeInfo = readingTime(markdownValue);
+   const [openChangeCoverModal, setOpenChangeCoverModal] =
+      useState<boolean>(false);
+   const toggleChangeCoverModal = () =>
+      setOpenChangeCoverModal(!openChangeCoverModal);
 
-   useHotkeys([["ctrl+shift+c", () => setOpenWordCountModal(true)]]);
+   // const { anchorPoint, showContextMenu } = useContextMenu(
+   //    !(
+   //       openWordCountModal ||
+   //       openConfirmModalUnderReview ||
+   //       deleteConfirmModal ||
+   //       openChangeCoverModal
+   //    )
+   // );
+
+   useHotkeys([
+      ["ctrl+shift+c", () => setOpenWordCountModal(true)],
+      ["ctrl+s", () => attemptToSave()],
+   ]);
 
    // useDebouncedValue(async () => {
    //    if (!canSave) return;
@@ -160,11 +178,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    //       setArticle(article);
    //    }
    // }, 1000);
-
-   const [openChangeCoverModal, setOpenChangeCoverModal] =
-      useState<boolean>(false);
-   const toggleChangeCoverModal = () =>
-      setOpenChangeCoverModal(!openChangeCoverModal);
 
    const canSave =
       (article.title !== title && title !== "") ||
@@ -378,6 +391,34 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                Words
             </div>
          )}
+         {/* {showContextMenu && (
+            <div
+               className="borderColor container absolute z-50 max-w-[10rem] rounded border-2 bg-white shadow-xl dark:bg-foot"
+               style={{
+                  top: anchorPoint.y,
+                  left: anchorPoint.x,
+               }}
+            >
+               <div
+                  className={`flex items-center justify-between py-2 px-3 duration-150 ${
+                     !canBeAttemptedSave
+                        ? "cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-bg"
+                        : "cursor-not-allowed opacity-50"
+                  }`}
+                  onClick={() => !canBeAttemptedSave && attemptToSave()}
+               >
+                  <p>Save</p>
+                  <AiFillSave />
+               </div>
+               <div
+                  className="flex cursor-pointer items-center justify-between py-2 px-3 duration-150 hover:bg-gray-100 dark:hover:bg-dark-bg"
+                  onClick={() => setOpenWordCountModal(true)}
+               >
+                  <p>Word Count</p>
+                  <BsKeyboardFill />
+               </div>
+            </div>
+         )} */}
          <div className="mt-4 flex flex-grow sm:mt-[5.1rem]">
             <LoadingOverlay
                visible={loadingContentUpdate || bigLoad}
