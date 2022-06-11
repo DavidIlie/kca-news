@@ -265,7 +265,7 @@ const ArticleViewer: React.FC<Props> = ({
                ],
             }}
          />
-         <div className="sm:pt-42 flex flex-grow dark:bg-dark-bg md:pt-36 lg:px-0 xl:pt-24">
+         <div className="flex flex-grow dark:bg-dark-bg sm:pt-32 md:pt-36 lg:px-0 xl:pt-20">
             <Slide
                triggerOnce
                className="mx-auto"
@@ -330,7 +330,7 @@ const ArticleViewer: React.FC<Props> = ({
                      showEdit={true}
                      className="ml-4 mt-1"
                   />
-                  <div className="mx-4 mt-2 mb-6 items-center justify-evenly gap-6 sm:flex">
+                  <div className="mx-4 mt-2 mb-6 items-center justify-evenly gap-3 sm:flex">
                      <div className="sm:w-2/3">
                         <Image
                            alt="Post picture"
@@ -606,39 +606,40 @@ export const getServerSideProps: GetServerSideProps = async ({
    const session = await getSession({ req });
 
    const article = await prisma.article.findFirst({
-      where: (session?.user?.isAdmin || session?.user?.isEditorial)
-         ? { id: id as string }
-         : session?.user?.isReviewer
-         ? {
-              id: id as string,
-              OR: [
-                 { sharedId: share as string },
-                 { user: session?.user?.id },
-                 { location: { in: session?.user?.department } },
-              ],
-           }
-         : session?.user?.isWriter
-         ? {
-              id: id as string,
-              OR: [
-                 { sharedId: share as string },
-                 { user: session?.user?.id },
-                 { published: true },
-              ],
-           }
-         : {
-              id: id as string,
-              OR:
-                 share !== undefined
-                    ? [
-                         {
-                            sharedToTeam: false,
-                            sharedId: share as string,
-                            shared: true,
-                         },
-                      ]
-                    : [{ published: true, underReview: false }],
-           },
+      where:
+         session?.user?.isAdmin || session?.user?.isEditorial
+            ? { id: id as string }
+            : session?.user?.isReviewer
+            ? {
+                 id: id as string,
+                 OR: [
+                    { sharedId: share as string },
+                    { user: session?.user?.id },
+                    { location: { in: session?.user?.department } },
+                 ],
+              }
+            : session?.user?.isWriter
+            ? {
+                 id: id as string,
+                 OR: [
+                    { sharedId: share as string },
+                    { user: session?.user?.id },
+                    { published: true },
+                 ],
+              }
+            : {
+                 id: id as string,
+                 OR:
+                    share !== undefined
+                       ? [
+                            {
+                               sharedToTeam: false,
+                               sharedId: share as string,
+                               shared: true,
+                            },
+                         ]
+                       : [{ published: true, underReview: false }],
+              },
       include: {
          coWriters: true,
          comments: {

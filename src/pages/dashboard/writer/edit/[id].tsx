@@ -15,7 +15,6 @@ import {
    AiOutlineUser,
 } from "react-icons/ai";
 import { RiRestartLine } from "react-icons/ri";
-import ContentEditable from "react-contenteditable";
 import { useNotifications } from "@mantine/notifications";
 import { formatDistance } from "date-fns";
 import {
@@ -370,7 +369,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
          )}
          {openWordCountOverlay && (
             <div
-               className="dark:text-whit borderColor fixed left-0 bottom-0 z-[100] mb-[25px] ml-5 cursor-pointer rounded-md border bg-white px-3 py-2 shadow-2xl dark:bg-foot"
+               className="borderColor fixed left-0 bottom-0 z-[100] mb-[25px] ml-5 cursor-pointer rounded-md border bg-white px-3 py-2 shadow-2xl dark:bg-foot"
                onClick={() => setOpenWordCountModal(!openWordCountModal)}
             >
                <span className="font-medium">
@@ -379,7 +378,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                Words
             </div>
          )}
-         <div className="mt-4 flex flex-grow sm:mt-[5.4rem]">
+         <div className="mt-4 flex flex-grow sm:mt-[5.1rem]">
             <LoadingOverlay
                visible={loadingContentUpdate || bigLoad}
                className="fixed"
@@ -432,15 +431,16 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            />
                         </div>
                      )}
-                     <ContentEditable
-                        tagName="h1"
-                        className="text-4xl font-semibold"
-                        html={title}
+                     <textarea
+                        className="-mb-3 w-full resize-none text-4xl font-semibold leading-[3rem] outline-none"
+                        style={{ background: "transparent" }}
                         onChange={(e) => setTitle(e.target.value)}
+                        value={title}
+                        maxLength={100}
                      />
                   </div>
                   <ArticleWriterInfo article={article} user={user} />
-                  <div className="items-center justify-evenly gap-6 sm:flex">
+                  <div className="items-center justify-evenly gap-3 sm:flex">
                      <div className="relative mt-1 flex justify-center sm:w-2/3">
                         <div className="absolute top-0 right-0 z-[1] mt-2 mr-4 flex items-center gap-4">
                            <Button
@@ -478,7 +478,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            onChange={(markdown) => setDescription(markdown())}
                            defaultValue={description}
                            key={key}
-                           className="z-0 mt-4"
+                           className="z-0 mt-2"
                            dark={resolvedTheme === "dark"}
                            maxLength={400}
                            disableExtensions={[
@@ -509,14 +509,12 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      uploadMedia={async (media) => {
                         const formData = new FormData();
                         formData.append("image", media);
-
                         try {
                            const { statusCode, response } = await sendPost(
                               `/api/article/${article.id}/image`,
                               formData,
                               true
                            );
-
                            if (statusCode !== 200) {
                               notifications.showNotification({
                                  color: "red",
@@ -538,7 +536,6 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            });
                         }
                      }}
-                     onSave={attemptToSave}
                   />
                   <div className="mt-7 border-t-2 pt-4">
                      <Button
