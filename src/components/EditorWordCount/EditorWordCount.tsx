@@ -28,17 +28,17 @@ const EditorWordCount: React.FC<{
          width="md"
       >
          <div className="mt-3">
-            <div className="borderColor mb-4 flex items-center justify-between border-b-2 pb-1">
+            <div className="borderColor mb-4 flex items-center justify-between border-b-2">
                <p>
                   <Tooltip label="*Estimated*">Reading Time</Tooltip>
                </p>
                <p className="font-medium">{readingTimeInfo.text}</p>
             </div>
-            <div className="borderColor mb-4 flex items-center justify-between border-b-2 pb-1">
+            <div className="borderColor mb-4 flex items-center justify-between border-b-2">
                <p>Words</p>
                <p className="font-medium">{readingTimeInfo.words}</p>
             </div>
-            <div className="borderColor mb-3 flex items-center justify-between border-b-2 pb-1">
+            <div className="borderColor mb-3 flex items-center justify-between border-b-2">
                <p>Characters</p>
                <p className="font-medium">
                   {content.replace(/^#+\s/g, "").length}
