@@ -472,7 +472,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            />
                         </div>
                      )}
-                     <textarea
+                     <input
                         className="-mb-3 w-full resize-none text-4xl font-semibold leading-[3rem] outline-none"
                         style={{ background: "transparent" }}
                         onChange={(e) => setTitle(e.target.value)}
