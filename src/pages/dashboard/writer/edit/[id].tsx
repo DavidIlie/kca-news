@@ -90,11 +90,11 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
       key: "editorOpenSidebar",
       defaultValue: (menu as any as boolean) || true,
    });
-   const [openWordCountOverlay, setOpenWordCountOverlay] =
-      useLocalStorage<boolean>({
-         key: "wordCountOverlay",
-         defaultValue: false,
-      });
+
+   const [openWordCountOverlay] = useLocalStorage<boolean>({
+      key: "wordCountOverlay",
+      defaultValue: false,
+   });
 
    useEffect(() => setOpenSidebar((menu as any as boolean) || openSidebar), []);
 
