@@ -23,6 +23,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const body = await updateProfileSchema.validate(req.body);
 
+      if (user.names.includes(body.extraName as string))
+         return res.status(401).json({
+            message: "your extra name can't be part of your real name!",
+         });
+
       if (body.nameIndex > user.names.length)
          return res.status(400).json({ message: "name index is big" });
 
