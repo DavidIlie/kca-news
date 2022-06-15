@@ -4,8 +4,7 @@ export type Locations =
    | "sports"
    | "society"
    | "science-environment"
-   | "entertainment"
-   | "arts";
+   | "entertainment";
 
 export const visibleLocations: Locations[] = ["news", "humanities", "sports"];
 
@@ -13,7 +12,6 @@ export const moreLocations: Locations[] = [
    "society",
    "science-environment",
    "entertainment",
-   "arts",
 ];
 
 export const fullLocations = visibleLocations.concat(moreLocations);
@@ -110,19 +108,9 @@ export const links: Category[] = [
       location: ["entertainment"],
    },
    {
-      id: "music",
-      name: "Music",
-      location: ["arts"],
-   },
-   {
-      id: "dance",
-      name: "Dance",
-      location: ["arts"],
-   },
-   {
-      id: "art",
-      name: "General Art",
-      location: ["arts"],
+      id: "arts",
+      name: "Arts",
+      location: ["entertainment"],
    },
    {
       id: "tech",
