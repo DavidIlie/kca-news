@@ -19,6 +19,7 @@ export interface Article {
    writer?: User;
    coWriters: User[];
    underReview: boolean;
+   readyToPublish: boolean;
    comments?: Comment[];
    upvotes?: Upvote[];
    downvotes?: Downvote[];

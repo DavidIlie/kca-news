@@ -683,6 +683,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     ? "Published"
                                     : article.underReview
                                     ? "Under Review"
+                                    : article.readyToPublish
+                                    ? "Ready To Publish"
                                     : "Not published"}
                               </h1>
                            </div>
@@ -732,8 +734,42 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     <ArticleUnderReviewCard />
                                  )}
                            </div>
+                           {(article.underReview || article.readyToPublish) &&
+                              (user?.isAdmin || user?.isEditorial) && (
+                                 <div className="mt-1">
+                                    <Radio
+                                       label="Ready to Publish"
+                                       labelSize="md"
+                                       checked={article.readyToPublish}
+                                       onChange={async () => {
+                                          setLoadingRest(true);
+                                          const r = await fetch(
+                                             `/api/article/${article.id}/update/readyToPublish`,
+                                             {
+                                                credentials: "include",
+                                             }
+                                          );
+                                          const response = await r.json();
+                                          if (r.status === 200) {
+                                             setArticle(response.article);
+                                          } else {
+                                             notifications.showNotification({
+                                                color: "red",
+                                                title: "Publish - Error",
+                                                message:
+                                                   response.message ||
+                                                   "Unknown Error",
+                                                icon: <AiOutlineClose />,
+                                                autoClose: 5000,
+                                             });
+                                          }
+                                          setLoadingRest(false);
+                                       }}
+                                    />
+                                 </div>
+                              )}
                            {user.isAdmin && (
-                              <div className="mt-2 flex items-center gap-2">
+                              <div className="mt-1 flex items-center gap-2">
                                  <Radio
                                     label="Publish"
                                     labelSize="md"

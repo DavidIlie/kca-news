@@ -169,7 +169,12 @@ const ArticleDashboardCard: React.FC<Props> = ({
                      {article.underReview && (
                         <div className="flex items-center gap-2">
                            <ArticleUnderReviewCard />
-                           <h1 className="font-semibold">Under Review</h1>
+                           <h1 className="font-semibold">under review</h1>
+                        </div>
+                     )}
+                     {article.readyToPublish && (
+                        <div className="flex items-center gap-2">
+                           <h1 className="font-semibold">ready to publish</h1>
                         </div>
                      )}
                   </div>

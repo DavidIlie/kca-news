@@ -30,12 +30,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    const newArticle = await prisma.article.update({
       where: { id: article.id },
       data: {
-         published: !article.published,
+         underReview: false,
+         readyToPublish: !article.readyToPublish,
          shared: false,
          sharedId: v4(),
-         createdAt: new Date(),
-         readyToPublish: false,
-         underReview: false,
       },
       include: {
          writer: true,

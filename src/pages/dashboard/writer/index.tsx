@@ -92,6 +92,9 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                )
             );
             break;
+         case "ready-to-publish":
+            setArticles(baseArticles.filter((s) => s.readyToPublish));
+            break;
          case "most-likes":
             setArticles(
                baseArticles
@@ -267,6 +270,10 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            data={[
                               { value: "newest", label: "Newest" },
                               { value: "oldest", label: "Oldest" },
+                              {
+                                 value: "ready-to-publish",
+                                 label: "Ready To Publish",
+                              },
                               { value: "most-likes", label: "Most Likes" },
                               { value: "least-likes", label: "Least Likes" },
                               {
