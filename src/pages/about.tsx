@@ -46,7 +46,7 @@ const OurTeam: React.FC = () => {
       <>
          <NextSeo title="About" />
          <div className="flex flex-grow px-4 dark:bg-dark-bg sm:pt-24 lg:px-0">
-            <div className="container mx-auto mt-10 max-w-7xl">
+            <div className="container mx-auto mt-10 max-w-7xl px-4">
                <Fade cascade triggerOnce duration={300}>
                   <h1 className="mb-4 text-5xl font-medium">
                      What is KCA News?
