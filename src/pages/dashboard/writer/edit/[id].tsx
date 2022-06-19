@@ -149,8 +149,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
    // );
 
    useHotkeys([
-      ["ctrl+shift+c", () => setOpenWordCountModal(true)],
-      ["ctrl+s", () => !canBeAttemptedSave && attemptToSave()],
+      ["mod+shift+c", () => setOpenWordCountModal(true)],
+      ["mod+s", () => !canBeAttemptedSave && attemptToSave()],
    ]);
 
    // useDebouncedValue(async () => {
@@ -412,7 +412,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                   <AiFillSave />
                </div>
                <div
-                  className="flex cursor-pointer items-center justify-between py-2 px-3 duration-150 hover:bg-gray-100 dark:hover:bg-dark-bg"
+                  className="flex items-center justify-between px-3 py-2 duration-150 cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-bg"
                   onClick={() => setOpenWordCountModal(true)}
                >
                   <p>Word Count</p>
@@ -431,8 +431,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                   openSidebar ? "w-4/5" : "w-full"
                }`}
             >
-               <div className="container mx-auto max-w-4xl">
-                  <div className="border-b-2 pb-4">
+               <div className="container max-w-4xl mx-auto">
+                  <div className="pb-4 border-b-2">
                      {displayAlert && (
                         <Alert
                            icon={<AiOutlineCheck />}
@@ -453,7 +453,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            </Link>
                         </Alert>
                      )}
-                     <div className="mb-2 flex w-full flex-wrap justify-start">
+                     <div className="flex flex-wrap justify-start w-full mb-2">
                         {categories.concat(tags).map((category, index) => (
                            <ArticleBadge tag={category} key={index} />
                         ))}
@@ -489,8 +489,8 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      />
                   </div>
                   <ArticleWriterInfo article={article} user={user} />
-                  <div className="items-center justify-evenly gap-3 sm:flex">
-                     <div className="relative mt-1 flex justify-center sm:w-2/3">
+                  <div className="items-center gap-3 justify-evenly sm:flex">
+                     <div className="relative flex justify-center mt-1 sm:w-2/3">
                         <div className="absolute top-0 right-0 z-[1] mt-2 mr-4 flex items-center gap-4">
                            <Button
                               color="cyan"
@@ -501,7 +501,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         </div>
                         <Image
                            alt="Post picture"
-                           className="rounded-xl shadow-xl"
+                           className="shadow-xl rounded-xl"
                            src={article.cover}
                            width={1280}
                            height={720}
@@ -514,7 +514,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         {description !== article.description && (
                            <div className="relative hidden sm:block">
                               <RiRestartLine
-                                 className="absolute right-0 -mr-10 mt-5 cursor-pointer select-none text-2xl"
+                                 className="absolute right-0 mt-5 -mr-10 text-2xl cursor-pointer select-none"
                                  onClick={() => {
                                     setDescription(article.description);
                                     setKey(key + 1);
@@ -586,7 +586,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                         }
                      }}
                   />
-                  <div className="mt-7 border-t-2 pt-4">
+                  <div className="pt-4 border-t-2 mt-7">
                      <Button
                         className="w-full"
                         disabled={canBeAttemptedSave}
@@ -616,7 +616,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            className="fixed"
                         />
                         {!mobile && (
-                           <div className="borderColor flex items-center justify-between gap-2 border-b-2 px-4 py-4">
+                           <div className="flex items-center justify-between gap-2 px-4 py-4 border-b-2 borderColor">
                               <div className={`${lastSaved && "-mb-2"}`}>
                                  <h1 className="text-2xl font-semibold">
                                     Settings
@@ -650,7 +650,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               </div>
                               <AiOutlineCloseCircle
                                  size="25"
-                                 className="mt-1 cursor-pointer text-black duration-150 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+                                 className="mt-1 text-black duration-150 cursor-pointer hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
                                  title="Close"
                                  onClick={closeSidebar}
                               />
@@ -662,7 +662,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            warning={title === ""}
                         >
                            {title === "" && (
-                              <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
+                              <h1 className="px-1 mb-2 -mt-2 font-medium text-red-500">
                                  You need a title in order to publish
                               </h1>
                            )}
@@ -676,7 +676,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     "dark:bg-foot border-2 dark:border-gray-800 border-gray-300",
                               }}
                            />
-                           <div className="mt-2 flex justify-between text-left">
+                           <div className="flex justify-between mt-2 text-left">
                               <h1 className="font-semibold">Status:</h1>
                               <h1 className="text-blue-500">
                                  {article.published
@@ -688,7 +688,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                     : "Not published"}
                               </h1>
                            </div>
-                           <div className="mt-2 flex items-center gap-2">
+                           <div className="flex items-center gap-2 mt-2">
                               <Tooltip
                                  label="Places article under review to be moderated by an administrator. This cannot be undone by you once changed."
                                  wrapLines
@@ -769,7 +769,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  </div>
                               )}
                            {user.isAdmin && (
-                              <div className="mt-1 flex items-center gap-2">
+                              <div className="flex items-center gap-2 mt-1">
                                  <Radio
                                     label="Publish"
                                     labelSize="md"
@@ -815,7 +815,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            )}
                            <Button
                               color="secondary"
-                              className="mt-3 -ml-1 w-full"
+                              className="w-full mt-3 -ml-1"
                               disabled={
                                  article.underReview || article.published
                               }
@@ -841,12 +841,12 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                            }
                         >
                            {location === null && (
-                              <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
+                              <h1 className="px-1 mb-2 -mt-2 font-medium text-red-500">
                                  You need a category in order to publish
                               </h1>
                            )}
                            {categories.length === 0 && location !== null && (
-                              <h1 className="-mt-2 mb-2 px-1 font-medium text-red-500">
+                              <h1 className="px-1 mb-2 -mt-2 font-medium text-red-500">
                                  At least one sub category is needed to publish.
                               </h1>
                            )}
@@ -1053,7 +1053,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  }`}
                                  key={index}
                               >
-                                 <div className="flex select-none items-center gap-2">
+                                 <div className="flex items-center gap-2 select-none">
                                     <Image
                                        className="rounded-full"
                                        src={writer.image}
@@ -1169,7 +1169,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                           : "Copy Link"}
                                     </Button>
                                     <Button
-                                       className="mt-2 w-full"
+                                       className="w-full mt-2"
                                        color="secondary"
                                        onClick={async () => {
                                           setBigLoad(true);
@@ -1253,7 +1253,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                  </h1>
 
                                  <Tabs
-                                    className="-px-1 mt-1"
+                                    className="mt-1 -px-1"
                                     grow
                                     position="center"
                                  >
@@ -1307,7 +1307,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                                             upvote.user!.id
                                                          }`}
                                                       >
-                                                         <a className="truncate font-medium duration-150 hover:text-blue-500">
+                                                         <a className="font-medium truncate duration-150 hover:text-blue-500">
                                                             {computeKCAName(
                                                                upvote.user!
                                                             )}
@@ -1446,7 +1446,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
 };
 
 const WrappedArticleBadge = ({ value }: { value: string }) => (
-   <ArticleBadge tag={value} className="mb-1 mt-1" />
+   <ArticleBadge tag={value} className="mt-1 mb-1" />
 );
 
 const CoWriterUser = forwardRef<HTMLDivElement, any>(
@@ -1454,7 +1454,7 @@ const CoWriterUser = forwardRef<HTMLDivElement, any>(
       <div
          ref={ref}
          {...rest}
-         className="flex cursor-pointer select-none items-center gap-2 py-2 px-2 duration-150 hover:bg-gray-300 dark:hover:bg-dark-bg"
+         className="flex items-center gap-2 px-2 py-2 duration-150 cursor-pointer select-none hover:bg-gray-300 dark:hover:bg-dark-bg"
       >
          <Image
             className="rounded-full"

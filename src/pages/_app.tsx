@@ -90,7 +90,7 @@ const ThemeHandler: React.FC = ({ children }) => {
 
    useHotkeys([
       [
-         "ctrl+shift+e",
+         "mod+shift+e",
          () =>
             colorScheme === "dark"
                ? toggleColorScheme("light")
