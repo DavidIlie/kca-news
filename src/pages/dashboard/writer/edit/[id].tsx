@@ -1221,7 +1221,14 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                        <span className="font-medium">
                                           Name:
                                        </span>{" "}
-                                       {article.writer?.name}
+                                       {article.writer?.names.join(" ") ||
+                                          article.writer?.name}
+                                    </h1>
+                                    <h1>
+                                       <span className="font-medium">
+                                          Year Group:
+                                       </span>{" "}
+                                       {article.writer?.year.split("Year ")[1]}
                                     </h1>
                                     <h1>
                                        <span className="font-medium">
