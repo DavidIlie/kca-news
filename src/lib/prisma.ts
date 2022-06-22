@@ -1,4 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient as NonEdgePrismaClient } from "@prisma/client";
+import { PrismaClient as EdgePrismaClient } from "@prisma/client/edge";
+import type { PrismaClient } from "@prisma/client";
 
 let prisma: PrismaClient;
 
@@ -7,21 +9,11 @@ declare global {
 }
 
 if (process.env.NODE_ENV === "production") {
-   prisma = new PrismaClient();
+   prisma = new EdgePrismaClient();
 } else {
    if (!global.prisma) {
-      global.prisma = new PrismaClient();
+      global.prisma = new NonEdgePrismaClient();
    }
    prisma = global.prisma;
 }
 export default prisma;
-
-export function excludeFields<T, K extends keyof T>(fields: T, omit: K[]) {
-   const result: Partial<Record<keyof T, boolean>> = {};
-   for (const key in fields) {
-     if (!omit.includes(key as any)) {
-       result[key] = true;
-     }
-   }
-   return result;
- }
