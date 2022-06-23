@@ -4,7 +4,7 @@ import * as yup from "yup";
 
 import { Context, createContext } from "@/lib/context";
 import { getArticles } from "@/lib/getArticles";
-import { fullLocations, Locations } from "@/lib/categories";
+import { fullLocations } from "@/lib/categories";
 
 export const appRouter = trpc
    .router<Context>()
