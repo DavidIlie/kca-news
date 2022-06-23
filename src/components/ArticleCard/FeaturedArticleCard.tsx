@@ -62,7 +62,7 @@ const FeaturedArticleCard: React.FC<Props> = ({
                   <h2 className="text-2xl font-semibold tracking-normal line-clamp-1">
                      {article.title}
                   </h2>
-                  <p className="text-md mt-2 mb-3 h-24 text-gray-800 line-clamp-3 dark:text-gray-200">
+                  <p className="h-24 mt-2 mb-3 text-gray-800 text-md line-clamp-3 dark:text-gray-200">
                      {article.description}
                   </p>
                   {categories.map((tag, i) => (
@@ -73,7 +73,7 @@ const FeaturedArticleCard: React.FC<Props> = ({
                         <ArticleBadge tag="surds" />
                      </div>
                   )}
-                  <div className="mt-1 mb-1 mr-1 flex items-center gap-2">
+                  <div className="flex items-center gap-2 mt-1 mb-1 mr-1">
                      <span
                         className={`-mb-0.5 ${
                            solo ? "text-lg" : "text-sm"

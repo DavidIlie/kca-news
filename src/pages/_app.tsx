@@ -14,6 +14,8 @@ import AppLayout from "../components/AppLayout";
 import { useThemeStore } from "../stores/useThemeStore";
 import useColorScheme from "../hooks/useColorScheme";
 import Loader from "../components/Loader";
+import { withTRPC } from "@trpc/next";
+import { AppRouter } from "./api/trpc/[trpc]";
 
 const KingsNews = ({
    Component,
@@ -101,4 +103,16 @@ const ThemeHandler: React.FC = ({ children }) => {
    return <>{children}</>;
 };
 
-export default KingsNews;
+export default withTRPC<AppRouter>({
+   config() {
+      const url = process.env.NEXT_PUBLIC_APP_URL
+         ? `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`
+         : "http://localhost:3000/api/trpc";
+
+      return {
+         url,
+         // queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
+      };
+   },
+   ssr: false,
+})(KingsNews);

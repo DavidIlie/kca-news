@@ -1,46 +1,42 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { GetServerSideProps } from "next";
 import { NextSeo } from "next-seo";
 import { Slide } from "react-awesome-reveal";
-import { getSession } from "next-auth/react";
+import { useQueries } from "react-query";
 
-import { Article } from "../types/Article";
-import { getArticles } from "../lib/getArticles";
-import {
-   fullLocations,
-   getFormmatedLocation,
-   Locations,
-} from "../lib/categories";
+import { fullLocations, getFormmatedLocation } from "../lib/categories";
 import { Button } from "../ui/Button";
 import CategorySection from "../components/CategorySection";
+import { trpc } from "@/lib/trpc";
 
-interface IndividualArticleType {
-   location: Locations;
-   articles: Article[];
-}
-
-interface Props {
-   featuredPosts: Article[];
-   individualArticles: IndividualArticleType[];
-}
-
-const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
+const Home: React.FC = () => {
    const { reload } = useRouter();
 
-   if (featuredPosts.length === 0) {
+   const { client } = trpc.useContext();
+   const featuredArticlesQuery = trpc.useQuery(["featured-posts"]);
+   const individualArticlesQuery = useQueries(
+      fullLocations.map((location) => ({
+         queryKey: [`location-posts-${location}`, { location }],
+         queryFn: (args: any) => {
+            const input = args.queryKey[1];
+            return client.query("location-posts", input);
+         },
+      }))
+   );
+
+   if (featuredArticlesQuery.data?.articles.length === 0) {
       return (
-         <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+         <div className="flex items-center justify-center flex-grow px-4 my-24 sm:pt-20 lg:px-0">
             <Slide triggerOnce direction="down">
                <div>
-                  <h1 className="text-center text-4xl font-semibold text-red-500 sm:text-6xl">
+                  <h1 className="text-4xl font-semibold text-center text-red-500 sm:text-6xl">
                      How did i get here?
                   </h1>
-                  <p className="mb-3 mt-4 text-center text-base sm:text-lg">
+                  <p className="mt-4 mb-3 text-base text-center sm:text-lg">
                      Looks like there are no articles, embarrising... 🙄
                   </p>
-                  <div className="mt-2 flex justify-center text-gray-800">
+                  <div className="flex justify-center mt-2 text-gray-800">
                      <Button onClick={() => reload()}>Reload</Button>
                   </div>
                </div>
@@ -52,73 +48,44 @@ const Home: React.FC<Props> = ({ featuredPosts, individualArticles }) => {
    return (
       <>
          <NextSeo title="Home" />
-         <div className="container mx-auto mt-12 max-w-7xl px-4 sm:mt-32">
-            <CategorySection articles={featuredPosts}>Latest</CategorySection>
+         <div className="container px-4 mx-auto mt-12 max-w-7xl sm:mt-32">
+            <CategorySection
+               articles={featuredArticlesQuery.data?.articles}
+               loading={featuredArticlesQuery.isLoading}
+            >
+               Latest
+            </CategorySection>
          </div>
-         <div className="container mx-auto mt-3 mb-6 max-w-7xl px-4 sm:mb-12">
-            {individualArticles.map((parsedLocation, index) => (
-               <div
-                  className={index !== featuredPosts.length - 1 ? "mb-6" : ""}
-                  key={index}
-               >
-                  <CategorySection articles={parsedLocation.articles}>
-                     {getFormmatedLocation(parsedLocation.location)} -{" "}
-                     <Link href={`/${parsedLocation.location}`}>
-                        <a className="cursor-pointer font-normal text-blue-500 duration-150 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-600">
+         <div className="container px-4 mx-auto mt-3 mb-6 max-w-7xl sm:mb-12">
+            {individualArticlesQuery.map((location, index) => {
+               return (
+                  <CategorySection
+                     loading={location.isLoading}
+                     articles={location.data?.articles}
+                     key={index}
+                  >
+                     {getFormmatedLocation(fullLocations[index])} -{" "}
+                     <Link href={`/${fullLocations[index]}`}>
+                        <a className="font-normal text-blue-500 duration-150 cursor-pointer hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-600">
                            See More
                         </a>
                      </Link>
                   </CategorySection>
-               </div>
-            ))}
+               );
+            })}
          </div>
       </>
    );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-   // for special purposes
-   // return {
-   //    redirect: {
-   //       destination: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-   //       permanent: true,
-   //    },
-   // };
-
-   const session = await getSession({ req });
-
-   const featuredPosts = await getArticles(
-      session?.user,
-      null,
-      {
-         take: 4,
-      },
-      true
-   );
-
-   const individualArticles: IndividualArticleType[] = await Promise.all(
-      fullLocations.map(
-         async (location): Promise<IndividualArticleType> => ({
-            location,
-            articles: await getArticles(
-               session?.user,
-               { location },
-               {
-                  take: 4,
-               },
-               true,
-               null
-            ),
-         })
-      )
-   );
-
-   return {
-      props: {
-         featuredPosts,
-         individualArticles,
-      },
-   };
-};
+// for special purposes
+// export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+//    return {
+//       redirect: {
+//          destination: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+//          permanent: true,
+//       },
+//    };
+// };
 
 export default Home;
