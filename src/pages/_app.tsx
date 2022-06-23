@@ -105,9 +105,10 @@ const ThemeHandler: React.FC = ({ children }) => {
 
 export default withTRPC<AppRouter>({
    config() {
-      const url = process.env.NEXT_PUBLIC_APP_URL
-         ? `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`
-         : "http://localhost:3000/api/trpc";
+      const url =
+         process.env.NODE_ENV === "production"
+            ? `https://www.kcanews.org/api/trpc`
+            : "http://localhost:3000/api/trpc";
 
       return {
          url,
