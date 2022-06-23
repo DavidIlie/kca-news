@@ -43,7 +43,6 @@ import Linkify from "../../../../components/Linkify";
 
 interface Props {
    article: Article;
-   notFound?: boolean;
    upvotes: {
       count: number;
       self: boolean;
@@ -57,38 +56,10 @@ interface Props {
 
 const ArticleViewer: React.FC<Props> = ({
    article,
-   notFound,
    upvotes,
    downvotes,
    comments,
 }) => {
-   if (notFound) {
-      return (
-         <>
-            <NextSeo title="Not Found" />
-            <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
-               <Slide triggerOnce direction="down">
-                  <div>
-                     <h1 className="mb-4 text-6xl font-bold text-red-500">
-                        404 not found.
-                     </h1>
-                     <Link href="/">
-                        <a>
-                           <Button
-                              className="mx-auto"
-                              title="Go big or go home"
-                           >
-                              Go Home
-                           </Button>
-                        </a>
-                     </Link>
-                  </div>
-               </Slide>
-            </div>
-         </>
-      );
-   }
-
    const notifications = useNotifications();
    const router = useRouter();
    const { resolvedTheme } = useTheme();
@@ -272,8 +243,8 @@ const ArticleViewer: React.FC<Props> = ({
                direction="up"
                duration={500}
             >
-               <div className="container mx-auto mt-10 max-w-4xl">
-                  <div className="mb-2 flex w-full flex-wrap justify-start px-3">
+               <div className="container max-w-4xl mx-auto mt-10">
+                  <div className="flex flex-wrap justify-start w-full px-3 mb-2">
                      {article.categoryId
                         .concat(article.tags)
                         .map((category, index) => (
@@ -286,21 +257,21 @@ const ArticleViewer: React.FC<Props> = ({
                      </h1>
                      {article.published && (
                         <div className="grid grid-cols-2 divide-x-2 divide-gray-500">
-                           <div className="mr-4 flex items-center justify-center gap-1">
+                           <div className="flex items-center justify-center gap-1 mr-4">
                               {selfUpvote && data ? (
                                  <AiFillLike
                                     size="30"
-                                    className="cursor-pointer text-blue-500 duration-150 hover:text-blue-500"
+                                    className="text-blue-500 duration-150 cursor-pointer hover:text-blue-500"
                                     onClick={() => handleOpinion("upvote")}
                                  />
                               ) : (
                                  <AiOutlineLike
                                     size="30"
-                                    className="cursor-pointer duration-150 hover:text-blue-500"
+                                    className="duration-150 cursor-pointer hover:text-blue-500"
                                     onClick={() => handleOpinion("upvote")}
                                  />
                               )}
-                              <p className="select-none font-medium">
+                              <p className="font-medium select-none">
                                  {upvoteCount}
                               </p>
                            </div>
@@ -308,17 +279,17 @@ const ArticleViewer: React.FC<Props> = ({
                               {selfDownvote && data ? (
                                  <AiFillDislike
                                     size="30"
-                                    className="cursor-pointer text-red-500 duration-150 hover:text-red-500"
+                                    className="text-red-500 duration-150 cursor-pointer hover:text-red-500"
                                     onClick={() => handleOpinion("downvote")}
                                  />
                               ) : (
                                  <AiOutlineDislike
                                     size="30"
-                                    className="cursor-pointer duration-150 hover:text-red-500"
+                                    className="duration-150 cursor-pointer hover:text-red-500"
                                     onClick={() => handleOpinion("downvote")}
                                  />
                               )}
-                              <p className="select-none font-medium">
+                              <p className="font-medium select-none">
                                  {downvoteCount}
                               </p>
                            </div>
@@ -330,13 +301,13 @@ const ArticleViewer: React.FC<Props> = ({
                      article={article}
                      user={data?.user}
                      showEdit={true}
-                     className="ml-4 mt-1"
+                     className="mt-1 ml-4"
                   />
-                  <div className="mx-4 mt-2 mb-6 items-center justify-evenly gap-3 sm:flex">
+                  <div className="items-center gap-3 mx-4 mt-2 mb-6 justify-evenly sm:flex">
                      <div className="sm:w-2/3">
                         <Image
                            alt="Post picture"
-                           className="rounded-xl shadow-xl"
+                           className="shadow-xl rounded-xl"
                            src={article.cover}
                            width={1280}
                            height={720}
@@ -373,7 +344,7 @@ const ArticleViewer: React.FC<Props> = ({
                         <h1 className="text-4xl font-semibold">
                            What do you think?
                         </h1>
-                        <div className="my-4 w-full rounded border border-gray-200 bg-gray-50 p-6 dark:border-gray-800 dark:bg-foot">
+                        <div className="w-full p-6 my-4 border border-gray-200 rounded bg-gray-50 dark:border-gray-800 dark:bg-foot">
                            <h5 className="text-lg font-semibold text-gray-900 dark:text-gray-100 md:text-xl">
                               Leave a comment
                            </h5>
@@ -453,10 +424,10 @@ const ArticleViewer: React.FC<Props> = ({
                                              placeholder="Your comment..."
                                              required
                                              name="message"
-                                             className="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 py-2 pl-4 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-800 dark:bg-dark-bg dark:text-gray-100 dark:focus:border-blue-900 dark:focus:ring-blue-900"
+                                             className="block w-full py-2 pl-4 pr-32 mt-1 text-gray-900 bg-gray-100 border-2 border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500 dark:border-gray-800 dark:bg-dark-bg dark:text-gray-100 dark:focus:border-blue-900 dark:focus:ring-blue-900"
                                           />
                                           <Button
-                                             className="mt-2 mb-2 w-full"
+                                             className="w-full mt-2 mb-2"
                                              type="submit"
                                              disabled={isSubmitting}
                                              loading={isSubmitting}
@@ -500,7 +471,7 @@ const ArticleViewer: React.FC<Props> = ({
                                     height={24}
                                     // blurDataURL={shimmer(10, 10)}
                                     placeholder="blur"
-                                    className="rounded-full object-cover"
+                                    className="object-cover rounded-full"
                                     alt={`${
                                        comment.user?.names[
                                           comment.user?.nameIndex
@@ -602,9 +573,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       };
 
    const id = dynamicCheck.id;
-
    const { share } = query;
-
    const session = await getSession({ req });
 
    const article = await prisma.article.findFirst({
