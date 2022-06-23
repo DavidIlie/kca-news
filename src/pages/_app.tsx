@@ -7,6 +7,7 @@ import { ThemeProvider, useTheme } from "next-themes";
 import { getCookie } from "cookies-next";
 import { useHotkeys } from "@mantine/hooks";
 import PlausibleProvider from "next-plausible";
+import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 
 import "../styles/globals.css";
 
@@ -112,6 +113,12 @@ export default withTRPC<AppRouter>({
 
       return {
          url,
+         links: [
+            httpBatchLink({
+               url: "/api/trpc",
+               maxBatchSize: 2,
+            }),
+         ],
          // queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
       };
    },
