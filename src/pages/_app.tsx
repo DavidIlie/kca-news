@@ -1,4 +1,4 @@
-iimport type { AppProps } from "next/app";
+import type { AppProps } from "next/app";
 import { useEffect } from "react";
 import { DefaultSeo } from "next-seo";
 import NextNprogress from "nextjs-progressbar";
