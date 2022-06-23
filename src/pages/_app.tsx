@@ -1,4 +1,4 @@
-import type { AppProps } from "next/app";
+iimport type { AppProps } from "next/app";
 import { useEffect } from "react";
 import { DefaultSeo } from "next-seo";
 import NextNprogress from "nextjs-progressbar";
@@ -58,7 +58,7 @@ const KingsNews = ({
             showOnShallow={true}
          />
          <PlausibleProvider
-            domain="davidilie.com"
+            domain="stats.davidilie.com"
             selfHosted
             trackOutboundLinks
             enabled={process.env.NODE_ENV === "production"}
