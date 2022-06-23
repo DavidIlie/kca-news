@@ -58,7 +58,7 @@ const KingsNews = ({
             showOnShallow={true}
          />
          <PlausibleProvider
-            domain="stats.davidilie.com"
+            domain="kcanews.org"
             selfHosted
             trackOutboundLinks
             enabled={process.env.NODE_ENV === "production"}
