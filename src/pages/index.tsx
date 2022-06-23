@@ -37,7 +37,7 @@ const Home: React.FC = () => {
                      Looks like there are no articles, embarrising... 🙄
                   </p>
                   <div className="flex justify-center mt-2 text-gray-800">
-                     <Button onClick={() => reload()}>Reload</Button>
+                     <Button onClick={reload}>Reload</Button>
                   </div>
                </div>
             </Slide>
