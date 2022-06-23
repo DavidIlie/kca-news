@@ -20,6 +20,7 @@ import {
    visibleLocations,
    moreLocations,
 } from "../../lib/categories";
+import { Spinner } from "@/ui/Spinner";
 
 const NavBar: React.FC = () => {
    const { status } = useSession();
@@ -36,33 +37,33 @@ const NavBar: React.FC = () => {
             } sm:mt-0 lg:flex-row`}
          >
             <Link href="/">
-               <a className="mb-4 flex items-center font-medium text-gray-900 dark:text-gray-100 md:mb-0">
+               <a className="flex items-center mb-4 font-medium text-gray-900 dark:text-gray-100 md:mb-0">
                   <div className="-mt-3 h-12 max-w-[4rem]">
                      <Logo />
                   </div>
                   <span className="ml-3 text-xl text-white">KCA News</span>
                </a>
             </Link>
-            <div className="mb-3 flex gap-2 sm:hidden">
+            <div className="flex gap-2 mb-3 sm:hidden">
                <Link href="/">
-                  <a className="cursor-pointer rounded-md border-2 border-blue-500 bg-blue-500 px-2 py-1 text-white duration-150 hover:border-blue-600 hover:bg-blue-600 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg">
+                  <a className="px-2 py-1 text-white duration-150 bg-blue-500 border-2 border-blue-500 rounded-md cursor-pointer hover:border-blue-600 hover:bg-blue-600 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg">
                      Home
                   </a>
                </Link>
                <Link href="/about">
-                  <a className="cursor-pointer rounded-md border-2 border-blue-500 bg-blue-500 px-2 py-1 text-white duration-150 hover:border-blue-600 hover:bg-blue-600 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg">
+                  <a className="px-2 py-1 text-white duration-150 bg-blue-500 border-2 border-blue-500 rounded-md cursor-pointer hover:border-blue-600 hover:bg-blue-600 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg">
                      About
                   </a>
                </Link>
             </div>
-            <nav className="flex w-full flex-nowrap items-center justify-center gap-1 pb-2 text-base sm:w-auto sm:gap-4 sm:pb-0 md:mr-auto md:ml-4 md:border-l md:border-gray-400 md:py-1 md:pl-4 dark:md:border-gray-900">
+            <nav className="flex items-center justify-center w-full gap-1 pb-2 text-base flex-nowrap sm:w-auto sm:gap-4 sm:pb-0 md:mr-auto md:ml-4 md:border-l md:border-gray-400 md:py-1 md:pl-4 dark:md:border-gray-900">
                <Link href="/">
-                  <a className="hidden cursor-pointer rounded-md border-2 border-blue-500 bg-blue-500 px-2 py-1 text-white duration-150 hover:border-blue-600 hover:bg-blue-600 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg sm:block">
+                  <a className="hidden px-2 py-1 text-white duration-150 bg-blue-500 border-2 border-blue-500 rounded-md cursor-pointer hover:border-blue-600 hover:bg-blue-600 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg sm:block">
                      Home
                   </a>
                </Link>
                <Link href="/about">
-                  <a className="hidden cursor-pointer rounded-md border-2 border-blue-500 bg-blue-500 px-2 py-1 text-white duration-150 hover:border-blue-600 hover:bg-blue-600 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg sm:block">
+                  <a className="hidden px-2 py-1 text-white duration-150 bg-blue-500 border-2 border-blue-500 rounded-md cursor-pointer hover:border-blue-600 hover:bg-blue-600 dark:border-gray-800 dark:bg-foot dark:hover:bg-dark-bg sm:block">
                      About
                   </a>
                </Link>
@@ -88,7 +89,7 @@ const NavBar: React.FC = () => {
                <NewsDropdown name="More" special={openMoreMenu !== null}>
                   {openMoreMenu ? (
                      <>
-                        <div className="flex items-center gap-2 bg-gray-100 px-2 py-2 dark:bg-dark-bg">
+                        <div className="flex items-center gap-2 px-2 py-2 bg-gray-100 dark:bg-dark-bg">
                            <AiOutlineArrowLeft
                               onClick={() => setOpenMoreMenu(null)}
                               className="cursor-pointer"
@@ -123,10 +124,10 @@ const NavBar: React.FC = () => {
                   )}
                </NewsDropdown>
             </nav>
-            <div className="mx-auto flex w-auto items-center gap-4">
+            <div className="flex items-center w-auto gap-4 mx-auto">
                <div className="relative mx-auto text-gray-600">
                   <input
-                     className="h-10 rounded-lg border-2 border-green-700 bg-green-700 bg-opacity-50 px-5 pr-16 text-sm text-white placeholder:text-white focus:outline-none dark:border-gray-800 dark:bg-foot dark:text-gray-100 sm:ml-0"
+                     className="h-10 px-5 pr-16 text-sm text-white bg-green-700 bg-opacity-50 border-2 border-green-700 rounded-lg placeholder:text-white focus:outline-none dark:border-gray-800 dark:bg-foot dark:text-gray-100 sm:ml-0"
                      type="search"
                      name="search"
                      placeholder="Search"
@@ -155,16 +156,23 @@ const NavBar: React.FC = () => {
                      }}
                   />
                </div>
-               {status === "unauthenticated" ? (
-                  <Button onClick={() => signIn("google")}>Login</Button>
-               ) : status === "authenticated" ? (
-                  <div className="mt-2">
-                     <UserDropdown />
+               {status === "loading" ? (
+                  <div className="my-[1.12rem]">
+                     <Spinner size="6" className="text-blue-500" />
                   </div>
-               ) : (
-                  <Button onClick={() => signIn("google")} className="hidden">
+               ) : status === "unauthenticated" ? (
+                  <Button
+                     onClick={() => signIn("google")}
+                     className="my-[0.55rem]"
+                  >
                      Login
                   </Button>
+               ) : (
+                  status === "authenticated" && (
+                     <div className="mt-1">
+                        <UserDropdown />
+                     </div>
+                  )
                )}
             </div>
          </div>
