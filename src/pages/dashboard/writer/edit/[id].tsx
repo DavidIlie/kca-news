@@ -78,6 +78,7 @@ import sendPost from "../../../../lib/sendPost";
 import { computeKCAName } from "../../../../lib/computeKCAName";
 import EditorWordCount from "../../../../components/EditorWordCount";
 import useContextMenu from "../../../../hooks/useContextMenu";
+import { createArticleUrl } from "@/lib/createArticleUrl";
 
 interface Props {
    user: User;
@@ -446,7 +447,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                               article.writer!.id === user.id ? "Your" : "This"
                            } article
                      has successfully been updated!`}{" "}
-                           <Link href={`/article/${article.id}`}>
+                           <Link href={createArticleUrl(article)}>
                               <a className="font-semibold text-blue-500 duration-150 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-600">
                                  See article
                               </a>

@@ -7,6 +7,7 @@ import { Article } from "../../types/Article";
 import { shimmer } from "../../lib/shimmer";
 import ArticleBadge from "../ArticleBadge";
 import { computeKCAName } from "../../lib/computeKCAName";
+import { createArticleUrl } from "@/lib/createArticleUrl";
 
 interface Props {
    article: Article;
@@ -23,11 +24,7 @@ const FeaturedArticleCard: React.FC<Props> = ({
    const categories = article.categoryId.slice(0, 3);
 
    return (
-      <Link
-         href={`/article/${date[0]}/${date[1]}/${
-            article.published ? article.slug : article.id
-         }`}
-      >
+      <Link href={createArticleUrl(article)}>
          <a className={`${latest && "hoverItem"} relative duration-200`}>
             {latest && !solo && (
                <h1

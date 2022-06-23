@@ -9,10 +9,11 @@ import { useNotifications } from "@mantine/notifications";
 import { AiOutlineClose } from "react-icons/ai";
 import { format, parseISO } from "date-fns";
 
-import { Article } from "../../types/Article";
-import { User } from "../../types/User";
-import { shimmer } from "../../lib/shimmer";
-import { computeKCAName } from "../../lib/computeKCAName";
+import { Article } from "@/types/Article";
+import { User } from "@/types/User";
+import { shimmer } from "@/lib/shimmer";
+import { computeKCAName } from "@/lib/computeKCAName";
+import { createArticleUrl } from "@/lib/createArticleUrl";
 
 interface ArticleWriterInfoProps {
    article: Article;
@@ -68,7 +69,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
    return (
       <div className={`${className} flex items-center`}>
          <LoadingOverlay className="fixed" visible={openLoading} />
-         <span className="inline-flex items-center justify-center rounded-md py-2 text-xs font-medium leading-none">
+         <span className="inline-flex items-center justify-center py-2 text-xs font-medium leading-none rounded-md">
             <Image
                className="rounded-full"
                src={article.anonymous ? "/no-pfp.jpg" : article.writer!.image}
@@ -95,7 +96,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                         <Popover className="relative">
                            <Popover.Button
                               as="span"
-                              className="cursor-pointer select-none duration-150 hover:text-blue-500"
+                              className="duration-150 cursor-pointer select-none hover:text-blue-500"
                            >
                               {" "}
                               and {article.coWriters.length} other
@@ -116,7 +117,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                                        href={`/profile/${co.id}`}
                                        key={index}
                                     >
-                                       <a className="flex select-none items-center gap-2 py-3 px-4 duration-150 hover:bg-gray-100 hover:text-blue-500 dark:border-gray-900 dark:hover:bg-gray-900 dark:hover:text-white">
+                                       <a className="flex items-center gap-2 px-4 py-3 duration-150 select-none hover:bg-gray-100 hover:text-blue-500 dark:border-gray-900 dark:hover:bg-gray-900 dark:hover:text-white">
                                           <Image
                                              className="rounded-full"
                                              src={co.image}
@@ -140,7 +141,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
             </span>
          </span>
          <div className="sm:flex">
-            <h1 className="relative ml-1 flex items-center text-gray-800 dark:text-gray-100">
+            <h1 className="relative flex items-center ml-1 text-gray-800 dark:text-gray-100">
                <div className="hidden sm:block">{" / "}</div>
                <DatePicker
                   ref={ref as any}
@@ -165,7 +166,7 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                </div>
             </h1>
             {(user?.isAdmin || article.writer?.id === user?.id) && showEdit && (
-               <h1 className="ml-1 flex items-center text-blue-500 dark:text-blue-300 sm:ml-2">
+               <h1 className="flex items-center ml-1 text-blue-500 dark:text-blue-300 sm:ml-2">
                   <div className="hidden sm:block">{" / "}</div>
                   <div className="ml-2">
                      <Link href={`/dashboard/writer/edit/${article.id}`}>
@@ -175,10 +176,10 @@ const ArticleWriterInfo: React.FC<ArticleWriterInfoProps> = ({
                </h1>
             )}
             {asPath.includes("/dashboard/writer/edit") && (
-               <h1 className="ml-1 flex items-center text-blue-500 dark:text-blue-300 sm:ml-2">
+               <h1 className="flex items-center ml-1 text-blue-500 dark:text-blue-300 sm:ml-2">
                   <div className="hidden sm:block">{" / "}</div>
                   <div className="ml-2">
-                     <Link href={`/article/${article.id}`}>
+                     <Link href={createArticleUrl(article)}>
                         <a>See Article</a>
                      </Link>
                   </div>

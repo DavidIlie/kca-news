@@ -2,25 +2,21 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import type { Article } from "../../types/Article";
-import { shimmer } from "../../lib/shimmer";
+import type { Article } from "@/types/Article";
+import { shimmer } from "@/lib/shimmer";
 import ArticleBadge from "../ArticleBadge";
 import { formatDistance } from "date-fns";
-import { computeKCAName } from "../../lib/computeKCAName";
+import { computeKCAName } from "@/lib/computeKCAName";
+import { createArticleUrl } from "@/lib/createArticleUrl";
 
 interface ArticleCardProps {
    article: Article;
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
-   const date = new Date(article.createdAt).toISOString().split("-");
    return (
-      <Link
-         href={`/article/${date[0]}/${date[1]}/${
-            article.published ? article.slug : article.id
-         }`}
-      >
-         <a className="hoverItem t-11 mb-4 flex cursor-pointer gap-4 rounded-xl border-2 border-gray-100 bg-gray-50 duration-200 dark:border-gray-800 dark:bg-foot md:flex-nowrap md:px-3 md:py-2">
+      <Link href={createArticleUrl(article)}>
+         <a className="flex gap-4 mb-4 duration-200 border-2 border-gray-100 cursor-pointer hoverItem t-11 rounded-xl bg-gray-50 dark:border-gray-800 dark:bg-foot md:flex-nowrap md:px-3 md:py-2">
             <Image
                alt="Post picture"
                className="rounded shadow-xl"
@@ -35,14 +31,14 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
                {article.categoryId.concat(article.tags).map((tag, i) => (
                   <ArticleBadge tag={tag} key={i} />
                ))}
-               <h1 className="text-section mt-1 mb-1 font-semibold line-clamp-2 md:text-2xl xl:text-2xl">
+               <h1 className="mt-1 mb-1 font-semibold text-section line-clamp-2 md:text-2xl xl:text-2xl">
                   {article.title}
                </h1>
                <p className="text-gray-800 line-clamp-6 dark:text-gray-100">
                   {article.description}
                </p>
                <div className="bottom-0 flex items-center sm:absolute">
-                  <span className="flex items-center justify-center rounded-md py-2 text-xs leading-none">
+                  <span className="flex items-center justify-center py-2 text-xs leading-none rounded-md">
                      <Image
                         className="rounded-full"
                         src={
