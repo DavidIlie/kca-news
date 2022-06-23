@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { ThemeProvider, useTheme } from "next-themes";
 import { getCookie } from "cookies-next";
 import { useHotkeys } from "@mantine/hooks";
+import { withTRPC } from "@trpc/next";
 import PlausibleProvider from "next-plausible";
 
 import "../styles/globals.css";
@@ -14,7 +15,6 @@ import AppLayout from "../components/AppLayout";
 import { useThemeStore } from "../stores/useThemeStore";
 import useColorScheme from "../hooks/useColorScheme";
 import Loader from "../components/Loader";
-import { withTRPC } from "@trpc/next";
 import { AppRouter } from "./api/trpc/[trpc]";
 
 const KingsNews = ({
