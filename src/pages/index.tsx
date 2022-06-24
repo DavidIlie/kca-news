@@ -57,22 +57,20 @@ const Home: React.FC = () => {
             </CategorySection>
          </div>
          <div className="container px-4 mx-auto mt-3 mb-6 max-w-7xl sm:mb-12">
-            {individualArticlesQuery.map((location, index) => {
-               return (
-                  <CategorySection
-                     loading={location.isLoading}
-                     articles={location.data?.articles}
-                     key={index}
-                  >
-                     {getFormmatedLocation(fullLocations[index])} -{" "}
-                     <Link href={`/${fullLocations[index]}`}>
-                        <a className="font-normal text-blue-500 duration-150 cursor-pointer hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-600">
-                           See More
-                        </a>
-                     </Link>
-                  </CategorySection>
-               );
-            })}
+            {individualArticlesQuery.map((location, index) => (
+               <CategorySection
+                  loading={location.isLoading}
+                  articles={location.data?.articles}
+                  key={index}
+               >
+                  {getFormmatedLocation(fullLocations[index])} -{" "}
+                  <Link href={`/${fullLocations[index]}`}>
+                     <a className="font-normal text-blue-500 duration-150 cursor-pointer hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-600">
+                        See More
+                     </a>
+                  </Link>
+               </CategorySection>
+            ))}
          </div>
       </>
    );
