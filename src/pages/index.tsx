@@ -18,10 +18,8 @@ const Home: React.FC = () => {
    const individualArticlesQuery = useQueries(
       fullLocations.map((location) => ({
          queryKey: [`location-posts-${location}`, { location }],
-         queryFn: (args: any) => {
-            const input = args.queryKey[1];
-            return client.query("location-posts", input);
-         },
+         queryFn: (args: any) =>
+            client.query("location-posts", args.queryKey[1]),
       }))
    );
 
