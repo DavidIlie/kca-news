@@ -1158,7 +1158,11 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                        className="w-full"
                                        onClick={() =>
                                           clipboard.copy(
-                                             `${process.env.NEXT_PUBLIC_APP_URL}/article/${article.id}?share=${article.sharedId}`
+                                             `${
+                                                process.env.NEXT_PUBLIC_APP_URL
+                                             }${createArticleUrl(
+                                                article
+                                             )}?share=${article.sharedId}`
                                           )
                                        }
                                        color={
@@ -1184,7 +1188,12 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                                           if (r.status === 200) {
                                              setArticle(response.article);
                                              secondClipboard.copy(
-                                                `${process.env.NEXT_PUBLIC_APP_URL}/article/${article.id}?share=${article.sharedId}`
+                                                `${
+                                                   process.env
+                                                      .NEXT_PUBLIC_APP_URL
+                                                }${createArticleUrl(
+                                                   article
+                                                )}?share=${article.sharedId}`
                                              );
                                              notifications.showNotification({
                                                 color: "teal",
