@@ -25,7 +25,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({
             {children}
          </h1>
          {loading ? (
-            <div className={`grid grid-cols-${desktop ? "4" : "2"} mt-6 gap-4`}>
+            <div className="grid grid-cols-2 gap-4 mt-6 sm:grid-cols-4">
                <Skeleton />
                <Skeleton />
                {desktop && (
