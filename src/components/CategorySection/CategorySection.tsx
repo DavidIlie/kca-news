@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { useMediaQuery } from "@mantine/hooks";
 
 import ArticleCard from "../ArticleCard";
 import FeaturedArticleCard from "../ArticleCard/FeaturedArticleCard";
@@ -16,17 +17,23 @@ const CategorySection: React.FC<CategorySectionProps> = ({
    articles,
    loading = false,
 }) => {
+   const desktop = useMediaQuery("(min-width: 640px)");
+
    return (
       <>
          <h1 className="pb-4 text-2xl font-semibold border-b-2 sm:text-4xl">
             {children}
          </h1>
          {loading ? (
-            <div className="grid grid-cols-4 gap-4 mt-6">
+            <div className={`grid grid-cols-${desktop ? "4" : "2"} mt-6 gap-4`}>
                <Skeleton />
                <Skeleton />
-               <Skeleton />
-               <Skeleton />
+               {desktop && (
+                  <>
+                     <Skeleton />
+                     <Skeleton />
+                  </>
+               )}
             </div>
          ) : !articles || articles.length === 0 ? (
             <div className="mt-6 text-center">
