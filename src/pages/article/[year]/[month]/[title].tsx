@@ -252,7 +252,7 @@ const ArticleViewer: React.FC<Props> = ({
                         ))}
                   </div>
                   <div className="flex justify-between px-4 pb-2">
-                     <h1 className="text-4xl font-semibold leading-[3rem]">
+                     <h1 className="text-2xl font-semibold leading-[3rem] sm:text-4xl">
                         {article.title}
                      </h1>
                      {article.published && (

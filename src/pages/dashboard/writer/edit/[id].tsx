@@ -476,7 +476,7 @@ const ArticleEditor: React.FC<Props> = ({ user, articleServer }) => {
                      )}
                      <ContentEditable
                         tagName="h1"
-                        className="text-4xl font-semibold leading-[3rem]"
+                        className="text-2xl font-semibold leading-[3rem] sm:text-4xl"
                         html={title}
                         onChange={(e) => setTitle(e.target.value)}
                         onPaste={(e) => {
