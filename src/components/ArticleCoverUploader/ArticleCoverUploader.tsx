@@ -4,10 +4,10 @@ import useFileUpload from "react-use-file-upload";
 import { useNotifications } from "@mantine/notifications";
 import { AiOutlineClose } from "react-icons/ai";
 
-import sendPost from "../../lib/sendPost";
-import { Article } from "../../types/Article";
-import { Button } from "../../ui/Button";
-import Modal from "../../ui/Modal";
+import sendPost from "@/lib/sendPost";
+import { Article } from "@/types/Article";
+import { Button } from "@/ui/Button";
+import Modal from "@/ui/Modal";
 
 interface ArticleCoverUploaderProps {
    article: Article;

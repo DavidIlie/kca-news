@@ -27,22 +27,22 @@ import {
 } from "react-icons/ai";
 import * as yup from "yup";
 
-import DashboardStatistics from "../../components/DashboardStatistics";
-import ProfileTags from "../../components/ProfileTags";
-import DropdownElement from "../../ui/DropdownElement";
-import Modal from "../../ui/Modal";
-import { Button } from "../../ui/Button";
-import NextLink from "../../ui/NextLink";
+import DashboardStatistics from "@/components/DashboardStatistics";
+import ProfileTags from "@/components/ProfileTags";
+import DropdownElement from "@/ui/DropdownElement";
+import Modal from "@/ui/Modal";
+import { Button } from "@/ui/Button";
+import NextLink from "@/ui/NextLink";
+import prisma from "@/lib/prisma";
+import { User } from "@/types/User";
+import { computeKCAName } from "@/lib/computeKCAName";
+import { tagArray } from "@/types/Tag";
+import { departmentSchema, tagSchema } from "@/schema/admin";
+import classNames from "@/lib/classNames";
+import { fullLocations, getFormmatedLocation } from "@/lib/categories";
+import ConfirmModal from "@/ui/ConfirmModal";
 
-import prisma from "../../lib/prisma";
 import { Statistics } from "./writer";
-import { User } from "../../types/User";
-import { computeKCAName } from "../../lib/computeKCAName";
-import { tagArray } from "../../types/Tag";
-import { departmentSchema, tagSchema } from "../../schema/admin";
-import classNames from "../../lib/classNames";
-import { fullLocations, getFormmatedLocation } from "../../lib/categories";
-import ConfirmModal from "../../ui/ConfirmModal";
 
 const emailSchema = yup
    .object()
@@ -182,7 +182,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                   className="mx-auto max-w-7xl lg:px-8"
                />
                <Tab.Group as="div" className="mx-2 mt-6 mb-8 sm:mx-8">
-                  <Tab.List className="flex space-x-1 rounded-xl border-2 border-gray-200 bg-gray-100 p-1 dark:border-gray-800 dark:bg-foot">
+                  <Tab.List className="flex p-1 space-x-1 bg-gray-100 border-2 border-gray-200 rounded-xl dark:border-gray-800 dark:bg-foot">
                      {options.map((option, index) => {
                         if (index > 0) {
                            return (
@@ -225,7 +225,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                         }
                      })}
                   </Tab.List>
-                  <div className="mt-4 flex items-center justify-between">
+                  <div className="flex items-center justify-between mt-4">
                      <div className="flex items-center gap-2">
                         <TextInput
                            icon={<AiOutlineSearch />}
@@ -298,7 +298,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                   </div>
                   <div className="mt-2">
                      {usersState.length === 0 && (
-                        <h1 className="mt-4 text-center text-4xl font-semibold">
+                        <h1 className="mt-4 text-4xl font-semibold text-center">
                            No users...
                         </h1>
                      )}
@@ -310,7 +310,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                            key={index}
                         >
                            <div className="items-center gap-4 sm:flex">
-                              <div className="mr-0 flex items-center gap-2">
+                              <div className="flex items-center gap-2 mr-0">
                                  <img
                                     src={user.image}
                                     alt={`${computeKCAName(
@@ -320,13 +320,13 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                     referrerPolicy="no-referrer"
                                  />
                                  <Link href={`/profile/${user.id}`}>
-                                    <a className="cursor-pointer text-xl font-medium duration-150 hover:text-blue-500">
+                                    <a className="text-xl font-medium duration-150 cursor-pointer hover:text-blue-500">
                                        {computeKCAName(user)}{" "}
                                        {user.id === data?.user?.id && "(you)"}
                                     </a>
                                  </Link>
                               </div>
-                              <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-0">
+                              <div className="grid grid-cols-2 gap-2 mt-2 sm:mt-0">
                                  {(user.isAdmin || user.isWriter) && (
                                     <>
                                        <Tooltip
@@ -382,7 +382,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                     leaveFrom="transform opacity-100 scale-100"
                                     leaveTo="transform opacity-0 scale-95"
                                  >
-                                    <Menu.Items className="absolute right-0 z-10 mt-2 -mr-4 w-36 rounded-md border-2 border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
+                                    <Menu.Items className="absolute right-0 z-10 mt-2 -mr-4 border-2 border-gray-200 rounded-md shadow-lg w-36 bg-gray-50 ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
                                        <Menu.Item
                                           as={NextLink}
                                           href={`/profile/${user.id}`}
@@ -577,7 +577,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                      Contact developer to remove administrator privileges.
                   </p>
                )}
-               <div className="flex justify-evenly gap-2">
+               <div className="flex gap-2 justify-evenly">
                   <Button
                      className="w-full"
                      disabled={accessEditorUser?.isAdmin}
@@ -727,7 +727,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                   </Button>
                </div>
                <Button
-                  className="mx-auto mt-2 w-1/3"
+                  className="w-1/3 mx-auto mt-2"
                   color={accessEditorUser?.canComment ? "secondary" : "sky"}
                   onClick={async () => {
                      setBigLoading(true);
@@ -772,7 +772,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                      {(accessEditorUser?.isWriter ||
                         accessEditorUser?.isReviewer) &&
                         !accessEditorUser.isEditorial && (
-                           <div className="borderColor mt-4 border-t-2 pt-2">
+                           <div className="pt-2 mt-4 border-t-2 borderColor">
                               <h1 className="text-xl font-medium">
                                  Change Department
                               </h1>
@@ -859,7 +859,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                                           size="md"
                                        />
                                        <Button
-                                          className="mt-3 w-full"
+                                          className="w-full mt-3"
                                           type="submit"
                                           loading={isSubmitting}
                                           disabled={isSubmitting}
@@ -926,7 +926,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                         error={errors.email}
                      />
                      <Button
-                        className="mt-3 w-full"
+                        className="w-full mt-3"
                         type="submit"
                         loading={isSubmitting}
                         disabled={isSubmitting}

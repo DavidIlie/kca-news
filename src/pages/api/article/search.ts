@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 
-import { searchArticles } from "../../../lib/searchArticles";
+import { searchArticles } from "@/lib/searchArticles";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    try {

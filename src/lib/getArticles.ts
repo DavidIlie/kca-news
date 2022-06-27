@@ -1,6 +1,6 @@
-import { User } from "../types/User";
-import prisma from "./prisma";
-import { Article } from "../types/Article";
+import { User } from "@/types/User";
+import prisma from "@/lib/prisma";
+import { Article } from "@/types/Article";
 
 export const getArticles = async (
    user?: User,

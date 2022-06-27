@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import * as yup from "yup";
 
-import prisma from "../../../../lib/prisma";
+import prisma from "@/lib/prisma";
 
 const emailSchema = yup
    .object()

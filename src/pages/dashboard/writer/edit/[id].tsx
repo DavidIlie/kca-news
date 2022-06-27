@@ -51,33 +51,33 @@ const Editor = dynamic(() => import("@davidilie/markdown-editor"), {
 });
 
 import { Downvote, Upvote } from "@prisma/client";
-import prisma from "../../../../lib/prisma";
-import { Article } from "../../../../types/Article";
-import { User } from "../../../../types/User";
-import { Button } from "../../../../ui/Button";
-import EditorSettingsDisclosure from "../../../../components/EditorSettingsDisclosure";
-import ArticleBadge from "../../../../components/ArticleBadge";
+import prisma from "@/lib/prisma";
+import { Article } from "@/types/Article";
+import { User } from "@/types/User";
+import { Button } from "@/ui/Button";
+import EditorSettingsDisclosure from "@/components/EditorSettingsDisclosure";
+import ArticleBadge from "@/components/ArticleBadge";
 import {
    fullLocations,
    getFormmatedLocation,
    links,
    Locations,
-} from "../../../../lib/categories";
-import Radio from "../../../../ui/Radio";
-import ArticleUnderReviewCard from "../../../../components/ArticleUnderReviewCard";
-import ConfirmModal from "../../../../ui/ConfirmModal";
-import { shimmer } from "../../../../lib/shimmer";
-import { Consumer } from "../../../../components/CustomSidebar/CustomSidebar";
-import CustomSidebar from "../../../../components/CustomSidebar";
-import useDetermineCustomQueryEditor from "../../../../hooks/useDetermineCustomQueryEditor";
-import ArticleWriterInfo from "../../../../components/ArticleWriterInfo";
+} from "@/lib/categories";
+import Radio from "@/ui/Radio";
+import ArticleUnderReviewCard from "@/components/ArticleUnderReviewCard";
+import ConfirmModal from "@/ui/ConfirmModal";
+import { shimmer } from "@/lib/shimmer";
+import { Consumer } from "@/components/CustomSidebar/CustomSidebar";
+import CustomSidebar from "@/components/CustomSidebar";
+import useDetermineCustomQueryEditor from "@/hooks/useDetermineCustomQueryEditor";
+import ArticleWriterInfo from "@/components/ArticleWriterInfo";
 import ArticleCoverUploader, {
    ModalArticleCoverUploaderWrapper,
-} from "../../../../components/ArticleCoverUploader/ArticleCoverUploader";
-import sendPost from "../../../../lib/sendPost";
-import { computeKCAName } from "../../../../lib/computeKCAName";
-import EditorWordCount from "../../../../components/EditorWordCount";
-import useContextMenu from "../../../../hooks/useContextMenu";
+} from "@/components/ArticleCoverUploader/ArticleCoverUploader";
+import sendPost from "@/lib/sendPost";
+import { computeKCAName } from "@/lib/computeKCAName";
+import EditorWordCount from "@/components/EditorWordCount";
+import useContextMenu from "@/hooks/useContextMenu";
 import { createArticleUrl } from "@/lib/createArticleUrl";
 
 interface Props {

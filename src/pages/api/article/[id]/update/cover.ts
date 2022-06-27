@@ -5,13 +5,9 @@ import { getSession } from "next-auth/react";
 import { v4 } from "uuid";
 import sharp from "sharp";
 
-import prisma from "../../../../../lib/prisma";
-import { expressFiles, uploadedFile } from "../../../../../types/fileUpload";
-import {
-   getObjectsByMetadata,
-   minioClient,
-   minioUrl,
-} from "../../../../../lib/minio";
+import prisma from "@/lib/prisma";
+import { expressFiles, uploadedFile } from "@/types/fileUpload";
+import { getObjectsByMetadata, minioClient, minioUrl } from "@/lib/minio";
 
 const router = nextConnect({
    onNoMatch(req, res: NextApiResponse) {

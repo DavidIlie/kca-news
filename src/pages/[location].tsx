@@ -6,16 +6,16 @@ import { getSession } from "next-auth/react";
 import { Slide } from "react-awesome-reveal";
 import Link from "next/link";
 
-import { Article } from "../types/Article";
+import { Article } from "@/types/Article";
 import {
    fullLocations,
    getFormmatedLocation,
    Locations,
-} from "../lib/categories";
-import { Button } from "../ui/Button";
-import ArticleCard from "../components/ArticleCard";
-import FeaturedArticleCard from "../components/ArticleCard/FeaturedArticleCard";
-import { getArticles } from "../lib/getArticles";
+} from "@/lib/categories";
+import { Button } from "@/ui/Button";
+import ArticleCard from "@/components/ArticleCard";
+import FeaturedArticleCard from "@/components/ArticleCard/FeaturedArticleCard";
+import { getArticles } from "@/lib/getArticles";
 
 interface Props {
    location: Locations;
@@ -29,13 +29,13 @@ const LocationArticleShowcase: React.FC<Props> = ({ articles, location }) => {
       return (
          <>
             <NextSeo title={getFormmatedLocation(location)} />
-            <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+            <div className="flex items-center justify-center flex-grow px-4 my-24 sm:pt-20 lg:px-0">
                <Slide triggerOnce direction="down">
                   <div>
                      <h1 className="text-6xl font-semibold text-red-500">
                         Woah! No posts?
                      </h1>
-                     <p className="mb-3 mt-2 text-center text-lg">
+                     <p className="mt-2 mb-3 text-lg text-center">
                         Looks like this category needs some motivation...
                      </p>
                      {router.query.category ? (
@@ -63,10 +63,10 @@ const LocationArticleShowcase: React.FC<Props> = ({ articles, location }) => {
    return (
       <>
          <NextSeo title={getFormmatedLocation(location)} />
-         <div className="mb-20 flex flex-grow px-4 sm:pt-32 lg:px-0">
-            <div className="container mx-auto max-w-5xl">
+         <div className="flex flex-grow px-4 mb-20 sm:pt-32 lg:px-0">
+            <div className="container max-w-5xl mx-auto">
                <div className="mb-16">
-                  <h1 className="border-b-2 pb-4 text-4xl font-semibold">
+                  <h1 className="pb-4 text-4xl font-semibold border-b-2">
                      {getFormmatedLocation(location)}{" "}
                      {router.query.category && (
                         <span className="text-gray-800 dark:text-gray-200">

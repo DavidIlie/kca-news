@@ -6,12 +6,12 @@ import { useNotifications } from "@mantine/notifications";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { AiOutlineClose } from "react-icons/ai";
 
-import Modal from "../../ui/Modal";
-import { User } from "../../types/User";
-import { computeKCAName } from "../../lib/computeKCAName";
-import Radio from "../../ui/Radio";
-import { Button } from "../../ui/Button";
-import { updateProfileSchema } from "../../schema/user";
+import Modal from "@/ui/Modal";
+import { User } from "@/types/User";
+import { computeKCAName } from "@/lib/computeKCAName";
+import Radio from "@/ui/Radio";
+import { Button } from "@/ui/Button";
+import { updateProfileSchema } from "@/schema/user";
 
 interface Props {
    isOpen: boolean;
@@ -84,10 +84,10 @@ const ProfileEditor: React.FC<Props> = ({
                >
                   {({ errors, isSubmitting, values, setFieldValue }) => (
                      <Form>
-                        <h1 className="borderColor border-b-2 pb-2 text-xl font-semibold">
+                        <h1 className="pb-2 text-xl font-semibold border-b-2 borderColor">
                            Name Settings
                         </h1>
-                        <div className="mt-2 flex justify-evenly gap-2">
+                        <div className="flex gap-2 mt-2 justify-evenly">
                            <Field
                               as={Select}
                               label="Preferred Name"
@@ -144,7 +144,7 @@ const ProfileEditor: React.FC<Props> = ({
                            />
                         </div>
                         {user.email.endsWith("kcpupils.org") ? (
-                           <div className="mx-1 mt-4 mb-3 flex items-center gap-2">
+                           <div className="flex items-center gap-2 mx-1 mt-4 mb-3">
                               <Field
                                  name="showYear"
                                  label="Show Year Group"
@@ -166,7 +166,7 @@ const ProfileEditor: React.FC<Props> = ({
                         ) : (
                            <div className="mt-3" />
                         )}
-                        <h1 className="borderColor mb-2 border-b-2 pb-2 text-xl font-semibold">
+                        <h1 className="pb-2 mb-2 text-xl font-semibold border-b-2 borderColor">
                            Misc Settings
                         </h1>
                         <Field
@@ -190,7 +190,7 @@ const ProfileEditor: React.FC<Props> = ({
                            error={errors.description}
                         />
                         <div className="mt-2" />
-                        <div className="mt-4 mb-3 flex items-center gap-2">
+                        <div className="flex items-center gap-2 mt-4 mb-3">
                            <Field
                               as={TextInput}
                               placeholder="Enter nickname..."

@@ -14,16 +14,16 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import { useSession } from "next-auth/react";
 
-import Radio from "../../ui/Radio";
-import ArticleBadge from "../ArticleBadge";
-import ArticleUnderReviewCard from "../ArticleUnderReviewCard";
-import ConfirmModal from "../../ui/ConfirmModal";
+import Radio from "@/ui/Radio";
+import ArticleBadge from "@/components/ArticleBadge";
+import ArticleUnderReviewCard from "@/components/ArticleUnderReviewCard";
+import ConfirmModal from "@/ui/ConfirmModal";
 
-import { computeKCAName } from "../../lib/computeKCAName";
-import type { Article } from "../../types/Article";
-import { shimmer } from "../../lib/shimmer";
-import { Button } from "../../ui/Button";
-import { getFormmatedLocation } from "../../lib/categories";
+import { computeKCAName } from "@/lib/computeKCAName";
+import type { Article } from "@/types/Article";
+import { shimmer } from "@/lib/shimmer";
+import { Button } from "@/ui/Button";
+import { getFormmatedLocation } from "@/lib/categories";
 
 interface Props {
    article: Article;
@@ -107,7 +107,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
                      className="focus:none"
                   />
                )}
-               <div className="flex w-full items-center justify-between">
+               <div className="flex items-center justify-between w-full">
                   <h1 className="-ml-2 truncate">
                      <Link href={`/dashboard/writer/edit/${article.id}`}>
                         <a className="duration-150 hover:text-blue-500">
@@ -134,8 +134,8 @@ const ArticleDashboardCard: React.FC<Props> = ({
                            <Link
                               href={`/dashboard/writer/edit/${article.id}?menu=true&opinion=true`}
                            >
-                              <a className="mr-2 grid grid-cols-2 divide-x-2 divide-gray-500">
-                                 <div className="mr-2 flex items-center justify-center gap-1">
+                              <a className="grid grid-cols-2 mr-2 divide-x-2 divide-gray-500">
+                                 <div className="flex items-center justify-center gap-1 mr-2">
                                     <AiOutlineLike size="25" />
                                     <p className="font-medium">
                                        {article.upvotes?.length || 0}
@@ -180,7 +180,7 @@ const ArticleDashboardCard: React.FC<Props> = ({
                   </div>
                </div>
             </div>
-            <Disclosure.Panel className="relative mt-4 flex justify-evenly gap-4 border-t-2 border-blue-500 pt-4">
+            <Disclosure.Panel className="relative flex gap-4 pt-4 mt-4 border-t-2 border-blue-500 justify-evenly">
                <div className="hidden sm:block">
                   <Image
                      alt="Post picture"
@@ -194,13 +194,13 @@ const ArticleDashboardCard: React.FC<Props> = ({
                   />
                </div>
                <div className="relative w-full max-w-lg">
-                  <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
+                  <h1 className="pb-2 mb-2 text-3xl font-semibold border-b-2">
                      Description
                   </h1>
-                  <p className=" mb-2 text-justify line-clamp-5">
+                  <p className="mb-2 text-justify  line-clamp-5">
                      {article.description}
                   </p>
-                  <h1 className="mb-2 border-b-2 pb-2 text-3xl font-semibold">
+                  <h1 className="pb-2 mb-2 text-3xl font-semibold border-b-2">
                      Extra Details
                   </h1>
                   {article.location && (

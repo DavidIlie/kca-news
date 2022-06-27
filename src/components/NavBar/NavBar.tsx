@@ -5,22 +5,22 @@ import { useSession, signIn } from "next-auth/react";
 import { AiOutlineSearch, AiOutlineArrowLeft } from "react-icons/ai";
 import { Menu } from "@headlessui/react";
 
-import { Button } from "../../ui/Button";
-import UserDropdown from "./UserDropdown";
-import NewsDropdown from "./NewsDropdown";
-import DropdownElement from "../../ui/DropdownElement";
-import NextLink from "../../ui/NextLink";
-import Logo from "../Logo";
-
-import NewsLink from "./NewsLink";
+import { Button } from "@/ui/Button";
+import DropdownElement from "@/ui/DropdownElement";
+import NextLink from "@/ui/NextLink";
+import Logo from "@/components/Logo";
 import {
    getFormmatedLocation,
    links,
    Locations,
    visibleLocations,
    moreLocations,
-} from "../../lib/categories";
+} from "@/lib/categories";
 import { Spinner } from "@/ui/Spinner";
+
+import UserDropdown from "./UserDropdown";
+import NewsDropdown from "./NewsDropdown";
+import NewsLink from "./NewsLink";
 
 const NavBar: React.FC = () => {
    const { status } = useSession();

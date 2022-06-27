@@ -1,9 +1,9 @@
 import React from "react";
 import { Menu } from "@headlessui/react";
 
-import { Category, Locations } from "../../lib/categories";
-import DropdownElement from "../../ui/DropdownElement";
-import NextLink from "../../ui/NextLink";
+import type { Category, Locations } from "@/lib/categories";
+import DropdownElement from "@/ui/DropdownElement";
+import NextLink from "@/ui/NextLink";
 
 interface Props {
    location: Locations;

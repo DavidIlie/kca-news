@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+
 import { shimmer } from "@/lib/shimmer";
 
 const Logo: React.FC<{ className?: string }> = ({ className, ...rest }) => {

@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "next-themes";
 
-import { colors } from "../../lib/colors";
+import { colors } from "@/lib/colors";
 
 interface ArticleBadgeProps {
    tag: string;

@@ -23,15 +23,16 @@ import DashboardStatistics from "../../components/DashboardStatistics";
 import NextLink from "../../ui/NextLink";
 import DropdownElement from "../../ui/DropdownElement";
 
-import prisma from "../../lib/prisma";
+import prisma from "@/lib/prisma";
+import classNames from "@/lib/classNames";
+import { Article } from "@/types/Article";
+import { Comment } from "@/types/Comment";
+import { computeKCAName } from "@/lib/computeKCAName";
+import { shimmer } from "@/lib/shimmer";
+import ArticleDashboardCard from "@/components/ArticleDashboardCard";
+import Linkify from "@/components/Linkify";
+
 import { Statistics } from "./writer";
-import classNames from "../../lib/classNames";
-import { Article } from "../../types/Article";
-import { Comment } from "../../types/Comment";
-import { computeKCAName } from "../../lib/computeKCAName";
-import { shimmer } from "../../lib/shimmer";
-import ArticleDashboardCard from "../../components/ArticleDashboardCard";
-import Linkify from "../../components/Linkify";
 
 interface Props {
    statistics: Statistics;
@@ -268,7 +269,7 @@ const ArticleList: React.FC<ArticleListProps> = ({
 
    return (
       <>
-         <div className="mb-2 flex items-center gap-2">
+         <div className="flex items-center gap-2 mb-2">
             <TextInput
                icon={<AiOutlineSearch />}
                placeholder="Search"
@@ -322,7 +323,7 @@ const ArticleList: React.FC<ArticleListProps> = ({
             />
          </div>
          {articlesState.length === 0 && (
-            <h1 className="text-center text-4xl font-semibold">
+            <h1 className="text-4xl font-semibold text-center">
                No articles...
             </h1>
          )}
@@ -452,7 +453,7 @@ const CommentList: React.FC<CommentListProps> = ({
 
    return (
       <div className="container max-w-6xl">
-         <div className="mt-4 mb-2 flex items-center gap-2">
+         <div className="flex items-center gap-2 mt-4 mb-2">
             <TextInput
                icon={<AiOutlineSearch />}
                placeholder="Search"
@@ -492,7 +493,7 @@ const CommentList: React.FC<CommentListProps> = ({
             />
          </div>
          {commentsState.length === 0 && (
-            <h1 className="mt-6 text-center text-4xl font-semibold">
+            <h1 className="mt-6 text-4xl font-semibold text-center">
                No comments...
             </h1>
          )}
@@ -510,7 +511,7 @@ const CommentList: React.FC<CommentListProps> = ({
                      height={55}
                      // blurDataURL={shimmer(10, 10)}
                      placeholder="blur"
-                     className="rounded-full object-cover"
+                     className="object-cover rounded-full"
                      alt={`${
                         comment.user?.names[comment.user?.nameIndex]
                      }'s profile image`}
@@ -585,7 +586,7 @@ const CommentList: React.FC<CommentListProps> = ({
                      leaveFrom="transform opacity-100 scale-100"
                      leaveTo="transform opacity-0 scale-95"
                   >
-                     <Menu.Items className="absolute right-0 z-10 mt-2 -mr-4 w-36 rounded-md border-2 border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
+                     <Menu.Items className="absolute right-0 z-10 mt-2 -mr-4 border-2 border-gray-200 rounded-md shadow-lg w-36 bg-gray-50 ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
                         <Menu.Item
                            as={NextLink}
                            href={`/article/${comment.article?.id}`}

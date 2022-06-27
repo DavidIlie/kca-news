@@ -7,14 +7,15 @@ import { format, formatDistance } from "date-fns";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
-import { User } from "../../types/User";
-import { ChangeableKCAName, computeKCAName } from "../../lib/computeKCAName";
-import ProfileTags from "../ProfileTags";
-import { Button } from "../../ui/Button";
-import ArticleBadge from "../ArticleBadge";
+import { User } from "@/types/User";
+import { ChangeableKCAName, computeKCAName } from "@/lib/computeKCAName";
+import ProfileTags from "@/components/ProfileTags";
+import { Button } from "@/ui/Button";
+import ArticleBadge from "@/components/ArticleBadge";
+import arrayToEnglish from "@/lib/arrayToEnglish";
+import LinkifyText from "@/components/Linkify";
+
 import ProfileEditor from "./ProfileEditor";
-import arrayToEnglish from "../../lib/arrayToEnglish";
-import LinkifyText from "../Linkify";
 
 interface ProfileViewerProps {
    user: User;
@@ -80,13 +81,13 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                ],
             }}
          />
-         <div className="container max-w-5xl rounded-md border-2 border-gray-200 bg-white dark:border-gray-800 dark:bg-foot sm:flex">
-            <div className="flex h-1/4 w-full border-b-2 border-gray-200 dark:border-gray-700 sm:block sm:h-full sm:w-1/4 sm:border-b-0 sm:border-r-2">
+         <div className="container max-w-5xl bg-white border-2 border-gray-200 rounded-md dark:border-gray-800 dark:bg-foot sm:flex">
+            <div className="flex w-full border-b-2 border-gray-200 h-1/4 dark:border-gray-700 sm:block sm:h-full sm:w-1/4 sm:border-b-0 sm:border-r-2">
                <div className="w-1/3 px-6 pt-4 sm:h-1/2 sm:w-full">
                   <Tooltip
                      label="This can be changed by changing your Google profile picture."
                      disabled={!editable}
-                     className="mb-2 flex w-full justify-center"
+                     className="flex justify-center w-full mb-2"
                   >
                      {editable ? (
                         <a
@@ -99,7 +100,7 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                                  userState.image.split("=")[0] ||
                                  userState.image
                               }
-                              className="h-32 w-32 cursor-pointer rounded-full object-cover"
+                              className="object-cover w-32 h-32 rounded-full cursor-pointer"
                               referrerPolicy="no-referrer"
                               width={150}
                               height={150}
@@ -110,7 +111,7 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                            src={
                               userState.image.split("=")[0] || userState.image
                            }
-                           className="h-32 w-32 rounded-full object-cover"
+                           className="object-cover w-32 h-32 rounded-full"
                            referrerPolicy="no-referrer"
                            width={150}
                            height={150}
@@ -134,12 +135,12 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                            }
                         )}
                      </p>
-                     <div className="mt-2 flex justify-center">
+                     <div className="flex justify-center mt-2">
                         <ProfileTags user={userState} />
                      </div>
                   </div>
                </div>
-               <div className="w-2/3 border-l-2 py-4 px-6 dark:border-gray-700 sm:h-1/2 sm:w-full sm:border-t-2 sm:border-l-0">
+               <div className="w-2/3 px-6 py-4 border-l-2 dark:border-gray-700 sm:h-1/2 sm:w-full sm:border-t-2 sm:border-l-0">
                   <div className="mb-2">
                      <h1 className="text-lg font-semibold">Description</h1>
                      <h1
@@ -187,8 +188,8 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                   </Button>
                </div>
             </div>
-            <div className="h-3/4 w-full flex-grow sm:h-full sm:w-3/4">
-               <h1 className="borderColor border-b-2 p-4 text-2xl font-semibold">
+            <div className="flex-grow w-full h-3/4 sm:h-full sm:w-3/4">
+               <h1 className="p-4 text-2xl font-semibold border-b-2 borderColor">
                   Activity
                </h1>
                <div className="h-full p-4">

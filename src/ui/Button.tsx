@@ -3,7 +3,8 @@ import React, {
    DetailedHTMLProps,
    ReactNode,
 } from "react";
-import { Spinner } from "./Spinner";
+
+import { Spinner } from "@/ui//Spinner";
 
 const colorClassnames = {
    primary:
@@ -43,7 +44,7 @@ export const Button: React.FC<ButtonProps> = ({
          {...props}
       >
          <span className={loading ? "opacity-0" : `flex items-center`}>
-            {icon ? <span className="mr-2 items-center">{icon}</span> : null}
+            {icon ? <span className="items-center mr-2">{icon}</span> : null}
             {children}
          </span>
          {loading && (

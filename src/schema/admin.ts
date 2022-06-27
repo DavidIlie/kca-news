@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
-import { tagArray } from "../types/Tag";
-import { fullLocations } from "../lib/categories";
+import { tagArray } from "@/types/Tag";
+import { fullLocations } from "@/lib/categories";
 
 export const tagSchema = yup.object().shape({
    tags: yup

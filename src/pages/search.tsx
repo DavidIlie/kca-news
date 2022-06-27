@@ -7,10 +7,10 @@ import { useNotifications } from "@mantine/notifications";
 import { LoadingOverlay } from "@mantine/core";
 import { getSession } from "next-auth/react";
 
-import { Article } from "../types/Article";
-import ArticleCard from "../components/ArticleCard";
-import { searchArticles } from "../lib/searchArticles";
-import FeaturedArticleCard from "../components/ArticleCard/FeaturedArticleCard";
+import { Article } from "@/types/Article";
+import ArticleCard from "@/components/ArticleCard";
+import { searchArticles } from "@/lib/searchArticles";
+import FeaturedArticleCard from "@/components/ArticleCard/FeaturedArticleCard";
 
 interface Props {
    initialResponse: Article[];
@@ -18,7 +18,7 @@ interface Props {
 
 const Search: React.FC<Props> = ({ initialResponse }) => {
    const { query, push } = useRouter();
-   const q = (query as any).q;
+   const { q } = query as any;
 
    const [previousSearchQuery, setPreviousSearchQuery] = useState(q);
    const [searchQuery, setSearchQuery] = useState(q);
@@ -59,14 +59,14 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
    return (
       <>
          <DefaultSeo title={previousSearchQuery} />
-         <div className="mb-20 mt-10 flex flex-grow px-4 sm:mt-0 sm:pt-32 lg:px-0">
-            <div className="container mx-auto max-w-5xl">
+         <div className="flex flex-grow px-4 mt-10 mb-20 sm:mt-0 sm:pt-32 lg:px-0">
+            <div className="container max-w-5xl mx-auto">
                <h1 className="mb-4 text-4xl font-semibold">
                   Search results for: {previousSearchQuery}
                </h1>
                <div className="relative mx-auto text-gray-600">
                   <input
-                     className="h-10 w-full rounded-lg border-2 border-gray-300 bg-white px-5 pr-16 text-sm text-black focus:outline-none dark:border-gray-800 dark:bg-foot dark:text-white"
+                     className="w-full h-10 px-5 pr-16 text-sm text-black bg-white border-2 border-gray-300 rounded-lg focus:outline-none dark:border-gray-800 dark:bg-foot dark:text-white"
                      type="search"
                      name="search"
                      placeholder="Search"
@@ -94,7 +94,7 @@ const Search: React.FC<Props> = ({ initialResponse }) => {
                      </div>
                   ))}
                   {results.length === 0 && (
-                     <h1 className="text-center text-xl font-semibold">
+                     <h1 className="text-xl font-semibold text-center">
                         No results...
                      </h1>
                   )}

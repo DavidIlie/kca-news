@@ -16,7 +16,7 @@ import { BiCommentX } from "react-icons/bi";
 import { BsPen } from "react-icons/bs";
 import { GiTeacher } from "react-icons/gi";
 
-import { User } from "../../types/User";
+import { User } from "@/types/User";
 
 interface ProfileTagsProps {
    user: User;

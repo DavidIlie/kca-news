@@ -2,7 +2,7 @@ import { ColorScheme } from "@mantine/core";
 import { useTheme } from "next-themes";
 import { setCookies } from "cookies-next";
 
-import { useThemeStore } from "../stores/useThemeStore";
+import { useThemeStore } from "@/stores/useThemeStore";
 
 const useColorScheme = () => {
    const { colorScheme, updateColorScheme } = useThemeStore();

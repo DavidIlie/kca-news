@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { User } from "../types/User";
+
+import { User } from "@/types/User";
 
 export const computeKCAName = (user: User, showNickname = false) =>
    showNickname && user.nickname

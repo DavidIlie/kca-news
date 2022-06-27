@@ -2,9 +2,9 @@ import React from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 
-import { User } from "../../types/User";
-import prisma from "../../lib/prisma";
-import ProfileViewer from "../../components/ProfileViewer";
+import { User } from "@/types/User";
+import prisma from "@/lib/prisma";
+import ProfileViewer from "@/components/ProfileViewer";
 
 interface Props {
    user: User;
@@ -12,7 +12,7 @@ interface Props {
 
 const ProfileViewerPage: React.FC<Props> = ({ user }) => {
    return (
-      <div className="my-12 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+      <div className="flex items-center justify-center flex-grow px-4 my-12 sm:pt-20 lg:px-0">
          <ProfileViewer user={user} />
       </div>
    );

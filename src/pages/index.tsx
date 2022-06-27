@@ -5,9 +5,9 @@ import { NextSeo } from "next-seo";
 import { Slide } from "react-awesome-reveal";
 import { useQueries } from "react-query";
 
-import { fullLocations, getFormmatedLocation } from "../lib/categories";
-import { Button } from "../ui/Button";
-import CategorySection from "../components/CategorySection";
+import { fullLocations, getFormmatedLocation } from "@/lib/categories";
+import { Button } from "@/ui/Button";
+import CategorySection from "@/components/CategorySection";
 import { trpc } from "@/lib/trpc";
 
 const Home: React.FC = () => {

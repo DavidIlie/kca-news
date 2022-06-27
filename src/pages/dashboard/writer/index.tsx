@@ -12,13 +12,13 @@ import {
    AiOutlineClose,
 } from "react-icons/ai";
 
-import prisma from "../../../lib/prisma";
-import { Button } from "../../../ui/Button";
-import { User } from "../../../types/User";
-import DashboardStatistics from "../../../components/DashboardStatistics";
-import ConfirmModal from "../../../ui/ConfirmModal";
-import ArticleDashboardCard from "../../../components/ArticleDashboardCard";
-import { Article } from "../../../types/Article";
+import prisma from "@/lib/prisma";
+import { Button } from "@/ui/Button";
+import { User } from "@/types/User";
+import DashboardStatistics from "@/components/DashboardStatistics";
+import ConfirmModal from "@/ui/ConfirmModal";
+import ArticleDashboardCard from "@/components/ArticleDashboardCard";
+import { Article } from "@/types/Article";
 
 export interface Statistics {
    totalArticles: number;
@@ -202,9 +202,9 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                   {...statisticsState}
                   className="mx-auto max-w-7xl lg:px-8"
                />
-               <div className="container mt-4 max-w-7xl px-2 sm:px-8">
-                  <div className="borderColor justify-between border-b-2 pb-4 sm:flex">
-                     <div className="mb-4 mt-1 flex items-center gap-2 sm:mb-0">
+               <div className="container px-2 mt-4 max-w-7xl sm:px-8">
+                  <div className="justify-between pb-4 border-b-2 borderColor sm:flex">
+                     <div className="flex items-center gap-2 mt-1 mb-4 sm:mb-0">
                         <Link href="/dashboard/writer/create">
                            <a className="w-1/3 sm:w-auto">
                               <Button className="w-full">
@@ -247,7 +247,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                            </span>
                         </Button>
                      </div>
-                     <div className="mt-1 flex items-center gap-2">
+                     <div className="flex items-center gap-2 mt-1">
                         <TextInput
                            icon={<AiOutlineSearch />}
                            placeholder="Search"
@@ -309,7 +309,7 @@ const WriterPanel: React.FC<Props> = ({ user, statistics, articles }) => {
                   </div>
                   <div className="my-4 mb-10 dark:bg-dark-bg">
                      {articlesState.length === 0 && (
-                        <h1 className="text-center text-4xl font-semibold">
+                        <h1 className="text-4xl font-semibold text-center">
                            No articles...
                         </h1>
                      )}

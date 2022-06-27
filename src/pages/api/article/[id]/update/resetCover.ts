@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
-import { getObjectsByMetadata, minioClient } from "../../../../../lib/minio";
 
-import prisma from "../../../../../lib/prisma";
+import { getObjectsByMetadata, minioClient } from "@/lib/minio";
+import prisma from "@/lib/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    const session = await getSession({ req });

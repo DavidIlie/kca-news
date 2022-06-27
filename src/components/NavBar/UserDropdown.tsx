@@ -8,11 +8,10 @@ import { MdPreview, MdDarkMode, MdLightMode } from "react-icons/md";
 import { RiAdminLine } from "react-icons/ri";
 import { useSession, signOut } from "next-auth/react";
 
-import DropdownElement from "../../ui/DropdownElement";
-import NextLink from "../../ui/NextLink";
-
-import useColorScheme from "../../hooks/useColorScheme";
-import { shimmer } from "../../lib/shimmer";
+import DropdownElement from "@/ui/DropdownElement";
+import NextLink from "@/ui/NextLink";
+import useColorScheme from "@/hooks/useColorScheme";
+import { shimmer } from "@/lib/shimmer";
 
 const UserDropdown: React.FC = () => {
    const { data } = useSession();
@@ -24,11 +23,11 @@ const UserDropdown: React.FC = () => {
    const isEditorial = data?.user?.isAdmin ? true : data?.user?.isEditorial;
 
    return (
-      <Menu as="div" className="relative m-0 inline-flex">
+      <Menu as="div" className="relative inline-flex m-0">
          <Menu.Button className="w-1/2">
             <Image
                src={data?.user?.image || "/no-pfp.jpg"}
-               className="flex rounded-full duration-150"
+               className="flex duration-150 rounded-full"
                referrerPolicy="no-referrer"
                placeholder="blur"
                blurDataURL={shimmer(1920, 1080)}
@@ -45,8 +44,8 @@ const UserDropdown: React.FC = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
          >
-            <Menu.Items className="absolute right-0 z-10 mt-12 w-36 rounded-md border border-gray-200 bg-gray-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
-               <div className="border-1 rounded-t-md border-gray-300">
+            <Menu.Items className="absolute right-0 z-10 mt-12 border border-gray-200 rounded-md shadow-lg w-36 bg-gray-50 ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
+               <div className="border-gray-300 border-1 rounded-t-md">
                   <Menu.Item as={NextLink} href="/profile">
                      <DropdownElement>
                         <BiUserCircle className="mx-0.5 text-xl" />
@@ -95,7 +94,7 @@ const UserDropdown: React.FC = () => {
                </div>
                <Menu.Item
                   as="a"
-                  className="group flex w-full cursor-pointer items-center justify-center rounded-b-md bg-blue-600 py-2 text-center text-sm font-semibold text-white duration-150 hover:bg-blue-700"
+                  className="flex items-center justify-center w-full py-2 text-sm font-semibold text-center text-white duration-150 bg-blue-600 cursor-pointer group rounded-b-md hover:bg-blue-700"
                   onClick={() => signOut()}
                >
                   Log Out

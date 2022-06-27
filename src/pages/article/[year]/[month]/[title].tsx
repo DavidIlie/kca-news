@@ -26,20 +26,20 @@ import {
    AiOutlineClose,
 } from "react-icons/ai";
 
-import prisma from "../../../../lib/prisma";
-import type { Article } from "../../../../types/Article";
-import type { Comment } from "../../../../types/Comment";
-import { shimmer } from "../../../../lib/shimmer";
-import { crudCommentSchema } from "../../../../schema/comment";
+import prisma from "@/lib/prisma";
+import type { Article } from "@/types/Article";
+import type { Comment } from "@/types/Comment";
+import { shimmer } from "@/lib/shimmer";
+import { crudCommentSchema } from "@/schema/comment";
 
-import { Button } from "../../../../ui/Button";
-import ArticleBadge from "../../../../components/ArticleBadge";
-import ErrorMessage from "../../../../ui/ErrorMessage";
-import SuccessMessage from "../../../../ui/SuccessMessage";
-import ConfirmModal from "../../../../ui/ConfirmModal";
-import ArticleWriterInfo from "../../../../components/ArticleWriterInfo";
-import { computeKCAName } from "../../../../lib/computeKCAName";
-import Linkify from "../../../../components/Linkify";
+import { Button } from "@/ui/Button";
+import ArticleBadge from "@/components/ArticleBadge";
+import ErrorMessage from "@/ui/ErrorMessage";
+import SuccessMessage from "@/ui/SuccessMessage";
+import ConfirmModal from "@/ui/ConfirmModal";
+import ArticleWriterInfo from "@/components/ArticleWriterInfo";
+import { computeKCAName } from "@/lib/computeKCAName";
+import Linkify from "@/components/Linkify";
 
 interface Props {
    article: Article;

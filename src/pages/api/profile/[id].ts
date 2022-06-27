@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 
-import prisma from "../../../lib/prisma";
-import { updateProfileSchema } from "../../../schema/user";
+import prisma from "@/lib/prisma";
+import { updateProfileSchema } from "@/schema/user";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    try {

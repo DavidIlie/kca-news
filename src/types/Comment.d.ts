@@ -1,5 +1,5 @@
-import type { User } from "./User";
-import { Article } from "./Article";
+import type { User } from "@/types/User";
+import { Article } from "@/types/Article";
 
 export interface Comment {
    id: string;

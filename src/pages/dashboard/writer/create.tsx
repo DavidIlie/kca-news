@@ -5,15 +5,15 @@ import React from "react";
 import { Slide } from "react-awesome-reveal";
 import { getSession } from "next-auth/react";
 
-import prisma from "../../../lib/prisma";
-import { Button } from "../../../ui/Button";
-import { createSlug } from "../../../lib/createSlug";
+import prisma from "@/lib/prisma";
+import { Button } from "@/ui/Button";
+import { createSlug } from "@/lib/createSlug";
 
 const CreatePage: React.FC = () => {
    return (
       <>
          <NextSeo title="Error" />
-         <div className="my-24 flex flex-grow items-center justify-center px-4 sm:pt-20 lg:px-0">
+         <div className="flex items-center justify-center flex-grow px-4 my-24 sm:pt-20 lg:px-0">
             <Slide triggerOnce direction="down">
                <div>
                   <h1 className="mb-4 text-6xl font-bold text-red-500">

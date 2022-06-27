@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import { v4 } from "uuid";
 
-import prisma from "../../../../../lib/prisma";
+import prisma from "@/lib/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    const session = await getSession({ req });

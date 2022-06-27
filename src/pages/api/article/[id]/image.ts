@@ -4,9 +4,9 @@ import fileUpload from "express-fileupload";
 import { getSession } from "next-auth/react";
 import { v4 } from "uuid";
 
-import prisma from "../../../../lib/prisma";
-import { expressFiles, uploadedFile } from "../../../../types/fileUpload";
-import { minioClient, minioUrl } from "../../../../lib/minio";
+import prisma from "@/lib/prisma";
+import { expressFiles, uploadedFile } from "@/types/fileUpload";
+import { minioClient, minioUrl } from "@/lib/minio";
 
 const router = nextConnect({
    onNoMatch(req, res: NextApiResponse) {

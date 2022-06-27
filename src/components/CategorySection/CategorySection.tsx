@@ -1,10 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import { useMediaQuery } from "@mantine/hooks";
 
-import ArticleCard from "../ArticleCard";
-import FeaturedArticleCard from "../ArticleCard/FeaturedArticleCard";
-import { Article } from "../../types/Article";
+import ArticleCard from "@/components/ArticleCard";
+import FeaturedArticleCard from "@/components/ArticleCard/FeaturedArticleCard";
+import { Article } from "@/types/Article";
 import { shimmer } from "@/lib/shimmer";
 
 interface CategorySectionProps {
@@ -17,24 +16,24 @@ const CategorySection: React.FC<CategorySectionProps> = ({
    articles,
    loading = false,
 }) => {
-   const desktop = useMediaQuery("(min-width: 640px)");
-
    return (
       <>
          <h1 className="pb-4 text-2xl font-semibold border-b-2 sm:text-4xl">
             {children}
          </h1>
          {loading ? (
-            <div className="grid grid-cols-2 gap-4 mt-6 sm:grid-cols-4">
-               <Skeleton />
-               <Skeleton />
-               {desktop && (
-                  <>
-                     <Skeleton />
-                     <Skeleton />
-                  </>
-               )}
-            </div>
+            <>
+               <div className="hidden grid-cols-4 gap-4 mt-6 sm:grid">
+                  <Skeleton />
+                  <Skeleton />
+                  <Skeleton />
+                  <Skeleton />
+               </div>
+               <div className="grid grid-cols-2 gap-4 mt-6 sm:hidden">
+                  <Skeleton />
+                  <Skeleton />
+               </div>
+            </>
          ) : !articles || articles.length === 0 ? (
             <div className="mt-6 text-center">
                <h1 className="text-2xl font-semibold text-red-500 sm:text-4xl">

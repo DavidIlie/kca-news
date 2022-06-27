@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/link";
+import { formatDistance } from "date-fns";
 import Image from "next/image";
 
 import type { Article } from "@/types/Article";
 import { shimmer } from "@/lib/shimmer";
-import ArticleBadge from "../ArticleBadge";
-import { formatDistance } from "date-fns";
+import ArticleBadge from "@/components/ArticleBadge";
 import { computeKCAName } from "@/lib/computeKCAName";
 import { createArticleUrl } from "@/lib/createArticleUrl";
 

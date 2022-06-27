@@ -9,13 +9,13 @@ import { useHotkeys } from "@mantine/hooks";
 import { withTRPC } from "@trpc/next";
 import PlausibleProvider from "next-plausible";
 
-import "../styles/globals.css";
+import "@/styles/globals.css";
 
-import AppLayout from "../components/AppLayout";
-import { useThemeStore } from "../stores/useThemeStore";
-import useColorScheme from "../hooks/useColorScheme";
-import Loader from "../components/Loader";
-import { AppRouter } from "./api/trpc/[trpc]";
+import AppLayout from "@/components/AppLayout";
+import { useThemeStore } from "@/stores/useThemeStore";
+import useColorScheme from "@/hooks/useColorScheme";
+import Loader from "@/components/Loader";
+import { AppRouter } from "@/pages/api/trpc/[trpc]";
 
 const KingsNews = ({
    Component,
@@ -58,7 +58,7 @@ const KingsNews = ({
             showOnShallow={true}
          />
          <PlausibleProvider
-            domain="kcanews.org"
+            domain="www.kcanews.org"
             selfHosted
             trackOutboundLinks
             enabled={process.env.NODE_ENV === "production"}

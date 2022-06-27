@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Button } from "./Button";
-import Modal, { ModalProps } from "./Modal";
+
+import { Button } from "@/ui/Button";
+import Modal, { ModalProps } from "@/ui/Modal";
 
 interface Props extends Partial<ModalProps> {
    isOpen: boolean;
@@ -31,7 +32,7 @@ const ConfirmModal: React.FC<Props> = ({
                   There is no going back once you do this.
                </h1>
             </div>
-            <div className="mt-4 flex justify-end gap-2">
+            <div className="flex justify-end gap-2 mt-4">
                <Button
                   onClick={() => {
                      updateModalState();

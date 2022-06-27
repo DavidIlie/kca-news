@@ -3,10 +3,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { formatDistance } from "date-fns";
 
-import { Article } from "../../types/Article";
-import { shimmer } from "../../lib/shimmer";
-import ArticleBadge from "../ArticleBadge";
-import { computeKCAName } from "../../lib/computeKCAName";
+import { Article } from "@/types/Article";
+import { shimmer } from "@/lib/shimmer";
+import ArticleBadge from "@/components/ArticleBadge";
+import { computeKCAName } from "@/lib/computeKCAName";
 import { createArticleUrl } from "@/lib/createArticleUrl";
 
 interface Props {

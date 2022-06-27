@@ -3,19 +3,15 @@ import Link from "next/link";
 import { AiOutlineInstagram } from "react-icons/ai";
 import { Tooltip } from "@mantine/core";
 
-import { Button } from "../../ui/Button";
-import {
-   fullLocations,
-   getFormmatedLocation,
-   links,
-} from "../../lib/categories";
-import Logo from "../Logo";
+import { Button } from "@/ui/Button";
+import { fullLocations, getFormmatedLocation, links } from "@/lib/categories";
+import Logo from "@/components/Logo";
 
 const Footer: React.FC = () => {
    return (
-      <footer className="borderColor border-t-2 dark:bg-dark-bg">
-         <div className="container mx-auto flex flex-col flex-wrap pb-12 pt-6 md:flex-row md:flex-nowrap md:items-center lg:items-start">
-            <div className="mx-auto w-64 flex-shrink-0 text-center sm:pl-14 md:mx-0 md:text-left">
+      <footer className="border-t-2 borderColor dark:bg-dark-bg">
+         <div className="container flex flex-col flex-wrap pt-6 pb-12 mx-auto md:flex-row md:flex-nowrap md:items-center lg:items-start">
+            <div className="flex-shrink-0 w-64 mx-auto text-center sm:pl-14 md:mx-0 md:text-left">
                <Link href="/">
                   <a className="flex items-center justify-center font-medium text-gray-900 dark:text-gray-100 md:justify-start">
                      <Logo className="w-[45%]" />
@@ -38,7 +34,7 @@ const Footer: React.FC = () => {
                   </Tooltip>
                </a>
             </div>
-            <div className="-mb-10 mt-10 grid grid-cols-2 text-center sm:flex sm:flex-grow sm:flex-wrap md:mt-0 md:text-left">
+            <div className="grid grid-cols-2 mt-10 -mb-10 text-center sm:flex sm:flex-grow sm:flex-wrap md:mt-0 md:text-left">
                {fullLocations.map((location, index) => (
                   <div key={index} className="px-6">
                      <Link href={`/${location}`}>
@@ -65,7 +61,7 @@ const Footer: React.FC = () => {
                ))}
             </div>
          </div>
-         <p className="borderColor mx-auto border-t-2 bg-gray-100 py-4 px-5 text-center text-sm text-gray-800 dark:bg-foot dark:text-gray-100 sm:text-left sm:text-base">
+         <p className="px-5 py-4 mx-auto text-sm text-center text-gray-800 bg-gray-100 border-t-2 borderColor dark:bg-foot dark:text-gray-100 sm:text-left sm:text-base">
             © {new Date().getFullYear()}{" "}
             <a href="https://davidilie.com">David Ilie</a>
          </p>

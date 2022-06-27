@@ -1,9 +1,9 @@
 import { Upvote, Downvote } from "@prisma/client";
 
-import { Comment } from "./Comment";
-import { Tag } from "./Tag";
-import { Article } from "./Article";
-import { Locations } from "../lib/categories";
+import { Comment } from "@/types/Comment";
+import { Tag } from "@/types/Tag";
+import { Article } from "@/types/Article";
+import { Locations } from "@/lib/categories";
 
 export interface UserCount {
    articles: number;

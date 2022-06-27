@@ -3,9 +3,9 @@ import { Tooltip } from "@mantine/core";
 import readingTime from "reading-time";
 import { useLocalStorage } from "@mantine/hooks";
 
-import Modal from "../../ui/Modal";
-import Radio from "../../ui/Radio";
-import { Button } from "../../ui/Button";
+import Modal from "@/ui/Modal";
+import Radio from "@/ui/Radio";
+import { Button } from "@/ui/Button";
 
 const EditorWordCount: React.FC<{
    content: string;
@@ -28,17 +28,17 @@ const EditorWordCount: React.FC<{
          width="md"
       >
          <div className="mt-3">
-            <div className="borderColor mb-4 flex items-center justify-between border-b-2">
+            <div className="flex items-center justify-between mb-4 border-b-2 borderColor">
                <p>
                   <Tooltip label="*Estimated*">Reading Time</Tooltip>
                </p>
                <p className="font-medium">{readingTimeInfo.text}</p>
             </div>
-            <div className="borderColor mb-4 flex items-center justify-between border-b-2">
+            <div className="flex items-center justify-between mb-4 border-b-2 borderColor">
                <p>Words</p>
                <p className="font-medium">{readingTimeInfo.words}</p>
             </div>
-            <div className="borderColor mb-3 flex items-center justify-between border-b-2">
+            <div className="flex items-center justify-between mb-3 border-b-2 borderColor">
                <p>Characters</p>
                <p className="font-medium">
                   {content.replace(/^#+\s/g, "").length}

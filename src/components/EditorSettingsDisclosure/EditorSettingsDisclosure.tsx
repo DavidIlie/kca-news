@@ -7,7 +7,7 @@ import {
    AiOutlineWarning,
 } from "react-icons/ai";
 
-import useDetermineCustomQueryEditor from "../../hooks/useDetermineCustomQueryEditor";
+import useDetermineCustomQueryEditor from "@/hooks/useDetermineCustomQueryEditor";
 
 interface Props {
    name: string;
@@ -34,7 +34,7 @@ const EditorSettingsDisclosure: React.FC<Props> = ({
    return (
       <Disclosure
          as="div"
-         className="borderColor border-b-2"
+         className="border-b-2 borderColor"
          defaultOpen={defaultOpenState}
       >
          <Disclosure.Button className="w-[99.5%] select-none p-0 py-4 ring-blue-500 duration-150 hover:bg-gray-100 focus:ring-1 dark:hover:bg-gray-800">
@@ -60,7 +60,7 @@ const EditorSettingsDisclosure: React.FC<Props> = ({
                </div>
             )}
          </Disclosure.Button>
-         <Disclosure.Panel className="border-t border-blue-500 px-4 py-4">
+         <Disclosure.Panel className="px-4 py-4 border-t border-blue-500">
             {children}
          </Disclosure.Panel>
       </Disclosure>

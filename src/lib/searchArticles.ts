@@ -1,6 +1,6 @@
-import { Article } from "../types/Article";
-import { User } from "../types/User";
-import prisma from "./prisma";
+import { Article } from "@/types/Article";
+import { User } from "@/types/User";
+import prisma from "@/lib/prisma";
 
 export const searchArticles = async (
    q: string | string[],

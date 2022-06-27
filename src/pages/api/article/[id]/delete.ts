@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
-import { getObjectsByMetadata, minioClient } from "../../../../lib/minio";
 
-import prisma from "../../../../lib/prisma";
+import { getObjectsByMetadata, minioClient } from "@/lib/minio";
+import prisma from "@/lib/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
    const session = await getSession({ req });
@@ -12,11 +12,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
    const { id } = req.query;
 
-   const article = session?.user?.isAdmin ? await prisma.article.findFirst({
-      where: { id: id as string },
-   }) : await prisma.article.findFirst({
-      where: { id: id as string, user: session?.user?.id },
-   });
+   const article = session?.user?.isAdmin
+      ? await prisma.article.findFirst({
+           where: { id: id as string },
+        })
+      : await prisma.article.findFirst({
+           where: { id: id as string, user: session?.user?.id },
+        });
 
    if (!article) return res.status(404).json({ message: "article not found" });
 

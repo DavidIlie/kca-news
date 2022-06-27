@@ -1,5 +1,4 @@
 import React, { DetailedHTMLProps, HTMLAttributes } from "react";
-
 import { AiOutlineArrowRight } from "react-icons/ai";
 
 interface Props
@@ -32,7 +31,7 @@ const DropdownElement: React.FC<Props> = ({
       >
          {children}
          {opening && (
-            <div className="flex w-full justify-end">
+            <div className="flex justify-end w-full">
                <AiOutlineArrowRight />
             </div>
          )}

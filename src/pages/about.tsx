@@ -3,9 +3,9 @@ import Image from "next/image";
 import { NextSeo } from "next-seo";
 import { Fade } from "react-awesome-reveal";
 
-import { Button } from "../ui/Button";
-import { shimmer } from "../lib/shimmer";
-import { getFormmatedLocation, Locations } from "../lib/categories";
+import { Button } from "@/ui/Button";
+import { shimmer } from "@/lib/shimmer";
+import { getFormmatedLocation, Locations } from "@/lib/categories";
 
 interface TeamMember {
    name: string;
@@ -62,7 +62,7 @@ const OurTeam: React.FC = () => {
                      beyond!
                   </p>
                   <div className="py-6" />
-                  <div className="justify-evenly gap-12 sm:flex">
+                  <div className="gap-12 justify-evenly sm:flex">
                      <div>
                         <h1 className="mb-4 text-5xl font-medium">
                            Welcome from the editor
@@ -85,27 +85,27 @@ const OurTeam: React.FC = () => {
                      <div className="mt-4 object-cover sm:mt-0 sm:w-[200%]">
                         <Image
                            src="/static/rocio.jpg"
-                           className="rounded-xl duration-150 hover:shadow-md"
+                           className="duration-150 rounded-xl hover:shadow-md"
                            width={500}
                            height={300}
                            blurDataURL={shimmer(1905 / 2, 957 / 2)}
                            placeholder="blur"
                            objectFit="cover"
                         />
-                        <h1 className="mt-1 text-center text-lg font-semibold">
+                        <h1 className="mt-1 text-lg font-semibold text-center">
                            Rocio De La Fuente Andrade
                         </h1>
                      </div>
                   </div>
-                  <h1 className="mt-8 text-center text-5xl font-medium">
+                  <h1 className="mt-8 text-5xl font-medium text-center">
                      The Team
                   </h1>
-                  <div className="mx-auto mt-12 grid grid-cols-2 gap-12 sm:grid-cols-5">
+                  <div className="grid grid-cols-2 gap-12 mx-auto mt-12 sm:grid-cols-5">
                      {team.map((member, index) => (
-                        <div className="hoverItem duration-150" key={index}>
+                        <div className="duration-150 hoverItem" key={index}>
                            <Image
                               src={member.photo}
-                              className="mx-auto rounded-full ring-1 ring-gray-800 duration-150 hover:shadow-md"
+                              className="mx-auto duration-150 rounded-full ring-1 ring-gray-800 hover:shadow-md"
                               width={300}
                               height={300}
                               blurDataURL={shimmer(1905 / 2, 957 / 2)}
@@ -123,11 +123,11 @@ const OurTeam: React.FC = () => {
                         </div>
                      ))}
                   </div>
-                  <div className="mt-24 mb-20 flex justify-evenly dark:bg-dark-bg">
+                  <div className="flex mt-24 mb-20 justify-evenly dark:bg-dark-bg">
                      <div>
-                        <div className="-mt-4 flex h-full items-center">
+                        <div className="flex items-center h-full -mt-4">
                            <div className="container max-w-[30rem]">
-                              <h1 className="mb-4 w-full text-center text-5xl font-semibold">
+                              <h1 className="w-full mb-4 text-5xl font-semibold text-center">
                                  The Creative Team
                               </h1>
                               <h1 className="mb-4 text-center">
