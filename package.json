@@ -32,7 +32,7 @@
       "formik": "^2.2.9",
       "minio": "^7.0.26",
       "next": "12.1.5",
-      "next-auth": "^4.3.3",
+      "next-auth": "^4.9.0",
       "next-connect": "^0.12.2",
       "next-plausible": "^3.1.9",
       "next-seo": "^5.4.0",
