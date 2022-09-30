@@ -452,7 +452,7 @@ const CommentList: React.FC<CommentListProps> = ({
    };
 
    return (
-      <div className="container max-w-6xl">
+      <>
          <div className="flex items-center gap-2 mt-4 mb-2">
             <TextInput
                icon={<AiOutlineSearch />}
@@ -688,7 +688,7 @@ const CommentList: React.FC<CommentListProps> = ({
                </Menu>
             </div>
          ))}
-      </div>
+      </>
    );
 };
 

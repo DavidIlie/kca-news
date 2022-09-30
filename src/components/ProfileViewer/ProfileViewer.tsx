@@ -14,6 +14,7 @@ import { Button } from "@/ui/Button";
 import ArticleBadge from "@/components/ArticleBadge";
 import arrayToEnglish from "@/lib/arrayToEnglish";
 import LinkifyText from "@/components/Linkify";
+import { createArticleUrl } from "@/lib/createArticleUrl";
 
 import ProfileEditor from "./ProfileEditor";
 
@@ -208,7 +209,10 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                         <h1 className="text-xl font-semibold">Top Articles:</h1>
                         <div className="mt-2">
                            {user.articles!.map((article, index) => (
-                              <Link href={`/article/${article.id}`} key={index}>
+                              <Link
+                                 href={createArticleUrl(article)}
+                                 key={index}
+                              >
                                  <a
                                     className={`hoverItem -mx-1.5 flex w-full items-center justify-between rounded-md border-2 border-gray-200 bg-gray-50 px-4 py-2 duration-150 dark:border-gray-800 dark:bg-dark-bg dark:bg-opacity-50 ${
                                        index !== user.articles!.length - 1 &&

@@ -6,11 +6,7 @@ import { User } from "@/types/User";
 import prisma from "@/lib/prisma";
 import ProfileViewer from "@/components/ProfileViewer";
 
-interface Props {
-   user: User;
-}
-
-const ProfileViewerPage: React.FC<Props> = ({ user }) => {
+const ProfileViewerPage: React.FC<{user: User}> = ({ user }) => {
    return (
       <div className="flex items-center justify-center flex-grow px-4 my-12 sm:pt-20 lg:px-0">
          <ProfileViewer user={user} />
