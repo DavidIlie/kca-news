@@ -3,4 +3,5 @@ export const createSlug = (s: string): string =>
       .replace(/[$-/:-?{-~!"^_`\[\]]/, "")
       .toLowerCase()
       .split(" ")
-      .join("-");
+      .join("-")
+      .replaceAll("?", "");

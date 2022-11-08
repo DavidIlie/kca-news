@@ -9,6 +9,7 @@ import { fullLocations, getFormmatedLocation } from "@/lib/categories";
 import { Button } from "@/ui/Button";
 import CategorySection from "@/components/CategorySection";
 import { trpc } from "@/lib/trpc";
+import { createSlug } from "@/lib/createSlug";
 
 const Home: React.FC = () => {
    const { reload } = useRouter();
@@ -22,6 +23,8 @@ const Home: React.FC = () => {
             client.query("location-posts", args.queryKey[1]),
       }))
    );
+
+   console.log(createSlug("THE CHRISTMAS FAIR: Should we have it?"));
 
    if (featuredArticlesQuery.data?.articles.length === 0) {
       return (
