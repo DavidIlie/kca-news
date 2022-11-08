@@ -662,11 +662,11 @@ export const getServerSideProps: GetServerSideProps = async ({
       props: {
          article: JSON.parse(JSON.stringify(article)),
          upvotes: {
-            count: article.upvotes.length,
+            count: article.upvotes.length || 0,
             self: hasSelfUpvoted,
          },
          downvotes: {
-            count: article.downvotes.length,
+            count: article.downvotes.length || 0,
             self: hasSelfDownvoted,
          },
          comments: JSON.parse(JSON.stringify(article.comments)),
