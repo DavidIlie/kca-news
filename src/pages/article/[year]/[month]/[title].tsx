@@ -66,10 +66,12 @@ const ArticleViewer: React.FC<Props> = ({
 
    const { data } = useSession();
 
-   const [upvoteCount, setUpvoteCount] = useState<number>(upvotes.count);
+   const [upvoteCount, setUpvoteCount] = useState<number>(upvotes.count || 0);
    const [selfUpvote, setSelfUpvote] = useState<boolean>(upvotes.self);
 
-   const [downvoteCount, setDownvoteCount] = useState<number>(downvotes.count);
+   const [downvoteCount, setDownvoteCount] = useState<number>(
+      downvotes.count || 0
+   );
    const [selfDownvote, setSelfDownvote] = useState<boolean>(downvotes.self);
 
    const [commentsState, setComments] = useState<Array<Comment>>(comments);
