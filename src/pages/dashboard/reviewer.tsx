@@ -51,7 +51,7 @@ const ReviewerPage: React.FC<Props> = ({ statistics, articles, comments }) => {
          <NextSeo title="Reviewer Panel" />
          <LoadingOverlay visible={bigLoading} className="fixed" />
          <div className="flex flex-grow px-4 pt-10 dark:bg-dark-bg sm:pt-32">
-            <div className="mx-auto">
+            <div className="container mx-auto max-w-7xl">
                <DashboardStatistics
                   isAdmin={true}
                   {...statisticsState}

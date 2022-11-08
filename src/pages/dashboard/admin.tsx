@@ -175,7 +175,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
          <NextSeo title="Admin" />
          <LoadingOverlay visible={bigLoading} className="fixed" />
          <div className="flex flex-grow px-4 pt-10 dark:bg-dark-bg sm:pt-32">
-            <div className="mx-auto">
+            <div className="container mx-auto max-w-7xl">
                <DashboardStatistics
                   isAdmin={true}
                   {...statistics}
@@ -284,7 +284,7 @@ const AdminPage: React.FC<Props> = ({ statistics, users }) => {
                            size="md"
                         />
                         <p className="font-medium">
-                           Total Users: {users.length}
+                           Total Users: {usersState.length}
                         </p>
                      </div>
                      {data?.user?.isAdmin && (
