@@ -24,8 +24,6 @@ const Home: React.FC = () => {
       }))
    );
 
-   console.log(createSlug("THE CHRISTMAS FAIR: Should we have it?"));
-
    if (featuredArticlesQuery.data?.articles.length === 0) {
       return (
          <div className="flex items-center justify-center flex-grow px-4 my-24 sm:pt-20 lg:px-0">
