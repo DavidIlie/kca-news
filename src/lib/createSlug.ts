@@ -4,4 +4,4 @@ export const createSlug = (s: string): string =>
       .toLowerCase()
       .split(" ")
       .join("-")
-      .replaceAll("?", "");
+      .replaceAll(/['?’]/g, "");
