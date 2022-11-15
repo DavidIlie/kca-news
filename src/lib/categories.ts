@@ -48,6 +48,11 @@ export const links: Category[] = [
       location: ["news"],
    },
    {
+      id: "committee-news",
+      name: "Committee News",
+      location: ["news"],
+   },
+   {
       id: "world",
       name: "Worldwide",
       location: fullLocations.filter((s) => s !== "news"),
