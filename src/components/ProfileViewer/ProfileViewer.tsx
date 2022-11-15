@@ -212,7 +212,7 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                 </div>
               </>
             )}
-            {user.coArticles!.length > 0 && (
+            {user.coArticles && user.coArticles.length > 0 && (
               <>
                 <h1 className="mt-2 text-xl font-semibold">
                   Co-written Articles:
