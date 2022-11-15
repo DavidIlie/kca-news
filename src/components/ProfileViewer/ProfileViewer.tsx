@@ -214,7 +214,9 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
             )}
             {user.coArticles!.length > 0 && (
               <>
-                <h1 className="text-xl font-semibold">Co-written Articles:</h1>
+                <h1 className="mt-2 text-xl font-semibold">
+                  Co-written Articles:
+                </h1>
                 <div className="mt-2">
                   {user.coArticles!.map((article, index) => (
                     <Link href={createArticleUrl(article)} key={index}>
@@ -223,9 +225,9 @@ const ProfileViewer: React.FC<ProfileViewerProps> = ({
                           index !== user.articles!.length - 1 && "mb-2"
                         }`}
                       >
-                        <p>
+                        <p className="flex flex-col items-start gap-1">
                           {article.title}
-                          <span className="font-semibold">
+                          <span className="text-sm font-semibold">
                             <Link href={`/profile/${article.writer!.id}`}>
                               <a className="font-semibold duration-150 hover:text-blue-500">
                                 by {computeKCAName(article.writer!)}
