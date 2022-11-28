@@ -9,6 +9,7 @@ import {
    AiOutlineDislike,
    AiOutlineQuestion,
    AiFillEdit,
+   AiOutlineHome,
 } from "react-icons/ai";
 import { MdPreview } from "react-icons/md";
 import { RiAdminLine } from "react-icons/ri";
@@ -75,6 +76,14 @@ const ProfileTags: React.FC<ProfileTagsProps> = ({ user }) => {
                case "teacher":
                   return (
                      <BaseTag label="Teacher" Icon={GiTeacher} key={index} />
+                  );
+               case "left-kca":
+                  return (
+                     <BaseTag
+                        label="Went Home (left KCA)"
+                        Icon={AiOutlineHome}
+                        key={index}
+                     />
                   );
                default:
                   return (

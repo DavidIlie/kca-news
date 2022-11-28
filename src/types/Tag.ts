@@ -1,4 +1,10 @@
-export type Tag = "developer" | "commenter" | "liker" | "disliker" | "teacher";
+export type Tag =
+   | "developer"
+   | "commenter"
+   | "liker"
+   | "disliker"
+   | "teacher"
+   | "left-kca";
 
 export const tagArray = [
    "developer",
@@ -6,4 +12,5 @@ export const tagArray = [
    "liker",
    "disliker",
    "teacher",
+   "left-kca",
 ] as Tag[];
