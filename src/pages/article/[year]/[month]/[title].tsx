@@ -74,7 +74,7 @@ const ArticleViewer: React.FC<Props> = ({
    );
    const [selfDownvote, setSelfDownvote] = useState<boolean>(downvotes.self);
 
-   const [commentsState, setComments] = useState<Array<Comment>>(comments);
+   const [commentsState, setComments] = useState<Comment[]>(comments);
 
    const [formSuccess, setFormSuccess] = useState<boolean>(false);
 
