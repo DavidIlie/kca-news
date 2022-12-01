@@ -31,6 +31,7 @@ import { computeKCAName } from "@/lib/computeKCAName";
 import { shimmer } from "@/lib/shimmer";
 import ArticleDashboardCard from "@/components/ArticleDashboardCard";
 import Linkify from "@/components/Linkify";
+import { createArticleUrl } from "@/lib/createArticleUrl";
 
 import { Statistics } from "./writer";
 
@@ -589,7 +590,7 @@ const CommentList: React.FC<CommentListProps> = ({
                      <Menu.Items className="absolute right-0 z-10 mt-2 -mr-4 border-2 border-gray-200 rounded-md shadow-lg w-36 bg-gray-50 ring-1 ring-black ring-opacity-5 focus:outline-none dark:border-gray-800 dark:bg-foot">
                         <Menu.Item
                            as={NextLink}
-                           href={`/article/${comment.article?.id}`}
+                           href={createArticleUrl(comment.article!)}
                         >
                            <DropdownElement>
                               <RiArticleLine className="mx-0.5 text-xl" />
