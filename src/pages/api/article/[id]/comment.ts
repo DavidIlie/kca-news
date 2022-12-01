@@ -37,7 +37,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             userId: session!.user!.id,
             articleId: article.id,
             comment: body.message,
-            underReview: session?.user?.isAdmin ? false : true,
+            underReview: session?.user?.isAdmin
+               ? false
+               : session?.user?.tags.includes("teacher")
+               ? false
+               : true,
          },
          include: {
             user: true,
