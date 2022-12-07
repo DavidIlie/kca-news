@@ -81,7 +81,7 @@ const Home: React.FC = () => {
 //    return {
 //       redirect: {
 //          destination: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-//          permanent: true,
+//          permanent: false,
 //       },
 //    };
 // };
