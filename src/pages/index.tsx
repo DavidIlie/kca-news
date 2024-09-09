@@ -76,14 +76,14 @@ const Home: React.FC = () => {
    );
 };
 
-// for special purposes
-// export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-//    return {
-//       redirect: {
-//          destination: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-//          permanent: false,
-//       },
-//    };
-// };
+for special purposes
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+   return {
+      redirect: {
+         destination: "https://workroad.app",
+         permanent: false,
+      },
+   };
+};
 
 export default Home;
