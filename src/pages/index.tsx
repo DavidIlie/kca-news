@@ -76,7 +76,6 @@ const Home: React.FC = () => {
    );
 };
 
-for special purposes
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
    return {
       redirect: {
